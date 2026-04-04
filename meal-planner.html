@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Meal Planner Pro | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root { --bg:#071423; --panel:#122943; --line:#325b85; --text:#edf7ff; --muted:#a9c6e8; }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#040f1d,#0b2846 52%,#103b63);min-height:100vh;}
+    .wrap{width:min(980px,94%);margin:22px auto 90px;}
+    .card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(18,41,67,.96),rgba(9,22,39,.96));margin-bottom:12px;}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    input,select,textarea,button{width:100%;border:1px solid var(--line);border-radius:10px;background:#0a1b30;color:var(--text);padding:9px 10px;font:inherit;}
+    button{cursor:pointer;font-weight:700;}
+    .btn-main{border:none;background:linear-gradient(135deg,#79d8ff,#5ad6a7);color:#042333;}
+    .meal{border:1px solid rgba(121,175,235,.35);border-radius:12px;padding:10px;margin-bottom:9px;background:rgba(7,19,34,.72);}
+    .meta{color:var(--muted);font-size:.88rem;}
+    .row{display:flex;gap:8px;}
+    @media (max-width: 900px){.grid{grid-template-columns:1fr;}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Meal Planner Pro</h1>
+      <p class="meta">Plan weekly meals and auto-build your grocery list.</p>
+      <p class="meta">Created by Krishiv PB</p>
+      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+    </section>
+    <section class="card grid">
+      <article>
+        <h2>Add Meal</h2>
+        <input id="dayInput" placeholder="Day (Mon, Tue...)" style="margin-bottom:8px;" />
+        <input id="mealInput" placeholder="Meal name" style="margin-bottom:8px;" />
+        <textarea id="itemsInput" placeholder="Ingredients (comma separated)"></textarea>
+        <button id="addBtn" class="btn-main" type="button" style="margin-top:8px;">Add Meal</button>
+      </article>
+      <article>
+        <h2>Grocery List</h2>
+        <textarea id="groceryOutput" readonly></textarea>
+        <div class="row" style="margin-top:8px;">
+          <button id="copyBtn" type="button">Copy</button>
+          <button id="clearBtn" type="button">Clear All</button>
+        </div>
+      </article>
+    </section>
+    <section class="card">
+      <h2>Weekly Meals</h2>
+      <div id="meals"></div>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const KEY = "krishiv_meal_planner_v1";
+      const dayInput = document.getElementById("dayInput");
+      const mealInput = document.getElementById("mealInput");
+      const itemsInput = document.getElementById("itemsInput");
+      const addBtn = document.getElementById("addBtn");
+      const mealsEl = document.getElementById("meals");
+      const groceryOutput = document.getElementById("groceryOutput");
+      const copyBtn = document.getElementById("copyBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      let meals = [];
+      function load(){ try{ meals = JSON.parse(localStorage.getItem(KEY)||"[]"); if(!Array.isArray(meals)) meals=[]; }catch{ meals=[]; } }
+      function save(){ localStorage.setItem(KEY, JSON.stringify(meals)); }
+      function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+      function render(){
+        mealsEl.innerHTML = meals.map((m)=>`
+          <article class="meal">
+            <strong>${esc(m.day)} - ${esc(m.meal)}</strong>
+            <p>${esc(m.items.join(", "))}</p>
+            <button type="button" data-del="${m.id}">Delete</button>
+          </article>
+        `).join("") || `<p class="meta">No meals yet.</p>`;
+        const map = new Map();
+        meals.forEach((m)=>m.items.forEach((i)=>{ const key = i.trim().toLowerCase(); if(!key) return; map.set(key, (map.get(key)||0)+1); }));
+        groceryOutput.value = Array.from(map.entries()).map(([k,v]) => `${k} x${v}`).join("\n");
+      }
+      addBtn.addEventListener("click", ()=>{
+        const day = dayInput.value.trim();
+        const meal = mealInput.value.trim();
+        const items = itemsInput.value.split(",").map((x)=>x.trim()).filter(Boolean);
+        if(day.length < 2 || meal.length < 2 || items.length < 1){ alert("Add day, meal and ingredients."); return; }
+        meals.push({ id: "M"+Date.now().toString(36), day, meal, items });
+        dayInput.value = ""; mealInput.value = ""; itemsInput.value = "";
+        save(); render();
+      });
+      mealsEl.addEventListener("click", (e)=>{
+        const t = e.target; if(!(t instanceof HTMLButtonElement)) return;
+        const id = t.dataset.del; if(!id) return;
+        meals = meals.filter((m)=>m.id!==id); save(); render();
+      });
+      copyBtn.addEventListener("click", async ()=>{ if(!groceryOutput.value.trim()) return; try{ await navigator.clipboard.writeText(groceryOutput.value); }catch{} });
+      clearBtn.addEventListener("click", ()=>{ meals=[]; save(); render(); });
+      load(); render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+

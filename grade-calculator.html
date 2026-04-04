@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Grade Calculator | Krishiv PB</title>
+  <style>
+    :root { --bg:#061323; --panel:#0f243d; --line:#33597f; --text:#eef6ff; --muted:#a6c2e3; --accent:#6fd3ff; --ok:#55d8a9; }
+    *{box-sizing:border-box} body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#04101b,#0b233c 50%,#12345b)}
+    .wrap{width:min(920px,94%);margin:24px auto 86px}.card{background:linear-gradient(160deg,rgba(16,38,63,.95),rgba(8,20,38,.95));border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 18px 38px rgba(0,0,0,.28)}
+    h1,h2{margin:0 0 8px} p{margin:0 0 10px;color:var(--muted)} .grid{display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr auto}
+    input,button{border-radius:10px;border:1px solid var(--line);background:#08192d;color:var(--text);padding:10px;font:inherit}
+    button{font-weight:700;cursor:pointer}.btn-primary{background:linear-gradient(135deg,var(--accent),var(--ok));color:#032033;border:none}
+    table{width:100%;border-collapse:collapse;margin-top:10px} th,td{border-bottom:1px solid rgba(110,162,215,.25);padding:8px;text-align:left}
+    .meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.pill{padding:10px;border-radius:10px;border:1px solid var(--line);background:rgba(6,18,32,.7)}
+    .credit{font-weight:700;color:#d8ecff} a{color:#9fd8ff}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}.meta{grid-template-columns:1fr}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body data-theme="default" data-mode="dark">
+  <main class="wrap">
+    <section class="card">
+      <h1>Grade Calculator</h1>
+      <p>Calculate weighted percentage and estimate grade bands quickly.</p>
+      <p class="credit">Created by Krishiv PB</p>
+      <p><a href="index.html#app-verse">Back to Apps Galaxy</a></p>
+    </section>
+    <section class="card">
+      <h2>Add Subject Score</h2>
+      <div class="grid">
+        <input id="subject" placeholder="Subject (Math)" maxlength="40" />
+        <input id="score" type="number" min="0" max="100" placeholder="Score %" />
+        <input id="weight" type="number" min="1" max="100" placeholder="Weight %" />
+        <button id="addBtn" class="btn-primary" type="button">Add</button>
+      </div>
+      <table>
+        <thead><tr><th>Subject</th><th>Score</th><th>Weight</th><th>Action</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+    <section class="card">
+      <h2>Results</h2>
+      <div class="meta">
+        <div class="pill"><strong id="weighted">0.00%</strong><div>Weighted Score</div></div>
+        <div class="pill"><strong id="grade">N/A</strong><div>Estimated Grade</div></div>
+        <div class="pill"><strong id="subjects">0</strong><div>Subjects Added</div></div>
+      </div>
+      <p>Details: use realistic weights that add up to your school pattern for better estimates.</p>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const key = "krishiv_grade_calculator_v1";
+      const subject = document.getElementById("subject");
+      const score = document.getElementById("score");
+      const weight = document.getElementById("weight");
+      const addBtn = document.getElementById("addBtn");
+      const rows = document.getElementById("rows");
+      const weighted = document.getElementById("weighted");
+      const grade = document.getElementById("grade");
+      const subjects = document.getElementById("subjects");
+      let data = [];
+      try { data = JSON.parse(localStorage.getItem(key) || "[]"); if (!Array.isArray(data)) data = []; } catch { data = []; }
+      const gradeBand = (n) => n >= 90 ? "A+" : n >= 80 ? "A" : n >= 70 ? "B" : n >= 60 ? "C" : n >= 50 ? "D" : "Needs Improvement";
+      function save(){ localStorage.setItem(key, JSON.stringify(data)); }
+      function render(){
+        rows.innerHTML = data.map((r) => `<tr><td>${r.subject}</td><td>${r.score}%</td><td>${r.weight}%</td><td><button data-id="${r.id}">Delete</button></td></tr>`).join("");
+        const totalW = data.reduce((a,b)=>a+Number(b.weight||0),0);
+        const sum = data.reduce((a,b)=>a + (Number(b.score||0)*Number(b.weight||0)),0);
+        const result = totalW ? sum / totalW : 0;
+        weighted.textContent = result.toFixed(2) + "%";
+        grade.textContent = data.length ? gradeBand(result) : "N/A";
+        subjects.textContent = String(data.length);
+      }
+      addBtn.addEventListener("click", () => {
+        const s = subject.value.trim(); const sc = Number(score.value||0); const w = Number(weight.value||0);
+        if (s.length < 2 || sc < 0 || sc > 100 || w < 1 || w > 100) { alert("Enter valid subject, score (0-100), and weight (1-100)."); return; }
+        data.push({ id: Date.now().toString(36), subject: s, score: sc, weight: w });
+        subject.value = ""; score.value = ""; weight.value = "";
+        save(); render();
+      });
+      rows.addEventListener("click", (e) => {
+        const t = e.target; if (!(t instanceof HTMLButtonElement)) return;
+        const id = t.dataset.id; data = data.filter((x) => x.id !== id); save(); render();
+      });
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

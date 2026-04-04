@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Flashcards Trainer | Krishiv PB</title>
+  <style>
+    :root{--bg:#071324;--panel:#112842;--line:#37608a;--text:#eff7ff;--muted:#a8c5e6}
+    *{box-sizing:border-box} body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(160deg,#030a14,#0b223c 48%,#133a61);color:var(--text)}
+    .wrap{width:min(900px,94%);margin:24px auto}.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(17,40,66,.96),rgba(8,22,40,.96));margin-bottom:12px}
+    input,button,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0b1b31;color:var(--text);font:inherit}
+    .row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.btn{cursor:pointer;font-weight:700}.btn.primary{border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333}
+    .flash{min-height:180px;display:grid;place-items:center;text-align:center;border:1px dashed var(--line);border-radius:12px;padding:16px;cursor:pointer}
+    .meta{color:var(--muted)} a{color:#9edcff}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card"><h1>Flashcards Trainer</h1><p class="meta">Created by Krishiv PB</p><a href="index.html#projects">Back to portfolio</a></section>
+    <section class="card">
+      <div class="row"><input id="q" placeholder="Question" maxlength="120"><input id="a" placeholder="Answer" maxlength="120"></div>
+      <div class="row" style="margin-top:8px"><input id="deck" placeholder="Deck name (example: Science)"><button class="btn primary" id="addBtn">Add Card</button></div>
+      <div class="row" style="margin-top:8px"><select id="deckFilter"></select><button class="btn" id="shuffleBtn">Shuffle</button><button class="btn" id="nextBtn">Next</button><button class="btn" id="delBtn">Delete</button></div>
+    </section>
+    <section class="card"><div id="flash" class="flash">No cards yet. Add one.</div><p id="pos" class="meta"></p><p id="stats" class="meta"></p></section>
+  </main>
+  <script>
+    (() => {
+      const key="krishiv_pb_flashcards_v2";
+      const q=document.getElementById("q"), a=document.getElementById("a"), deck=document.getElementById("deck"), deckFilter=document.getElementById("deckFilter"), flash=document.getElementById("flash"), pos=document.getElementById("pos"), stats=document.getElementById("stats");
+      const addBtn=document.getElementById("addBtn"), nextBtn=document.getElementById("nextBtn"), delBtn=document.getElementById("delBtn"), shuffleBtn=document.getElementById("shuffleBtn");
+      let cards=[], i=0, showAns=false, flips=0;
+      function load(){ try{cards=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(cards)) cards=[];}catch{cards=[];} }
+      function save(){ localStorage.setItem(key, JSON.stringify(cards)); }
+      function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+      function activeDeck(){ return deckFilter.value || "all"; }
+      function visible(){ const d=activeDeck(); return d==="all" ? cards : cards.filter((c)=>c.deck===d); }
+      function renderDecks(){
+        const decks = Array.from(new Set(cards.map((c)=>c.deck || "General")));
+        const current = deckFilter.value || "all";
+        deckFilter.innerHTML = `<option value="all">All Decks</option>` + decks.map((d)=>`<option value="${esc(d)}">${esc(d)}</option>`).join("");
+        if (decks.includes(current)) deckFilter.value = current;
+      }
+      function render(){
+        const list = visible();
+        renderDecks();
+        if(!list.length){ flash.innerHTML="No cards in this deck yet."; pos.textContent=""; stats.textContent=`Total cards: ${cards.length}`; return; }
+        if(i>=list.length) i=0;
+        const c=list[i]; flash.innerHTML = showAns ? `<strong>Answer</strong><p>${esc(c.a)}</p>` : `<strong>Question</strong><p>${esc(c.q)}</p>`;
+        pos.textContent=`Card ${i+1} of ${list.length} | Deck: ${esc(c.deck || "General")} | click card to flip`;
+        stats.textContent=`Total cards: ${cards.length} | Flips this session: ${flips}`;
+      }
+      addBtn.addEventListener("click",()=>{ const qv=q.value.trim(), av=a.value.trim(); if(qv.length<2||av.length<1){alert("Enter question and answer.");return;} cards.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),q:qv,a:av,deck:(deck.value.trim()||"General").slice(0,40)}); q.value=""; a.value=""; save(); i=visible().length-1; showAns=false; render(); });
+      nextBtn.addEventListener("click",()=>{ const list=visible(); if(!list.length) return; i=(i+1)%list.length; showAns=false; render(); });
+      delBtn.addEventListener("click",()=>{ const list=visible(); if(!list.length) return; const current=list[i]; cards=cards.filter((c)=>c.id!==current.id); if(i>=visible().length) i=Math.max(0,visible().length-1); showAns=false; save(); render(); });
+      shuffleBtn.addEventListener("click",()=>{ cards=[...cards].sort(()=>Math.random()-0.5); i=0; showAns=false; save(); render(); });
+      deckFilter.addEventListener("change",()=>{ i=0; showAns=false; render(); });
+      flash.addEventListener("click",()=>{ if(!visible().length) return; showAns=!showAns; flips+=1; render(); });
+      load(); render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

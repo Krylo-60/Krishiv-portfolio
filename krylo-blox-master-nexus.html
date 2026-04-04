@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KRYLO-Blox | Master Nexus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Krishiv PB">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;500;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00d2ff; --secondary: #9d50bb; --accent: #00ff88; --bg: #010204; --glass: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.08); }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; overflow-x: hidden; line-height: 1.6; }
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; }
+        #cursor { width: 15px; height: 15px; border: 2px solid var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; transition: transform 0.1s; box-shadow: 0 0 15px var(--primary); }
+        
+        header { padding: 1rem 8%; display: flex; justify-content: space-between; align-items: center; background: rgba(1,2,4,0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); position: fixed; width: 100%; z-index: 100; }
+        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--primary); letter-spacing: 5px; }
+        nav a { margin-left: 25px; color: #94a3b8; text-decoration: none; font-size: 0.85rem; transition: 0.3s; font-family: 'Orbitron'; }
+        nav a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 12vw, 7rem); margin-bottom: 10px; background: linear-gradient(#fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* SUBSCRIBE BUTTON RESTORED */
+        .btn-main {
+            padding: 16px 40px;
+            background: var(--primary);
+            color: #000;
+            border-radius: 50px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+            font-family: 'Orbitron';
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .btn-main:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--primary); }
+
+        .live-wall { max-width: 800px; margin: 40px auto; padding: 30px; background: rgba(0,210,255,0.02); border: 1px solid var(--primary); border-radius: 4px; text-align: center; }
+        #wall-message { font-family: 'Orbitron'; font-size: 1.2rem; color: #fff; text-shadow: 0 0 10px var(--primary); }
+
+        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; width: 90%; max-width: 1100px; margin: -60px auto 60px; z-index: 10; position: relative; }
+        .stat-card { background: rgba(15, 23, 42, 0.8); border: 1px solid var(--glass-border); padding: 30px; border-radius: 20px; text-align: center; backdrop-filter: blur(10px); }
+        .stat-number { font-family: 'Orbitron'; font-size: 2.8rem; display: block; }
+
+        section { padding: 80px 10%; }
+        .card { background: var(--glass); border: 1px solid var(--glass-border); padding: 40px; border-radius: 24px; backdrop-filter: blur(5px); }
+        .timeline { border-left: 2px solid var(--glass-border); margin: 40px 0; padding-left: 30px; position: relative; }
+        .timeline-item { position: relative; margin-bottom: 40px; }
+        .timeline-item::before { content: ''; position: absolute; left: -39px; top: 5px; width: 16px; height: 16px; background: var(--bg); border: 3px solid var(--primary); border-radius: 50%; }
+        
+        .wall-of-fame { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 25px; }
+        .supporter-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; text-align: center; transition: 0.3s; }
+        .supporter-card:hover { transform: scale(1.05); border-color: var(--primary); }
+        .supporter-name { display: block; font-weight: 800; color: var(--primary); font-family: 'Orbitron'; font-size: 0.8rem; }
+
+        .system-status { position: fixed; bottom: 20px; left: 20px; font-family: 'JetBrains Mono'; font-size: 0.65rem; color: var(--accent); background: #000; padding: 10px; border-left: 3px solid var(--accent); z-index: 1000; min-width: 210px; }
+        .sync-meta { margin-top: 6px; color: #94a3b8; font-size: 0.62rem; line-height: 1.45; }
+        .sync-badge { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--glass-border); color: #cde9ff; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .sync-badge.youtube { border-color: rgba(0, 255, 136, 0.45); color: #00ff88; }
+        .sync-badge.firebase { border-color: rgba(0, 210, 255, 0.45); color: #7dd3fc; }
+        .sync-badge.local { border-color: rgba(148, 163, 184, 0.4); color: #cbd5e1; }
+        .sync-controls { margin-top: 8px; display: flex; gap: 8px; align-items: center; }
+        .sync-btn {
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font: 700 0.6rem/1 "JetBrains Mono", monospace;
+            color: #9fd9ff;
+            background: rgba(0, 210, 255, 0.08);
+            cursor: pointer;
+        }
+        .delta-chip { color: #8dfcc8; font-size: 0.62rem; margin-left: 6px; }
+        .nexus-badges { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 18px; }
+        .nexus-badge {
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            text-align: center;
+            padding: 10px;
+            background: rgba(8, 24, 42, 0.46);
+            font: 700 0.72rem/1.2 "JetBrains Mono", monospace;
+            color: #bde6ff;
+        }
+        .nexus-badge svg { width: 18px; height: 18px; margin-bottom: 6px; stroke: var(--primary); fill: none; stroke-width: 1.9; }
+        @media (max-width: 768px) { nav { display: none; } * { cursor: auto; } #cursor { display: none; } }
+    </style>
+    <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div id="cursor"></div>
+<div class="system-status">
+  UPLINK: ACTIVE<br>NODE: SINGAPORE_AS1<br>STATUS: <span id="ping">SYNCING...</span><span id="syncSourceBadge" class="sync-badge local">local</span>
+  <div class="sync-meta">Last sync: <span id="lastSyncText">waiting...</span></div>
+  <div class="sync-controls"><button class="sync-btn" id="manualSyncBtn" type="button">SYNC NOW</button></div>
+</div>
+
+<header>
+    <div class="logo">KRYLO-Blox</div>
+    <nav>
+        <a href="#about">Journey</a>
+        <a href="#stats">Live Stats</a>
+        <a href="#wall">Wall of Fame</a>
+        <a href="#contact">Discord</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>KRYLO-BLOX</h1>
+    <p style="color: #888; letter-spacing: 5px;">ROBLOX LEGEND | CONTENT ARCHITECT</p>
+    <a href="https://www.youtube.com/@KryloBlox60" class="btn-main">SUBSCRIBE FOR UPDATES</a>
+    
+    <div class="live-wall">
+        <div id="wall-message">CONNECTING TO COMMAND CENTER...</div>
+    </div>
+</section>
+
+<div class="stats-container" id="stats">
+    <div class="stat-card"><span class="stat-number" id="stat-subs">0</span><span style="color: var(--primary); font-size: 0.7rem; font-weight: 900;">SUBSCRIBERS</span><span id="deltaSubs" class="delta-chip"></span></div>
+    <div class="stat-card"><span class="stat-number" id="stat-uploads">0</span><span style="color: var(--primary); font-size: 0.7rem; font-weight: 900;">VIDEOS</span><span id="deltaUploads" class="delta-chip"></span></div>
+    <div class="stat-card"><span class="stat-number" id="stat-views">0</span><span style="color: var(--primary); font-size: 0.7rem; font-weight: 900;">TOTAL VIEWS</span><span id="deltaViews" class="delta-chip"></span></div>
+</div>
+
+<section id="about">
+    <div class="card">
+        <h2 style="font-family: 'Orbitron'; color: var(--primary); margin-bottom: 30px;">The Journey</h2>
+        <div class="timeline">
+            <div class="timeline-item"><h3>The First Upload</h3><p style="color: #94a3b8;">Where the dream began. Focused on mechanics and tutorials.</p></div>
+            <div class="timeline-item"><h3>The Discord Expansion</h3><p style="color: #94a3b8;">Moving beyond YouTube to build a 24/7 community hub.</p></div>
+            <div class="timeline-item"><h3>1K Subs Milestone</h3><p style="color: #94a3b8;">Certified Roblox content creator. The grind never stops.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="wall">
+    <div class="card">
+        <h2 style="font-family: 'Orbitron'; color: var(--accent);">Wall of Fame</h2>
+        <div class="wall-of-fame">
+            <div class="supporter-card"><span class="supporter-name">Player_One</span><span style="font-size: 0.6rem; color: var(--accent);">Gold Tier</span></div>
+            <div class="supporter-card"><span class="supporter-name">Nexus_Dev</span><span style="font-size: 0.6rem; color: var(--accent);">OG Squad</span></div>
+            <div class="supporter-card"><span class="supporter-name">RobloxKing</span><span style="font-size: 0.6rem; color: var(--accent);">Supporter</span></div>
+            <div class="supporter-card"><span class="supporter-name">You?</span><span style="font-size: 0.6rem; color: var(--accent);">Join Today</span></div>
+        </div>
+        <div class="nexus-badges">
+            <div class="nexus-badge"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v10l-8 4-8-4V7z"/></svg>NEXUS CORE</div>
+            <div class="nexus-badge"><svg viewBox="0 0 24 24"><path d="M4 12h16M12 4v16"/></svg>SYNC AXIS</div>
+            <div class="nexus-badge"><svg viewBox="0 0 24 24"><path d="M6 12l4 4 8-8"/></svg>UPLINK READY</div>
+            <div class="nexus-badge"><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3a9 9 0 010 18"/></svg>LIVE ORBIT</div>
+        </div>
+    </div>
+</section>
+
+<section id="contact">
+    <div class="card" style="background: rgba(88, 101, 242, 0.05); border-color: rgba(88, 101, 242, 0.2);">
+        <h2 style="color: #5865F2; margin-bottom: 25px; font-family: 'Orbitron';">Live Community</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <div><p style="margin-bottom: 20px;">Jump into our real-time Discord to connect with the squad.</p><a href="https://discord.gg/QZ3KfPsH4Y" style="color: #5865F2; font-weight: bold; text-decoration: none;">Launch Discord ></a></div>
+            <iframe src="https://discord.com/widget?id=1420991845546332162&theme=dark" width="100%" height="300" frameborder="0"></iframe>
+        </div>
+    </div>
+</section>
+
+<footer>(c) 2026 KRYLO-Blox | CLOUD ENCRYPTED</footer>
+
+<script>
+    const syncURL = "/api/yt-portfolio-sync";
+    let previousStats = null;
+    const manualSyncBtn = document.getElementById('manualSyncBtn');
+
+    function setDelta(nodeId, delta) {
+        const node = document.getElementById(nodeId);
+        if (!node) return;
+        if (!Number.isFinite(delta) || delta === 0) {
+            node.innerText = "";
+            return;
+        }
+        node.innerText = delta > 0 ? `+${delta}` : `${delta}`;
+    }
+
+    async function sync() {
+        try {
+            if (manualSyncBtn) manualSyncBtn.disabled = true;
+            const res = await fetch(syncURL, { cache: "no-store" });
+            if (!res.ok) throw new Error("sync source unavailable");
+            const data = await res.json();
+            const subs = Number(data.subs || 0);
+            const views = Number(data.views || 0);
+            const uploads = Number(data.uploads || 0);
+            document.getElementById('stat-subs').innerText = subs;
+            document.getElementById('stat-views').innerText = views;
+            document.getElementById('stat-uploads').innerText = uploads;
+            if (previousStats) {
+                setDelta('deltaSubs', subs - previousStats.subs);
+                setDelta('deltaViews', views - previousStats.views);
+                setDelta('deltaUploads', uploads - previousStats.uploads);
+            }
+            previousStats = { subs, views, uploads };
+            document.getElementById('wall-message').innerText = String(data.message || "WELCOME TO THE NEXUS");
+            document.getElementById('ping').innerText = "STABLE";
+            const source = String(data.syncSource || data.source || "local").toLowerCase();
+            const badge = document.getElementById('syncSourceBadge');
+            badge.className = 'sync-badge ' + (source === 'youtube' ? 'youtube' : source === 'firebase' ? 'firebase' : 'local');
+            badge.innerText = source;
+            const syncedAt = data.syncedAt ? new Date(data.syncedAt) : null;
+            const syncText = document.getElementById('lastSyncText');
+            syncText.innerText = syncedAt && !Number.isNaN(syncedAt.getTime())
+              ? syncedAt.toLocaleString()
+              : 'just now';
+        } catch (e) {
+            document.getElementById('ping').innerText = "OFFLINE";
+        } finally {
+            if (manualSyncBtn) manualSyncBtn.disabled = false;
+        }
+    }
+    setInterval(sync, 15000);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) sync();
+    });
+    if (manualSyncBtn) manualSyncBtn.addEventListener('click', sync);
+    sync();
+
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => { cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px'; });
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    class Particle { constructor() { this.reset(); }
+        reset() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.s = Math.random()*2; this.v = Math.random()*0.5; }
+        draw() { ctx.fillStyle='rgba(0,210,255,0.2)'; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); this.x += this.v; if(this.x > canvas.width) this.reset(); }
+    }
+    const pArray = Array.from({length: 80}, () => new Particle());
+    function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); pArray.forEach(p => p.draw()); requestAnimationFrame(animate); }
+    animate();
+</script>
+<script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+
+
+

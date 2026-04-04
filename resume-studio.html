@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Resume Studio Lite | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root { --bg:#071323; --panel:#122943; --line:#355c86; --text:#edf7ff; --muted:#aec9e8; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:"Segoe UI",Arial,sans-serif; color:var(--text); background:linear-gradient(165deg,#040f1d,#0b2847 52%,#103b63); min-height:100vh; }
+    .wrap { width:min(980px,94%); margin:22px auto 90px; }
+    .card { border:1px solid var(--line); border-radius:14px; padding:14px; background:linear-gradient(160deg,rgba(18,41,67,.96),rgba(9,22,40,.96)); margin-bottom:12px; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    input,textarea,button { width:100%; border:1px solid var(--line); border-radius:10px; background:#0a1b30; color:var(--text); padding:9px 10px; font:inherit; }
+    textarea { min-height:82px; resize:vertical; }
+    button { cursor:pointer; font-weight:700; }
+    .btn-main { border:none; background:linear-gradient(135deg,#79d8ff,#5ad6a7); color:#042333; }
+    #preview { white-space: pre-wrap; font-family: "JetBrains Mono", Consolas, monospace; font-size:.9rem; }
+    .meta { color:var(--muted); font-size:.88rem; }
+    @media (max-width:900px) { .grid { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Resume Studio Lite</h1>
+      <p class="meta">Build a quick resume summary and export as text.</p>
+      <p class="meta">Created by Krishiv PB</p>
+      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+    </section>
+    <section class="card grid">
+      <article>
+        <h2>Input</h2>
+        <input id="nameInput" placeholder="Your name" style="margin-bottom:8px;" />
+        <input id="titleInput" placeholder="Role (Student Developer, Creator...)" style="margin-bottom:8px;" />
+        <textarea id="skillsInput" placeholder="Skills (comma separated)"></textarea>
+        <textarea id="projectsInput" placeholder="Projects highlights"></textarea>
+        <textarea id="contactInput" placeholder="Contact links / email"></textarea>
+        <button id="generateBtn" class="btn-main" type="button">Generate Resume</button>
+      </article>
+      <article>
+        <h2>Preview</h2>
+        <div id="preview" class="card" style="margin:0; min-height:220px;"></div>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button id="copyBtn" type="button">Copy</button>
+          <button id="downloadBtn" type="button">Download TXT</button>
+        </div>
+      </article>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const ids = ["nameInput","titleInput","skillsInput","projectsInput","contactInput"];
+      const [nameInput,titleInput,skillsInput,projectsInput,contactInput] = ids.map((id)=>document.getElementById(id));
+      const preview = document.getElementById("preview");
+      const generateBtn = document.getElementById("generateBtn");
+      const copyBtn = document.getElementById("copyBtn");
+      const downloadBtn = document.getElementById("downloadBtn");
+      let text = "";
+      function render(){
+        text = [
+          (nameInput.value.trim() || "Your Name"),
+          (titleInput.value.trim() || "Role"),
+          "",
+          "Skills:",
+          (skillsInput.value.trim() || "-"),
+          "",
+          "Projects:",
+          (projectsInput.value.trim() || "-"),
+          "",
+          "Contact:",
+          (contactInput.value.trim() || "-"),
+          "",
+          "Created with Resume Studio Lite by Krishiv PB"
+        ].join("\n");
+        preview.textContent = text;
+      }
+      generateBtn.addEventListener("click", render);
+      copyBtn.addEventListener("click", async ()=>{ if(!text.trim()) render(); try{ await navigator.clipboard.writeText(text); }catch{} });
+      downloadBtn.addEventListener("click", ()=>{ if(!text.trim()) render(); const b=new Blob([text],{type:"text/plain;charset=utf-8"}); const u=URL.createObjectURL(b); const a=document.createElement("a"); a.href=u; a.download="resume-studio-lite.txt"; a.click(); URL.revokeObjectURL(u); });
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+

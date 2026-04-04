@@ -1,0 +1,69 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06070b"/>
+      <stop offset="100%" stop-color="#0b1221"/>
+    </linearGradient>
+    <linearGradient id="cy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00f2ff"/>
+      <stop offset="100%" stop-color="#2dd4ff"/>
+    </linearGradient>
+    <linearGradient id="or" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff7a18"/>
+      <stop offset="100%" stop-color="#ff3d00"/>
+    </linearGradient>
+    <linearGradient id="pr" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7000ff"/>
+      <stop offset="100%" stop-color="#00f2ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <circle cx="190" cy="130" r="180" fill="#00f2ff" opacity="0.15"/>
+  <circle cx="1030" cy="120" r="200" fill="#ff4d00" opacity="0.14"/>
+  <circle cx="610" cy="590" r="220" fill="#7000ff" opacity="0.15"/>
+
+  <rect x="90" y="90" width="1020" height="495" rx="30" fill="#060a14" opacity="0.78" stroke="#1e293b"/>
+
+  <text x="120" y="150" fill="#dbeafe" font-family="Arial" font-size="50" font-weight="700">AETHER CORE SUITE</text>
+  <text x="122" y="185" fill="#7dd3fc" font-family="Arial" font-size="24" font-weight="600">Built from your real files: v104, v55 (KR), and v2.5</text>
+
+  <g transform="translate(120 225)">
+    <rect x="0" y="0" width="300" height="280" rx="20" fill="#08111d" stroke="#00f2ff" stroke-opacity="0.5"/>
+    <rect x="18" y="18" width="120" height="18" rx="9" fill="url(#cy)" opacity="0.9"/>
+    <text x="20" y="70" fill="#9ee6ff" font-family="Arial" font-size="34" font-weight="700">v104</text>
+    <text x="20" y="102" fill="#38bdf8" font-family="Arial" font-size="20" font-weight="600">OMNI-SPEC</text>
+    <rect x="20" y="130" width="260" height="18" rx="9" fill="#1e293b"/>
+    <rect x="20" y="130" width="190" height="18" rx="9" fill="url(#cy)"/>
+    <rect x="20" y="164" width="260" height="12" rx="6" fill="#0f172a"/>
+    <rect x="20" y="184" width="230" height="12" rx="6" fill="#0f172a"/>
+  </g>
+
+  <g transform="translate(450 225)">
+    <rect x="0" y="0" width="300" height="280" rx="20" fill="#130a07" stroke="#ff4d00" stroke-opacity="0.55"/>
+    <rect x="18" y="18" width="120" height="18" rx="9" fill="url(#or)" opacity="0.9"/>
+    <text x="20" y="70" fill="#fed7aa" font-family="Arial" font-size="34" font-weight="700">v55</text>
+    <text x="20" y="102" fill="#fb923c" font-family="Arial" font-size="20" font-weight="600">KR BUILD</text>
+    <g fill="#ff4d00" opacity="0.9">
+      <rect x="20" y="130" width="44" height="44" rx="6"/>
+      <rect x="72" y="130" width="44" height="44" rx="6"/>
+      <rect x="124" y="130" width="44" height="44" rx="6"/>
+      <rect x="176" y="130" width="44" height="44" rx="6"/>
+      <rect x="228" y="130" width="44" height="44" rx="6"/>
+    </g>
+    <rect x="20" y="192" width="260" height="12" rx="6" fill="#3f1f0f"/>
+    <rect x="20" y="212" width="220" height="12" rx="6" fill="#3f1f0f"/>
+  </g>
+
+  <g transform="translate(780 225)">
+    <rect x="0" y="0" width="300" height="280" rx="20" fill="#0b0a16" stroke="#8b5cf6" stroke-opacity="0.52"/>
+    <rect x="18" y="18" width="120" height="18" rx="9" fill="url(#pr)" opacity="0.9"/>
+    <text x="20" y="70" fill="#ddd6fe" font-family="Arial" font-size="34" font-weight="700">v2.5</text>
+    <text x="20" y="102" fill="#a78bfa" font-family="Arial" font-size="20" font-weight="600">OMNI-SYNTH</text>
+    <rect x="20" y="128" width="260" height="60" rx="12" fill="#1f1b37"/>
+    <rect x="36" y="146" width="110" height="24" rx="8" fill="#3b82f6" opacity="0.7"/>
+    <rect x="156" y="146" width="110" height="24" rx="8" fill="#8b5cf6" opacity="0.8"/>
+    <rect x="20" y="206" width="260" height="12" rx="6" fill="#231f3f"/>
+    <rect x="20" y="226" width="200" height="12" rx="6" fill="#231f3f"/>
+  </g>
+</svg>

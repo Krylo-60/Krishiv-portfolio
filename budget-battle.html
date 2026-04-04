@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Budget Battle Sim | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root { --bg:#071323; --panel:#122943; --line:#355c86; --text:#edf7ff; --muted:#aec9e8; --good:#5bd7a8; --bad:#ff8a8a; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:"Segoe UI",Arial,sans-serif; color:var(--text); background:linear-gradient(165deg,#040f1d,#0b2847 52%,#103b63); min-height:100vh; }
+    .wrap { width:min(980px,94%); margin:22px auto 90px; }
+    .card { border:1px solid var(--line); border-radius:14px; padding:14px; background:linear-gradient(160deg,rgba(18,41,67,.96),rgba(9,22,40,.96)); margin-bottom:12px; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    input,button,select { width:100%; border:1px solid var(--line); border-radius:10px; background:#0a1b30; color:var(--text); padding:9px 10px; font:inherit; }
+    button { cursor:pointer; font-weight:700; }
+    .btn-main { border:none; background:linear-gradient(135deg,#79d8ff,#5ad6a7); color:#042333; }
+    .tx { border:1px solid rgba(121,175,235,.35); border-radius:10px; padding:8px; margin-bottom:8px; background:rgba(8,20,35,.65); }
+    .meta { color:var(--muted); font-size:.88rem; }
+    .good { color: var(--good); }
+    .bad { color: var(--bad); }
+    @media (max-width:900px) { .grid { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Budget Battle Sim</h1>
+      <p class="meta">Simulate money decisions and train better budgeting habits.</p>
+      <p class="meta">Created by Krishiv PB</p>
+      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+    </section>
+    <section class="card grid">
+      <article>
+        <h2>Add Transaction</h2>
+        <input id="labelInput" placeholder="Label (Groceries, Gaming, Salary...)" style="margin-bottom:8px;" />
+        <select id="typeSelect" style="margin-bottom:8px;">
+          <option value="income">Income (+)</option>
+          <option value="expense">Expense (-)</option>
+        </select>
+        <input id="amountInput" type="number" min="1" step="1" placeholder="Amount" />
+        <button id="addBtn" class="btn-main" type="button" style="margin-top:8px;">Add</button>
+      </article>
+      <article>
+        <h2>Scoreboard</h2>
+        <p>Balance: <strong id="balance" class="good">Rs 0</strong></p>
+        <p>Income: <strong id="income">Rs 0</strong></p>
+        <p>Expense: <strong id="expense" class="bad">Rs 0</strong></p>
+        <p>Budget Health: <strong id="health">0%</strong></p>
+        <button id="resetBtn" type="button">Reset</button>
+      </article>
+    </section>
+    <section class="card">
+      <h2>Battle Log</h2>
+      <div id="log"></div>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const KEY = "krishiv_budget_battle_v1";
+      const labelInput = document.getElementById("labelInput");
+      const typeSelect = document.getElementById("typeSelect");
+      const amountInput = document.getElementById("amountInput");
+      const addBtn = document.getElementById("addBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const balanceEl = document.getElementById("balance");
+      const incomeEl = document.getElementById("income");
+      const expenseEl = document.getElementById("expense");
+      const healthEl = document.getElementById("health");
+      const logEl = document.getElementById("log");
+      let list = [];
+      function load(){ try{ list=JSON.parse(localStorage.getItem(KEY)||"[]"); if(!Array.isArray(list)) list=[]; }catch{ list=[]; } }
+      function save(){ localStorage.setItem(KEY, JSON.stringify(list)); }
+      function money(v){ return "Rs " + Number(v||0).toLocaleString("en-IN"); }
+      function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+      function render(){
+        let income=0, expense=0;
+        list.forEach((x)=>{ if(x.type==="income") income += x.amount; else expense += x.amount; });
+        const balance = income-expense;
+        const health = income > 0 ? Math.max(0, Math.min(100, Math.round((balance / income) * 100))) : 0;
+        incomeEl.textContent = money(income);
+        expenseEl.textContent = money(expense);
+        balanceEl.textContent = money(balance);
+        balanceEl.className = balance >= 0 ? "good" : "bad";
+        healthEl.textContent = health + "%";
+        logEl.innerHTML = list.slice().reverse().map((x)=>`
+          <article class="tx">
+            <strong>${esc(x.label)}</strong> <span class="${x.type==="income"?"good":"bad"}">${x.type==="income"?"+":"-"}${money(x.amount)}</span>
+            <div class="meta">${new Date(x.time).toLocaleString("en-IN")}</div>
+          </article>
+        `).join("") || `<p class="meta">No transactions yet.</p>`;
+      }
+      addBtn.addEventListener("click", ()=>{
+        const label = labelInput.value.trim();
+        const type = typeSelect.value;
+        const amount = Math.max(1, Number(amountInput.value||0));
+        if(label.length<2 || !Number.isFinite(amount) || amount<=0){ alert("Add valid label and amount."); return; }
+        list.push({ id:"B"+Date.now().toString(36), label, type, amount, time:new Date().toISOString() });
+        labelInput.value=""; amountInput.value="";
+        save(); render();
+      });
+      resetBtn.addEventListener("click", ()=>{ if(!confirm("Reset budget log?")) return; list=[]; save(); render(); });
+      load(); render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+

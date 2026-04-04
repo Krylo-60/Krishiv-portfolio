@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Daily Journal | Krishiv PB</title>
+  <style>
+    :root{--bg:#071323;--panel:#11263f;--line:#355b80;--text:#eef7ff;--muted:#a8c4e5;--accent:#78d7ff;--ok:#54d8a7}
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(170deg,#040d18,#0b213a 50%,#15365c)}
+    .wrap{width:min(940px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(9,22,40,.95));margin-bottom:12px}
+    h1,h2{margin:0 0 8px}p{margin:0 0 10px;color:var(--muted)}textarea,input,select,button{width:100%;border-radius:10px;border:1px solid var(--line);background:#081a2e;color:var(--text);padding:10px;font:inherit}
+    textarea{min-height:110px}.row{display:grid;gap:10px;grid-template-columns:1fr 180px 140px}.btn{font-weight:700;cursor:pointer}.btn-primary{border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#042232}
+    .entry{border:1px solid rgba(110,162,215,.28);border-radius:12px;padding:10px;background:rgba(6,18,32,.72);margin-bottom:8px}.meta{font-size:.86rem;color:#9fc1e3}
+    .credit{font-weight:700;color:#d9edff} a{color:#9fd9ff}
+    @media(max-width:780px){.row{grid-template-columns:1fr}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body data-theme="default" data-mode="dark">
+  <main class="wrap">
+    <section class="card"><h1>Daily Journal</h1><p>Track your day, mood, and learning wins.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
+    <section class="card">
+      <h2>Write Entry</h2>
+      <div class="row">
+        <input id="title" placeholder="Entry title" maxlength="60" />
+        <select id="mood"><option>Happy</option><option>Focused</option><option>Excited</option><option>Tired</option><option>Neutral</option></select>
+        <button id="saveBtn" class="btn btn-primary" type="button">Save Entry</button>
+      </div>
+      <textarea id="content" maxlength="600" placeholder="What happened today? What did you learn?"></textarea>
+      <p>Details: journal entries are stored in your browser to help build consistency.</p>
+    </section>
+    <section class="card"><h2>Journal Timeline</h2><div id="entries"></div></section>
+  </main>
+  <script>
+    (() => {
+      const key = "krishiv_daily_journal_v1";
+      const title = document.getElementById("title"), mood = document.getElementById("mood"), content = document.getElementById("content"), saveBtn = document.getElementById("saveBtn"), entries = document.getElementById("entries");
+      let items = []; try { items = JSON.parse(localStorage.getItem(key) || "[]"); if (!Array.isArray(items)) items = []; } catch { items = []; }
+      function save(){ localStorage.setItem(key, JSON.stringify(items)); }
+      function render(){ entries.innerHTML = items.length ? items.map((e)=>`<article class="entry"><strong>${e.title}</strong><div class="meta">${e.mood} | ${new Date(e.ts).toLocaleString()}</div><p>${e.content}</p><button data-id="${e.id}">Delete</button></article>`).join("") : '<p class="meta">No entries yet.</p>'; }
+      saveBtn.addEventListener("click", ()=>{ const t=title.value.trim(), c=content.value.trim(); if(t.length<2||c.length<5){alert("Add a title and a meaningful entry.");return;} items.unshift({id:Date.now().toString(36),title:t,mood:mood.value,content:c,ts:Date.now()}); title.value=""; content.value=""; save(); render(); });
+      entries.addEventListener("click",(ev)=>{ const b=ev.target; if(!(b instanceof HTMLButtonElement)) return; items=items.filter((x)=>x.id!==b.dataset.id); save(); render(); });
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

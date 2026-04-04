@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Projects Hub | Krishiv PB</title>
+  <style>
+    :root{--bg:#061223;--panel:#10253f;--line:#355b80;--text:#eef7ff;--muted:#a8c4e4;--accent:#79d8ff;--ok:#57d9aa}
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#04101b,#0a2139 50%,#13365b)}
+    .wrap{width:min(1060px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(8,20,38,.95));margin-bottom:12px}
+    h1,h2,h3,p{margin:0 0 8px}p{color:var(--muted)}a{color:#9fd8ff;text-decoration:none;font-weight:700}
+    .grid{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+    .item{border:1px solid rgba(110,162,215,.26);border-radius:12px;padding:10px;background:rgba(6,18,32,.72)}
+    .credit{font-weight:700;color:#d9ecff}
+    @media(max-width:860px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:620px){.grid{grid-template-columns:1fr}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body data-theme="default" data-mode="dark">
+  <main class="wrap">
+    <section class="card">
+      <h1>Projects Hub</h1>
+      <p>This page gives a focused view of Krishiv PB projects with clear categories and launch links.</p>
+      <p class="credit">Credit: Krishiv PB</p>
+      <p><a href="index.html#projects">Open full projects section</a></p>
+    </section>
+    <section class="card">
+      <h2>Core Builds</h2>
+      <div class="grid">
+        <article class="item"><h3>Master Nexus</h3><p>Live creator sync page with dashboard style.</p><a href="krylo-blox-master-nexus.html">Launch</a></article>
+        <article class="item"><h3>Aether v104</h3><p>Advanced Aether core build with rich system UI.</p><a href="aether-core-v104.html">Launch</a></article>
+        <article class="item"><h3>Aether v55</h3><p>Focused core build for lightweight performance.</p><a href="aether-core-v55.html">Launch</a></article>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Student + Utility Apps</h2>
+      <div class="grid">
+        <article class="item"><h3>Study Planner</h3><p>Task organization and deadlines.</p><a href="study-planner.html">Open</a></article>
+        <article class="item"><h3>Quiz Zone</h3><p>Interactive knowledge checks.</p><a href="quiz-zone.html">Open</a></article>
+        <article class="item"><h3>Review App</h3><p>Feedback + ratings with backend.</p><a href="review-app.html">Open</a></article>
+        <article class="item"><h3>Grade Calculator</h3><p>Weighted grade estimate tool.</p><a href="grade-calculator.html">Open</a></article>
+        <article class="item"><h3>Reading Tracker</h3><p>Book progress and completion flow.</p><a href="reading-tracker.html">Open</a></article>
+        <article class="item"><h3>Code Snippets Vault</h3><p>Reusable coding snippets storage.</p><a href="code-snippets-vault.html">Open</a></article>
+      </div>
+    </section>
+  </main>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

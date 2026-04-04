@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Water Reminder | Krishiv PB</title>
+  <style>
+    :root{--bg:#061223;--panel:#10243d;--line:#355a80;--text:#eef7ff;--muted:#a7c3e4;--accent:#79d8ff;--ok:#57d9aa}
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(170deg,#04101a,#0a2139 50%,#14365d)}
+    .wrap{width:min(900px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(9,22,40,.95));margin-bottom:12px}
+    h1,h2,p{margin:0 0 8px}p{color:var(--muted)} .row{display:flex;gap:8px;flex-wrap:wrap}
+    button,input{border-radius:10px;border:1px solid var(--line);background:#08192d;color:var(--text);padding:10px;font:inherit}
+    .btn-primary{border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#032132;font-weight:700}
+    .meter{height:16px;border-radius:999px;border:1px solid var(--line);background:#08192d;overflow:hidden}.meter span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--ok))}
+    .credit{font-weight:700;color:#d9ecff}a{color:#9fd9ff}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body data-theme="default" data-mode="dark">
+  <main class="wrap">
+    <section class="card"><h1>Water Reminder</h1><p>Track daily water intake and keep hydration goals on point.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
+    <section class="card">
+      <h2>Daily Hydration</h2>
+      <p>Goal (ml)</p><input id="goal" type="number" min="500" step="100" value="2000" />
+      <div class="row" style="margin-top:8px;">
+        <button class="btn-primary" data-add="200" type="button">+200 ml</button>
+        <button class="btn-primary" data-add="300" type="button">+300 ml</button>
+        <button class="btn-primary" data-add="500" type="button">+500 ml</button>
+        <button id="reset" type="button">Reset Day</button>
+      </div>
+      <p id="summary" style="margin-top:10px;"></p>
+      <div class="meter"><span id="fill" style="width:0%"></span></div>
+      <p>Details: intake auto-resets each day and saves in your browser.</p>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const key="krishiv_water_reminder_v1", goal=document.getElementById("goal"), fill=document.getElementById("fill"), summary=document.getElementById("summary"), reset=document.getElementById("reset");
+      let state={date:new Date().toDateString(),goal:2000,intake:0}; try{const raw=JSON.parse(localStorage.getItem(key)||"null"); if(raw&&typeof raw==="object") state={...state,...raw};}catch{}
+      if(state.date!==new Date().toDateString()){state={date:new Date().toDateString(),goal:Number(goal.value)||2000,intake:0};}
+      function save(){localStorage.setItem(key,JSON.stringify(state));}
+      function render(){const g=Math.max(500,Number(goal.value)||state.goal||2000); state.goal=g; const pct=Math.max(0,Math.min(100,Math.round((state.intake/g)*100))); fill.style.width=pct+"%"; summary.textContent=`${state.intake} ml / ${g} ml (${pct}%)`; save();}
+      goal.addEventListener("input",render);
+      document.querySelectorAll("[data-add]").forEach((b)=>b.addEventListener("click",()=>{state.intake+=Number(b.getAttribute("data-add")||0); render();}));
+      reset.addEventListener("click",()=>{state.intake=0; state.date=new Date().toDateString(); render();});
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

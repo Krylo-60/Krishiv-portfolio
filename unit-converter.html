@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Unit Converter | Krishiv PB</title>
+  <style>
+    :root{--bg:#071223;--panel:#122844;--line:#35608a;--text:#eef7ff;--muted:#a9c6e7}
+    *{box-sizing:border-box} body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);color:var(--text)}
+    .wrap{width:min(760px,94%);margin:24px auto}.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:12px}
+    .row{display:flex;gap:8px;flex-wrap:wrap} input,select,button{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit}
+    .btn{cursor:pointer;font-weight:700;border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333}.meta{color:var(--muted)} a{color:#9edcff}
+    .history{margin:0;padding-left:18px}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card"><h1>Unit Converter</h1><p class="meta">Created by Krishiv PB</p><a href="index.html#projects">Back to portfolio</a></section>
+    <section class="card">
+      <div class="row">
+        <input id="value" type="number" placeholder="Value" />
+        <select id="kind">
+          <option value="km-miles">KM to Miles</option><option value="miles-km">Miles to KM</option>
+          <option value="c-f">Celsius to Fahrenheit</option><option value="f-c">Fahrenheit to Celsius</option>
+          <option value="kg-lb">KG to LB</option><option value="lb-kg">LB to KG</option>
+          <option value="cm-inch">CM to Inch</option><option value="inch-cm">Inch to CM</option>
+        </select>
+        <button class="btn" id="swap">Swap</button>
+        <button class="btn" id="convert">Convert</button>
+      </div>
+      <h2 id="out">Result: -</h2>
+      <p id="formula" class="meta"></p>
+      <h3>Recent Conversions</h3>
+      <ul id="history" class="history"></ul>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const key = "krishiv_unit_converter_history_v2";
+      const value=document.getElementById("value"), kind=document.getElementById("kind"), out=document.getElementById("out"), formula=document.getElementById("formula"), history=document.getElementById("history");
+      let items = [];
+      const map = {
+        "km-miles": { fn:(v)=>v*0.621371, unit:"miles", f:"km x 0.621371" },
+        "miles-km": { fn:(v)=>v/0.621371, unit:"km", f:"miles / 0.621371" },
+        "c-f": { fn:(v)=>(v*9/5)+32, unit:"F", f:"(C x 9/5) + 32" },
+        "f-c": { fn:(v)=>(v-32)*5/9, unit:"C", f:"(F - 32) x 5/9" },
+        "kg-lb": { fn:(v)=>v*2.20462, unit:"lb", f:"kg x 2.20462" },
+        "lb-kg": { fn:(v)=>v/2.20462, unit:"kg", f:"lb / 2.20462" },
+        "cm-inch": { fn:(v)=>v/2.54, unit:"inch", f:"cm / 2.54" },
+        "inch-cm": { fn:(v)=>v*2.54, unit:"cm", f:"inch x 2.54" }
+      };
+      function load(){ try{ items=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(items)) items=[]; }catch{ items=[]; } }
+      function save(){ localStorage.setItem(key, JSON.stringify(items.slice(0,8))); }
+      function renderHistory(){ history.innerHTML = items.slice(0,8).map((x)=>`<li>${x}</li>`).join("") || "<li>No conversions yet.</li>"; }
+      function runConvert() {
+        const v=Number(value.value); if(!Number.isFinite(v)){ out.textContent="Result: enter a valid number"; return; }
+        const meta = map[kind.value]; const r = meta.fn(v);
+        const line = `${v} -> ${r.toFixed(2)} ${meta.unit}`;
+        out.textContent="Result: "+r.toFixed(2)+" "+meta.unit;
+        formula.textContent="Formula: " + meta.f;
+        items.unshift(line); save(); renderHistory();
+      }
+      document.getElementById("convert").addEventListener("click", runConvert);
+      document.getElementById("swap").addEventListener("click",()=>{
+        const v = kind.value;
+        const swapMap = {"km-miles":"miles-km","miles-km":"km-miles","c-f":"f-c","f-c":"c-f","kg-lb":"lb-kg","lb-kg":"kg-lb","cm-inch":"inch-cm","inch-cm":"cm-inch"};
+        kind.value = swapMap[v] || v;
+      });
+      load(); renderHistory();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

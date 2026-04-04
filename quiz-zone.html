@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>JavaScript Quiz Zone</title>
+  <style>
+    :root {
+      --bg: #060f1f;
+      --panel: #10253f;
+      --line: #355a82;
+      --text: #eff6ff;
+      --muted: #afc7e7;
+      --ok: #52d6a3;
+      --bad: #ff7f7f;
+      --accent: #7cd4ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(170deg, #030b16, #0a2038 48%, #13365f);
+      min-height: 100vh;
+    }
+    .wrap { width: min(900px, 94%); margin: 24px auto; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(155deg, rgba(17,37,64,.95), rgba(10,24,43,.95));
+      box-shadow: 0 20px 42px rgba(0,0,0,.28);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    h1, h2, p { margin: 0 0 10px; }
+    p { color: var(--muted); }
+    .progress {
+      width: 100%; height: 10px; border-radius: 999px;
+      background: rgba(4,14,26,.8); border: 1px solid var(--line); overflow: hidden;
+      margin: 10px 0 12px;
+    }
+    .progress span { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, #7cd4ff, #52d6a3); transition: width .25s ease; }
+    .option {
+      display: block; width: 100%; text-align: left; margin-bottom: 8px; cursor: pointer;
+      border: 1px solid var(--line); border-radius: 10px; background: #0a1a30; color: var(--text); padding: 10px;
+    }
+    .option:hover { border-color: #75c7f0; }
+    .option.correct { border-color: rgba(82,214,163,.8); background: rgba(20,54,47,.85); }
+    .option.wrong { border-color: rgba(255,127,127,.75); background: rgba(62,26,26,.85); }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #0a1a30; color: var(--text);
+      cursor: pointer; font-weight: 700;
+    }
+    .btn.primary { border: none; color: #042132; background: linear-gradient(135deg, var(--accent), var(--ok)); }
+    .meta { color: var(--muted); font-size: .9rem; }
+    a { color: #9ad9ff; }
+  </style>
+
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>JavaScript Quiz Zone</h1>
+      <p>Practice logic with instant feedback and score tracking.</p>
+      <p>Created by Krishiv PB</p>
+      <a href="index.html#projects">Back to portfolio</a>
+    </section>
+
+    <section class="card">
+      <div class="row" style="justify-content:space-between;align-items:center;">
+        <h2 id="questionTitle">Question</h2>
+        <strong id="scoreText">Score: 0</strong>
+      </div>
+      <div class="meta" id="questionMeta">Question 1</div>
+      <div class="meta">Time left: <strong id="timerText">20s</strong> | Best score: <strong id="bestScoreText">0</strong></div>
+      <div class="progress"><span id="progressBar"></span></div>
+      <p id="questionText"></p>
+      <div id="optionsNode"></div>
+      <p id="feedback" class="meta"></p>
+      <div class="row">
+        <button id="nextBtn" class="btn primary" disabled>Next</button>
+        <button id="restartBtn" class="btn">Restart Quiz</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const questions = [
+        { q: "Which method adds an item to the end of an array?", options: ["push()", "shift()", "pop()", "slice()"], answer: 0 },
+        { q: "What does '===' check in JavaScript?", options: ["Only value", "Only type", "Value and type", "Neither"], answer: 2 },
+        { q: "Which keyword creates a block-scoped variable?", options: ["var", "const", "both let and const", "function"], answer: 2 },
+        { q: "What does JSON.stringify do?", options: ["Parses JSON to object", "Converts object to JSON string", "Clones array", "Sorts object keys"], answer: 1 },
+        { q: "Which one is asynchronous by default in browsers?", options: ["for loop", "fetch()", "if statement", "Math.random()"], answer: 1 }
+      ];
+
+      const questionTitle = document.getElementById("questionTitle");
+      const questionMeta = document.getElementById("questionMeta");
+      const questionText = document.getElementById("questionText");
+      const optionsNode = document.getElementById("optionsNode");
+      const feedback = document.getElementById("feedback");
+      const scoreText = document.getElementById("scoreText");
+      const progressBar = document.getElementById("progressBar");
+      const timerText = document.getElementById("timerText");
+      const bestScoreText = document.getElementById("bestScoreText");
+      const nextBtn = document.getElementById("nextBtn");
+      const restartBtn = document.getElementById("restartBtn");
+      const BEST_KEY = "krishiv_quiz_best_score_v1";
+      const QUESTION_SECONDS = 20;
+
+      let index = 0;
+      let score = 0;
+      let locked = false;
+      let remaining = QUESTION_SECONDS;
+      let timer = null;
+      let best = Number(localStorage.getItem(BEST_KEY) || "0") || 0;
+      bestScoreText.textContent = String(best);
+
+      function stopTimer() {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      }
+
+      function startTimer() {
+        stopTimer();
+        remaining = QUESTION_SECONDS;
+        timerText.textContent = remaining + "s";
+        timer = setInterval(() => {
+          remaining -= 1;
+          timerText.textContent = Math.max(0, remaining) + "s";
+          if (remaining <= 0) {
+            stopTimer();
+            if (!locked) {
+              locked = true;
+              const current = questions[index];
+              const optionButtons = Array.from(optionsNode.querySelectorAll(".option"));
+              optionButtons.forEach((btn) => btn.disabled = true);
+              const rightBtn = optionButtons[current.answer];
+              if (rightBtn) rightBtn.classList.add("correct");
+              feedback.textContent = "Time up. The correct answer is highlighted.";
+              feedback.style.color = "#ff7f7f";
+              nextBtn.disabled = false;
+            }
+          }
+        }, 1000);
+      }
+
+      function render() {
+        const current = questions[index];
+        const total = questions.length;
+        locked = false;
+        feedback.textContent = "";
+        nextBtn.disabled = true;
+        questionTitle.textContent = "Question " + (index + 1);
+        questionMeta.textContent = "Question " + (index + 1) + " of " + total;
+        questionText.textContent = current.q;
+        scoreText.textContent = "Score: " + score;
+        progressBar.style.width = ((index / total) * 100).toFixed(1) + "%";
+
+        optionsNode.innerHTML = current.options.map((opt, optIndex) => {
+          return '<button class="option" type="button" data-index="' + optIndex + '">' + escapeHtml(opt) + "</button>";
+        }).join("");
+        startTimer();
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function finish() {
+        stopTimer();
+        progressBar.style.width = "100%";
+        questionTitle.textContent = "Quiz Completed";
+        questionMeta.textContent = "Final result";
+        questionText.textContent = "Great effort. You scored " + score + " out of " + questions.length + ".";
+        optionsNode.innerHTML = "";
+        nextBtn.disabled = true;
+        feedback.textContent = "Press Restart Quiz to play again.";
+        if (score > best) {
+          best = score;
+          localStorage.setItem(BEST_KEY, String(best));
+          bestScoreText.textContent = String(best);
+          feedback.textContent += " New best score!";
+        }
+      }
+
+      optionsNode.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) return;
+        if (locked) return;
+        stopTimer();
+        locked = true;
+
+        const selected = Number(target.dataset.index);
+        const current = questions[index];
+        const optionButtons = Array.from(optionsNode.querySelectorAll(".option"));
+        optionButtons.forEach((btn) => btn.disabled = true);
+
+        if (selected === current.answer) {
+          score += 1;
+          target.classList.add("correct");
+          feedback.textContent = "Correct answer.";
+          feedback.style.color = "#52d6a3";
+        } else {
+          target.classList.add("wrong");
+          const rightBtn = optionButtons[current.answer];
+          if (rightBtn) rightBtn.classList.add("correct");
+          feedback.textContent = "Wrong answer. The correct choice is highlighted.";
+          feedback.style.color = "#ff7f7f";
+        }
+        scoreText.textContent = "Score: " + score;
+        nextBtn.disabled = false;
+      });
+
+      nextBtn.addEventListener("click", () => {
+        if (index >= questions.length - 1) {
+          finish();
+          return;
+        }
+        index += 1;
+        render();
+      });
+
+      restartBtn.addEventListener("click", () => {
+        stopTimer();
+        index = 0;
+        score = 0;
+        render();
+      });
+
+      render();
+    })();
+  </script>
+
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>StoryForge Studio | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root {
+      --bg: #061223;
+      --panel: #122943;
+      --line: #355a82;
+      --text: #ecf6ff;
+      --muted: #a9c6e5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(165deg, #040f1d, #0b2744 52%, #11375d);
+      min-height: 100vh;
+    }
+    .wrap { width: min(960px, 94%); margin: 22px auto 90px; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(160deg, rgba(18, 41, 67, 0.96), rgba(9, 23, 41, 0.96));
+      margin-bottom: 12px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #0a1b2f;
+      color: var(--text);
+      padding: 9px 10px;
+      font: inherit;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    button { cursor: pointer; font-weight: 700; }
+    .btn-main { border: none; background: linear-gradient(135deg, #79d8ff, #5ad6a7); color: #042333; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .story {
+      border: 1px solid rgba(120, 174, 235, 0.35);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 9px;
+      background: rgba(7, 19, 34, 0.72);
+    }
+    .meta { color: var(--muted); font-size: .88rem; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>StoryForge Studio</h1>
+      <p class="meta">Build creative mini stories with genre templates, twists, and endings.</p>
+      <p class="meta">Created by Krishiv PB</p>
+      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+    </section>
+
+    <section class="card grid">
+      <article>
+        <h2>Create Story</h2>
+        <input id="heroInput" placeholder="Main hero name" style="margin-bottom:8px;" />
+        <input id="placeInput" placeholder="Place (city, planet, forest...)" style="margin-bottom:8px;" />
+        <select id="genreSelect" style="margin-bottom:8px;">
+          <option value="adventure">Adventure</option>
+          <option value="mystery">Mystery</option>
+          <option value="future">Future Tech</option>
+          <option value="fantasy">Fantasy</option>
+        </select>
+        <select id="twistSelect" style="margin-bottom:8px;">
+          <option value="hidden-map">Hidden map appears</option>
+          <option value="secret-friend">A secret friend helps</option>
+          <option value="time-loop">Time loop starts</option>
+          <option value="final-clue">Final clue is in plain sight</option>
+        </select>
+        <button id="generateBtn" class="btn-main" type="button">Generate Story</button>
+      </article>
+      <article>
+        <h2>Output</h2>
+        <textarea id="result"></textarea>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button id="copyBtn" type="button">Copy</button>
+          <button id="saveBtn" type="button">Save Story</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Saved Stories</h2>
+      <div id="stories"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const KEY = "krishiv_storyforge_v1";
+      const heroInput = document.getElementById("heroInput");
+      const placeInput = document.getElementById("placeInput");
+      const genreSelect = document.getElementById("genreSelect");
+      const twistSelect = document.getElementById("twistSelect");
+      const result = document.getElementById("result");
+      const storiesEl = document.getElementById("stories");
+      const generateBtn = document.getElementById("generateBtn");
+      const copyBtn = document.getElementById("copyBtn");
+      const saveBtn = document.getElementById("saveBtn");
+      let stories = [];
+
+      function load() {
+        try { stories = JSON.parse(localStorage.getItem(KEY) || "[]"); if (!Array.isArray(stories)) stories = []; }
+        catch { stories = []; }
+      }
+      function save() { localStorage.setItem(KEY, JSON.stringify(stories)); }
+      function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+      function buildStory(hero, place, genre, twist) {
+        const lead = hero || "Nova";
+        const zone = place || "Aster City";
+        const hooks = {
+          adventure: `${lead} raced across ${zone} chasing a signal no one else could decode.`,
+          mystery: `${lead} arrived in ${zone} to solve a puzzle locked for 100 years.`,
+          future: `${lead} activated a prototype in ${zone} and everything changed in one second.`,
+          fantasy: `${lead} discovered an ancient gate hidden under ${zone}.`
+        };
+        const turns = {
+          "hidden-map": "A glowing map appeared on the wall and pointed to a place outside every known map.",
+          "secret-friend": "An unknown friend sent clues at exactly the right time.",
+          "time-loop": "The same 10 minutes repeated until the right choice was made.",
+          "final-clue": "The final clue was hidden in the very first message."
+        };
+        return `${hooks[genre] || hooks.adventure}\n\n${turns[twist] || turns["hidden-map"]}\n\nIn the final moment, ${lead} trusted their courage, solved the challenge, and unlocked a new mission for tomorrow.`;
+      }
+
+      function renderStories() {
+        storiesEl.innerHTML = stories.map((s) => `
+          <article class="story">
+            <strong>${esc(s.title)}</strong>
+            <p>${esc(s.text)}</p>
+            <p class="meta">${new Date(s.time).toLocaleString("en-IN")}</p>
+            <button type="button" data-del="${s.id}">Delete</button>
+          </article>
+        `).join("") || `<p class="meta">No stories saved yet.</p>`;
+      }
+
+      generateBtn.addEventListener("click", () => {
+        result.value = buildStory(
+          heroInput.value.trim(),
+          placeInput.value.trim(),
+          genreSelect.value,
+          twistSelect.value
+        );
+      });
+      copyBtn.addEventListener("click", async () => {
+        const text = result.value.trim();
+        if (!text) return;
+        try { await navigator.clipboard.writeText(text); } catch {}
+      });
+      saveBtn.addEventListener("click", () => {
+        const text = result.value.trim();
+        if (!text) return;
+        const title = (heroInput.value.trim() || "Story") + " - " + (genreSelect.value || "adventure");
+        stories.unshift({ id: "S" + Date.now().toString(36), title, text, time: new Date().toISOString() });
+        save();
+        renderStories();
+      });
+      storiesEl.addEventListener("click", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLButtonElement)) return;
+        const id = t.dataset.del;
+        if (!id) return;
+        stories = stories.filter((x) => x.id !== id);
+        save();
+        renderStories();
+      });
+
+      load();
+      renderStories();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+

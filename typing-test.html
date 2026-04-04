@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Typing Speed Test | Krishiv PB</title>
+  <style>
+    :root{--bg:#071223;--panel:#122844;--line:#35608a;--text:#eef7ff;--muted:#aac5e6}
+    *{box-sizing:border-box} body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);color:var(--text)}
+    .wrap{width:min(900px,94%);margin:24px auto}.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:12px}
+    textarea,button,select{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit}
+    textarea{width:100%;min-height:120px}
+    .row{display:flex;gap:8px;flex-wrap:wrap}.btn{cursor:pointer;font-weight:700;border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333}.meta{color:var(--muted)} a{color:#9edcff}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card"><h1>Typing Speed Test</h1><p class="meta">Created by Krishiv PB</p><a href="index.html#projects">Back to portfolio</a></section>
+    <section class="card">
+      <div class="row">
+        <select id="duration"><option value="30">30s</option><option value="60" selected>60s</option><option value="120">120s</option></select>
+        <button id="newText" class="btn">New Text</button>
+        <button id="reset" class="btn">Reset</button>
+      </div>
+      <p id="target">JavaScript helps me build interactive websites faster every week.</p>
+      <textarea id="input" placeholder="Start typing the line above..."></textarea>
+      <p id="result" class="meta">Type to start the timer.</p>
+      <p id="best" class="meta"></p>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const bestKey = "krishiv_typing_best_v2";
+      const targetEl=document.getElementById("target"), input=document.getElementById("input"), result=document.getElementById("result"), reset=document.getElementById("reset"), duration=document.getElementById("duration"), best=document.getElementById("best"), newText=document.getElementById("newText");
+      const samples=[
+        "JavaScript helps me build interactive websites faster every week.",
+        "Consistent coding practice turns ideas into real projects.",
+        "Krishiv PB builds apps with speed, creativity, and focus.",
+        "Strong habits and smart tools create excellent student outcomes."
+      ];
+      let start=0, timer=null, left=60, running=false;
+      const bestScore = Number(localStorage.getItem(bestKey) || 0);
+      function pick(){ return samples[Math.floor(Math.random()*samples.length)]; }
+      function setBest(v){ best.textContent = "Best WPM: " + v; }
+      setBest(bestScore);
+      function calcAccuracy(typed, target){
+        const len = Math.max(typed.length, 1);
+        let correct = 0;
+        for (let i = 0; i < typed.length; i += 1) if (typed[i] === target[i]) correct += 1;
+        return Math.max(0, Math.round((correct / len) * 100));
+      }
+      function stop() { if (timer) clearInterval(timer); timer = null; running = false; }
+      function resetTest(newSample=false){
+        stop();
+        if (newSample) targetEl.textContent = pick();
+        input.value="";
+        left = Number(duration.value || 60);
+        result.textContent="Time: " + left + "s | Type to start.";
+        start=0;
+      }
+      input.addEventListener("input",()=>{
+        const target=targetEl.textContent; const typed=input.value;
+        if(!running && typed.length){
+          running=true; start=Date.now();
+          timer = setInterval(() => {
+            left -= 1;
+            const acc = calcAccuracy(input.value, target);
+            result.textContent = `Time: ${Math.max(left,0)}s | Accuracy: ${acc}%`;
+            if (left <= 0) {
+              stop();
+              const minutes = Number(duration.value || 60) / 60;
+              const words = input.value.trim() ? input.value.trim().split(/\s+/).length : 0;
+              const wpm = Math.round(words / Math.max(minutes, 0.5));
+              result.textContent = `Finished | WPM: ${wpm} | Accuracy: ${acc}%`;
+              if (wpm > Number(localStorage.getItem(bestKey) || 0)) {
+                localStorage.setItem(bestKey, String(wpm));
+                setBest(wpm);
+              }
+            }
+          }, 1000);
+        }
+        const acc = calcAccuracy(typed, target);
+        if (typed === target) {
+          const ms=Math.max(1,Date.now()-start); const words=target.trim().split(/\s+/).length; const wpm=Math.round((words*60000)/ms);
+          stop();
+          result.textContent=`Perfect run in ${(ms/1000).toFixed(2)}s | WPM: ${wpm} | Accuracy: ${acc}%`;
+          if (wpm > Number(localStorage.getItem(bestKey) || 0)) {
+            localStorage.setItem(bestKey, String(wpm));
+            setBest(wpm);
+          }
+        }
+      });
+      reset.addEventListener("click",()=>resetTest(false));
+      newText.addEventListener("click",()=>resetTest(true));
+      duration.addEventListener("change",()=>resetTest(false));
+      resetTest(true);
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

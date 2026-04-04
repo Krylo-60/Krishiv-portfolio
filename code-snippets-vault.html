@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Code Snippets Vault | Krishiv PB</title>
+  <style>
+    :root{--bg:#061223;--panel:#0f243d;--line:#355a80;--text:#eef7ff;--muted:#a7c4e4;--accent:#79d8ff;--ok:#57d9aa}
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#040f1a,#0a223a 50%,#13365d)}
+    .wrap{width:min(980px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(8,20,38,.95));margin-bottom:12px}
+    h1,h2,p{margin:0 0 8px}p{color:var(--muted)}.row{display:grid;gap:10px;grid-template-columns:1fr 160px auto}
+    input,select,textarea,button{width:100%;border-radius:10px;border:1px solid var(--line);background:#08192d;color:var(--text);padding:10px;font:inherit}
+    textarea{min-height:130px;font-family:Consolas,monospace}.btn-primary{border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#032132;font-weight:700}
+    .snip{border:1px solid rgba(110,162,215,.25);border-radius:12px;padding:10px;background:rgba(6,18,32,.72);margin-bottom:8px} pre{margin:8px 0 0;overflow:auto;background:#07182b;border:1px solid var(--line);border-radius:10px;padding:8px}
+    .credit{font-weight:700;color:#d9ecff}a{color:#9fd9ff}
+    @media(max-width:760px){.row{grid-template-columns:1fr}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body data-theme="default" data-mode="dark">
+  <main class="wrap">
+    <section class="card"><h1>Code Snippets Vault</h1><p>Save reusable code snippets with language labels.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
+    <section class="card">
+      <h2>Add Snippet</h2>
+      <div class="row"><input id="name" maxlength="60" placeholder="Snippet name" /><select id="lang"><option>JavaScript</option><option>HTML</option><option>CSS</option><option>Python</option></select><button id="saveSnip" class="btn-primary" type="button">Save</button></div>
+      <textarea id="code" maxlength="3000" placeholder="Paste code snippet here..."></textarea>
+      <p>Details: snippets are local to your browser for fast personal reference.</p>
+    </section>
+    <section class="card"><h2>Vault</h2><div id="vault"></div></section>
+  </main>
+  <script>
+    (() => {
+      const key="krishiv_code_snippets_v1", name=document.getElementById("name"), lang=document.getElementById("lang"), code=document.getElementById("code"), saveSnip=document.getElementById("saveSnip"), vault=document.getElementById("vault");
+      let data=[]; try{data=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(data)) data=[];}catch{data=[];}
+      const esc=(t)=>String(t).replace(/[&<>\"']/g,(m)=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+      const save=()=>localStorage.setItem(key,JSON.stringify(data));
+      const render=()=>{vault.innerHTML=data.length?data.map(s=>`<article class="snip"><strong>${esc(s.name)}</strong> <span style="color:#9ec3e3;">[${esc(s.lang)}]</span><div><button data-a="copy" data-id="${s.id}">Copy</button> <button data-a="del" data-id="${s.id}">Delete</button></div><pre><code>${esc(s.code)}</code></pre></article>`).join(""):'<p>No snippets yet.</p>';};
+      saveSnip.addEventListener("click",()=>{const n=name.value.trim(),l=lang.value,c=code.value.trim(); if(n.length<2||c.length<3){alert("Add snippet name and code.");return;} data.unshift({id:Date.now().toString(36),name:n,lang:l,code:c}); name.value=""; code.value=""; save(); render();});
+      vault.addEventListener("click",async(e)=>{const b=e.target; if(!(b instanceof HTMLButtonElement)) return; const id=b.dataset.id; const item=data.find(x=>x.id===id); if(!item) return; if(b.dataset.a==="del"){data=data.filter(x=>x.id!==id); save(); render();} if(b.dataset.a==="copy"){try{await navigator.clipboard.writeText(item.code); b.textContent="Copied"; setTimeout(()=>b.textContent="Copy",900);}catch{}}});
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

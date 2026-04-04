@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Habit Streak Tracker</title>
+  <style>
+    :root { --bg:#06101f; --panel:#112640; --line:#365b83; --text:#f0f7ff; --muted:#acc6e6; --ok:#55d7a8; --acc:#7ad7ff; --warn:#ffd67e; }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:linear-gradient(160deg,#020912,#0b213a 48%,#13365c);color:var(--text);}
+    .wrap{width:min(980px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(155deg,rgba(17,38,64,.95),rgba(8,20,37,.95));box-shadow:0 20px 40px rgba(0,0,0,.28);margin-bottom:12px;}
+    h1,h2,p{margin:0 0 10px;} p{color:var(--muted);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;}
+    input,select,button{border-radius:10px;border:1px solid var(--line);background:#0a1a2f;color:var(--text);padding:10px;font:inherit;}
+    input{flex:1;min-width:220px;}
+    .btn{cursor:pointer;font-weight:700;}
+    .btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#032032;}
+    .btn.soft{background:#102544;}
+    .habit{border:1px solid var(--line);border-radius:12px;padding:10px;background:rgba(5,16,30,.75);margin-bottom:8px;}
+    .habit-top{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;}
+    .pill{font-size:.78rem;border:1px solid rgba(85,215,168,.55);padding:3px 8px;border-radius:999px;color:#c9ffe9;}
+    .pill.warn{border-color:rgba(255,214,126,.6);color:#ffe9b4;}
+    .meta{color:var(--muted);font-size:.9rem;}
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(110px,1fr));gap:8px;}
+    .stat{border:1px solid rgba(73,113,157,.45);border-radius:12px;padding:10px;background:rgba(6,18,35,.7);}
+    .stat strong{display:block;font-size:1.25rem;}
+    .empty{border:1px dashed var(--line);border-radius:12px;padding:14px;text-align:center;color:var(--muted);}
+    a{color:#9ad9ff;}
+    @media (max-width:720px){.stats{grid-template-columns:1fr;}}
+  </style>
+
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Habit Streak Tracker</h1>
+      <p>Create habits, track streaks, filter by category, and export/import your progress.</p>
+      <p>Created by Krishiv PB</p>
+      <a href="index.html#projects">Back to portfolio</a>
+    </section>
+
+    <section class="card">
+      <h2>Add Habit</h2>
+      <div class="row">
+        <input id="habitInput" maxlength="60" placeholder="Example: 30 min coding practice" />
+        <select id="habitCategory">
+          <option value="Study">Study</option>
+          <option value="Health">Health</option>
+          <option value="Fitness">Fitness</option>
+          <option value="Focus">Focus</option>
+          <option value="Custom">Custom</option>
+        </select>
+        <button id="addHabitBtn" class="btn primary" type="button">Add Habit</button>
+      </div>
+      <div class="row" style="margin-top:8px;">
+        <input id="searchInput" placeholder="Search habits..." />
+        <select id="categoryFilter">
+          <option value="all">All Categories</option>
+          <option value="Study">Study</option>
+          <option value="Health">Health</option>
+          <option value="Fitness">Fitness</option>
+          <option value="Focus">Focus</option>
+          <option value="Custom">Custom</option>
+        </select>
+        <button id="exportBtn" class="btn soft" type="button">Export</button>
+        <button id="importBtn" class="btn soft" type="button">Import</button>
+        <input id="importFile" type="file" accept="application/json" hidden />
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Stats</h2>
+      <div class="stats">
+        <article class="stat"><strong id="totalHabits">0</strong><span class="meta">Total Habits</span></article>
+        <article class="stat"><strong id="bestStreak">0</strong><span class="meta">Best Streak</span></article>
+        <article class="stat"><strong id="doneToday">0</strong><span class="meta">Done Today</span></article>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Your Habits</h2>
+      <div id="habitList"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "krishiv_habit_tracker_v2";
+      const habitInput = document.getElementById("habitInput");
+      const habitCategory = document.getElementById("habitCategory");
+      const addHabitBtn = document.getElementById("addHabitBtn");
+      const searchInput = document.getElementById("searchInput");
+      const categoryFilter = document.getElementById("categoryFilter");
+      const exportBtn = document.getElementById("exportBtn");
+      const importBtn = document.getElementById("importBtn");
+      const importFile = document.getElementById("importFile");
+      const habitList = document.getElementById("habitList");
+      const totalHabits = document.getElementById("totalHabits");
+      const bestStreak = document.getElementById("bestStreak");
+      const doneToday = document.getElementById("doneToday");
+      const today = new Date().toISOString().slice(0, 10);
+
+      let habits = [];
+
+      function uid() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+      }
+
+      function load() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          habits = raw ? JSON.parse(raw) : [];
+          if (!Array.isArray(habits)) habits = [];
+        } catch {
+          habits = [];
+        }
+      }
+
+      function save() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function calcStreak(doneDates) {
+        if (!Array.isArray(doneDates) || !doneDates.length) return 0;
+        let streak = 0;
+        const set = new Set(doneDates);
+        const cursor = new Date();
+        for (;;) {
+          const key = cursor.toISOString().slice(0, 10);
+          if (!set.has(key)) break;
+          streak += 1;
+          cursor.setDate(cursor.getDate() - 1);
+        }
+        return streak;
+      }
+
+      function getVisibleHabits() {
+        const term = searchInput.value.trim().toLowerCase();
+        const cat = categoryFilter.value;
+        return habits.filter((habit) => {
+          const bySearch = !term || (habit.name + " " + habit.category).toLowerCase().includes(term);
+          const byCategory = cat === "all" || habit.category === cat;
+          return bySearch && byCategory;
+        });
+      }
+
+      function renderStats() {
+        totalHabits.textContent = String(habits.length);
+        doneToday.textContent = String(habits.filter((h) => h.doneDates.includes(today)).length);
+        bestStreak.textContent = String(habits.reduce((max, h) => Math.max(max, calcStreak(h.doneDates)), 0));
+      }
+
+      function render() {
+        const visible = getVisibleHabits();
+        renderStats();
+        if (!visible.length) {
+          habitList.innerHTML = '<div class="empty">No matching habits yet.</div>';
+          return;
+        }
+
+        habitList.innerHTML = visible.map((habit) => {
+          const done = Array.isArray(habit.doneDates) ? habit.doneDates : [];
+          const doneTodayFlag = done.includes(today);
+          const streak = calcStreak(done);
+          const weekly = done.filter((d) => {
+            const diff = (Date.now() - Date.parse(d)) / (1000 * 60 * 60 * 24);
+            return diff >= 0 && diff < 7;
+          }).length;
+          return `
+            <article class="habit">
+              <div class="habit-top">
+                <strong>${escapeHtml(habit.name)}</strong>
+                <div class="row">
+                  <span class="pill">${escapeHtml(habit.category || "Custom")}</span>
+                  <span class="pill ${streak >= 7 ? "" : "warn"}">Streak: ${streak}</span>
+                </div>
+              </div>
+              <p class="meta">Completed days: ${done.length} | Last 7 days: ${weekly}/7</p>
+              <div class="row">
+                <button class="btn" type="button" data-action="toggle" data-id="${habit.id}">
+                  ${doneTodayFlag ? "Undo Today" : "Mark Today Done"}
+                </button>
+                <button class="btn soft" type="button" data-action="reset" data-id="${habit.id}">Reset Streak</button>
+                <button class="btn soft" type="button" data-action="delete" data-id="${habit.id}">Delete</button>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      addHabitBtn.addEventListener("click", () => {
+        const name = habitInput.value.trim();
+        if (name.length < 3) {
+          alert("Habit name must be at least 3 characters.");
+          return;
+        }
+        habits.unshift({
+          id: uid(),
+          name,
+          category: habitCategory.value,
+          doneDates: []
+        });
+        habitInput.value = "";
+        save();
+        render();
+      });
+
+      habitList.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) return;
+        const id = target.dataset.id;
+        const action = target.dataset.action;
+        if (!id || !action) return;
+
+        if (action === "delete") {
+          habits = habits.filter((h) => h.id !== id);
+        } else if (action === "reset") {
+          habits = habits.map((h) => h.id === id ? { ...h, doneDates: [] } : h);
+        } else {
+          habits = habits.map((habit) => {
+            if (habit.id !== id) return habit;
+            const set = new Set(habit.doneDates);
+            if (set.has(today)) set.delete(today);
+            else set.add(today);
+            return { ...habit, doneDates: Array.from(set).sort() };
+          });
+        }
+        save();
+        render();
+      });
+
+      searchInput.addEventListener("input", render);
+      categoryFilter.addEventListener("change", render);
+
+      exportBtn.addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(habits, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "habit-tracker-krishiv-pb.json";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+
+      importBtn.addEventListener("click", () => importFile.click());
+      importFile.addEventListener("change", async () => {
+        const file = importFile.files && importFile.files[0];
+        if (!file) return;
+        try {
+          const raw = await file.text();
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) throw new Error("Invalid file.");
+          habits = parsed
+            .filter((h) => h && typeof h === "object")
+            .map((h) => ({
+              id: String(h.id || uid()),
+              name: String(h.name || "Habit"),
+              category: String(h.category || "Custom"),
+              doneDates: Array.isArray(h.doneDates) ? h.doneDates.filter((d) => typeof d === "string") : []
+            }));
+          save();
+          render();
+        } catch (error) {
+          alert("Import failed: " + (error.message || "Invalid JSON"));
+        } finally {
+          importFile.value = "";
+        }
+      });
+
+      load();
+      render();
+    })();
+  </script>
+
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

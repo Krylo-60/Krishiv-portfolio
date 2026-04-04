@@ -1,0 +1,8 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 120" role="img" aria-labelledby="title desc">
+  <title id="title">Valorant Mark</title>
+  <desc id="desc">Stylized Valorant V mark with sharp geometry.</desc>
+  <g fill="#ff4655">
+    <path d="M10 0v58l72 62h66L10 0z"/>
+    <path d="M220 0v58l-24 24h-74L220 0z"/>
+  </g>
+</svg>

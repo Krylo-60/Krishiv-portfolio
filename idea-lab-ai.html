@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Idea Lab AI | Krishiv PB</title>
+  <style>
+    :root { --bg:#071223; --panel:#122844; --line:#365f88; --text:#eef7ff; --muted:#a9c6e7; --ok:#56d5a6; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:Segoe UI,Arial,sans-serif; color:var(--text); background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860); }
+    .wrap { width:min(980px,94%); margin:24px auto; }
+    .card { border:1px solid var(--line); border-radius:14px; padding:14px; background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96)); margin-bottom:12px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    input, textarea, button, select { width:100%; padding:10px; border-radius:10px; border:1px solid var(--line); background:#0a1b31; color:var(--text); font:inherit; }
+    textarea { min-height:90px; resize:vertical; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; }
+    .btn { cursor:pointer; font-weight:700; }
+    .btn.primary { border:none; background:linear-gradient(135deg,#79d8ff,#58d4a8); color:#032333; }
+    .meta { color:var(--muted); }
+    .idea { border:1px solid rgba(84,126,171,.45); border-radius:12px; padding:10px; background:rgba(5,16,30,.72); margin-bottom:8px; }
+    #ideasGenerated { margin-top: 10px; }
+    a { color:#9edcff; }
+    @media (max-width: 900px) { .grid { grid-template-columns:1fr; } }
+  </style>
+
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Idea Lab AI</h1>
+      <p class="meta">Created by Krishiv PB | AI idea generation + backend idea database</p>
+      <a href="index.html#projects">Back to portfolio</a>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Generate With AI</h2>
+        <div class="meta">Describe what kind of app you want to build.</div>
+        <p><input id="goal" placeholder="Goal (example: app to help students revise fast)" maxlength="140" /></p>
+        <p><input id="audience" placeholder="Audience (example: grade 6-10 students)" maxlength="80" /></p>
+        <p><input id="constraints" placeholder="Constraints (example: mobile first, no login)" maxlength="120" /></p>
+        <p>
+          <label for="ideaCount" class="meta">How many ideas</label>
+          <select id="ideaCount">
+            <option value="1">1 idea</option>
+            <option value="2">2 ideas</option>
+            <option value="3" selected>3 ideas</option>
+            <option value="4">4 ideas</option>
+            <option value="5">5 ideas</option>
+            <option value="6">6 ideas</option>
+          </select>
+        </p>
+        <div class="row">
+          <button id="generateBtn" class="btn primary" type="button">Generate Idea</button>
+          <button id="saveBtn" class="btn" type="button">Save To Database</button>
+          <button id="copyBtn" class="btn" type="button">Copy Result</button>
+        </div>
+        <div class="row">
+          <button type="button" class="btn templateBtn" data-template="quiz app for kids">Quiz App</button>
+          <button type="button" class="btn templateBtn" data-template="habit and focus coach">Habit Coach</button>
+          <button type="button" class="btn templateBtn" data-template="study planner with rewards">Study Rewards</button>
+        </div>
+        <p id="genMode" class="meta"></p>
+        <textarea id="result" placeholder="AI suggestion appears here..."></textarea>
+        <div id="ideasGenerated"></div>
+      </article>
+
+      <article class="card">
+        <h2>Saved Ideas</h2>
+        <p><input id="ideasSearch" placeholder="Search saved ideas..." /></p>
+        <div id="ideasList"></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const goal = document.getElementById("goal");
+      const audience = document.getElementById("audience");
+      const constraints = document.getElementById("constraints");
+      const result = document.getElementById("result");
+      const genMode = document.getElementById("genMode");
+      const ideaCount = document.getElementById("ideaCount");
+      const ideasGenerated = document.getElementById("ideasGenerated");
+      const ideasList = document.getElementById("ideasList");
+      const generateBtn = document.getElementById("generateBtn");
+      const saveBtn = document.getElementById("saveBtn");
+      const copyBtn = document.getElementById("copyBtn");
+      const ideasSearch = document.getElementById("ideasSearch");
+      const templateButtons = Array.from(document.querySelectorAll(".templateBtn"));
+      let allIdeas = [];
+
+      async function api(path, options = {}) {
+        const response = await fetch(path, {
+          headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+          ...options
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || "Request failed");
+        return data;
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      async function loadIdeas() {
+        try {
+          const data = await api("/api/ideas");
+          allIdeas = Array.isArray(data.ideas) ? data.ideas : [];
+          renderIdeas();
+        } catch (error) {
+          ideasList.innerHTML = `<p class="meta">Could not load ideas: ${escapeHtml(error.message)}</p>`;
+        }
+      }
+
+      function renderIdeas() {
+        const term = String((ideasSearch && ideasSearch.value) || "").trim().toLowerCase();
+        const ideas = allIdeas.filter((idea) => {
+          if (!term) return true;
+          return String(idea.title + " " + idea.content).toLowerCase().includes(term);
+        });
+        ideasList.innerHTML = ideas.map((idea) => `
+            <article class="idea">
+              <h3>${escapeHtml(idea.title)}</h3>
+              <p>${escapeHtml(idea.content)}</p>
+              <p class="meta">Source: ${escapeHtml(idea.source || "manual")} | ${new Date(idea.createdAt).toLocaleString("en-IN")}</p>
+              <button type="button" data-id="${idea.id}">Delete</button>
+            </article>
+          `).join("") || `<p class="meta">No saved ideas yet.</p>`;
+      }
+
+      generateBtn.addEventListener("click", async () => {
+        const payload = {
+          goal: goal.value.trim(),
+          audience: audience.value.trim(),
+          constraints: constraints.value.trim(),
+          count: Number((ideaCount && ideaCount.value) || 3)
+        };
+        if (payload.goal.length < 5) {
+          alert("Goal must be at least 5 characters.");
+          return;
+        }
+
+        result.value = "Generating idea...";
+        genMode.textContent = "";
+        try {
+          const data = await api("/api/ai/idea-suggest", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+          result.value = data.suggestion || "";
+          const blocks = Array.isArray(data.suggestions) ? data.suggestions : [];
+          if (ideasGenerated) {
+            ideasGenerated.innerHTML = blocks.map((block, index) => `
+              <article class="idea">
+                <h3>Idea ${index + 1}</h3>
+                <p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>
+              </article>
+            `).join("");
+          }
+          genMode.textContent = data.mode === "google"
+            ? "AI mode: Google backend"
+            : "AI mode: fallback generator";
+        } catch (error) {
+          result.value = "Generation failed: " + error.message;
+          if (ideasGenerated) ideasGenerated.innerHTML = "";
+        }
+      });
+
+      saveBtn.addEventListener("click", async () => {
+        const generated = result.value.trim();
+        if (generated.length < 8) {
+          alert("Generate (or write) an idea first.");
+          return;
+        }
+        const titleText = goal.value.trim() || "AI App Idea";
+        try {
+          await api("/api/ideas", {
+            method: "POST",
+            body: JSON.stringify({
+              title: titleText.slice(0, 80),
+              content: generated,
+              source: genMode.textContent.toLowerCase().includes("google") ? "ai-google" : "manual-or-fallback"
+            })
+          });
+          await loadIdeas();
+        } catch (error) {
+          alert("Save failed: " + error.message);
+        }
+      });
+
+      ideasList.addEventListener("click", async (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) return;
+        const id = target.dataset.id;
+        if (!id) return;
+        try {
+          await api("/api/ideas/" + encodeURIComponent(id), { method: "DELETE" });
+          await loadIdeas();
+        } catch (error) {
+          alert("Delete failed: " + error.message);
+        }
+      });
+      
+      copyBtn.addEventListener("click", async () => {
+        const text = result.value.trim();
+        if (!text) return;
+        try {
+          await navigator.clipboard.writeText(text);
+          genMode.textContent = "Copied result to clipboard.";
+        } catch {
+          genMode.textContent = "Copy blocked by browser permissions.";
+        }
+      });
+
+      templateButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          goal.value = btn.dataset.template || "";
+        });
+      });
+
+      ideasSearch.addEventListener("input", renderIdeas);
+
+      loadIdeas();
+    })();
+  </script>
+
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+
+

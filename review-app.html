@@ -1,0 +1,961 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Review App | Krishiv Velocity</title>
+  <meta
+    name="description"
+    content="Review app with backend storage and AI-assisted review suggestions by Krishiv Velocity."
+  />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: radial-gradient(circle at 15% 5%, rgba(18, 197, 255, 0.16), transparent 35%),
+        radial-gradient(circle at 95% 20%, rgba(135, 79, 255, 0.18), transparent 44%),
+        #040714;
+      --panel: rgba(8, 13, 27, 0.84);
+      --panel-border: rgba(141, 165, 214, 0.32);
+      --text: #e7eeff;
+      --muted: #a4b3d6;
+      --primary: #7cecff;
+      --primary-2: #74ffc2;
+      --danger: #ff6a89;
+      --ok: #58d17d;
+      --shadow: 0 16px 42px rgba(3, 8, 26, 0.56);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .shell {
+      width: min(1150px, 93%);
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+    }
+
+    .top a.action {
+      color: #02111b;
+      text-decoration: none;
+      font-weight: 700;
+      background: linear-gradient(120deg, var(--primary), var(--primary-2));
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+
+    .creator-badge {
+      display: none;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(132, 248, 197, 0.35);
+      background: rgba(88, 209, 125, 0.16);
+      color: #bffff0;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .hero,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 16px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(147, 169, 218, 0.38);
+      background: rgba(6, 9, 19, 0.88);
+      color: var(--text);
+      padding: 10px 11px;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #50e0ff;
+      box-shadow: 0 0 0 3px rgba(80, 224, 255, 0.2);
+    }
+
+    .rating {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .rating button {
+      cursor: pointer;
+      border-radius: 9px;
+      border: 1px solid rgba(152, 176, 221, 0.42);
+      background: rgba(4, 8, 17, 0.9);
+      color: #cfdbff;
+      padding: 8px 10px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.84rem;
+      min-width: 48px;
+    }
+
+    .rating button.active {
+      background: linear-gradient(130deg, #9bffdf, #7bc8ff);
+      color: #04111d;
+      border-color: transparent;
+      font-weight: 700;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      color: #03131e;
+      background: linear-gradient(120deg, var(--primary), var(--primary-2));
+    }
+
+    .btn.secondary {
+      color: var(--text);
+      background: rgba(95, 114, 160, 0.3);
+      border: 1px solid rgba(143, 164, 214, 0.32);
+    }
+
+    .btn.danger {
+      color: #ffd5dd;
+      background: rgba(255, 84, 116, 0.14);
+      border: 1px solid rgba(255, 96, 126, 0.4);
+    }
+
+    .feedback {
+      min-height: 22px;
+      margin-top: 6px;
+      font-size: 0.9rem;
+      color: var(--ok);
+    }
+
+    .feedback.error {
+      color: var(--danger);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(100px, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stat {
+      border: 1px solid rgba(141, 162, 208, 0.3);
+      border-radius: 10px;
+      background: rgba(6, 11, 24, 0.68);
+      padding: 10px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.16rem;
+      margin-bottom: 3px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid rgba(141, 163, 212, 0.34);
+      background: rgba(6, 10, 20, 0.86);
+      color: #cad7ff;
+      padding: 6px 12px;
+      font-size: 0.84rem;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      color: #03121d;
+      border-color: transparent;
+      background: linear-gradient(120deg, #8ca1ff, #74ebff);
+      font-weight: 700;
+    }
+
+    .list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .item {
+      border: 1px solid rgba(139, 160, 207, 0.31);
+      border-radius: 11px;
+      background: rgba(7, 12, 27, 0.68);
+      padding: 11px;
+    }
+
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+
+    .item h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .meta {
+      margin: 2px 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .stars {
+      letter-spacing: 0.1em;
+      color: #ffdf82;
+      white-space: nowrap;
+      font-size: 0.95rem;
+    }
+
+    .item p {
+      margin: 0;
+      line-height: 1.55;
+      color: #dbe6ff;
+    }
+
+    .item .delete {
+      margin-top: 8px;
+      text-align: right;
+    }
+
+    .item .delete button {
+      border-radius: 8px;
+      border: 1px solid rgba(255, 95, 128, 0.45);
+      background: rgba(255, 86, 118, 0.14);
+      color: #ffc1ce;
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .ai-box {
+      margin-top: 12px;
+      border-top: 1px solid rgba(140, 162, 211, 0.24);
+      padding-top: 12px;
+    }
+
+    .ai-result {
+      margin-top: 7px;
+      border-radius: 10px;
+      border: 1px solid rgba(132, 155, 203, 0.32);
+      background: rgba(8, 14, 31, 0.72);
+      padding: 10px;
+      color: #d4e8ff;
+      min-height: 62px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .ai-note {
+      margin-top: 6px;
+      font-size: 0.77rem;
+      color: var(--muted);
+    }
+
+    .empty {
+      border: 1px dashed rgba(139, 160, 208, 0.35);
+      border-radius: 10px;
+      background: rgba(6, 11, 24, 0.56);
+      color: var(--muted);
+      padding: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        width: min(1150px, 95%);
+      }
+
+      .panel,
+      .hero {
+        border-radius: 13px;
+        padding: 13px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="shell">
+    <div class="top">
+      <a class="brand" href="index.html">
+        <img src="logo.svg" alt="Krishiv Velocity logo" />
+        <span>Krishiv Velocity</span>
+      </a>
+      <div class="buttons">
+        <span id="creatorBadge" class="creator-badge">Creator Mode Active</span>
+        <a class="action" href="index.html#projects">Back to Projects</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h1>Review App With Backend + AI</h1>
+      <p>
+        Reviews are now stored on the server through APIs, and AI suggestions are generated from a backend endpoint.
+        This means your frontend stays clean and your AI key remains protected.
+      </p>
+      <p class="meta">Created by Krishiv PB</p>
+    </section>
+
+    <div class="layout">
+      <section class="panel">
+        <h2>Add Review</h2>
+        <form id="reviewForm" novalidate>
+          <div class="field">
+            <label for="name">Your Name</label>
+            <input id="name" maxlength="40" placeholder="Your name" required />
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category">
+              <option value="Website">Website</option>
+              <option value="App">App</option>
+              <option value="Game">Game</option>
+              <option value="Video">Video</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Rating</label>
+            <div class="rating" role="group" aria-label="Rating options">
+              <button type="button" class="active" data-rating="5">5 Star</button>
+              <button type="button" data-rating="4">4 Star</button>
+              <button type="button" data-rating="3">3 Star</button>
+              <button type="button" data-rating="2">2 Star</button>
+              <button type="button" data-rating="1">1 Star</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="message">Review</label>
+            <textarea id="message" maxlength="350" placeholder="Write your review..." required></textarea>
+          </div>
+
+          <div class="buttons">
+            <button class="btn primary" type="submit">Submit Review</button>
+            <button class="btn secondary" type="button" id="refreshBtn">Refresh</button>
+            <button class="btn danger" type="button" id="clearBtn" style="display:none">Clear All</button>
+          </div>
+          <p id="feedback" class="feedback" aria-live="polite"></p>
+        </form>
+
+        <div class="ai-box">
+          <h2>Creator Controls</h2>
+          <p class="meta">Only creator mode can delete reviews.</p>
+          <div class="field">
+            <label for="creatorToken">Creator Token</label>
+            <input id="creatorToken" type="password" placeholder="Enter creator token" />
+          </div>
+          <div class="buttons">
+            <button class="btn secondary" type="button" id="enableCreatorBtn">Enable Creator Mode</button>
+            <button class="btn danger" type="button" id="disableCreatorBtn" style="display:none">Exit Creator Mode</button>
+          </div>
+          <p id="creatorStatus" class="feedback" aria-live="polite"></p>
+        </div>
+
+        <div class="ai-box">
+          <h2>AI Review Helper</h2>
+          <p class="meta">Improve review wording using the backend AI endpoint.</p>
+          <div class="buttons">
+            <button class="btn secondary" type="button" id="aiBtn">Improve With AI</button>
+          </div>
+          <div id="aiResult" class="ai-result">AI suggestion will appear here.</div>
+          <p id="aiMode" class="ai-note"></p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Review Feed</h2>
+        <p class="meta">Delete works for creator mode, or for reviews posted from this same browser session.</p>
+        <div class="stats">
+          <div class="stat">
+            <strong id="statTotal">0</strong>
+            <span>Total Reviews</span>
+          </div>
+          <div class="stat">
+            <strong id="statAvg">0.0</strong>
+            <span>Average Rating</span>
+          </div>
+          <div class="stat">
+            <strong id="statFive">0</strong>
+            <span>5-Star Reviews</span>
+          </div>
+        </div>
+
+        <div class="filters" role="toolbar" aria-label="Review filters">
+          <button class="chip active" type="button" data-filter="all">All</button>
+          <button class="chip" type="button" data-filter="5">5 Star</button>
+          <button class="chip" type="button" data-filter="4+">4+ Star</button>
+          <button class="chip" type="button" data-filter="newest">Newest</button>
+        </div>
+
+        <div id="list" class="list"></div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const form = document.getElementById("reviewForm");
+      const feedback = document.getElementById("feedback");
+      const nameInput = document.getElementById("name");
+      const categoryInput = document.getElementById("category");
+      const messageInput = document.getElementById("message");
+      const ratingButtons = Array.from(document.querySelectorAll(".rating button"));
+      const filterButtons = Array.from(document.querySelectorAll(".chip"));
+      const listNode = document.getElementById("list");
+      const refreshBtn = document.getElementById("refreshBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const aiBtn = document.getElementById("aiBtn");
+      const aiResult = document.getElementById("aiResult");
+      const aiMode = document.getElementById("aiMode");
+      const statTotal = document.getElementById("statTotal");
+      const statAvg = document.getElementById("statAvg");
+      const statFive = document.getElementById("statFive");
+      const creatorTokenInput = document.getElementById("creatorToken");
+      const enableCreatorBtn = document.getElementById("enableCreatorBtn");
+      const disableCreatorBtn = document.getElementById("disableCreatorBtn");
+      const creatorStatus = document.getElementById("creatorStatus");
+      const creatorBadge = document.getElementById("creatorBadge");
+      const creatorSessionKey = "krishiv_creator_token";
+      const reviewDeleteTokenKey = "krishiv_review_delete_tokens_v1";
+
+      let selectedRating = 5;
+      let activeFilter = "all";
+      let reviews = [];
+      let creatorToken = localStorage.getItem(creatorSessionKey) || sessionStorage.getItem(creatorSessionKey) || "";
+      let creatorMode = Boolean(creatorToken);
+      let reviewDeleteTokens = {};
+
+      function loadDeleteTokens() {
+        try {
+          const raw = localStorage.getItem(reviewDeleteTokenKey);
+          const parsed = raw ? JSON.parse(raw) : {};
+          return parsed && typeof parsed === "object" ? parsed : {};
+        } catch {
+          return {};
+        }
+      }
+
+      function saveDeleteTokens() {
+        try {
+          localStorage.setItem(reviewDeleteTokenKey, JSON.stringify(reviewDeleteTokens));
+        } catch {
+          // Ignore private-mode or quota failures.
+        }
+      }
+
+      function canDeleteReview(reviewId) {
+        return creatorMode || Boolean(reviewDeleteTokens[reviewId]);
+      }
+
+      function setFeedback(message, isError = false) {
+        feedback.textContent = message;
+        feedback.classList.toggle("error", isError);
+      }
+
+      function stars(rating) {
+        const safe = Math.max(1, Math.min(5, Number(rating) || 0));
+        return `${"\u2605".repeat(safe)}${"\u2606".repeat(5 - safe)}`;
+      }
+
+      function normalizeReview(input) {
+        const review = input && typeof input === "object" ? input : {};
+        const rating = Math.max(1, Math.min(5, Number(review.rating) || 0));
+        const createdDate = new Date(review.createdAt || Date.now());
+        const createdAt = Number.isNaN(createdDate.getTime())
+          ? new Date().toISOString()
+          : createdDate.toISOString();
+        return {
+          id: String(review.id || ""),
+          name: String(review.name || "Anonymous"),
+          category: String(review.category || "General"),
+          message: String(review.message || ""),
+          rating,
+          createdAt
+        };
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function setCreatorStatus(message, isError = false) {
+        creatorStatus.textContent = message;
+        creatorStatus.classList.toggle("error", isError);
+      }
+
+      function updateCreatorUi() {
+        const deleteButtons = Array.from(listNode.querySelectorAll('button[data-action="delete"]'));
+        clearBtn.style.display = creatorMode ? "" : "none";
+        enableCreatorBtn.style.display = creatorMode ? "none" : "";
+        disableCreatorBtn.style.display = creatorMode ? "" : "none";
+        creatorBadge.style.display = creatorMode ? "inline-flex" : "none";
+        deleteButtons.forEach((btn) => {
+          const reviewId = btn.getAttribute("data-id") || "";
+          btn.style.display = canDeleteReview(reviewId) ? "" : "none";
+        });
+      }
+
+      async function verifyCreatorSessionOnLoad() {
+        if (!creatorToken) {
+          creatorMode = false;
+          updateCreatorUi();
+          return;
+        }
+        try {
+          await api("/api/creator/verify", { method: "POST" });
+          creatorMode = true;
+          setCreatorStatus("Creator mode active.");
+        } catch {
+          creatorToken = "";
+          creatorMode = false;
+          localStorage.removeItem(creatorSessionKey);
+          sessionStorage.removeItem(creatorSessionKey);
+          setCreatorStatus("Creator session expired. Please enable creator mode again.", true);
+        }
+        updateCreatorUi();
+      }
+
+      async function api(path, options = {}) {
+        const headers = {
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        };
+        if (creatorToken) {
+          headers["x-admin-token"] = creatorToken;
+        }
+        const response = await fetch(path, {
+          headers,
+          ...options
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || "Request failed");
+        }
+        return data;
+      }
+
+      function applyFilter(items) {
+        if (activeFilter === "5") {
+          return items.filter((item) => Number(item.rating) === 5);
+        }
+        if (activeFilter === "4+") {
+          return items.filter((item) => Number(item.rating) >= 4);
+        }
+        if (activeFilter === "newest") {
+          return [...items].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+        }
+        return items;
+      }
+
+      function renderStats() {
+        const total = reviews.length;
+        const sum = reviews.reduce((acc, item) => acc + (Number(item.rating) || 0), 0);
+        const avg = total ? (sum / total).toFixed(1) : "0.0";
+        const five = reviews.filter((item) => Number(item.rating) === 5).length;
+        statTotal.textContent = String(total);
+        statAvg.textContent = avg;
+        statFive.textContent = String(five);
+      }
+
+      function renderList() {
+        const visible = applyFilter(reviews);
+        if (!visible.length) {
+          listNode.innerHTML = '<div class="empty">No reviews for this filter yet.</div>';
+          return;
+        }
+
+        listNode.innerHTML = visible
+          .map((review) => {
+            const when = new Date(review.createdAt).toLocaleString("en-IN", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit"
+            });
+            return `
+              <article class="item">
+                <div class="item-top">
+                  <div>
+                    <h3>${escapeHtml(review.name)}</h3>
+                    <p class="meta">${escapeHtml(review.category)} \u00B7 ${when}</p>
+                  </div>
+                  <span class="stars">${stars(review.rating)}</span>
+                </div>
+                <p>${escapeHtml(review.message)}</p>
+                <div class="delete">
+                  <button type="button" data-action="delete" data-id="${review.id}" style="${canDeleteReview(review.id) ? "" : "display:none"}">Delete</button>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+        updateCreatorUi();
+      }
+
+      async function loadReviews() {
+        const data = await api("/api/reviews");
+        reviews = Array.isArray(data.reviews) ? data.reviews.map(normalizeReview) : [];
+        renderStats();
+        renderList();
+      }
+
+      function setSelectedRating(value) {
+        const next = Math.max(1, Math.min(5, Number(value) || 5));
+        selectedRating = next;
+        ratingButtons.forEach((item) => {
+          item.classList.toggle("active", Number(item.dataset.rating) === next);
+        });
+      }
+
+      const ratingGroup = document.querySelector(".rating");
+      if (ratingGroup) {
+        ratingGroup.addEventListener("click", (event) => {
+          const target = event.target;
+          if (!(target instanceof HTMLButtonElement)) {
+            return;
+          }
+          const value = Number(target.dataset.rating);
+          if (!Number.isInteger(value)) {
+            return;
+          }
+          setSelectedRating(value);
+        });
+      }
+
+      filterButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          activeFilter = btn.dataset.filter;
+          filterButtons.forEach((item) => item.classList.remove("active"));
+          btn.classList.add("active");
+          renderList();
+        });
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const payload = {
+          name: nameInput.value.trim(),
+          category: categoryInput.value,
+          rating: selectedRating,
+          message: messageInput.value.trim()
+        };
+
+        if (payload.name.length < 2) {
+          setFeedback("Name must be at least 2 characters.", true);
+          return;
+        }
+        if (payload.message.length < 8) {
+          setFeedback("Review must be at least 8 characters.", true);
+          return;
+        }
+
+        try {
+          const data = await api("/api/reviews", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+          const created = data.review;
+          if (created) {
+            reviews.unshift(normalizeReview(created));
+            if (data.deleteToken && created.id) {
+              reviewDeleteTokens[created.id] = data.deleteToken;
+              saveDeleteTokens();
+            }
+            renderStats();
+            renderList();
+          } else {
+            await loadReviews();
+          }
+          setFeedback("Review submitted to backend.");
+          form.reset();
+          categoryInput.value = "Website";
+          setSelectedRating(5);
+        } catch (error) {
+          if ((error.message || "").toLowerCase().includes("not authorized")) {
+            setFeedback("Not authorized to delete this review. Enable creator mode or delete from the same browser that posted it.", true);
+          } else {
+            setFeedback(error.message, true);
+          }
+        }
+      });
+
+      refreshBtn.addEventListener("click", async () => {
+        try {
+          await loadReviews();
+          setFeedback("Feed refreshed from backend.");
+        } catch (error) {
+          setFeedback(error.message, true);
+        }
+      });
+
+      clearBtn.addEventListener("click", async () => {
+        if (!window.confirm("Delete all reviews from backend storage?")) {
+          return;
+        }
+        try {
+          await api("/api/reviews", { method: "DELETE" });
+          reviews = [];
+          renderStats();
+          renderList();
+          setFeedback("All backend reviews cleared.");
+        } catch (error) {
+          setFeedback(error.message, true);
+        }
+      });
+
+      listNode.addEventListener("click", async (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) {
+          return;
+        }
+        if (target.dataset.action !== "delete") {
+          return;
+        }
+        const id = target.dataset.id;
+        if (!id) {
+          return;
+        }
+        try {
+          const headers = {};
+          if (!creatorMode && reviewDeleteTokens[id]) {
+            headers["x-review-delete-token"] = reviewDeleteTokens[id];
+          }
+          await api(`/api/reviews/${encodeURIComponent(id)}`, {
+            method: "DELETE",
+            headers
+          });
+          reviews = reviews.filter((review) => review.id !== id);
+          if (reviewDeleteTokens[id]) {
+            delete reviewDeleteTokens[id];
+            saveDeleteTokens();
+          }
+          renderStats();
+          renderList();
+          setFeedback("Review deleted.");
+        } catch (error) {
+          setFeedback(error.message, true);
+        }
+      });
+
+      aiBtn.addEventListener("click", async () => {
+        const reviewText = messageInput.value.trim();
+        if (reviewText.length < 6) {
+          aiResult.textContent = "Please write at least 6 characters in the review box first.";
+          aiMode.textContent = "";
+          return;
+        }
+
+        aiResult.textContent = "Generating AI suggestion from backend...";
+        aiMode.textContent = "";
+
+        try {
+          const data = await api("/api/ai/suggest", {
+            method: "POST",
+            body: JSON.stringify({
+              reviewText,
+              category: categoryInput.value,
+              rating: selectedRating
+            })
+          });
+
+          aiResult.textContent = data.suggestion || "No suggestion returned.";
+          aiMode.textContent = data.mode === "google"
+            ? "AI mode: Google backend"
+            : "AI mode: local fallback (set GOOGLE_API_KEY for full AI)";
+        } catch (error) {
+          aiResult.textContent = `AI request failed: ${error.message}`;
+          aiMode.textContent = "";
+        }
+      });
+
+      enableCreatorBtn.addEventListener("click", async () => {
+        const token = creatorTokenInput.value.trim();
+        if (!token) {
+          setCreatorStatus("Enter creator token first.", true);
+          return;
+        }
+        try {
+          creatorToken = token;
+          await api("/api/creator/verify", { method: "POST" });
+          creatorMode = true;
+          localStorage.setItem(creatorSessionKey, creatorToken);
+          sessionStorage.setItem(creatorSessionKey, creatorToken);
+          setCreatorStatus("Creator mode enabled.");
+          creatorTokenInput.value = "";
+          updateCreatorUi();
+        } catch (error) {
+          creatorToken = "";
+          creatorMode = false;
+          localStorage.removeItem(creatorSessionKey);
+          sessionStorage.removeItem(creatorSessionKey);
+          setCreatorStatus(error.message || "Invalid creator token.", true);
+          updateCreatorUi();
+        }
+      });
+
+      disableCreatorBtn.addEventListener("click", () => {
+        creatorToken = "";
+        creatorMode = false;
+        localStorage.removeItem(creatorSessionKey);
+        sessionStorage.removeItem(creatorSessionKey);
+        setCreatorStatus("Creator mode disabled.");
+        updateCreatorUi();
+      });
+
+      setSelectedRating(5);
+      updateCreatorUi();
+      reviewDeleteTokens = loadDeleteTokens();
+      verifyCreatorSessionOnLoad();
+
+      loadReviews().catch((error) => {
+        setFeedback(`Backend not reachable: ${error.message}`, true);
+        listNode.innerHTML = '<div class="empty">Could not load shared reviews. Check backend storage configuration.</div>';
+      });
+    })();
+  </script>
+
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Notes Vault | Krishiv PB</title>
+  <style>
+    :root{--bg:#071223;--panel:#112742;--line:#366089;--text:#eff7ff;--muted:#a7c5e6;--acc:#79d7ff;--ok:#57d3a7}
+    *{box-sizing:border-box} body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(160deg,#020a14,#0a2139 48%,#123860);color:var(--text)}
+    .wrap{width:min(960px,94%);margin:24px auto}.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(17,39,66,.96),rgba(9,22,41,.96));margin-bottom:12px}
+    input,textarea,button{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit}
+    input,textarea{width:100%} textarea{min-height:90px;resize:vertical}.row{display:flex;gap:8px;flex-wrap:wrap}.btn{cursor:pointer;font-weight:700}.btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#042333}
+    .note{border:1px solid rgba(78,116,159,.45);border-radius:12px;padding:10px;margin-bottom:8px;background:rgba(5,16,30,.7)}
+    .note-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+    .meta{color:var(--muted)} .tag{font-size:.75rem;border:1px solid rgba(121,215,255,.45);border-radius:999px;padding:3px 8px;color:#bde9ff}
+    a{color:#9edcff}
+  </style>
+
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card"><h1>Notes Vault</h1><p class="meta">Created by Krishiv PB</p><a href="index.html#projects">Back to portfolio</a></section>
+    <section class="card">
+      <input id="title" placeholder="Note title" maxlength="80" />
+      <textarea id="body" placeholder="Write your note..."></textarea>
+      <div class="row">
+        <input id="tag" placeholder="Tag (example: school, ideas, coding)" />
+        <button class="btn primary" id="saveBtn">Save Note</button>
+        <button class="btn" id="clearDraftBtn">Clear Draft</button>
+      </div>
+      <div class="row" style="margin-top:8px;">
+        <input id="search" placeholder="Search notes" />
+        <button id="exportBtn" class="btn">Export</button>
+      </div>
+    </section>
+    <section class="card"><div id="list"></div></section>
+  </main>
+  <script>
+    (() => {
+      const key="krishiv_pb_notes_vault_v2";
+      const draftKey="krishiv_pb_notes_draft_v1";
+      const title=document.getElementById("title"), body=document.getElementById("body"), tag=document.getElementById("tag"), saveBtn=document.getElementById("saveBtn"), search=document.getElementById("search"), list=document.getElementById("list"), exportBtn=document.getElementById("exportBtn"), clearDraftBtn=document.getElementById("clearDraftBtn");
+      let notes=[], q="";
+      function load(){ try{notes=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(notes)) notes=[];}catch{notes=[];} }
+      function save(){ localStorage.setItem(key, JSON.stringify(notes)); }
+      function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+      function sortedNotes(){
+        return [...notes].sort((a,b)=> Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)) || b.ts - a.ts);
+      }
+      function render(){
+        const filtered=sortedNotes().filter(n=>(n.title+" "+n.body+" "+(n.tag||"")).toLowerCase().includes(q));
+        list.innerHTML = filtered.map(n=>`<article class="note"><div class="note-top"><div><strong>${esc(n.title)}</strong><div class="meta">${new Date(n.ts).toLocaleString("en-IN")}</div></div><span class="tag">${esc(n.tag || "general")}</span></div><p>${esc(n.body)}</p><div class="row"><button data-action="pin" data-id="${n.id}">${n.pinned ? "Unpin" : "Pin"}</button><button data-action="edit" data-id="${n.id}">Edit</button><button data-action="delete" data-id="${n.id}">Delete</button></div></article>`).join("") || `<p class="meta">No notes found.</p>`;
+      }
+      function saveDraft(){ localStorage.setItem(draftKey, JSON.stringify({title:title.value, body:body.value, tag:tag.value})); }
+      function loadDraft(){ try{ const d=JSON.parse(localStorage.getItem(draftKey)||"null"); if(d){ title.value=d.title||""; body.value=d.body||""; tag.value=d.tag||""; } }catch{} }
+      [title,body,tag].forEach((n)=>n.addEventListener("input", saveDraft));
+      clearDraftBtn.addEventListener("click", ()=>{ title.value=""; body.value=""; tag.value=""; localStorage.removeItem(draftKey); });
+      saveBtn.addEventListener("click",()=>{ const t=title.value.trim(), b=body.value.trim(); if(t.length<2||b.length<1){alert("Enter title and note."); return;} notes.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6), title:t, body:b, tag:tag.value.trim().slice(0,24), pinned:false, ts:Date.now()}); title.value=""; body.value=""; tag.value=""; localStorage.removeItem(draftKey); save(); render(); });
+      search.addEventListener("input",()=>{ q=search.value.trim().toLowerCase(); render(); });
+      exportBtn.addEventListener("click", ()=>{
+        const blob = new Blob([JSON.stringify(notes, null, 2)], { type:"application/json" });
+        const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "notes-vault-krishiv-pb.json"; a.click(); URL.revokeObjectURL(a.href);
+      });
+      list.addEventListener("click",(e)=>{
+        const b=e.target; if(!(b instanceof HTMLButtonElement)) return; const id=b.dataset.id; const action=b.dataset.action; if(!id||!action) return;
+        if(action==="delete"){ notes=notes.filter(n=>n.id!==id); }
+        else if(action==="pin"){ notes=notes.map(n=>n.id===id?{...n,pinned:!n.pinned}:n); }
+        else {
+          const n = notes.find((x)=>x.id===id); if(!n) return;
+          title.value=n.title; body.value=n.body; tag.value=n.tag||"";
+          notes = notes.filter((x)=>x.id!==id);
+          saveDraft();
+        }
+        save(); render();
+      });
+      load(); loadDraft(); render();
+    })();
+  </script>
+
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

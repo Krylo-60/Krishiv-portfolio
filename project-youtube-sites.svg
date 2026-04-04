@@ -1,0 +1,45 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#010204"/>
+      <stop offset="100%" stop-color="#0a1122"/>
+    </linearGradient>
+    <linearGradient id="hero" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fdff"/>
+      <stop offset="100%" stop-color="#00d2ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <circle cx="170" cy="120" r="190" fill="#00d2ff" opacity="0.18"/>
+  <circle cx="1010" cy="90" r="200" fill="#9d50bb" opacity="0.12"/>
+
+  <rect x="80" y="70" width="1040" height="58" rx="14" fill="rgba(7,11,17,0.86)" stroke="rgba(255,255,255,0.12)"/>
+  <text x="118" y="107" fill="#00d2ff" font-family="Orbitron, Arial" font-size="30" font-weight="900" letter-spacing="2">KRYLO-Blox</text>
+  <text x="760" y="106" fill="#94a3b8" font-family="Orbitron, Arial" font-size="16" font-weight="700">Journey  Live Stats  Wall  Discord</text>
+
+  <text x="600" y="255" text-anchor="middle" fill="url(#hero)" font-family="Orbitron, Arial" font-size="95" font-weight="900" letter-spacing="4">KRYLO-BLOX</text>
+  <text x="600" y="295" text-anchor="middle" fill="#8ca3b9" font-family="Arial" font-size="21" letter-spacing="4">ROBLOX LEGEND • CONTENT ARCHITECT</text>
+
+  <rect x="420" y="325" width="360" height="68" rx="34" fill="#00d2ff"/>
+  <text x="600" y="367" text-anchor="middle" fill="#02070f" font-family="Orbitron, Arial" font-size="24" font-weight="900">SUBSCRIBE FOR UPDATES</text>
+
+  <rect x="250" y="430" width="700" height="72" rx="10" fill="rgba(0,210,255,0.06)" stroke="#00d2ff" stroke-opacity="0.55"/>
+  <text x="600" y="475" text-anchor="middle" fill="#ccf5ff" font-family="Orbitron, Arial" font-size="24" font-weight="700">CONNECTING TO COMMAND CENTER...</text>
+
+  <g transform="translate(180 530)">
+    <rect x="0" y="0" width="260" height="100" rx="18" fill="rgba(15,23,42,0.86)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="130" y="50" text-anchor="middle" fill="#e2f7ff" font-family="Orbitron, Arial" font-size="42" font-weight="800">1.2K</text>
+    <text x="130" y="76" text-anchor="middle" fill="#00d2ff" font-family="Arial" font-size="14" font-weight="800">SUBSCRIBERS</text>
+  </g>
+  <g transform="translate(470 530)">
+    <rect x="0" y="0" width="260" height="100" rx="18" fill="rgba(15,23,42,0.86)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="130" y="50" text-anchor="middle" fill="#e2f7ff" font-family="Orbitron, Arial" font-size="42" font-weight="800">245</text>
+    <text x="130" y="76" text-anchor="middle" fill="#00d2ff" font-family="Arial" font-size="14" font-weight="800">UPLOADS</text>
+  </g>
+  <g transform="translate(760 530)">
+    <rect x="0" y="0" width="260" height="100" rx="18" fill="rgba(15,23,42,0.86)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="130" y="50" text-anchor="middle" fill="#e2f7ff" font-family="Orbitron, Arial" font-size="42" font-weight="800">3.8M</text>
+    <text x="130" y="76" text-anchor="middle" fill="#00d2ff" font-family="Arial" font-size="14" font-weight="800">TOTAL VIEWS</text>
+  </g>
+</svg>

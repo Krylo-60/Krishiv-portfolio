@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Private Nexus Admin | Krishiv PB</title>
+  <style>
+    :root {
+      --bg: #050b14;
+      --panel: #0d1726;
+      --line: rgba(133, 227, 255, 0.24);
+      --text: #e7f7ff;
+      --muted: #98b7cf;
+      --ok: #34d399;
+      --warn: #f59e0b;
+      --err: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(99, 245, 210, 0.15), transparent 28%),
+        radial-gradient(circle at 85% 12%, rgba(116, 167, 255, 0.16), transparent 24%),
+        #030913;
+    }
+    .panel {
+      width: min(760px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(160deg, rgba(12, 27, 45, 0.95), rgba(8, 16, 28, 0.96));
+      padding: 1rem;
+    }
+    h1 { margin: 0 0 0.3rem; font-size: 1.2rem; }
+    p { margin: 0 0 0.85rem; color: var(--muted); }
+    .mono { font-family: "JetBrains Mono", Consolas, monospace; font-size: 0.8rem; color: #cfe8ff; }
+    label { display: block; margin: 0.75rem 0 0.28rem; color: var(--muted); font-size: 0.82rem; }
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #06101c;
+      color: var(--text);
+      padding: 0.62rem;
+      outline: none;
+    }
+    textarea { min-height: 80px; resize: vertical; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+    .actions { display: flex; gap: 0.6rem; margin-top: 1rem; flex-wrap: wrap; }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.62rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-primary { background: #7dd3fc; color: #04111d; }
+    .btn-secondary { background: #1e293b; color: #d8ebff; border: 1px solid var(--line); }
+    #status { margin-top: 0.9rem; font-weight: 600; }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .err { color: var(--err); }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="panel">
+    <h1>Private Nexus Admin</h1>
+    <p>Authorized route only. Updates are written via backend and then pushed to Firebase.</p>
+    <p class="mono">Route: <code>/admin?token=YOUR_REVIEW_ADMIN_TOKEN</code></p>
+
+    <label for="msg">Live wall message</label>
+    <textarea id="msg" placeholder="Enter broadcast message...">Subscibe to Krylo-Blox</textarea>
+
+    <div class="grid">
+      <div>
+        <label for="subs">Subs</label>
+        <input id="subs" type="number" min="0" value="7" />
+      </div>
+      <div>
+        <label for="views">Views</label>
+        <input id="views" type="number" min="0" value="7" />
+      </div>
+      <div>
+        <label for="uploads">Videos</label>
+        <input id="uploads" type="number" min="0" value="0" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="refreshBtn" class="btn-secondary" type="button">Load Current</button>
+      <button id="publishBtn" class="btn-primary" type="button">Publish Sync</button>
+    </div>
+
+    <div id="status" aria-live="polite">Ready.</div>
+    <p class="mono" id="syncMeta">Sync source: unknown | Last sync: unknown</p>
+    <p class="mono">Auto sync works when <code>YOUTUBE_API_KEY</code> is set. Otherwise use Publish Sync manually.</p>
+  </main>
+
+  <script>
+    (() => {
+      const msg = document.getElementById("msg");
+      const subs = document.getElementById("subs");
+      const views = document.getElementById("views");
+      const uploads = document.getElementById("uploads");
+      const status = document.getElementById("status");
+      const syncMeta = document.getElementById("syncMeta");
+      const refreshBtn = document.getElementById("refreshBtn");
+      const publishBtn = document.getElementById("publishBtn");
+
+      const TOKEN_KEY = "krishiv_private_admin_token_v1";
+      const queryToken = (new URLSearchParams(window.location.search).get("token") || "").trim();
+      if (queryToken) {
+        localStorage.setItem(TOKEN_KEY, queryToken);
+        if (window.location.pathname !== "/admin" || window.location.search) {
+          window.history.replaceState({}, "", "/admin");
+        }
+      }
+      const token = queryToken || String(localStorage.getItem(TOKEN_KEY) || "").trim();
+
+      function setStatus(text, level) {
+        status.textContent = text;
+        status.className = level || "";
+      }
+
+      function setSyncMeta(data) {
+        const source = String(data && (data.syncSource || data.source) || "unknown");
+        const syncedAt = data && data.syncedAt ? new Date(data.syncedAt) : null;
+        const timeText = syncedAt && !Number.isNaN(syncedAt.getTime())
+          ? syncedAt.toLocaleString()
+          : "unknown";
+        syncMeta.textContent = "Sync source: " + source + " | Last sync: " + timeText;
+      }
+
+      async function api(path, options = {}) {
+        const headers = {
+          "Content-Type": "application/json",
+          "x-admin-token": token,
+          ...(options.headers || {})
+        };
+        const response = await fetch(path, { ...options, headers });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || "request failed");
+        return data;
+      }
+
+      async function loadCurrent() {
+        if (!token) {
+          setStatus("Missing token. Open /admin?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
+          return;
+        }
+        setStatus("Loading current values...", "");
+        try {
+          const data = await api("/api/yt-portfolio-sync", { method: "GET" });
+          msg.value = String(data.message || "");
+          subs.value = String(Number(data.subs || 0));
+          views.value = String(Number(data.views || 0));
+          uploads.value = String(Number(data.uploads || 0));
+          setSyncMeta(data);
+          setStatus("Loaded from " + String(data.source || "backend") + ".", "ok");
+        } catch (error) {
+          setStatus("Load failed: " + error.message, "err");
+        }
+      }
+
+      async function publish() {
+        if (!token) {
+          setStatus("Missing token. Open /admin?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
+          return;
+        }
+        setStatus("Publishing...", "");
+        try {
+          const payload = {
+            message: msg.value.trim(),
+            subs: Number(subs.value || 0),
+            views: Number(views.value || 0),
+            uploads: Number(uploads.value || 0)
+          };
+          const data = await api("/api/yt-portfolio-sync", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+          setSyncMeta(data);
+          setStatus(
+            data.firebaseSynced
+              ? "Published and synced to Firebase."
+              : "Published to backend. Firebase sync unavailable right now.",
+            data.firebaseSynced ? "ok" : "warn"
+          );
+        } catch (error) {
+          setStatus("Publish failed: " + error.message, "err");
+        }
+      }
+
+      refreshBtn.addEventListener("click", loadCurrent);
+      publishBtn.addEventListener("click", publish);
+      loadCurrent();
+    })();
+  </script>
+</body>
+</html>
+
+

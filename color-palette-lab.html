@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Color Palette Lab | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root { --bg:#071323; --panel:#122943; --line:#355b86; --text:#edf7ff; --muted:#acc8e8; }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#040f1d,#0b2847 52%,#103b63);min-height:100vh;}
+    .wrap{width:min(980px,94%);margin:22px auto 90px;}
+    .card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(18,41,67,.96),rgba(9,22,40,.96));margin-bottom:12px;}
+    button,input{border:1px solid var(--line);border-radius:10px;background:#0a1b30;color:var(--text);padding:9px 10px;font:inherit;}
+    button{cursor:pointer;font-weight:700;}
+    .btn-main{border:none;background:linear-gradient(135deg,#79d8ff,#5ad6a7);color:#042333;}
+    .palette{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+    .chip{border:1px solid rgba(121,175,235,.35);border-radius:12px;overflow:hidden;background:rgba(8,20,35,.65);}
+    .swatch{height:92px;}
+    .chip code{display:block;padding:8px;text-align:center;color:#cce8ff;font-weight:700;}
+    .meta{color:var(--muted);font-size:.88rem;}
+    @media (max-width: 880px){.palette{grid-template-columns:repeat(2,1fr);}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Color Palette Lab</h1>
+      <p class="meta">Generate beautiful palettes and copy HEX codes instantly.</p>
+      <p class="meta">Created by Krishiv PB</p>
+      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+    </section>
+    <section class="card" style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button id="generateBtn" class="btn-main" type="button">Generate Palette</button>
+      <button id="copyAllBtn" type="button">Copy All</button>
+      <input id="seedInput" placeholder="Seed keyword (optional)" style="min-width:240px; flex:1;" />
+    </section>
+    <section class="card">
+      <h2>Palette</h2>
+      <div id="palette" class="palette"></div>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const KEY = "krishiv_palette_lab_v1";
+      const paletteEl = document.getElementById("palette");
+      const generateBtn = document.getElementById("generateBtn");
+      const copyAllBtn = document.getElementById("copyAllBtn");
+      const seedInput = document.getElementById("seedInput");
+      let colors = [];
+
+      function toHex(n){ return n.toString(16).padStart(2, "0"); }
+      function rand(seed){
+        let x = seed || Date.now();
+        return () => { x = (x * 1664525 + 1013904223) % 4294967296; return x / 4294967296; };
+      }
+      function hash(str){
+        let h = 2166136261;
+        for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+        return h >>> 0;
+      }
+      function makePalette(seedWord){
+        const r = rand(seedWord ? hash(seedWord) : 0);
+        return Array.from({length:5}, () => {
+          const rv = Math.floor(40 + r() * 200);
+          const gv = Math.floor(40 + r() * 200);
+          const bv = Math.floor(40 + r() * 200);
+          return "#" + toHex(rv) + toHex(gv) + toHex(bv);
+        });
+      }
+      function render(){
+        paletteEl.innerHTML = colors.map((c)=>`
+          <article class="chip">
+            <div class="swatch" style="background:${c}"></div>
+            <code data-color="${c}">${c}</code>
+          </article>
+        `).join("");
+      }
+      function save(){ try{ localStorage.setItem(KEY, JSON.stringify(colors)); }catch{} }
+      function load(){ try{ colors = JSON.parse(localStorage.getItem(KEY) || "[]"); if(!Array.isArray(colors)||!colors.length) colors=makePalette(""); }catch{ colors=makePalette(""); } }
+
+      generateBtn.addEventListener("click", ()=>{ colors = makePalette(seedInput.value.trim()); save(); render(); });
+      copyAllBtn.addEventListener("click", async ()=>{ if(!colors.length) return; try{ await navigator.clipboard.writeText(colors.join(", ")); }catch{} });
+      paletteEl.addEventListener("click", async (e)=>{
+        const t = e.target;
+        if(!(t instanceof HTMLElement)) return;
+        const code = t.closest("code[data-color]");
+        if(!code) return;
+        const c = code.getAttribute("data-color") || "";
+        if(!c) return;
+        try{ await navigator.clipboard.writeText(c); }catch{}
+      });
+
+      load(); render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+

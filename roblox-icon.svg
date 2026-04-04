@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 120" role="img" aria-labelledby="title desc">
+  <title id="title">Roblox Icon</title>
+  <desc id="desc">A stylized tilted square icon inspired by Roblox branding.</desc>
+  <rect width="220" height="120" fill="none" />
+  <g transform="translate(64 12) rotate(-18 46 46)">
+    <rect x="6" y="6" width="80" height="80" rx="8" fill="#ffffff"/>
+    <rect x="34" y="34" width="24" height="24" rx="2" fill="#0a0a0a"/>
+  </g>
+</svg>

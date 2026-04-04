@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Usage Admin | Krishiv PB</title>
+  <style>
+    :root {
+      --bg: #040b15;
+      --panel: #0a1728;
+      --line: rgba(125, 196, 255, 0.3);
+      --text: #e8f6ff;
+      --muted: #9fbddb;
+      --ok: #34d399;
+      --err: #fb7185;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 1rem;
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 14% 10%, rgba(99, 245, 210, 0.15), transparent 34%),
+        radial-gradient(circle at 86% 14%, rgba(116, 167, 255, 0.15), transparent 30%),
+        #030813;
+    }
+    .wrap { width: min(1100px, 100%); margin: 0 auto; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: linear-gradient(160deg, rgba(11, 25, 43, 0.95), rgba(7, 15, 28, 0.95));
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.3);
+    }
+    h1, h2, p { margin: 0 0 8px; }
+    p { color: var(--muted); }
+    .mono { font-family: "JetBrains Mono", Consolas, monospace; font-size: 0.78rem; color: #cde6ff; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-primary { background: #7dd3fc; color: #03111d; }
+    .btn-secondary { background: #1f2f45; color: #d9edff; border: 1px solid var(--line); }
+    .stats { display: grid; grid-template-columns: repeat(3, minmax(120px, 1fr)); gap: 8px; }
+    .stat {
+      border: 1px solid rgba(125, 196, 255, 0.3);
+      border-radius: 10px;
+      padding: 10px;
+      background: rgba(6, 15, 28, 0.72);
+    }
+    .stat strong { display: block; font-size: 1.3rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; border-bottom: 1px solid rgba(125, 196, 255, 0.2); padding: 7px 6px; font-size: 0.88rem; }
+    th { color: #cae7ff; }
+    .status { min-height: 22px; font-weight: 700; }
+    .ok { color: var(--ok); }
+    .err { color: var(--err); }
+    .events {
+      max-height: 320px;
+      overflow: auto;
+      border: 1px solid rgba(125, 196, 255, 0.2);
+      border-radius: 10px;
+      background: rgba(6, 15, 28, 0.6);
+    }
+    .event-row {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(125, 196, 255, 0.12);
+      font-size: 0.83rem;
+    }
+    .event-row:last-child { border-bottom: none; }
+    @media (max-width: 860px) {
+      .stats { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Private Usage Admin</h1>
+      <p>Track how many people use your app and which pages get the most traffic.</p>
+      <p class="mono">Route: <code>/usage-admin?token=YOUR_REVIEW_ADMIN_TOKEN</code></p>
+      <div class="actions">
+        <button id="refreshBtn" class="btn-primary" type="button">Refresh Stats</button>
+        <button id="autoBtn" class="btn-secondary" type="button">Auto Refresh: OFF</button>
+      </div>
+      <p id="status" class="status">Ready.</p>
+      <p id="generatedAt" class="mono">Generated at: --</p>
+    </section>
+
+    <section class="card stats">
+      <article class="stat"><strong id="totalEvents">0</strong><span>Total tracked events</span></article>
+      <article class="stat"><strong id="uniqueTotal">0</strong><span>Unique sessions (all time)</span></article>
+      <article class="stat"><strong id="uniqueToday">0</strong><span>Unique sessions (today)</span></article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Top Pages</h2>
+        <table>
+          <thead><tr><th>Page</th><th>Hits</th></tr></thead>
+          <tbody id="pagesBody"></tbody>
+        </table>
+      </article>
+      <article class="card">
+        <h2>Event Types</h2>
+        <table>
+          <thead><tr><th>Event</th><th>Count</th></tr></thead>
+          <tbody id="eventsBody"></tbody>
+        </table>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Recent Activity</h2>
+      <div id="recentList" class="events"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const TOKEN_KEY = "krishiv_usage_admin_token_v1";
+      const LEGACY_TOKEN_KEY = "krishiv_private_admin_token_v1";
+      const refreshBtn = document.getElementById("refreshBtn");
+      const autoBtn = document.getElementById("autoBtn");
+      const status = document.getElementById("status");
+      const generatedAt = document.getElementById("generatedAt");
+      const totalEvents = document.getElementById("totalEvents");
+      const uniqueTotal = document.getElementById("uniqueTotal");
+      const uniqueToday = document.getElementById("uniqueToday");
+      const pagesBody = document.getElementById("pagesBody");
+      const eventsBody = document.getElementById("eventsBody");
+      const recentList = document.getElementById("recentList");
+
+      const queryToken = String(new URLSearchParams(window.location.search).get("token") || "").trim();
+      if (queryToken) {
+        localStorage.setItem(TOKEN_KEY, queryToken);
+        localStorage.setItem(LEGACY_TOKEN_KEY, queryToken);
+        if (window.location.pathname !== "/usage-admin" || window.location.search) {
+          window.history.replaceState({}, "", "/usage-admin");
+        }
+      }
+      const token = queryToken
+        || String(localStorage.getItem(TOKEN_KEY) || "").trim()
+        || String(localStorage.getItem(LEGACY_TOKEN_KEY) || "").trim();
+      let timer = 0;
+
+      function setStatus(text, level) {
+        status.textContent = text;
+        status.className = "status " + (level || "");
+      }
+
+      async function api(path) {
+        const withToken = token ? (path + (path.includes("?") ? "&" : "?") + "token=" + encodeURIComponent(token)) : path;
+        const response = await fetch(withToken, {
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-token": token
+          },
+          cache: "no-store"
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || "Request failed");
+        return data;
+      }
+
+      function renderTableBody(node, rows, firstKey, secondKey) {
+        node.innerHTML = rows.length
+          ? rows.map((row) => `<tr><td>${String(row[firstKey] || "")}</td><td>${Number(row[secondKey] || 0)}</td></tr>`).join("")
+          : '<tr><td colspan="2">No data yet.</td></tr>';
+      }
+
+      function renderRecent(events) {
+        recentList.innerHTML = events.length
+          ? events.map((item) => {
+            const time = item.at ? new Date(item.at).toLocaleString("en-IN") : "unknown";
+            return `<div class="event-row"><strong>${String(item.event || "event")}</strong> | <span>${String(item.page || "page")}</span> | <span>${time}</span></div>`;
+          }).join("")
+          : '<div class="event-row">No activity yet.</div>';
+      }
+
+      async function refresh() {
+        if (!token) {
+          setStatus("Missing token. Open /usage-admin?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
+          return;
+        }
+        setStatus("Loading usage stats...", "");
+        try {
+          const data = await api("/api/usage/stats");
+          totalEvents.textContent = String(Number(data.totalEvents || 0));
+          uniqueTotal.textContent = String(Number(data.uniqueSessionsTotal || 0));
+          uniqueToday.textContent = String(Number(data.uniqueSessionsToday || 0));
+          renderTableBody(pagesBody, Array.isArray(data.byPage) ? data.byPage : [], "page", "count");
+          renderTableBody(eventsBody, Array.isArray(data.byEvent) ? data.byEvent : [], "event", "count");
+          renderRecent(Array.isArray(data.lastEvents) ? data.lastEvents : []);
+          generatedAt.textContent = "Generated at: " + (data.generatedAt ? new Date(data.generatedAt).toLocaleString("en-IN") : "--");
+          setStatus("Stats updated.", "ok");
+        } catch (error) {
+          setStatus("Failed to load stats: " + error.message, "err");
+        }
+      }
+
+      refreshBtn.addEventListener("click", refresh);
+      autoBtn.addEventListener("click", () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = 0;
+          autoBtn.textContent = "Auto Refresh: OFF";
+          return;
+        }
+        timer = setInterval(refresh, 15000);
+        autoBtn.textContent = "Auto Refresh: ON";
+      });
+
+      refresh();
+    })();
+  </script>
+</body>
+</html>
+
+

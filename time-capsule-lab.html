@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Time Capsule Lab | Krishiv PB</title>
+  <style>
+    :root {
+      --bg: #071223;
+      --panel: #122742;
+      --line: #345a84;
+      --text: #eef7ff;
+      --muted: #acc7e8;
+      --accent: #79d8ff;
+      --good: #62dfb1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(165deg, #040f1c, #0b2541 48%, #12395f);
+      min-height: 100vh;
+    }
+    .wrap { width: min(980px, 94%); margin: 24px auto 90px; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(160deg, rgba(18, 40, 68, 0.96), rgba(9, 22, 40, 0.96));
+      margin-bottom: 12px;
+    }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    input, textarea, button {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #0a1a2f;
+      color: var(--text);
+      padding: 9px 10px;
+      font: inherit;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    button { cursor: pointer; font-weight: 700; }
+    .btn-main { background: linear-gradient(135deg, #79d8ff, #62dfb1); color: #042333; border: none; }
+    .capsule {
+      border: 1px solid rgba(121, 175, 235, 0.35);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: rgba(7, 19, 34, 0.72);
+    }
+    .meta { color: var(--muted); font-size: .88rem; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Time Capsule Lab</h1>
+      <p class="meta">Write future messages and unlock them on selected dates.</p>
+      <p class="meta">Created by Krishiv PB</p>
+      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+    </section>
+
+    <section class="card grid">
+      <article>
+        <h2>Create Capsule</h2>
+        <input id="titleInput" placeholder="Capsule title" style="margin-bottom:8px;" />
+        <textarea id="msgInput" placeholder="Message for your future self..."></textarea>
+        <input id="dateInput" type="date" style="margin:8px 0;" />
+        <button id="saveBtn" class="btn-main" type="button">Save Capsule</button>
+      </article>
+      <article>
+        <h2>Capsules</h2>
+        <div id="capsules"></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const KEY = "krishiv_time_capsule_v1";
+      const titleInput = document.getElementById("titleInput");
+      const msgInput = document.getElementById("msgInput");
+      const dateInput = document.getElementById("dateInput");
+      const saveBtn = document.getElementById("saveBtn");
+      const capsulesEl = document.getElementById("capsules");
+      let capsules = [];
+
+      function load() {
+        try {
+          capsules = JSON.parse(localStorage.getItem(KEY) || "[]");
+          if (!Array.isArray(capsules)) capsules = [];
+        } catch { capsules = []; }
+      }
+      function save() { localStorage.setItem(KEY, JSON.stringify(capsules)); }
+      function esc(s) {
+        return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+      function startOfDay(dateStr) {
+        return new Date(dateStr + "T00:00:00").getTime();
+      }
+
+      function render() {
+        const now = Date.now();
+        capsulesEl.innerHTML = capsules.map((c) => {
+          const unlock = startOfDay(c.unlockDate);
+          const open = unlock <= now;
+          const days = Math.ceil((unlock - now) / 86400000);
+          return `
+            <article class="capsule">
+              <h3>${esc(c.title)}</h3>
+              <p class="meta">Unlock: ${new Date(c.unlockDate + "T00:00:00").toLocaleDateString("en-IN")}</p>
+              ${open ? `<p>${esc(c.message)}</p>` : `<p class="meta">Locked (${Math.max(0, days)} day${Math.abs(days) === 1 ? "" : "s"} left)</p>`}
+              <div style="display:flex; gap:8px; margin-top:8px;">
+                ${open ? `<button type="button" data-copy="${c.id}">Copy</button>` : `<button type="button" disabled>Locked</button>`}
+                <button type="button" data-del="${c.id}">Delete</button>
+              </div>
+            </article>
+          `;
+        }).join("") || `<p class="meta">No capsules yet.</p>`;
+      }
+
+      saveBtn.addEventListener("click", () => {
+        const title = titleInput.value.trim();
+        const message = msgInput.value.trim();
+        const unlockDate = dateInput.value;
+        if (title.length < 3 || message.length < 8 || !unlockDate) {
+          alert("Add title, message, and unlock date.");
+          return;
+        }
+        capsules.unshift({ id: "C" + Date.now().toString(36), title, message, unlockDate });
+        titleInput.value = "";
+        msgInput.value = "";
+        dateInput.value = "";
+        save();
+        render();
+      });
+
+      capsulesEl.addEventListener("click", async (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLButtonElement)) return;
+        const delId = t.dataset.del;
+        const copyId = t.dataset.copy;
+        if (delId) {
+          capsules = capsules.filter((c) => c.id !== delId);
+          save();
+          render();
+          return;
+        }
+        if (copyId) {
+          const cap = capsules.find((c) => c.id === copyId);
+          if (!cap) return;
+          try { await navigator.clipboard.writeText(cap.message); } catch {}
+        }
+      });
+
+      load();
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+
+

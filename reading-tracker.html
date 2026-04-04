@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Reading Tracker | Krishiv PB</title>
+  <style>
+    :root{--bg:#061223;--panel:#10253f;--line:#345a80;--text:#eef7ff;--muted:#a8c3e4;--accent:#79d8ff;--ok:#55d8a8}
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#040e19,#0b223b 50%,#12355b)}
+    .wrap{width:min(940px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(8,20,38,.95));margin-bottom:12px}
+    h1,h2{margin:0 0 8px}p{margin:0 0 10px;color:var(--muted)}.row{display:grid;gap:10px;grid-template-columns:1fr 140px 140px auto}
+    input,button{border-radius:10px;border:1px solid var(--line);background:#08192e;color:var(--text);padding:10px;font:inherit}
+    .btn-primary{font-weight:700;border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#042132}
+    .book{border:1px solid rgba(110,163,215,.24);border-radius:12px;padding:10px;background:rgba(6,18,32,.72);margin-bottom:8px}.bar{height:8px;background:#091a2f;border:1px solid var(--line);border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--ok))}
+    .credit{font-weight:700;color:#d9ecff}a{color:#9fd9ff}
+    @media(max-width:780px){.row{grid-template-columns:1fr}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body data-theme="default" data-mode="dark">
+  <main class="wrap">
+    <section class="card"><h1>Reading Tracker</h1><p>Track reading progress and finish books with consistency.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
+    <section class="card">
+      <h2>Add Book</h2>
+      <div class="row"><input id="book" placeholder="Book title" maxlength="80" /><input id="pages" type="number" min="1" placeholder="Total pages" /><input id="read" type="number" min="0" placeholder="Pages read" /><button id="addBook" class="btn-primary" type="button">Add</button></div>
+      <p>Details: update pages-read over time to keep your reading streak visible.</p>
+    </section>
+    <section class="card"><h2>Reading List</h2><div id="books"></div></section>
+  </main>
+  <script>
+    (() => {
+      const key="krishiv_reading_tracker_v1", book=document.getElementById("book"), pages=document.getElementById("pages"), read=document.getElementById("read"), add=document.getElementById("addBook"), books=document.getElementById("books");
+      let data=[]; try{data=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(data)) data=[];}catch{data=[];}
+      const save=()=>localStorage.setItem(key,JSON.stringify(data));
+      const render=()=>{books.innerHTML=data.length?data.map(b=>{const pct=Math.max(0,Math.min(100,Math.round((b.read/Math.max(1,b.pages))*100))); return `<article class="book"><strong>${b.title}</strong><p>${b.read}/${b.pages} pages (${pct}%)</p><div class="bar"><span style="width:${pct}%"></span></div><div style="margin-top:8px;"><button data-a="plus" data-id="${b.id}">+10 pages</button> <button data-a="del" data-id="${b.id}">Delete</button></div></article>`;}).join(""):'<p>No books added yet.</p>';};
+      add.addEventListener("click",()=>{const t=book.value.trim(),p=Number(pages.value||0),r=Number(read.value||0); if(t.length<2||p<1||r<0||r>p){alert("Enter valid title and page values.");return;} data.unshift({id:Date.now().toString(36),title:t,pages:p,read:r}); book.value=""; pages.value=""; read.value=""; save(); render();});
+      books.addEventListener("click",(e)=>{const b=e.target; if(!(b instanceof HTMLButtonElement)) return; const id=b.dataset.id; if(!id) return; if(b.dataset.a==="plus"){data=data.map(x=>x.id===id?({...x,read:Math.min(x.pages,x.read+10)}):x);} if(b.dataset.a==="del"){data=data.filter(x=>x.id!==id);} save(); render();});
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

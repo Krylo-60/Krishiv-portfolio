@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Mind Map Board | Krishiv PB</title>
+  <style>
+    :root{--bg:#061223;--panel:#10243d;--line:#355a80;--text:#eef7ff;--muted:#a7c3e4;--accent:#79d8ff;--ok:#57d9aa}
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#04101b,#0a2139 50%,#13355b)}
+    .wrap{width:min(980px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(8,20,38,.95));margin-bottom:12px}
+    h1,h2,p{margin:0 0 8px}p{color:var(--muted)}.row{display:grid;gap:10px;grid-template-columns:1fr 180px auto}
+    input,select,button{width:100%;border-radius:10px;border:1px solid var(--line);background:#08192d;color:var(--text);padding:10px;font:inherit}
+    .btn-primary{border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#032132;font-weight:700}
+    .nodes{display:grid;gap:8px;grid-template-columns:repeat(3,minmax(0,1fr))}.node{border:1px solid rgba(110,162,215,.25);border-radius:12px;padding:10px;background:rgba(6,18,32,.72)}
+    .node .type{font-size:.8rem;color:#9ec2e3}.credit{font-weight:700;color:#d9ecff}a{color:#9fd9ff}
+    @media(max-width:860px){.row{grid-template-columns:1fr}.nodes{grid-template-columns:1fr 1fr}} @media(max-width:620px){.nodes{grid-template-columns:1fr}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body data-theme="default" data-mode="dark">
+  <main class="wrap">
+    <section class="card"><h1>Mind Map Board</h1><p>Capture and organize idea nodes for projects and content.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
+    <section class="card">
+      <h2>Add Idea Node</h2>
+      <div class="row"><input id="nodeText" maxlength="90" placeholder="Node title (Feature idea)" /><select id="nodeType"><option>Core Idea</option><option>Feature</option><option>Task</option><option>Risk</option></select><button id="addNode" class="btn-primary" type="button">Add Node</button></div>
+      <p>Details: use different node types to see priorities and structure clearly.</p>
+    </section>
+    <section class="card"><h2>Mind Map Nodes</h2><div id="nodes" class="nodes"></div></section>
+  </main>
+  <script>
+    (() => {
+      const key="krishiv_mind_map_board_v1", nodeText=document.getElementById("nodeText"), nodeType=document.getElementById("nodeType"), addNode=document.getElementById("addNode"), nodes=document.getElementById("nodes");
+      let data=[]; try{data=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(data)) data=[];}catch{data=[];}
+      const save=()=>localStorage.setItem(key,JSON.stringify(data));
+      const render=()=>{nodes.innerHTML=data.length?data.map(n=>`<article class="node"><div class="type">${n.type}</div><strong>${n.text}</strong><p style="margin-top:8px;"><button data-id="${n.id}">Delete</button></p></article>`).join(""):'<p>No nodes yet.</p>';};
+      addNode.addEventListener("click",()=>{const t=nodeText.value.trim(); if(t.length<2){alert("Node title must be at least 2 characters.");return;} data.unshift({id:Date.now().toString(36),text:t,type:nodeType.value}); nodeText.value=""; save(); render();});
+      nodes.addEventListener("click",(e)=>{const b=e.target; if(!(b instanceof HTMLButtonElement)) return; data=data.filter(n=>n.id!==b.dataset.id); save(); render();});
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

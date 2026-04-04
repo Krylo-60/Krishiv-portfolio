@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://krishiv-new-portfoilo.vercel.app/sitemap.xml

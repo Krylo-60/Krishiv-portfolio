@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Presentation Planner | Krishiv PB</title>
+  <style>
+    :root{--bg:#061223;--panel:#10253f;--line:#355b80;--text:#eef7ff;--muted:#a7c4e4;--accent:#79d8ff;--ok:#57d9aa}
+    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#04101a,#0a223a 50%,#13375d)}
+    .wrap{width:min(940px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(9,22,40,.95));margin-bottom:12px}
+    h1,h2,p{margin:0 0 8px}p{color:var(--muted)}input,textarea,button{width:100%;border-radius:10px;border:1px solid var(--line);background:#08192d;color:var(--text);padding:10px;font:inherit}
+    textarea{min-height:90px}.row{display:grid;gap:10px;grid-template-columns:1fr auto}.btn-primary{border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#032132;font-weight:700}
+    .slide{border:1px solid rgba(110,162,215,.25);border-radius:12px;padding:10px;background:rgba(6,18,32,.72);margin-bottom:8px}.credit{font-weight:700;color:#d9ecff}a{color:#9fd9ff}
+    @media(max-width:760px){.row{grid-template-columns:1fr}}
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body data-theme="default" data-mode="dark">
+  <main class="wrap">
+    <section class="card"><h1>Presentation Planner</h1><p>Plan slides, key points, and flow before presenting.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
+    <section class="card">
+      <h2>Add Slide Plan</h2>
+      <div class="row"><input id="slideTitle" placeholder="Slide title" maxlength="70" /><button id="addSlide" class="btn-primary" type="button">Add Slide</button></div>
+      <textarea id="slideNotes" maxlength="500" placeholder="Main point, visual idea, and what to speak."></textarea>
+      <p>Details: keep each slide focused on one message for cleaner storytelling.</p>
+    </section>
+    <section class="card"><h2>Slide Sequence</h2><div id="slides"></div></section>
+  </main>
+  <script>
+    (() => {
+      const key="krishiv_presentation_planner_v1", title=document.getElementById("slideTitle"), notes=document.getElementById("slideNotes"), add=document.getElementById("addSlide"), slides=document.getElementById("slides");
+      let data=[]; try{data=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(data)) data=[];}catch{data=[];}
+      const save=()=>localStorage.setItem(key,JSON.stringify(data));
+      const render=()=>{slides.innerHTML=data.length?data.map((s,i)=>`<article class="slide"><strong>${i+1}. ${s.title}</strong><p>${s.notes}</p><button data-a="up" data-id="${s.id}">Up</button> <button data-a="down" data-id="${s.id}">Down</button> <button data-a="del" data-id="${s.id}">Delete</button></article>`).join(""):'<p>No slide plans yet.</p>';};
+      add.addEventListener("click",()=>{const t=title.value.trim(),n=notes.value.trim(); if(t.length<2||n.length<5){alert("Add a slide title and notes.");return;} data.push({id:Date.now().toString(36),title:t,notes:n}); title.value=""; notes.value=""; save(); render();});
+      slides.addEventListener("click",(e)=>{const b=e.target; if(!(b instanceof HTMLButtonElement)) return; const id=b.dataset.id; const idx=data.findIndex(x=>x.id===id); if(idx<0) return; if(b.dataset.a==="del"){data.splice(idx,1);} if(b.dataset.a==="up"&&idx>0){[data[idx-1],data[idx]]=[data[idx],data[idx-1]];} if(b.dataset.a==="down"&&idx<data.length-1){[data[idx+1],data[idx]]=[data[idx],data[idx+1]];} save(); render();});
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+

@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>VoteStorm Arena | Krishiv PB</title>
+  <style>
+    :root {
+      --bg: #071423;
+      --panel: #122943;
+      --line: #355d88;
+      --text: #eef7ff;
+      --muted: #a9c5e8;
+      --accent: #79d8ff;
+      --good: #5ad6a7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(160deg, #04101f, #0d2848 52%, #10395f);
+      min-height: 100vh;
+    }
+    .wrap { width: min(980px, 94%); margin: 24px auto 90px; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(160deg, rgba(18, 41, 67, 0.96), rgba(9, 23, 41, 0.96));
+      margin-bottom: 12px;
+    }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    input, button, textarea {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #0a1b30;
+      color: var(--text);
+      padding: 9px 10px;
+      font: inherit;
+    }
+    textarea { width: 100%; min-height: 78px; resize: vertical; }
+    button { cursor: pointer; font-weight: 700; }
+    .btn-main { background: linear-gradient(135deg, #79d8ff, #5ad6a7); color: #042333; border: none; }
+    .poll {
+      border: 1px solid rgba(122, 177, 238, 0.35);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: rgba(6, 18, 33, 0.72);
+    }
+    .option { margin-bottom: 8px; }
+    .bar {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(121, 216, 255, 0.16);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .bar span { display: block; height: 100%; background: linear-gradient(90deg, #79d8ff, #5ad6a7); }
+    .meta { font-size: .88rem; color: var(--muted); }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>VoteStorm Arena</h1>
+      <p class="meta">Create fast polls, vote instantly, and watch live percentage bars.</p>
+      <p class="meta">Created by Krishiv PB</p>
+      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+    </section>
+
+    <section class="card">
+      <h2>Create Poll</h2>
+      <input id="qInput" placeholder="Poll question..." style="width:100%; margin-bottom:8px;" />
+      <textarea id="oInput" placeholder="Options (one per line)&#10;Option A&#10;Option B&#10;Option C"></textarea>
+      <div class="row" style="margin-top:8px;">
+        <button id="createBtn" class="btn-main" type="button">Create Poll</button>
+        <button id="clearBtn" type="button">Clear All</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Active Polls</h2>
+      <div id="polls"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const KEY = "krishiv_votestorm_v1";
+      const qInput = document.getElementById("qInput");
+      const oInput = document.getElementById("oInput");
+      const createBtn = document.getElementById("createBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const pollsEl = document.getElementById("polls");
+      let polls = [];
+
+      function load() {
+        try {
+          polls = JSON.parse(localStorage.getItem(KEY) || "[]");
+          if (!Array.isArray(polls)) polls = [];
+        } catch { polls = []; }
+      }
+      function save() { localStorage.setItem(KEY, JSON.stringify(polls)); }
+      function esc(s) {
+        return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
+      function render() {
+        pollsEl.innerHTML = polls.map((p) => {
+          const total = p.options.reduce((n, o) => n + o.votes, 0);
+          const ops = p.options.map((o, i) => {
+            const ratio = total ? Math.round((o.votes / total) * 100) : 0;
+            return `
+              <div class="option">
+                <div class="row">
+                  <span>${esc(o.label)}</span>
+                  <strong>${ratio}% (${o.votes})</strong>
+                </div>
+                <div class="bar"><span style="width:${ratio}%"></span></div>
+                <button type="button" data-vote="${p.id}|${i}" style="margin-top:6px;">Vote</button>
+              </div>
+            `;
+          }).join("");
+          return `
+            <article class="poll">
+              <h3>${esc(p.question)}</h3>
+              <p class="meta">Total votes: ${total}</p>
+              ${ops}
+              <div class="row" style="margin-top:8px;">
+                <button type="button" data-del="${p.id}">Delete Poll</button>
+              </div>
+            </article>
+          `;
+        }).join("") || `<p class="meta">No polls yet. Create one above.</p>`;
+      }
+
+      createBtn.addEventListener("click", () => {
+        const question = qInput.value.trim();
+        const options = oInput.value.split(/\r?\n/).map((v) => v.trim()).filter(Boolean).slice(0, 8);
+        if (question.length < 4 || options.length < 2) {
+          alert("Add a question and at least 2 options.");
+          return;
+        }
+        polls.unshift({
+          id: "P" + Date.now().toString(36),
+          question,
+          options: options.map((label) => ({ label, votes: 0 })),
+          createdAt: new Date().toISOString()
+        });
+        qInput.value = "";
+        oInput.value = "";
+        save();
+        render();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        if (!confirm("Delete all polls?")) return;
+        polls = [];
+        save();
+        render();
+      });
+
+      pollsEl.addEventListener("click", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLButtonElement)) return;
+        const voteData = t.dataset.vote;
+        const delId = t.dataset.del;
+        if (voteData) {
+          const [pollId, idxStr] = voteData.split("|");
+          const poll = polls.find((x) => x.id === pollId);
+          const idx = Number(idxStr);
+          if (!poll || !poll.options[idx]) return;
+          poll.options[idx].votes += 1;
+          save();
+          render();
+          return;
+        }
+        if (delId) {
+          polls = polls.filter((x) => x.id !== delId);
+          save();
+          render();
+        }
+      });
+
+      load();
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+
+

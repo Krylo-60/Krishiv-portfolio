@@ -1,0 +1,330 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>BazaarBlitz Prime | Krishiv PB</title>
+  <style>
+    :root {
+      --bg: #081528;
+      --panel: #112742;
+      --line: #2c537d;
+      --text: #eef6ff;
+      --muted: #a8c4e8;
+      --good: #5ee0b0;
+      --accent: #79d8ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(165deg, #04111f, #0b2644 50%, #133d67);
+      min-height: 100vh;
+    }
+    .wrap { width: min(1120px, 94%); margin: 20px auto 90px; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(160deg, rgba(20, 46, 77, 0.95), rgba(10, 26, 46, 0.95));
+      margin-bottom: 12px;
+    }
+    h1, h2, h3 { margin: 0 0 10px; }
+    p { color: var(--muted); margin: 0 0 10px; }
+    input, select, button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #0a1a30;
+      color: var(--text);
+      padding: 9px 10px;
+      font: inherit;
+    }
+    button { cursor: pointer; font-weight: 700; }
+    .btn-main { background: linear-gradient(135deg, #79d8ff, #5ee0b0); color: #062333; border: none; }
+    .grid-head { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; }
+    .layout { display: grid; grid-template-columns: 1.6fr .8fr; gap: 12px; }
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+    .product {
+      border: 1px solid rgba(130, 176, 228, 0.35);
+      border-radius: 12px;
+      padding: 12px;
+      background: rgba(7, 20, 36, 0.72);
+    }
+    .emoji { font-size: 1.5rem; }
+    .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+    .price { color: var(--good); font-weight: 800; }
+    .cart-item {
+      border-bottom: 1px solid rgba(130, 176, 228, 0.25);
+      padding: 8px 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+    .totals { margin-top: 10px; border-top: 1px solid rgba(130, 176, 228, 0.25); padding-top: 10px; }
+    .totals .row { margin-bottom: 6px; }
+    .badge { font-size: .78rem; color: #8ec4ff; }
+    .small { font-size: .86rem; color: var(--muted); }
+    .history-item {
+      border: 1px solid rgba(130, 176, 228, 0.28);
+      border-radius: 10px;
+      padding: 8px;
+      margin-top: 8px;
+      background: rgba(7, 20, 36, 0.65);
+    }
+    @media (max-width: 920px) {
+      .grid-head { grid-template-columns: 1fr; }
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>BazaarBlitz Prime</h1>
+      <p>Interactive shopping app inspired by marketplace flow. Search, filter, cart, coupon, and simulated checkout.</p>
+      <p>Created by Krishiv PB</p>
+      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+    </section>
+
+    <section class="card grid-head">
+      <input id="searchInput" placeholder="Search products..." />
+      <select id="categorySelect">
+        <option value="all">All Categories</option>
+        <option value="gaming">Gaming</option>
+        <option value="school">School</option>
+        <option value="creator">Creator</option>
+        <option value="tech">Tech</option>
+      </select>
+      <select id="sortSelect">
+        <option value="featured">Sort: Featured</option>
+        <option value="price-low">Sort: Price Low</option>
+        <option value="price-high">Sort: Price High</option>
+        <option value="rating">Sort: Rating</option>
+      </select>
+      <button id="resetBtn" type="button">Reset</button>
+    </section>
+
+    <section class="layout">
+      <article class="card">
+        <h2>Shop Deck</h2>
+        <div id="products" class="products"></div>
+      </article>
+
+      <aside class="card">
+        <h2>Cart</h2>
+        <div id="cartItems"></div>
+        <div class="totals">
+          <div class="row"><span>Subtotal</span><strong id="subtotal">Rs 0</strong></div>
+          <div class="row"><span>Shipping</span><strong id="shipping">Rs 0</strong></div>
+          <div class="row"><span>Discount</span><strong id="discount">Rs 0</strong></div>
+          <div class="row"><span>Total</span><strong id="total">Rs 0</strong></div>
+          <div class="row">
+            <input id="couponInput" placeholder="Coupon code" style="flex:1;" />
+            <button id="applyCouponBtn" type="button">Apply</button>
+          </div>
+          <button id="checkoutBtn" class="btn-main" type="button" style="width:100%;">Checkout</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card">
+      <h2>Order History</h2>
+      <p class="small">Recent simulated orders stored in your browser.</p>
+      <div id="orderHistory"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const STORE_KEY = "krishiv_bazaar_blitz_v1";
+      const ORDER_KEY = "krishiv_bazaar_orders_v1";
+      const products = [
+        { id: "p1", name: "Creator RGB Keyboard", category: "tech", price: 2499, rating: 4.7, icon: "âŒ¨ï¸" },
+        { id: "p2", name: "Roblox Battle Mouse", category: "gaming", price: 1299, rating: 4.5, icon: "ðŸ–±ï¸" },
+        { id: "p3", name: "Study Sprint Notebook", category: "school", price: 399, rating: 4.4, icon: "ðŸ“˜" },
+        { id: "p4", name: "Streamer Desk Light", category: "creator", price: 1599, rating: 4.6, icon: "ðŸ’¡" },
+        { id: "p5", name: "Gaming Headset Pro", category: "gaming", price: 3199, rating: 4.8, icon: "ðŸŽ§" },
+        { id: "p6", name: "Smart Pen Pack", category: "school", price: 249, rating: 4.2, icon: "ðŸ–Šï¸" },
+        { id: "p7", name: "Mini Action Cam", category: "creator", price: 4599, rating: 4.3, icon: "ðŸ“·" },
+        { id: "p8", name: "Turbo USB Hub", category: "tech", price: 899, rating: 4.1, icon: "ðŸ”Œ" }
+      ];
+
+      const searchInput = document.getElementById("searchInput");
+      const categorySelect = document.getElementById("categorySelect");
+      const sortSelect = document.getElementById("sortSelect");
+      const resetBtn = document.getElementById("resetBtn");
+      const productsEl = document.getElementById("products");
+      const cartItemsEl = document.getElementById("cartItems");
+      const subtotalEl = document.getElementById("subtotal");
+      const shippingEl = document.getElementById("shipping");
+      const discountEl = document.getElementById("discount");
+      const totalEl = document.getElementById("total");
+      const couponInput = document.getElementById("couponInput");
+      const applyCouponBtn = document.getElementById("applyCouponBtn");
+      const checkoutBtn = document.getElementById("checkoutBtn");
+      const orderHistoryEl = document.getElementById("orderHistory");
+
+      let cart = {};
+      let orders = [];
+      let coupon = "";
+
+      function loadState() {
+        try { cart = JSON.parse(localStorage.getItem(STORE_KEY) || "{}") || {}; } catch { cart = {}; }
+        try { orders = JSON.parse(localStorage.getItem(ORDER_KEY) || "[]") || []; } catch { orders = []; }
+      }
+      function saveState() {
+        localStorage.setItem(STORE_KEY, JSON.stringify(cart));
+        localStorage.setItem(ORDER_KEY, JSON.stringify(orders.slice(0, 12)));
+      }
+
+      function money(v) { return "Rs " + Number(v || 0).toLocaleString("en-IN"); }
+      function currentList() {
+        const q = searchInput.value.trim().toLowerCase();
+        const cat = categorySelect.value;
+        const sort = sortSelect.value;
+        let items = products.filter((p) => {
+          if (cat !== "all" && p.category !== cat) return false;
+          if (!q) return true;
+          return (p.name + " " + p.category).toLowerCase().includes(q);
+        });
+        if (sort === "price-low") items.sort((a, b) => a.price - b.price);
+        if (sort === "price-high") items.sort((a, b) => b.price - a.price);
+        if (sort === "rating") items.sort((a, b) => b.rating - a.rating);
+        return items;
+      }
+
+      function renderProducts() {
+        const list = currentList();
+        productsEl.innerHTML = list.map((p) => `
+          <article class="product">
+            <div class="row">
+              <span class="emoji">${p.icon}</span>
+              <span class="badge">${p.category.toUpperCase()}</span>
+            </div>
+            <h3>${p.name}</h3>
+            <p class="small">Rating ${p.rating.toFixed(1)} / 5</p>
+            <div class="row">
+              <span class="price">${money(p.price)}</span>
+              <button type="button" data-add="${p.id}" class="btn-main">Add</button>
+            </div>
+          </article>
+        `).join("") || `<p class="small">No products found for this filter.</p>`;
+      }
+
+      function getSummary() {
+        let subtotal = 0;
+        const lines = Object.entries(cart).map(([id, qty]) => {
+          const item = products.find((p) => p.id === id);
+          if (!item || qty <= 0) return null;
+          const line = item.price * qty;
+          subtotal += line;
+          return { item, qty, line };
+        }).filter(Boolean);
+        const shipping = subtotal > 1500 ? 0 : subtotal > 0 ? 99 : 0;
+        const discount = coupon === "KRISHIVPB" ? Math.round(subtotal * 0.1) : 0;
+        const total = Math.max(0, subtotal + shipping - discount);
+        return { lines, subtotal, shipping, discount, total };
+      }
+
+      function renderCart() {
+        const sum = getSummary();
+        cartItemsEl.innerHTML = sum.lines.map(({ item, qty, line }) => `
+          <div class="cart-item">
+            <div>
+              <strong>${item.name}</strong>
+              <div class="small">${qty} x ${money(item.price)}</div>
+            </div>
+            <div>
+              <div class="price">${money(line)}</div>
+              <button type="button" data-remove="${item.id}" style="margin-top:6px;">Remove</button>
+            </div>
+          </div>
+        `).join("") || `<p class="small">Cart is empty.</p>`;
+
+        subtotalEl.textContent = money(sum.subtotal);
+        shippingEl.textContent = money(sum.shipping);
+        discountEl.textContent = "- " + money(sum.discount);
+        totalEl.textContent = money(sum.total);
+      }
+
+      function renderOrders() {
+        orderHistoryEl.innerHTML = orders.map((o) => `
+          <article class="history-item">
+            <div class="row"><strong>${o.id}</strong><span class="small">${new Date(o.time).toLocaleString("en-IN")}</span></div>
+            <div class="small">${o.items} items | ${money(o.total)}</div>
+          </article>
+        `).join("") || `<p class="small">No orders yet.</p>`;
+      }
+
+      productsEl.addEventListener("click", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLButtonElement)) return;
+        const id = t.dataset.add;
+        if (!id) return;
+        cart[id] = Number(cart[id] || 0) + 1;
+        saveState();
+        renderCart();
+      });
+
+      cartItemsEl.addEventListener("click", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLButtonElement)) return;
+        const id = t.dataset.remove;
+        if (!id) return;
+        delete cart[id];
+        saveState();
+        renderCart();
+      });
+
+      [searchInput, categorySelect, sortSelect].forEach((el) => el.addEventListener("input", renderProducts));
+      resetBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        categorySelect.value = "all";
+        sortSelect.value = "featured";
+        renderProducts();
+      });
+
+      applyCouponBtn.addEventListener("click", () => {
+        coupon = couponInput.value.trim().toUpperCase();
+        if (coupon !== "KRISHIVPB") coupon = "";
+        renderCart();
+      });
+
+      checkoutBtn.addEventListener("click", () => {
+        const sum = getSummary();
+        if (!sum.lines.length) {
+          alert("Cart is empty.");
+          return;
+        }
+        const order = {
+          id: "BB-" + Date.now().toString().slice(-6),
+          time: new Date().toISOString(),
+          items: sum.lines.reduce((n, x) => n + x.qty, 0),
+          total: sum.total
+        };
+        orders.unshift(order);
+        cart = {};
+        coupon = "";
+        couponInput.value = "";
+        saveState();
+        renderCart();
+        renderOrders();
+        alert("Order placed in BazaarBlitz Prime: " + order.id);
+      });
+
+      loadState();
+      renderProducts();
+      renderCart();
+      renderOrders();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
+
+
+
