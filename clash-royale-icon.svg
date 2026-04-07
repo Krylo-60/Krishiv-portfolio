@@ -1,46 +1,26 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 120" role="img" aria-labelledby="title desc">
-  <title id="title">Clash Royale Logo</title>
-  <desc id="desc">Clash Royale style wordmark with shield badge on the right.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">Clash Royale logo</title>
+  <desc id="desc">Clash Royale wordmark with polished crown shield badge.</desc>
   <defs>
-    <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#f5f7fb"/>
-      <stop offset="52%" stop-color="#bcc4d2"/>
-      <stop offset="100%" stop-color="#7e8798"/>
+    <linearGradient id="crBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#12264d"/>
+      <stop offset="100%" stop-color="#251047"/>
     </linearGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffe39a"/>
-      <stop offset="52%" stop-color="#e5a93e"/>
-      <stop offset="100%" stop-color="#965f16"/>
-    </linearGradient>
-    <linearGradient id="goldEdge" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fff0be"/>
-      <stop offset="100%" stop-color="#cb8628"/>
-    </linearGradient>
-    <linearGradient id="blueShield" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#5ca3ff"/>
-      <stop offset="100%" stop-color="#2250a6"/>
+    <linearGradient id="crGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff2a9"/>
+      <stop offset="45%" stop-color="#e8be5c"/>
+      <stop offset="100%" stop-color="#9b6313"/>
     </linearGradient>
   </defs>
-
-  <g font-family="Impact, Arial Black, Arial, sans-serif" font-weight="800" stroke="#2f2114" stroke-width="1.4" paint-order="stroke fill">
-    <text x="14" y="45" font-size="29" fill="url(#silver)" letter-spacing="0.6">CLASH</text>
-    <text x="8" y="78" font-size="44" fill="url(#gold)" letter-spacing="0.7">ROYALE</text>
+  <rect width="300" height="140" rx="24" fill="url(#crBg)"/>
+  <circle cx="64" cy="40" r="46" fill="#5ea7ff" opacity=".16"/>
+  <g font-family="Impact, Arial Black, Arial, sans-serif" paint-order="stroke fill">
+    <text x="18" y="56" font-size="36" fill="#eef6ff" stroke="#35230d" stroke-width="2.2">CLASH</text>
+    <text x="16" y="100" font-size="52" fill="url(#crGold)" stroke="#35230d" stroke-width="2.6">ROYALE</text>
   </g>
-
-  <g transform="translate(156 14)">
-    <path d="M30 2l28 9v25c0 18-13 30-28 37C15 66 2 54 2 36V11z" fill="url(#gold)"/>
-    <path d="M30 6l23 8v21c0 15-10 24-23 31C17 59 7 50 7 35V14z" fill="url(#goldEdge)"/>
-    <path d="M30 10l18 6v18c0 13-8 21-18 27C20 55 12 47 12 34V16z" fill="url(#blueShield)"/>
-    <path d="M30 10v51" stroke="#2f61bf" stroke-opacity="0.35"/>
-    <path d="M21 13v42" stroke="#2f61bf" stroke-opacity="0.25"/>
-    <path d="M39 13v42" stroke="#2f61bf" stroke-opacity="0.25"/>
-
-    <g transform="translate(14 22)">
-      <path d="M0 8l6-8 8 6 8-6 6 8v7H0z" fill="#f3c45b"/>
-      <path d="M6 13h16v5H6z" fill="#d48f24"/>
-      <path d="M14 6c9 0 16 6 16 13 0 6-5 11-11 13l-5 6-5-6C3 30-2 25-2 19-2 12 5 6 14 6z" fill="#f1b346"/>
-      <path d="M14 10c6 0 11 4 11 8 0 4-4 7-8 8l-3 3-3-3c-4-1-8-4-8-8 0-4 5-8 11-8z" fill="#ffd27b"/>
-      <path d="M14 16l3 3-3 3-3-3z" fill="#d38220"/>
-    </g>
+  <g transform="translate(220 24)">
+    <path d="M26 0 58 12v30c0 23-16 39-32 48C10 81-6 65-6 42V12z" fill="url(#crGold)" stroke="#513310" stroke-width="3"/>
+    <path d="M26 10 48 18v22c0 15-9 27-22 35C13 67 4 55 4 40V18z" fill="#3b82f6"/>
+    <path d="M26 24 18 34h16l-8-10zm-14 14h28v12H12z" fill="#f8fafc"/>
   </g>
 </svg>

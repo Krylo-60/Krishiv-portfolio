@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+  <title id="title">Rocket League inspired poster</title>
+  <desc id="desc">Stylized sports racing poster inspired by Rocket League.</desc>
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#071b37"/><stop offset="100%" stop-color="#2563eb"/></linearGradient></defs>
+  <rect width="960" height="640" fill="url(#bg)"/>
+  <ellipse cx="480" cy="470" rx="308" ry="86" fill="#0d335e"/>
+  <path d="M152 510c80-28 148-84 202-166" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="256" cy="506" r="34" fill="#eff6ff"/>
+  <circle cx="256" cy="506" r="14" fill="#2563eb"/>
+  <path d="M520 384l116-54 102 64-44 94H560z" fill="#dbeafe"/>
+  <path d="M574 404h88" stroke="#0f172a" stroke-width="10" stroke-linecap="round"/>
+  <path d="M672 260l40 28" stroke="#7dd3fc" stroke-width="10" stroke-linecap="round"/>
+  <rect x="82" y="82" width="352" height="58" rx="29" fill="rgba(5,16,27,.42)" stroke="rgba(255,255,255,.22)"/>
+  <text x="112" y="121" font-family="Space Grotesk, Arial, sans-serif" font-size="32" font-weight="700" fill="#f4fbff">ROCKET LEAGUE</text>
+</svg>

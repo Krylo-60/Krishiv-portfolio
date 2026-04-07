@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+  <title id="title">Stumble Guys inspired poster</title>
+  <desc id="desc">Playful obstacle race poster inspired by Stumble Guys.</desc>
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7a1f53"/><stop offset="100%" stop-color="#fb923c"/></linearGradient></defs>
+  <rect width="960" height="640" fill="url(#bg)"/>
+  <circle cx="184" cy="192" r="74" fill="#fff0fb" opacity=".18"/>
+  <circle cx="782" cy="154" r="94" fill="#fff7ed" opacity=".16"/>
+  <path d="M118 470c110-100 206-132 306-132 100 0 176 26 406 90-118 86-250 130-396 130-124 0-226-28-316-88z" fill="#381028" opacity=".42"/>
+  <g fill="#fff7f4">
+    <circle cx="358" cy="296" r="38"/><rect x="326" y="332" width="64" height="92" rx="22"/>
+    <circle cx="548" cy="258" r="34"/><rect x="520" y="290" width="56" height="84" rx="20"/>
+  </g>
+  <path d="M330 432l-68 62M390 432l74 58M520 374l-62 54M574 374l70 52" stroke="#fff1ea" stroke-width="10" stroke-linecap="round"/>
+  <rect x="82" y="82" width="334" height="58" rx="29" fill="rgba(5,16,27,.42)" stroke="rgba(255,255,255,.22)"/>
+  <text x="112" y="121" font-family="Space Grotesk, Arial, sans-serif" font-size="32" font-weight="700" fill="#fff7f3">STUMBLE GUYS</text>
+</svg>

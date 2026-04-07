@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Color Switch Rush | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root { --bg:#24111f; --panel:#331625; --line:#7c3f2d; --text:#fff8f2; --muted:#ffd9c4; }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      font-family:"Space Grotesk","Segoe UI",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(251,113,133,.18), transparent 22%),
+        linear-gradient(165deg, #1c0d18 0%, #341222 52%, #ea580c 100%);
+    }
+    .wrap { width:min(1080px,94%); margin:24px auto 96px; display:grid; gap:14px; }
+    .card { border:1px solid rgba(255,255,255,.12); border-radius:22px; padding:18px; background:linear-gradient(155deg, rgba(45,18,31,.94), rgba(27,11,20,.94)); box-shadow:0 24px 48px rgba(0,0,0,.24); }
+    .hero { display:grid; grid-template-columns:1fr auto; gap:16px; }
+    h1, h2, p { margin:0 0 10px; }
+    p { color:var(--muted); line-height:1.55; }
+    .eyebrow, .meta { font-size:.86rem; text-transform:uppercase; letter-spacing:.08em; color:#ffe6d8; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; align-items:start; }
+    button, a.button-link {
+      border:none;
+      border-radius:14px;
+      padding:13px 16px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
+      color:#2b1018;
+      background:linear-gradient(135deg, #fff1df, #ffd1ab);
+    }
+    .ghost { background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.16); }
+    .game-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:14px; }
+    .wheel-wrap { display:grid; place-items:center; min-height:420px; }
+    .wheel {
+      width:min(320px,72vw);
+      aspect-ratio:1;
+      border-radius:50%;
+      position:relative;
+      border:14px solid rgba(255,255,255,.22);
+      overflow:hidden;
+      box-shadow:0 18px 40px rgba(0,0,0,.28);
+    }
+    .slice { position:absolute; inset:0; clip-path:polygon(50% 50%, 50% 0, 100% 0, 100% 50%); transform-origin:center; }
+    .slice.red { background:#fb7185; transform:rotate(0deg); }
+    .slice.blue { background:#60a5fa; transform:rotate(90deg); }
+    .slice.green { background:#34d399; transform:rotate(180deg); }
+    .slice.yellow { background:#facc15; transform:rotate(270deg); }
+    .wheel-center {
+      position:absolute;
+      inset:50%;
+      width:34%;
+      height:34%;
+      transform:translate(-50%, -50%);
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:rgba(39,16,28,.92);
+      color:#fff3e8;
+      font-weight:700;
+    }
+    .pad-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px; }
+    .pad {
+      min-height:76px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      color:#fff8f2;
+      font:700 1rem/1 "Space Grotesk", sans-serif;
+    }
+    .pad.red { background:#fb7185; }
+    .pad.blue { background:#60a5fa; }
+    .pad.green { background:#34d399; color:#0d2a20; }
+    .pad.yellow { background:#facc15; color:#392d00; }
+    .pad.is-target { box-shadow:0 0 0 4px rgba(255,255,255,.26) inset, 0 0 22px rgba(255,255,255,.18); }
+    .stack { display:grid; gap:12px; }
+    .pill-row { display:flex; gap:10px; flex-wrap:wrap; }
+    .pill { border-radius:999px; padding:10px 14px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); }
+    @media (max-width:900px) { .hero, .game-grid { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card hero">
+      <div>
+        <p class="eyebrow">Krishiv Game Studio</p>
+        <h1>Color Switch Rush</h1>
+        <p>The game calls a color. You have one second to hit the matching pad. Every streak point makes the next round feel sharper.</p>
+        <p class="meta">Designed by Krishiv PB</p>
+      </div>
+      <div class="controls">
+        <button id="startBtn" type="button">Start Rush</button>
+        <button id="resetBtn" class="ghost" type="button">Reset</button>
+        <a class="button-link ghost" href="games.html#games-apps-gateway">Back to Games Hub</a>
+      </div>
+    </section>
+
+    <section class="game-grid">
+      <article class="card wheel-wrap">
+        <div class="wheel">
+          <div class="slice red"></div>
+          <div class="slice blue"></div>
+          <div class="slice green"></div>
+          <div class="slice yellow"></div>
+          <div class="wheel-center" id="callout">READY</div>
+        </div>
+      </article>
+      <article class="card stack">
+        <div class="pill-row">
+          <div class="pill">Score: <strong id="score">0</strong></div>
+          <div class="pill">Best: <strong id="best">0</strong></div>
+          <div class="pill">Time: <strong id="timeLeft">0</strong></div>
+        </div>
+        <p id="status">Press start to get the first color call.</p>
+        <div class="pad-grid">
+          <button class="pad red" data-color="red" type="button">Red</button>
+          <button class="pad blue" data-color="blue" type="button">Blue</button>
+          <button class="pad green" data-color="green" type="button">Green</button>
+          <button class="pad yellow" data-color="yellow" type="button">Yellow</button>
+        </div>
+      </article>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const KEY = "krishiv_color_switch_rush_v1";
+      const startBtn = document.getElementById("startBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const callout = document.getElementById("callout");
+      const status = document.getElementById("status");
+      const scoreEl = document.getElementById("score");
+      const bestEl = document.getElementById("best");
+      const timeLeftEl = document.getElementById("timeLeft");
+      const pads = Array.from(document.querySelectorAll(".pad"));
+      const colors = ["red", "blue", "green", "yellow"];
+      let best = 0;
+      let score = 0;
+      let target = "";
+      let timeLeft = 0;
+      let interval = 0;
+      let active = false;
+
+      function load() { try { const value = JSON.parse(localStorage.getItem(KEY) || "{}"); best = Number(value.best || 0); } catch {} }
+      function save() { localStorage.setItem(KEY, JSON.stringify({ best })); }
+      function render() {
+        scoreEl.textContent = String(score);
+        bestEl.textContent = String(best);
+        timeLeftEl.textContent = String(timeLeft);
+        callout.textContent = target ? target.toUpperCase() : "READY";
+        pads.forEach((pad) => pad.classList.toggle("is-target", pad.dataset.color === target));
+      }
+      function stop(message) {
+        active = false;
+        window.clearInterval(interval);
+        target = "";
+        timeLeft = 0;
+        status.textContent = message;
+        render();
+      }
+      function nextRound() {
+        target = colors[Math.floor(Math.random() * colors.length)];
+        timeLeft = 10;
+        render();
+        window.clearInterval(interval);
+        interval = window.setInterval(() => {
+          timeLeft -= 1;
+          render();
+          if (timeLeft <= 0) {
+            best = Math.max(best, score);
+            save();
+            stop("Time slipped away. Hit start to try another streak.");
+          }
+        }, 100);
+      }
+      startBtn.addEventListener("click", () => {
+        score = 0;
+        active = true;
+        status.textContent = "Match the called color before the timer empties.";
+        nextRound();
+      });
+      resetBtn.addEventListener("click", () => {
+        score = 0;
+        best = 0;
+        save();
+        stop("Reset done. Start when you want a fresh run.");
+        render();
+      });
+      pads.forEach((pad) => pad.addEventListener("click", () => {
+        if (!active) return;
+        if (pad.dataset.color === target) {
+          score += 1;
+          status.textContent = "Clean hit. Keep the streak alive.";
+          nextRound();
+        } else {
+          best = Math.max(best, score);
+          save();
+          stop("Wrong color. The rush is over for this round.");
+        }
+      }));
+      load();
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>

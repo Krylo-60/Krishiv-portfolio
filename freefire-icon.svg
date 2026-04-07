@@ -1,25 +1,21 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 120" role="img" aria-labelledby="title desc">
-  <title id="title">Free Fire MAX Gold Logo</title>
-  <desc id="desc">Gold FREE FIRE MAX lockup with centered lightning knife I and horizontal bar.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">Free Fire logo</title>
+  <desc id="desc">High-contrast Free Fire wordmark with ember glow and blade accent.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1b1208"/>
-      <stop offset="100%" stop-color="#2d1b0b"/>
+    <linearGradient id="ffBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#241300"/>
+      <stop offset="50%" stop-color="#121212"/>
+      <stop offset="100%" stop-color="#331500"/>
     </linearGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffe8af"/>
-      <stop offset="52%" stop-color="#dfb14c"/>
-      <stop offset="100%" stop-color="#9f6c18"/>
+    <linearGradient id="ffBlade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd56d"/>
+      <stop offset="100%" stop-color="#ff7a00"/>
     </linearGradient>
   </defs>
-
-  <g fill="url(#gold)">
-    <text x="54" y="54" font-size="26" font-weight="800" font-family="Impact, Arial Black, Arial, sans-serif" letter-spacing="0.9">FREE F</text>
-    <text x="123" y="54" font-size="26" font-weight="800" font-family="Impact, Arial Black, Arial, sans-serif" letter-spacing="0.9">I</text>
-    <text x="132" y="54" font-size="26" font-weight="800" font-family="Impact, Arial Black, Arial, sans-serif" letter-spacing="0.9">RE</text>
-
-    <path d="M34 69h52v9H34z"/>
-    <path d="M186 69h-52v9h52z"/>
-    <text x="110" y="95" text-anchor="middle" font-size="18" font-weight="800" font-family="Impact, Arial Black, Arial, sans-serif" letter-spacing="0.9">MAX</text>
-  </g>
+  <rect width="300" height="140" rx="24" fill="url(#ffBg)"/>
+  <circle cx="226" cy="34" r="44" fill="#ff8a00" opacity=".12"/>
+  <text x="150" y="82" text-anchor="middle" font-family="Impact, Arial Black, Arial, sans-serif" font-size="46" letter-spacing="3" fill="#ffffff">FREE FIRE</text>
+  <path d="M157 37h12l-9 65h-12z" fill="url(#ffBlade)"/>
+  <path d="M153 37h20l-3 12h-14z" fill="#ffe18b"/>
+  <text x="150" y="118" text-anchor="middle" font-family="Orbitron, Arial Black, Arial, sans-serif" font-size="14" letter-spacing="7" fill="#ffcb7e">BATTLE ROYALE</text>
 </svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">Stumble Guys logo</title>
+  <desc id="desc">Stumble Guys playful logo with bright party-race color treatment.</desc>
+  <defs>
+    <linearGradient id="sgBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff6ca7"/>
+      <stop offset="100%" stop-color="#fb923c"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="140" rx="24" fill="url(#sgBg)"/>
+  <circle cx="242" cy="38" r="44" fill="#ffffff" opacity=".12"/>
+  <text x="150" y="58" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="30" fill="#ffffff" stroke="#7a1730" stroke-width="2.3" paint-order="stroke fill">STUMBLE</text>
+  <text x="150" y="94" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="30" fill="#ffe680" stroke="#7a1730" stroke-width="2.3" paint-order="stroke fill">GUYS</text>
+  <path d="M52 110h196" stroke="rgba(255,255,255,.2)" stroke-width="3" stroke-linecap="round"/>
+</svg>

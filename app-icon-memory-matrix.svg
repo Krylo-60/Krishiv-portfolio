@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Memory Matrix icon">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c1038"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="26" fill="url(#bg)"/>
+  <g fill="#eef2ff">
+    <rect x="24" y="24" width="22" height="22" rx="6"/>
+    <rect x="49" y="24" width="22" height="22" rx="6" opacity=".82"/>
+    <rect x="74" y="24" width="22" height="22" rx="6"/>
+    <rect x="24" y="49" width="22" height="22" rx="6" opacity=".82"/>
+    <rect x="49" y="49" width="22" height="22" rx="6"/>
+    <rect x="74" y="49" width="22" height="22" rx="6" opacity=".82"/>
+    <rect x="24" y="74" width="22" height="22" rx="6"/>
+    <rect x="49" y="74" width="22" height="22" rx="6" opacity=".82"/>
+    <rect x="74" y="74" width="22" height="22" rx="6"/>
+  </g>
+</svg>

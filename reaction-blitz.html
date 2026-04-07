@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Reaction Blitz | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root { --bg:#061420; --panel:#0e2437; --line:#24506d; --text:#eefcff; --muted:#add6df; --accent:#82ffee; --accent-2:#79a8ff; }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      font-family:"Space Grotesk","Segoe UI",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(130,255,238,.16), transparent 26%),
+        linear-gradient(165deg, #04111d 0%, #082133 56%, #0e4a4f 100%);
+    }
+    .wrap { width:min(1080px,94%); margin:24px auto 96px; display:grid; gap:14px; }
+    .card {
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      background:linear-gradient(155deg, rgba(13,33,49,.94), rgba(8,21,32,.94));
+      box-shadow:0 24px 48px rgba(0,0,0,.24);
+    }
+    .hero { display:grid; grid-template-columns:1.1fr .9fr; gap:16px; align-items:stretch; }
+    .eyebrow, .meta { font-size:.86rem; letter-spacing:.08em; text-transform:uppercase; color:#c3f7ef; }
+    h1, h2, p { margin:0 0 10px; }
+    p { color:var(--muted); line-height:1.55; }
+    .hero-display {
+      border-radius:18px;
+      min-height:280px;
+      display:grid;
+      place-items:center;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 30%),
+        radial-gradient(circle at center, rgba(130,255,238,.18), transparent 42%),
+        linear-gradient(160deg, rgba(5,17,29,.82), rgba(8,32,42,.92));
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-display::before {
+      content:"";
+      position:absolute;
+      inset:18px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+    }
+    .orb {
+      width:min(210px,44vw);
+      aspect-ratio:1;
+      border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, #dbfff8, #6ae8d6 55%, #0b4643 100%);
+      box-shadow:0 0 0 14px rgba(130,255,238,.12), 0 0 0 34px rgba(130,255,238,.06);
+      transform:scale(.72);
+      transition:background .18s ease, transform .18s ease;
+      position:relative;
+      z-index:1;
+    }
+    .orb.ready { background:radial-gradient(circle at 30% 30%, #f3fffc, #87fff0 55%, #0d5951 100%); transform:scale(1); }
+    .orb.active { background:radial-gradient(circle at 30% 30%, #f1fff7, #7dffb6 56%, #15663f 100%); transform:scale(1.05); }
+    .orb.early { background:radial-gradient(circle at 30% 30%, #fff4f4, #ff8290 56%, #8f1d2c 100%); }
+    .display-text { position:absolute; bottom:24px; left:24px; right:24px; font-size:1.04rem; color:#d7fffb; }
+    .stack { display:grid; gap:12px; }
+    .stats { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; }
+    .stat { border-radius:16px; padding:14px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); }
+    .stat strong { display:block; font-size:1.6rem; margin-top:4px; }
+    button {
+      border:none;
+      border-radius:14px;
+      padding:14px 16px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      color:#042124;
+      background:linear-gradient(135deg, var(--accent), #b0fff6);
+    }
+    .ghost { background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.16); }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; }
+    .timeline { display:grid; gap:10px; }
+    .run {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      border-radius:14px;
+      padding:12px 14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      color:#e8ffff;
+    }
+    a { color:#9feaff; }
+    @media (max-width:900px) {
+      .hero { grid-template-columns:1fr; }
+      .stats { grid-template-columns:1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card hero">
+      <div>
+        <p class="eyebrow">Krishiv Game Studio</p>
+        <h1>Reaction Blitz</h1>
+        <p>Wait for the arena to turn green, then hit the orb as fast as you can. The point is clean reflexes, not random spam.</p>
+        <p class="meta">Original mini-game by Krishiv PB</p>
+        <div class="controls">
+          <button id="startBtn" type="button">Start Round</button>
+          <button id="resetBtn" class="ghost" type="button">Reset Session</button>
+          <a href="games.html#games-apps-gateway">Back to Games Hub</a>
+        </div>
+      </div>
+      <div class="hero-display" id="arena">
+        <button class="orb" id="orbBtn" type="button" aria-label="Reaction orb"></button>
+        <div class="display-text" id="statusText">Press start, stay calm, and wait for the green signal.</div>
+      </div>
+    </section>
+
+    <section class="card stack">
+      <div class="stats">
+        <article class="stat"><span class="meta">Best</span><strong id="bestTime">--</strong></article>
+        <article class="stat"><span class="meta">Latest</span><strong id="latestTime">--</strong></article>
+        <article class="stat"><span class="meta">Rounds</span><strong id="roundCount">0</strong></article>
+      </div>
+      <div class="timeline" id="historyList">
+        <div class="run"><span>Session log</span><span>No completed rounds yet.</span></div>
+      </div>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const KEY = "krishiv_reaction_blitz_v1";
+      const startBtn = document.getElementById("startBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const orbBtn = document.getElementById("orbBtn");
+      const statusText = document.getElementById("statusText");
+      const bestTime = document.getElementById("bestTime");
+      const latestTime = document.getElementById("latestTime");
+      const roundCount = document.getElementById("roundCount");
+      const historyList = document.getElementById("historyList");
+      let state = { best: null, latest: null, rounds: [] };
+      let timer = 0;
+      let armedAt = 0;
+      let ready = false;
+      let live = false;
+
+      function load() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(KEY) || "{}");
+          if (parsed && typeof parsed === "object") state = { best: parsed.best ?? null, latest: parsed.latest ?? null, rounds: Array.isArray(parsed.rounds) ? parsed.rounds : [] };
+        } catch {}
+      }
+      function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+      function fmt(ms) { return typeof ms === "number" ? (ms / 1000).toFixed(3) + "s" : "--"; }
+      function render() {
+        bestTime.textContent = fmt(state.best);
+        latestTime.textContent = fmt(state.latest);
+        roundCount.textContent = String(state.rounds.length);
+        historyList.innerHTML = state.rounds.length
+          ? state.rounds.slice(-6).reverse().map((ms, index) => `<div class="run"><span>Round ${state.rounds.length - index}</span><strong>${fmt(ms)}</strong></div>`).join("")
+          : `<div class="run"><span>Session log</span><span>No completed rounds yet.</span></div>`;
+      }
+      function clearArena(message) {
+        window.clearTimeout(timer);
+        ready = false;
+        live = false;
+        orbBtn.className = "orb";
+        statusText.textContent = message;
+      }
+      startBtn.addEventListener("click", () => {
+        if (live || ready) return;
+        clearArena("Wait for it... the signal is coming.");
+        orbBtn.className = "orb ready";
+        ready = true;
+        timer = window.setTimeout(() => {
+          live = true;
+          ready = false;
+          armedAt = performance.now();
+          orbBtn.className = "orb active";
+          statusText.textContent = "GO! Tap the orb now.";
+        }, 900 + Math.random() * 2400);
+      });
+      orbBtn.addEventListener("click", () => {
+        if (ready) {
+          clearArena("Too early. Clean timing beats panic clicking.");
+          orbBtn.className = "orb early";
+          return;
+        }
+        if (!live) return;
+        const reaction = Math.round(performance.now() - armedAt);
+        state.latest = reaction;
+        state.best = state.best == null ? reaction : Math.min(state.best, reaction);
+        state.rounds.push(reaction);
+        save();
+        render();
+        clearArena(`Locked in at ${fmt(reaction)}. Hit start when you want another round.`);
+      });
+      resetBtn.addEventListener("click", () => {
+        state = { best: null, latest: null, rounds: [] };
+        save();
+        render();
+        clearArena("Session reset. Press start for a fresh run.");
+      });
+      load();
+      render();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>

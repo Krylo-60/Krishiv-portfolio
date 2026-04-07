@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Memory Matrix | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root { --bg:#0d0822; --panel:#1a1231; --line:#3f4fb1; --text:#f3f4ff; --muted:#c9d0ff; --accent:#99b1ff; --accent-2:#d8e0ff; }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      font-family:"Space Grotesk","Segoe UI",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(153,177,255,.18), transparent 24%),
+        linear-gradient(165deg, #0b0820 0%, #160f2b 54%, #1d4ed8 100%);
+    }
+    .wrap { width:min(1080px,94%); margin:24px auto 96px; display:grid; gap:14px; }
+    .card { border:1px solid rgba(216,224,255,.16); border-radius:22px; padding:18px; background:linear-gradient(155deg, rgba(21,16,44,.94), rgba(14,12,29,.94)); box-shadow:0 26px 52px rgba(0,0,0,.24); }
+    .hero { display:grid; grid-template-columns:1fr auto; gap:16px; align-items:start; }
+    .eyebrow, .meta { font-size:.85rem; letter-spacing:.08em; text-transform:uppercase; color:#d8deff; }
+    p { color:var(--muted); line-height:1.55; margin:0 0 10px; }
+    h1, h2 { margin:0 0 10px; }
+    .stats { display:flex; gap:10px; flex-wrap:wrap; }
+    .chip { border-radius:999px; padding:10px 14px; border:1px solid rgba(216,224,255,.16); background:rgba(255,255,255,.03); }
+    .board { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; }
+    .tile {
+      min-height:116px;
+      border-radius:18px;
+      border:1px solid rgba(216,224,255,.18);
+      background:linear-gradient(165deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      color:transparent;
+      font:700 2rem/1 "Space Grotesk", sans-serif;
+      cursor:pointer;
+      transition:transform .18s ease, background .18s ease, color .18s ease;
+    }
+    .tile:hover { transform:translateY(-2px); }
+    .tile.revealed, .tile.matched { color:#101634; background:linear-gradient(165deg, #f6f7ff, #c8d4ff); }
+    .tile.matched { background:linear-gradient(165deg, #ffffff, #a5b4fc); }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; }
+    button, a.button-link {
+      border:none;
+      border-radius:14px;
+      padding:13px 16px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
+      color:#121734;
+      background:linear-gradient(135deg, var(--accent-2), var(--accent));
+    }
+    .ghost { background:transparent; color:var(--text); border:1px solid rgba(216,224,255,.18); }
+    .aside-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .panel-note { border-radius:16px; padding:14px; background:rgba(255,255,255,.03); border:1px solid rgba(216,224,255,.1); }
+    @media (max-width:900px) {
+      .hero, .aside-grid { grid-template-columns:1fr; }
+      .board { grid-template-columns:repeat(3, minmax(0,1fr)); }
+    }
+    @media (max-width:620px) {
+      .board { grid-template-columns:repeat(2, minmax(0,1fr)); }
+    }
+  </style>
+  <link rel="stylesheet" href="app-universe-shell.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="card hero">
+      <div>
+        <p class="eyebrow">Krishiv Game Studio</p>
+        <h1>Memory Matrix</h1>
+        <p>Flip the board, remember the glyphs, and clear every pair in as few moves as possible. It is calm, clean, and a little competitive.</p>
+        <p class="meta">Handmade by Krishiv PB</p>
+      </div>
+      <div class="controls">
+        <button id="restartBtn" type="button">Shuffle Board</button>
+        <a class="button-link ghost" href="games.html#games-apps-gateway">Back to Games Hub</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="stats">
+        <div class="chip">Moves: <strong id="moveCount">0</strong></div>
+        <div class="chip">Matches: <strong id="matchCount">0</strong> / 6</div>
+        <div class="chip">Best: <strong id="bestScore">--</strong></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="board" id="board"></div>
+    </section>
+
+    <section class="aside-grid">
+      <article class="card panel-note">
+        <h2>How to play</h2>
+        <p>Pick two cards. If they match, they stay open. If not, the board closes them after a short beat.</p>
+      </article>
+      <article class="card panel-note">
+        <h2>Studio note</h2>
+        <p>This one is built to feel polished and readable, with a simple layout that still feels like it belongs inside Krishiv Velocity.</p>
+      </article>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const KEY = "krishiv_memory_matrix_v1";
+      const board = document.getElementById("board");
+      const restartBtn = document.getElementById("restartBtn");
+      const moveCount = document.getElementById("moveCount");
+      const matchCount = document.getElementById("matchCount");
+      const bestScore = document.getElementById("bestScore");
+      const symbols = ["A", "B", "C", "D", "E", "F"];
+      let tiles = [];
+      let flipped = [];
+      let moves = 0;
+      let matches = 0;
+      let lock = false;
+      let best = null;
+
+      function shuffle(array) {
+        const list = array.slice();
+        for (let i = list.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [list[i], list[j]] = [list[j], list[i]];
+        }
+        return list;
+      }
+      function load() { try { const value = JSON.parse(localStorage.getItem(KEY) || "{}"); if (typeof value.best === "number") best = value.best; } catch {} }
+      function save() { localStorage.setItem(KEY, JSON.stringify({ best })); }
+      function renderStats() {
+        moveCount.textContent = String(moves);
+        matchCount.textContent = String(matches);
+        bestScore.textContent = best == null ? "--" : String(best) + " moves";
+      }
+      function buildBoard() {
+        const values = shuffle(symbols.concat(symbols));
+        tiles = values.map((value, index) => ({ id: index, value, matched: false }));
+        flipped = [];
+        moves = 0;
+        matches = 0;
+        lock = false;
+        renderStats();
+        board.innerHTML = tiles.map((tile) => `<button class="tile" data-id="${tile.id}" type="button" aria-label="Memory tile">${tile.value}</button>`).join("");
+      }
+      function reveal(tileBtn, tile) {
+        tileBtn.classList.add("revealed");
+        tileBtn.textContent = tile.value;
+      }
+      function conceal(tileBtn) {
+        tileBtn.classList.remove("revealed");
+        if (!tileBtn.classList.contains("matched")) tileBtn.textContent = "";
+      }
+      board.addEventListener("click", (event) => {
+        const btn = event.target.closest(".tile");
+        if (!btn || lock) return;
+        const id = Number(btn.dataset.id);
+        const tile = tiles.find((entry) => entry.id === id);
+        if (!tile || tile.matched || flipped.some((entry) => entry.id === id)) return;
+        reveal(btn, tile);
+        flipped.push({ id, element: btn, value: tile.value });
+        if (flipped.length < 2) return;
+        moves += 1;
+        renderStats();
+        const [first, second] = flipped;
+        if (first.value === second.value) {
+          first.element.classList.add("matched");
+          second.element.classList.add("matched");
+          tiles = tiles.map((entry) => entry.value === first.value ? { ...entry, matched: true } : entry);
+          matches += 1;
+          flipped = [];
+          renderStats();
+          if (matches === symbols.length) {
+            best = best == null ? moves : Math.min(best, moves);
+            save();
+            renderStats();
+          }
+          return;
+        }
+        lock = true;
+        window.setTimeout(() => {
+          conceal(first.element);
+          conceal(second.element);
+          flipped = [];
+          lock = false;
+        }, 650);
+      });
+      restartBtn.addEventListener("click", buildBoard);
+      load();
+      buildBoard();
+    })();
+  </script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>

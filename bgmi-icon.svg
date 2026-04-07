@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">BGMI logo</title>
+  <desc id="desc">BGMI wordmark with tricolor neon lighting and sharp competitive framing.</desc>
+  <defs>
+    <linearGradient id="bgmiBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#0b1221"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="140" rx="24" fill="url(#bgmiBg)"/>
+  <path d="M24 24h252" stroke="rgba(255,255,255,.1)" stroke-width="2"/>
+  <path d="M24 116h252" stroke="rgba(255,255,255,.08)" stroke-width="2"/>
+  <text x="150" y="84" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="54" letter-spacing="6">
+    <tspan fill="#f97316">BG</tspan><tspan fill="#ffffff">M</tspan><tspan fill="#22c55e">I</tspan>
+  </text>
+  <text x="150" y="116" text-anchor="middle" font-family="Orbitron, Arial Black, Arial, sans-serif" font-size="13" letter-spacing="7" fill="#cbd5e1">MOBILE INDIA</text>
+</svg>

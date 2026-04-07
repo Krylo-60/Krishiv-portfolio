@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Memory Matrix preview</title>
+  <desc id="desc">Preview card for Memory Matrix by Krishiv.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#120c28"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="30" fill="url(#bg)"/>
+  <rect x="120" y="96" width="414" height="78" rx="39" fill="rgba(5,16,27,.46)" stroke="rgba(255,255,255,.22)"/>
+  <text x="162" y="148" font-family="Space Grotesk, Arial, sans-serif" font-size="42" font-weight="700" fill="#f7f4ff">MEMORY MATRIX</text>
+  <g transform="translate(646 154)">
+    <rect x="0" y="0" width="124" height="124" rx="20" fill="#dbeafe"/>
+    <rect x="152" y="0" width="124" height="124" rx="20" fill="#a5b4fc"/>
+    <rect x="304" y="0" width="124" height="124" rx="20" fill="#dbeafe"/>
+    <rect x="0" y="152" width="124" height="124" rx="20" fill="#a5b4fc"/>
+    <rect x="152" y="152" width="124" height="124" rx="20" fill="#dbeafe"/>
+    <rect x="304" y="152" width="124" height="124" rx="20" fill="#a5b4fc"/>
+    <rect x="0" y="304" width="124" height="124" rx="20" fill="#dbeafe"/>
+    <rect x="152" y="304" width="124" height="124" rx="20" fill="#a5b4fc"/>
+    <rect x="304" y="304" width="124" height="124" rx="20" fill="#dbeafe"/>
+  </g>
+  <text x="154" y="310" font-family="JetBrains Mono, monospace" font-size="30" fill="#dfe7ff">Flip cards, read the board,</text>
+  <text x="154" y="354" font-family="JetBrains Mono, monospace" font-size="30" fill="#dfe7ff">and clear it in fewer moves.</text>
+  <text x="154" y="426" font-family="Space Grotesk, Arial, sans-serif" font-size="28" fill="#f6f7ff">Handmade by Krishiv PB</text>
+</svg>
