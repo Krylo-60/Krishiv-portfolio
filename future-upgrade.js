@@ -96,6 +96,17 @@
     }
   });
 
+  window.addEventListener("storage", (event) => {
+    if (event.key === MODE_KEY) {
+      futureMode = safeGet(MODE_KEY, futureMode || "on") || "on";
+      applyMode();
+      return;
+    }
+    if (event.key === LAUNCH_KEY) {
+      syncFuturePanel();
+    }
+  });
+
   if (REDUCED) return;
 
   const canvas = document.createElement("canvas");

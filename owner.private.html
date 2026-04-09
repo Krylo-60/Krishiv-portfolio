@@ -606,70 +606,6 @@
         { key: "neon", label: "Neon" },
         { key: "solar", label: "Solar" }
       ];
-      const LAUNCH_ITEMS = [
-        { label: "Home", note: "Main landing page", href: BASE_URL + "/", group: "main" },
-        { label: "Projects", note: "Projects page", href: BASE_URL + "/projects.html", group: "main" },
-        { label: "Contact", note: "Contact page", href: BASE_URL + "/contact.html", group: "main" },
-        { label: "Games Hub", note: "Games profile page", href: BASE_URL + "/games.html", group: "main" },
-        { label: "Review App", note: "Feedback tool", href: BASE_URL + "/review-app.html", group: "apps" },
-        { label: "Master Nexus", note: "YouTube creator live build", href: BASE_URL + "/krylo-blox-master-nexus.html", group: "main" },
-        { label: "Home > Projects Section", note: "Jump to public projects area", href: BASE_URL + "/#projects", group: "sections" },
-        { label: "Home > Contact Section", note: "Jump to public contact area", href: BASE_URL + "/#contact", group: "sections" },
-        { label: "Home > Future Section", note: "Jump to future plans", href: BASE_URL + "/#future", group: "sections" },
-        { label: "Home > App Verse", note: "Jump to app universe gallery", href: BASE_URL + "/#app-verse", group: "sections" },
-        { label: "Home > Command Center", note: "Jump to command center", href: BASE_URL + "/#command-center", group: "sections" },
-        { label: "Home > Secret Aura", note: "Jump to footer easter egg", href: BASE_URL + "/#contact", group: "easter" },
-        { label: "Owner Dashboard", note: "Private owner nexus", href: withToken(BASE_URL + "/owner"), group: "admin" },
-        { label: "Main Admin", note: "YouTube sync admin", href: withToken(BASE_URL + "/admin"), group: "admin" },
-        { label: "Usage Admin", note: "Usage analytics admin", href: withToken(BASE_URL + "/usage-admin"), group: "admin" },
-        { label: "Study Planner", note: "Productivity app", href: BASE_URL + "/study-planner.html", group: "apps" },
-        { label: "Quiz Zone", note: "Interactive quiz app", href: BASE_URL + "/quiz-zone.html", group: "apps" },
-        { label: "Focus Timer", note: "Focus tool", href: BASE_URL + "/focus-timer.html", group: "apps" },
-        { label: "Habit Tracker", note: "Habit streak system", href: BASE_URL + "/habit-tracker.html", group: "apps" },
-        { label: "Idea Lab AI", note: "Idea generation app", href: BASE_URL + "/idea-lab-ai.html", group: "apps" },
-        { label: "Expense Tracker", note: "Finance app", href: BASE_URL + "/expense-tracker.html", group: "apps" },
-        { label: "Notes Vault", note: "Notes manager", href: BASE_URL + "/notes-vault.html", group: "apps" },
-        { label: "Flashcards", note: "Revision helper", href: BASE_URL + "/flashcards.html", group: "apps" },
-        { label: "Typing Test", note: "Typing speed app", href: BASE_URL + "/typing-test.html", group: "apps" },
-        { label: "Task Kanban", note: "Task board", href: BASE_URL + "/task-kanban.html", group: "apps" },
-        { label: "Unit Converter", note: "Quick converter", href: BASE_URL + "/unit-converter.html", group: "apps" },
-        { label: "Grade Calculator", note: "Marks calculator", href: BASE_URL + "/grade-calculator.html", group: "apps" },
-        { label: "Daily Journal", note: "Journal app", href: BASE_URL + "/daily-journal.html", group: "apps" },
-        { label: "Goal Planner", note: "Goal planning app", href: BASE_URL + "/goal-planner.html", group: "apps" },
-        { label: "Reading Tracker", note: "Reading app", href: BASE_URL + "/reading-tracker.html", group: "apps" },
-        { label: "Water Reminder", note: "Hydration helper", href: BASE_URL + "/water-reminder.html", group: "apps" },
-        { label: "Presentation Planner", note: "School presentation app", href: BASE_URL + "/presentation-planner.html", group: "apps" },
-        { label: "Code Snippets Vault", note: "Code library", href: BASE_URL + "/code-snippets-vault.html", group: "apps" },
-        { label: "Mind Map Board", note: "Idea mapping app", href: BASE_URL + "/mind-map-board.html", group: "apps" },
-        { label: "Bazaar Blitz", note: "Marketplace app", href: BASE_URL + "/bazaar-blitz.html", group: "apps" },
-        { label: "VoteStorm Arena", note: "Voting app", href: BASE_URL + "/votestorm-arena.html", group: "apps" },
-        { label: "Time Capsule Lab", note: "Memory capsule app", href: BASE_URL + "/time-capsule-lab.html", group: "concepts" },
-        { label: "StoryForge Studio", note: "Story builder app", href: BASE_URL + "/storyforge-studio.html", group: "concepts" },
-        { label: "Meal Planner", note: "Meal planning app", href: BASE_URL + "/meal-planner.html", group: "concepts" },
-        { label: "Color Palette Lab", note: "Palette lab", href: BASE_URL + "/color-palette-lab.html", group: "concepts" },
-        { label: "Resume Studio", note: "Resume builder", href: BASE_URL + "/resume-studio.html", group: "concepts" },
-        { label: "Homework Hub", note: "Concept app", href: BASE_URL + "/homework-hub.html", group: "concepts" },
-        { label: "Attendance Tracker", note: "Concept app", href: BASE_URL + "/attendance-tracker.html", group: "concepts" },
-        { label: "Link Locker", note: "Concept app", href: BASE_URL + "/link-locker.html", group: "concepts" },
-        { label: "Habit Heatmap", note: "Concept app", href: BASE_URL + "/habit-heatmap.html", group: "concepts" },
-        { label: "Focus Music Deck", note: "Concept app", href: BASE_URL + "/focus-music-deck.html", group: "concepts" },
-        { label: "Thumbnail Idea Board", note: "Concept app", href: BASE_URL + "/thumbnail-idea-board.html", group: "concepts" },
-        { label: "Script Planner", note: "Concept app", href: BASE_URL + "/script-planner.html", group: "concepts" },
-        { label: "Upload Calendar", note: "Concept app", href: BASE_URL + "/upload-calendar.html", group: "concepts" },
-        { label: "Stream Overlay Kit", note: "Concept app", href: BASE_URL + "/stream-overlay-kit.html", group: "concepts" },
-        { label: "QR Generator Pro", note: "Concept app", href: BASE_URL + "/qr-generator-pro.html", group: "concepts" },
-        { label: "Pomodoro Duel", note: "Concept app", href: BASE_URL + "/pomodoro-duel.html", group: "concepts" },
-        { label: "Revision Race", note: "Concept app", href: BASE_URL + "/revision-race.html", group: "concepts" },
-        { label: "Scholarship Finder", note: "Concept app", href: BASE_URL + "/scholarship-finder.html", group: "concepts" },
-        { label: "Portfolio Asset Vault", note: "Concept app", href: BASE_URL + "/portfolio-asset-vault.html", group: "concepts" },
-        { label: "Poll Party", note: "Concept app", href: BASE_URL + "/poll-party.html", group: "concepts" },
-        { label: "Emoji Story Maker", note: "Concept app", href: BASE_URL + "/emoji-story-maker.html", group: "concepts" },
-        { label: "Team Splitter", note: "Concept app", href: BASE_URL + "/team-splitter.html", group: "concepts" },
-        { label: "Exam Countdown", note: "Concept app", href: BASE_URL + "/exam-countdown.html", group: "concepts" },
-        { label: "Screenshot Annotator", note: "Concept app", href: BASE_URL + "/screenshot-annotator.html", group: "concepts" },
-        { label: "Open Ctrl/Cmd + K Launcher", note: "Public quick launcher hint", href: BASE_URL + "/", group: "easter" },
-        { label: "Future Mode Toggle Hint", note: "Alt + F on supported pages", href: BASE_URL + "/", group: "easter" }
-      ];
 
       const byId = (id) => document.getElementById(id);
       const refreshAllBtn = byId("refreshAllBtn");
@@ -757,6 +693,73 @@
         return path + joiner + "token=" + encodeURIComponent(token);
       }
 
+      function createLaunchItems() {
+        return [
+          { label: "Home", note: "Main landing page", href: BASE_URL + "/", group: "main" },
+          { label: "Projects", note: "Projects page", href: BASE_URL + "/projects.html", group: "main" },
+          { label: "Contact", note: "Contact page", href: BASE_URL + "/contact.html", group: "main" },
+          { label: "Games Hub", note: "Games profile page", href: BASE_URL + "/games.html", group: "main" },
+          { label: "Review App", note: "Feedback tool", href: BASE_URL + "/review-app.html", group: "apps" },
+          { label: "Master Nexus", note: "YouTube creator live build", href: BASE_URL + "/krylo-blox-master-nexus.html", group: "main" },
+          { label: "Home > Projects Section", note: "Jump to public projects area", href: BASE_URL + "/#projects", group: "sections" },
+          { label: "Home > Contact Section", note: "Jump to public contact area", href: BASE_URL + "/#contact", group: "sections" },
+          { label: "Home > Future Section", note: "Jump to future plans", href: BASE_URL + "/#future", group: "sections" },
+          { label: "Home > App Verse", note: "Jump to app universe gallery", href: BASE_URL + "/#app-verse", group: "sections" },
+          { label: "Home > Command Center", note: "Jump to command center", href: BASE_URL + "/#command-center", group: "sections" },
+          { label: "Home > Secret Aura", note: "Jump to footer easter egg", href: BASE_URL + "/#contact", group: "easter" },
+          { label: "Owner Dashboard", note: "Private owner nexus", href: withToken(BASE_URL + "/owner"), group: "admin" },
+          { label: "Main Admin", note: "YouTube sync admin", href: withToken(BASE_URL + "/admin"), group: "admin" },
+          { label: "Usage Admin", note: "Usage analytics admin", href: withToken(BASE_URL + "/usage-admin"), group: "admin" },
+          { label: "Study Planner", note: "Productivity app", href: BASE_URL + "/study-planner.html", group: "apps" },
+          { label: "Quiz Zone", note: "Interactive quiz app", href: BASE_URL + "/quiz-zone.html", group: "apps" },
+          { label: "Focus Timer", note: "Focus tool", href: BASE_URL + "/focus-timer.html", group: "apps" },
+          { label: "Habit Tracker", note: "Habit streak system", href: BASE_URL + "/habit-tracker.html", group: "apps" },
+          { label: "Idea Lab AI", note: "Idea generation app", href: BASE_URL + "/idea-lab-ai.html", group: "apps" },
+          { label: "Expense Tracker", note: "Finance app", href: BASE_URL + "/expense-tracker.html", group: "apps" },
+          { label: "Notes Vault", note: "Notes manager", href: BASE_URL + "/notes-vault.html", group: "apps" },
+          { label: "Flashcards", note: "Revision helper", href: BASE_URL + "/flashcards.html", group: "apps" },
+          { label: "Typing Test", note: "Typing speed app", href: BASE_URL + "/typing-test.html", group: "apps" },
+          { label: "Task Kanban", note: "Task board", href: BASE_URL + "/task-kanban.html", group: "apps" },
+          { label: "Unit Converter", note: "Quick converter", href: BASE_URL + "/unit-converter.html", group: "apps" },
+          { label: "Grade Calculator", note: "Marks calculator", href: BASE_URL + "/grade-calculator.html", group: "apps" },
+          { label: "Daily Journal", note: "Journal app", href: BASE_URL + "/daily-journal.html", group: "apps" },
+          { label: "Goal Planner", note: "Goal planning app", href: BASE_URL + "/goal-planner.html", group: "apps" },
+          { label: "Reading Tracker", note: "Reading app", href: BASE_URL + "/reading-tracker.html", group: "apps" },
+          { label: "Water Reminder", note: "Hydration helper", href: BASE_URL + "/water-reminder.html", group: "apps" },
+          { label: "Presentation Planner", note: "School presentation app", href: BASE_URL + "/presentation-planner.html", group: "apps" },
+          { label: "Code Snippets Vault", note: "Code library", href: BASE_URL + "/code-snippets-vault.html", group: "apps" },
+          { label: "Mind Map Board", note: "Idea mapping app", href: BASE_URL + "/mind-map-board.html", group: "apps" },
+          { label: "Bazaar Blitz", note: "Marketplace app", href: BASE_URL + "/bazaar-blitz.html", group: "apps" },
+          { label: "VoteStorm Arena", note: "Voting app", href: BASE_URL + "/votestorm-arena.html", group: "apps" },
+          { label: "Time Capsule Lab", note: "Memory capsule app", href: BASE_URL + "/time-capsule-lab.html", group: "concepts" },
+          { label: "StoryForge Studio", note: "Story builder app", href: BASE_URL + "/storyforge-studio.html", group: "concepts" },
+          { label: "Meal Planner", note: "Meal planning app", href: BASE_URL + "/meal-planner.html", group: "concepts" },
+          { label: "Color Palette Lab", note: "Palette lab", href: BASE_URL + "/color-palette-lab.html", group: "concepts" },
+          { label: "Resume Studio", note: "Resume builder", href: BASE_URL + "/resume-studio.html", group: "concepts" },
+          { label: "Homework Hub", note: "Concept app", href: BASE_URL + "/homework-hub.html", group: "concepts" },
+          { label: "Attendance Tracker", note: "Concept app", href: BASE_URL + "/attendance-tracker.html", group: "concepts" },
+          { label: "Link Locker", note: "Concept app", href: BASE_URL + "/link-locker.html", group: "concepts" },
+          { label: "Habit Heatmap", note: "Concept app", href: BASE_URL + "/habit-heatmap.html", group: "concepts" },
+          { label: "Focus Music Deck", note: "Concept app", href: BASE_URL + "/focus-music-deck.html", group: "concepts" },
+          { label: "Thumbnail Idea Board", note: "Concept app", href: BASE_URL + "/thumbnail-idea-board.html", group: "concepts" },
+          { label: "Script Planner", note: "Concept app", href: BASE_URL + "/script-planner.html", group: "concepts" },
+          { label: "Upload Calendar", note: "Concept app", href: BASE_URL + "/upload-calendar.html", group: "concepts" },
+          { label: "Stream Overlay Kit", note: "Concept app", href: BASE_URL + "/stream-overlay-kit.html", group: "concepts" },
+          { label: "QR Generator Pro", note: "Concept app", href: BASE_URL + "/qr-generator-pro.html", group: "concepts" },
+          { label: "Pomodoro Duel", note: "Concept app", href: BASE_URL + "/pomodoro-duel.html", group: "concepts" },
+          { label: "Revision Race", note: "Concept app", href: BASE_URL + "/revision-race.html", group: "concepts" },
+          { label: "Scholarship Finder", note: "Concept app", href: BASE_URL + "/scholarship-finder.html", group: "concepts" },
+          { label: "Portfolio Asset Vault", note: "Concept app", href: BASE_URL + "/portfolio-asset-vault.html", group: "concepts" },
+          { label: "Poll Party", note: "Concept app", href: BASE_URL + "/poll-party.html", group: "concepts" },
+          { label: "Emoji Story Maker", note: "Concept app", href: BASE_URL + "/emoji-story-maker.html", group: "concepts" },
+          { label: "Team Splitter", note: "Concept app", href: BASE_URL + "/team-splitter.html", group: "concepts" },
+          { label: "Exam Countdown", note: "Concept app", href: BASE_URL + "/exam-countdown.html", group: "concepts" },
+          { label: "Screenshot Annotator", note: "Concept app", href: BASE_URL + "/screenshot-annotator.html", group: "concepts" },
+          { label: "Open Ctrl/Cmd + K Launcher", note: "Public quick launcher hint", href: BASE_URL + "/", group: "easter" },
+          { label: "Future Mode Toggle Hint", note: "Alt + F on supported pages", href: BASE_URL + "/", group: "easter" }
+        ];
+      }
+
       function readStorage(key, fallback) {
         try {
           const value = localStorage.getItem(key);
@@ -827,7 +830,7 @@
 
       function renderFavorites() {
         const favorites = ownerFavorites
-          .map((href) => LAUNCH_ITEMS.find((item) => item.href === href))
+          .map((href) => createLaunchItems().find((item) => item.href === href))
           .filter(Boolean)
           .slice(0, 6);
         favoritesGrid.innerHTML = favorites.length
@@ -1015,7 +1018,8 @@
 
       function renderLauncher() {
         const term = String(launcherSearch.value || "").trim().toLowerCase();
-        const items = LAUNCH_ITEMS.filter((item) => {
+        const launchItems = createLaunchItems();
+        const items = launchItems.filter((item) => {
           if (activeLauncherFilter !== "all" && item.group !== activeLauncherFilter) return false;
           if (!term) return true;
           return [item.label, item.note, item.href, item.group].join(" ").toLowerCase().includes(term);
@@ -1114,6 +1118,23 @@
       renderLauncher();
       updateControlMeta();
       updateSpotlight();
+
+      window.addEventListener("storage", (event) => {
+        if (event.key === THEME_KEY || event.key === FUTURE_MODE_KEY) {
+          updateControlMeta();
+          return;
+        }
+        if (event.key === OWNER_FAVORITES_KEY) {
+          ownerFavorites = readJsonStorage(OWNER_FAVORITES_KEY, []);
+          if (!Array.isArray(ownerFavorites)) ownerFavorites = [];
+          renderFavorites();
+          renderLauncher();
+          return;
+        }
+        if (event.key === OWNER_NOTES_KEY) {
+          ownerNotes.value = String(readStorage(OWNER_NOTES_KEY, "") || "");
+        }
+      });
 
       refreshAllBtn.addEventListener("click", () => refreshAll({ fast: false }));
       loadSyncBtn.addEventListener("click", () => loadSync({ fast: false }).then(() => {

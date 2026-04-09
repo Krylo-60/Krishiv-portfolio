@@ -2501,6 +2501,12 @@
         });
       }
 
+      window.addEventListener('storage', (event) => {
+        if (event.key !== THEME_KEY) return;
+        activeThemeKey = safeGet(THEME_KEY, activeThemeKey);
+        applyTheme(activeThemeKey);
+      });
+
       let deferredInstallPrompt = null;
       window.addEventListener('beforeinstallprompt', (event) => {
         event.preventDefault();
