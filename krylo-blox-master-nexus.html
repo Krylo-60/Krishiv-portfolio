@@ -180,10 +180,11 @@
         node.innerText = delta > 0 ? `+${delta}` : `${delta}`;
     }
 
-    async function sync() {
+    async function sync(options = {}) {
         try {
             if (manualSyncBtn) manualSyncBtn.disabled = true;
-            const res = await fetch(syncURL, { cache: "no-store" });
+            const fastMode = options.fast === true;
+            const res = await fetch(fastMode ? `${syncURL}?fast=1` : syncURL, { cache: "no-store" });
             if (!res.ok) throw new Error("sync source unavailable");
             const data = await res.json();
             const subs = Number(data.subs || 0);
@@ -220,7 +221,7 @@
       if (!document.hidden) sync();
     });
     if (manualSyncBtn) manualSyncBtn.addEventListener('click', sync);
-    sync();
+    sync({ fast: true });
 
     const cursor = document.getElementById('cursor');
     document.addEventListener('mousemove', e => { cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px'; });

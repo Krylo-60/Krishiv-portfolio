@@ -90,12 +90,12 @@
   installImageGuard();
 
   const APPS = [
-    { name: "Study Planner", href: "study-planner.html", tag: "Productivity" },
+    { name: "Study Planner", href: "study-planner.html", tag: "Productivity", tier: "featured" },
     { name: "Quiz Zone", href: "quiz-zone.html", tag: "Learning" },
-    { name: "Review App", href: "review-app.html", tag: "Feedback" },
+    { name: "Review App", href: "review-app.html", tag: "Feedback", tier: "featured" },
     { name: "Focus Timer", href: "focus-timer.html", tag: "Focus" },
     { name: "Habit Tracker", href: "habit-tracker.html", tag: "Discipline" },
-    { name: "Idea Lab AI", href: "idea-lab-ai.html", tag: "AI" },
+    { name: "Idea Lab AI", href: "idea-lab-ai.html", tag: "AI", tier: "featured" },
     { name: "Expense Tracker", href: "expense-tracker.html", tag: "Finance" },
     { name: "Notes Vault", href: "notes-vault.html", tag: "Writing" },
     { name: "Flashcards", href: "flashcards.html", tag: "Memory" },
@@ -110,8 +110,8 @@
     { name: "Presentation Planner", href: "presentation-planner.html", tag: "School" },
     { name: "Code Snippets Vault", href: "code-snippets-vault.html", tag: "Developer" },
     { name: "Mind Map Board", href: "mind-map-board.html", tag: "Ideas" },
-    { name: "BazaarBlitz Prime", href: "bazaar-blitz.html", tag: "Marketplace" },
-    { name: "VoteStorm Arena", href: "votestorm-arena.html", tag: "Community" },
+    { name: "BazaarBlitz Prime", href: "bazaar-blitz.html", tag: "Marketplace", tier: "featured" },
+    { name: "VoteStorm Arena", href: "votestorm-arena.html", tag: "Community", tier: "featured" },
     { name: "Time Capsule Lab", href: "time-capsule-lab.html", tag: "Future" },
     { name: "StoryForge Studio", href: "storyforge-studio.html", tag: "Creative" },
     { name: "Meal Planner Pro", href: "meal-planner.html", tag: "Lifestyle" },
@@ -124,10 +124,29 @@
     { name: "Color Switch Rush", href: "color-switch-rush.html", tag: "Gaming" },
     { name: "Projects", href: "projects.html", tag: "Navigation" },
     { name: "Contact", href: "contact.html", tag: "Navigation" },
-    { name: "Master Nexus", href: "krylo-blox-master-nexus.html", tag: "Core" },
+    { name: "Master Nexus", href: "krylo-blox-master-nexus.html", tag: "Core", tier: "featured" },
     { name: "Aether v104", href: "aether-core-v104.html", tag: "Core" },
     { name: "Aether v55", href: "aether-core-v55.html", tag: "Core" },
-    { name: "Aether v2.5", href: "aether-core-v25.html", tag: "Core" }
+    { name: "Aether v2.5", href: "aether-core-v25.html", tag: "Core" },
+    { name: "Homework Hub", href: "homework-hub.html", tag: "Concept" },
+    { name: "Attendance Tracker", href: "attendance-tracker.html", tag: "Concept" },
+    { name: "Link Locker", href: "link-locker.html", tag: "Concept" },
+    { name: "Habit Heatmap", href: "habit-heatmap.html", tag: "Concept" },
+    { name: "Focus Music Deck", href: "focus-music-deck.html", tag: "Concept" },
+    { name: "Thumbnail Idea Board", href: "thumbnail-idea-board.html", tag: "Concept" },
+    { name: "Script Planner", href: "script-planner.html", tag: "Concept" },
+    { name: "Upload Calendar", href: "upload-calendar.html", tag: "Concept" },
+    { name: "Stream Overlay Kit", href: "stream-overlay-kit.html", tag: "Concept" },
+    { name: "QR Generator Pro", href: "qr-generator-pro.html", tag: "Concept" },
+    { name: "Pomodoro Duel", href: "pomodoro-duel.html", tag: "Concept" },
+    { name: "Revision Race", href: "revision-race.html", tag: "Concept" },
+    { name: "Scholarship Finder", href: "scholarship-finder.html", tag: "Concept" },
+    { name: "Portfolio Asset Vault", href: "portfolio-asset-vault.html", tag: "Concept" },
+    { name: "Poll Party", href: "poll-party.html", tag: "Concept" },
+    { name: "Emoji Story Maker", href: "emoji-story-maker.html", tag: "Concept" },
+    { name: "Team Splitter", href: "team-splitter.html", tag: "Concept" },
+    { name: "Exam Countdown", href: "exam-countdown.html", tag: "Concept" },
+    { name: "Screenshot Annotator", href: "screenshot-annotator.html", tag: "Concept" }
   ];
 
   const THEME_KEY = "krishiv_theme_mode_v1";
@@ -214,11 +233,13 @@
       const recentIndex = recents.indexOf(item.href);
       const recentRank = recentIndex >= 0 ? recentIndex : 999;
       const launches = Number(stats[item.href] || 0);
-      return { item, isFav, recentRank, launches };
+      const tierRank = item.tier === "featured" ? 0 : 1;
+      return { item, isFav, recentRank, launches, tierRank };
     });
     withRank.sort((a, b) => {
       if (a.isFav !== b.isFav) return Number(b.isFav) - Number(a.isFav);
       if (a.recentRank !== b.recentRank) return a.recentRank - b.recentRank;
+      if (a.tierRank !== b.tierRank) return a.tierRank - b.tierRank;
       if (a.launches !== b.launches) return b.launches - a.launches;
       return a.item.name.localeCompare(b.item.name);
     });
@@ -234,7 +255,7 @@
         <div class="app-shell-link-row">
           <a href="${item.href}" style="color:inherit;text-decoration:none;display:block;flex:1;">
             <strong>${item.name}</strong>
-            <span>${item.tag}</span>
+            <span>${item.tag}${item.tier === "featured" ? " • Featured" : ""}</span>
             <span class="app-shell-meta">${item.href} | launches: ${launches}</span>
           </a>
           <button type="button" class="app-shell-fav ${isFav ? "is-on" : ""}" data-fav="${item.href}" aria-label="Toggle favorite">${isFav ? "Fav" : "+"}</button>

@@ -1,0 +1,304 @@
+.concept-app-root {
+  --ca-bg: linear-gradient(160deg, #04101b, #0c2340 48%, #153a60);
+  --ca-panel: linear-gradient(165deg, rgba(16, 38, 63, 0.95), rgba(8, 20, 38, 0.95));
+  --ca-line: rgba(94, 150, 212, 0.34);
+  --ca-text: #eef6ff;
+  --ca-muted: #a6c2e3;
+  --ca-accent: #6fd3ff;
+  --ca-accent-2: #55d8a9;
+  background: var(--ca-bg);
+  color: var(--ca-text);
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.concept-wrap {
+  width: min(1100px, 94%);
+  margin: 24px auto 96px;
+}
+
+.concept-shell {
+  border: 1px solid var(--ca-line);
+  border-radius: 18px;
+  background: var(--ca-panel);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.26);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.concept-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.concept-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top right, rgba(111, 211, 255, 0.16), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(85, 216, 169, 0.12), transparent 28%);
+}
+
+.concept-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.concept-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font: 800 0.78rem/1 "JetBrains Mono", Consolas, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #bde7ff;
+}
+
+.concept-kicker::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--ca-accent), var(--ca-accent-2));
+  box-shadow: 0 0 16px rgba(111, 211, 255, 0.4);
+}
+
+.concept-title {
+  margin: 0.6rem 0 0.45rem;
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+}
+
+.concept-lead {
+  margin: 0 0 0.9rem;
+  color: var(--ca-muted);
+  max-width: 68ch;
+}
+
+.concept-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.concept-pill,
+.concept-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(111, 211, 255, 0.22);
+  background: rgba(8, 22, 38, 0.6);
+  color: var(--ca-text);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.concept-link:hover,
+.concept-link:focus-visible {
+  border-color: rgba(111, 211, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.concept-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1.1fr 0.9fr;
+}
+
+.concept-form-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.concept-full {
+  grid-column: 1 / -1;
+}
+
+.concept-shell label,
+.concept-shell h2,
+.concept-shell h3 {
+  color: var(--ca-text);
+}
+
+.concept-shell p {
+  color: var(--ca-muted);
+}
+
+.concept-shell input,
+.concept-shell textarea,
+.concept-shell select,
+.concept-shell button {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--ca-line);
+  background: rgba(8, 22, 38, 0.78);
+  color: var(--ca-text);
+  padding: 0.8rem 0.9rem;
+  font: inherit;
+}
+
+.concept-shell textarea {
+  min-height: 116px;
+  resize: vertical;
+}
+
+.concept-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.concept-btn-primary {
+  border: none !important;
+  background: linear-gradient(135deg, var(--ca-accent), var(--ca-accent-2)) !important;
+  color: #032033 !important;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.concept-btn-secondary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.concept-seeds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.concept-seed {
+  width: auto !important;
+  cursor: pointer;
+  padding: 0.65rem 0.78rem !important;
+  font-weight: 700;
+}
+
+.concept-board-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.concept-board-head input {
+  width: min(320px, 100%);
+}
+
+.concept-stats {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+.concept-stat {
+  border: 1px solid var(--ca-line);
+  border-radius: 14px;
+  padding: 0.95rem;
+  background: rgba(6, 18, 32, 0.68);
+}
+
+.concept-stat strong {
+  display: block;
+  font-size: 1.35rem;
+  margin-bottom: 0.22rem;
+}
+
+.concept-list {
+  display: grid;
+  gap: 10px;
+}
+
+.concept-item {
+  border: 1px solid rgba(111, 211, 255, 0.18);
+  border-radius: 14px;
+  padding: 1rem;
+  background: rgba(7, 19, 33, 0.72);
+}
+
+.concept-item.is-done {
+  border-color: rgba(85, 216, 169, 0.3);
+  background: rgba(7, 27, 28, 0.7);
+}
+
+.concept-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.concept-item-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.concept-item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.concept-mini-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.34rem 0.62rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  border: 1px solid rgba(111, 211, 255, 0.2);
+  background: rgba(10, 25, 42, 0.9);
+}
+
+.concept-mini-pill.is-done {
+  color: #c9ffe9;
+  border-color: rgba(85, 216, 169, 0.34);
+}
+
+.concept-item p {
+  margin: 0.4rem 0;
+}
+
+.concept-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0.7rem;
+}
+
+.concept-item-actions button {
+  width: auto;
+  cursor: pointer;
+  padding: 0.65rem 0.8rem;
+}
+
+.concept-empty {
+  text-align: center;
+  padding: 1.4rem;
+  border: 1px dashed rgba(111, 211, 255, 0.25);
+  border-radius: 14px;
+  color: var(--ca-muted);
+}
+
+@media (max-width: 860px) {
+  .concept-grid,
+  .concept-form-grid,
+  .concept-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .concept-actions {
+    flex-direction: column;
+  }
+
+  .concept-board-head input {
+    width: 100%;
+  }
+}

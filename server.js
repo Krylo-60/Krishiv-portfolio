@@ -74,6 +74,15 @@ const MIME_TYPES = {
   ".ico": "image/x-icon"
 };
 
+function fetchWithTimeout(resource, options = {}, timeoutMs = 6000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(resource, {
+    ...options,
+    signal: controller.signal
+  }).finally(() => clearTimeout(timer));
+}
+
 let inMemoryReviews = [];
 let inMemoryIdeas = [];
 let storageBootstrapped = false;
@@ -94,7 +103,7 @@ let usageAnalytics = {
   timeline: []
 };
 let inMemoryYtNexus = {
-  message: "Subscibe to Krylo-Blox",
+  message: "Subscribe to Krylo-Blox",
   subs: 7,
   views: 7,
   uploads: 0
@@ -167,7 +176,7 @@ async function getFirebaseAccessToken() {
     .replace(/=+$/g, "");
   const assertion = `${unsignedToken}.${signature}`;
 
-  const response = await fetch(serviceAccount.token_uri, {
+  const response = await fetchWithTimeout(serviceAccount.token_uri, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
@@ -230,7 +239,7 @@ async function getFirebaseHeaders(extra = {}) {
 
 async function firebaseReadReviews() {
   const node = sanitizeFirebaseNode(REVIEW_STORAGE_KEY);
-  const response = await fetch(firebaseUrl(`/${node}`), {
+  const response = await fetchWithTimeout(firebaseUrl(`/${node}`), {
     method: "GET",
     headers: await getFirebaseHeaders()
   });
@@ -253,7 +262,7 @@ async function firebaseReadReviews() {
 
 async function firebaseWriteReviews(reviews) {
   const node = sanitizeFirebaseNode(REVIEW_STORAGE_KEY);
-  const response = await fetch(firebaseUrl(`/${node}`), {
+  const response = await fetchWithTimeout(firebaseUrl(`/${node}`), {
     method: "PUT",
     headers: await getFirebaseHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify(reviews)
@@ -701,7 +710,7 @@ function buildFallbackIdeaSuite(goal, audience, constraints, count = 3) {
 function normalizeYtNexusPayload(input) {
   const source = input && typeof input === "object" ? input : {};
   return {
-    message: String(source.message || "Subscibe to Krylo-Blox").trim() || "Subscibe to Krylo-Blox",
+    message: String(source.message || "Subscribe to Krylo-Blox").trim() || "Subscribe to Krylo-Blox",
     subs: Math.max(0, Number(source.subs || source.subscribers || 7) || 7),
     views: Math.max(0, Number(source.views || source.totalViews || 7) || 7),
     uploads: Math.max(0, Number(source.uploads || source.videos || 0) || 0)
@@ -762,6 +771,7 @@ async function fetchYouTubeChannelStats() {
   let totalViews = 0;
   let totalUploads = 0;
   let matchedChannels = 0;
+  const seenChannelIds = new Set();
 
   for (const key of keys) {
     let matchedForKey = 0;
@@ -772,15 +782,21 @@ async function fetchYouTubeChannelStats() {
       params.set("key", key);
       const url = `https://www.googleapis.com/youtube/v3/channels?${params.toString()}`;
       try {
-        const response = await fetch(url, { cache: "no-store" });
+        const response = await fetchWithTimeout(url, { cache: "no-store" }, 5000);
         if (!response.ok) {
           continue;
         }
         const data = await response.json().catch(() => ({}));
-        const stats = data?.items?.[0]?.statistics;
+        const channel = data?.items?.[0];
+        const stats = channel?.statistics;
         if (!stats || typeof stats !== "object") {
           continue;
         }
+        const channelId = String(channel?.id || target.id);
+        if (seenChannelIds.has(channelId)) {
+          continue;
+        }
+        seenChannelIds.add(channelId);
         totalSubs += Math.max(0, Number(stats.subscriberCount || 0) || 0);
         totalViews += Math.max(0, Number(stats.viewCount || 0) || 0);
         totalUploads += Math.max(0, Number(stats.videoCount || 0) || 0);
@@ -1435,6 +1451,18 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && pathname === "/api/yt-portfolio-sync") {
       try {
         const localFallback = await loadYtNexus();
+        const fastMode = /^(1|true|yes)$/i.test(String(url.searchParams.get("fast") || "").trim());
+        if (fastMode) {
+          sendJson(res, 200, {
+            ok: true,
+            source: "local",
+            autoSynced: false,
+            syncedAt: ytLastSyncedAt || null,
+            syncSource: ytLastSyncSource,
+            ...localFallback
+          });
+          return;
+        }
         let payload = localFallback;
         let source = "local";
         let autoSynced = false;
@@ -1459,11 +1487,11 @@ const server = http.createServer(async (req, res) => {
         }
         if (autoSynced) {
           try {
-            await fetch(syncUrl, {
+            await fetchWithTimeout(syncUrl, {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(payload)
-            });
+            }, 5000);
           } catch {
             // Ignore firebase sync errors during auto-sync.
           }
@@ -1471,7 +1499,7 @@ const server = http.createServer(async (req, res) => {
           return;
         }
 
-        const response = await fetch(syncUrl, { cache: "no-store" });
+        const response = await fetchWithTimeout(syncUrl, { cache: "no-store" }, 5000);
         if (!response.ok) {
           sendJson(res, 200, { ok: true, source, autoSynced, syncedAt: ytLastSyncedAt || null, syncSource: ytLastSyncSource, ...payload });
           return;
@@ -1510,11 +1538,11 @@ const server = http.createServer(async (req, res) => {
         if (!syncUrl) {
           firebaseSynced = false;
         } else {
-          const syncRes = await fetch(syncUrl, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-          });
+          const syncRes = await fetchWithTimeout(syncUrl, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          }, 5000);
           firebaseSynced = syncRes.ok;
         }
       } catch {

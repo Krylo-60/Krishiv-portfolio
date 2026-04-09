@@ -76,7 +76,7 @@
     <p class="mono">Route: <code>/admin?token=YOUR_REVIEW_ADMIN_TOKEN</code></p>
 
     <label for="msg">Live wall message</label>
-    <textarea id="msg" placeholder="Enter broadcast message...">Subscibe to Krylo-Blox</textarea>
+    <textarea id="msg" placeholder="Enter broadcast message...">Subscribe to Krylo-Blox</textarea>
 
     <div class="grid">
       <div>
@@ -150,14 +150,16 @@
         return data;
       }
 
-      async function loadCurrent() {
+      async function loadCurrent(options = {}) {
         if (!token) {
           setStatus("Missing token. Open /admin?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
           return;
         }
         setStatus("Loading current values...", "");
         try {
-          const data = await api("/api/yt-portfolio-sync", { method: "GET" });
+          const fastMode = options.fast === true;
+          const path = fastMode ? "/api/yt-portfolio-sync?fast=1" : "/api/yt-portfolio-sync";
+          const data = await api(path, { method: "GET" });
           msg.value = String(data.message || "");
           subs.value = String(Number(data.subs || 0));
           views.value = String(Number(data.views || 0));
@@ -198,9 +200,9 @@
         }
       }
 
-      refreshBtn.addEventListener("click", loadCurrent);
+      refreshBtn.addEventListener("click", () => loadCurrent());
       publishBtn.addEventListener("click", publish);
-      loadCurrent();
+      loadCurrent({ fast: true });
     })();
   </script>
 </body>

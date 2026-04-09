@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Attendance Tracker | Krishiv PB</title>
+  <link rel="stylesheet" href="concept-apps.css" />
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body class="concept-app-root" data-theme="default" data-mode="dark">
+  <main class="concept-wrap">
+    <section class="concept-shell concept-hero"><span id="appCategory" class="concept-kicker"></span><h1 id="appTitle" class="concept-title"></h1><p id="appLead" class="concept-lead"></p><div class="concept-meta"><span class="concept-pill">Starter app page</span><a class="concept-link" href="index.html#app-verse">Back to Apps Galaxy</a></div></section>
+    <section class="concept-grid"><section class="concept-shell"><h2>Log Entry</h2><div class="concept-form-grid"><div><label id="titleLabel" for="entryTitle"></label><input id="entryTitle" /></div><div><label id="metaLabel" for="entryMeta"></label><input id="entryMeta" /></div><div><label for="entryState">Status</label><select id="entryState"></select></div><div class="concept-full"><label id="notesLabel" for="entryNotes"></label><textarea id="entryNotes"></textarea></div></div><div class="concept-actions"><button id="addEntryBtn" class="concept-btn-primary" type="button"></button><button id="seedEntryBtn" class="concept-btn-secondary" type="button"></button></div></section><section class="concept-shell"><h2>Quick Examples</h2><div id="seedChips" class="concept-seeds"></div><p id="helperCopy"></p></section></section>
+    <section class="concept-shell"><div class="concept-board-head"><h2 id="boardTitle"></h2><input id="searchInput" type="search" /></div><div class="concept-stats"><div class="concept-stat"><strong id="totalCount">0</strong><span>Total entries</span></div><div class="concept-stat"><strong id="pinnedCount">0</strong><span>Pinned</span></div><div class="concept-stat"><strong id="doneCount">0</strong><span>Resolved</span></div></div><div id="entryList" class="concept-list"></div></section>
+  </main>
+  <script id="app-config" type="application/json">{"title":"Attendance Tracker","category":"Concept | School","lead":"Track classes, absences, and recovery plans with a simple attendance log.","helper":"Add daily attendance entries so you can spot low-attendance areas early.","storageKey":"krishiv_attendance_tracker_v1","boardTitle":"Attendance Log","titleLabel":"Class or day","titlePlaceholder":"Monday assembly or Math period","metaLabel":"Date or teacher","metaPlaceholder":"2026-04-07 | Ms. Rao","notesLabel":"Attendance notes","notesPlaceholder":"Mention reason, makeup work, or follow-up actions.","ctaLabel":"Add attendance entry","seedLabel":"Load sample attendance","searchPlaceholder":"Search attendance...","emptyTitle":"No attendance entries yet.","emptyLead":"Log today's first record.","statuses":["Present","Late","Absent"],"seeds":[{"title":"Math period","meta":"2026-04-07 | Mr. Sen","notes":"Reached class on time and collected worksheet.","state":"Present"},{"title":"Assembly","meta":"2026-04-06 | Morning","notes":"Missed because of rain delay.","state":"Absent"}]}</script>
+  <script src="concept-apps.js"></script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>

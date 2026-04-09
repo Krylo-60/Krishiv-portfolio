@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Homework Hub | Krishiv PB</title>
+  <link rel="stylesheet" href="concept-apps.css" />
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body class="concept-app-root" data-theme="default" data-mode="dark">
+  <main class="concept-wrap">
+    <section class="concept-shell concept-hero">
+      <span id="appCategory" class="concept-kicker"></span>
+      <h1 id="appTitle" class="concept-title"></h1>
+      <p id="appLead" class="concept-lead"></p>
+      <div class="concept-meta">
+        <span class="concept-pill">Starter app page</span>
+        <a class="concept-link" href="index.html#app-verse">Back to Apps Galaxy</a>
+      </div>
+    </section>
+    <section class="concept-grid">
+      <section class="concept-shell">
+        <h2>Create Entry</h2>
+        <div class="concept-form-grid">
+          <div><label id="titleLabel" for="entryTitle"></label><input id="entryTitle" /></div>
+          <div><label id="metaLabel" for="entryMeta"></label><input id="entryMeta" /></div>
+          <div><label for="entryState">Stage</label><select id="entryState"></select></div>
+          <div class="concept-full"><label id="notesLabel" for="entryNotes"></label><textarea id="entryNotes"></textarea></div>
+        </div>
+        <div class="concept-actions"><button id="addEntryBtn" class="concept-btn-primary" type="button"></button><button id="seedEntryBtn" class="concept-btn-secondary" type="button"></button></div>
+      </section>
+      <section class="concept-shell"><h2>Quick Ideas</h2><div id="seedChips" class="concept-seeds"></div><p id="helperCopy"></p></section>
+    </section>
+    <section class="concept-shell"><div class="concept-board-head"><h2 id="boardTitle"></h2><input id="searchInput" type="search" /></div><div class="concept-stats"><div class="concept-stat"><strong id="totalCount">0</strong><span>Total entries</span></div><div class="concept-stat"><strong id="pinnedCount">0</strong><span>Pinned</span></div><div class="concept-stat"><strong id="doneCount">0</strong><span>Done</span></div></div><div id="entryList" class="concept-list"></div></section>
+  </main>
+  <script id="app-config" type="application/json">{"title":"Homework Hub","category":"Concept | School","lead":"Plan homework tasks, deadlines, and subject priorities in one focused board.","helper":"Use this starter app to track homework by subject, urgency, and progress.","storageKey":"krishiv_homework_hub_v1","boardTitle":"Homework Board","titleLabel":"Homework title","titlePlaceholder":"Math worksheet or history assignment","metaLabel":"Subject or deadline","metaPlaceholder":"Science | Due Friday","notesLabel":"What needs to be done","notesPlaceholder":"Add task steps, chapter names, or resources.","ctaLabel":"Add homework","seedLabel":"Load sample homework","searchPlaceholder":"Search homework...","emptyTitle":"No homework added yet.","emptyLead":"Start by adding your next assignment.","statuses":["Not started","Doing","Submitted"],"seeds":[{"title":"Math worksheet","meta":"Math | Due tomorrow","notes":"Finish the last 8 questions and review formulas.","state":"Doing"},{"title":"English reading","meta":"English | Monday","notes":"Read two chapters and note important quotes.","state":"Not started"}]}</script>
+  <script src="concept-apps.js"></script>
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-const CACHE_NAME = "krishiv-velocity-v1001-1";
+const CACHE_NAME = "krishiv-velocity-v1002-1";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -35,8 +35,16 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   const destination = event.request.destination || "";
+  const isNavigation = event.request.mode === "navigate" || destination === "document";
   const isCoreLive = destination === "document" || destination === "script" || destination === "style" || destination === "manifest";
   const isSameOrigin = requestUrl.origin === self.location.origin;
+
+  if (!isSameOrigin) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+    return;
+  }
 
   if (isCoreLive && isSameOrigin) {
     event.respondWith(
@@ -46,7 +54,12 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone)).catch(() => {});
           return response;
         })
-        .catch(() => caches.match(event.request).then((cached) => cached || caches.match("/index.html")))
+        .catch(() =>
+          caches.match(event.request).then((cached) => {
+            if (cached) return cached;
+            return isNavigation ? caches.match("/index.html") : Response.error();
+          })
+        )
     );
     return;
   }
@@ -61,7 +74,7 @@ self.addEventListener("fetch", (event) => {
           }
           return response;
         })
-        .catch(() => cached || caches.match("/index.html"));
+        .catch(() => cached || (isNavigation ? caches.match("/index.html") : Response.error()));
       return cached || networkFetch;
     })
   );

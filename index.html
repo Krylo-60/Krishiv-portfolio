@@ -91,18 +91,11 @@
           <li><a href="#about">About</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#app-verse">Apps</a></li>
-          <li><a href="#command-center">Command Center</a></li>
           <li><a href="#signature">Signature</a></li>
-          <li><a href="#design-dna">Design DNA</a></li>
-          <li><a href="#skills">Skills</a></li>
           <li><a href="#creator">Creator</a></li>
-          <li><a href="#spotify">Spotify</a></li>
-          <li><a href="#strategy">Strategy</a></li>
-          <li><a href="#changelog">Changelog</a></li>
           <li><a href="#wins">Wins</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="games.html">Games</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li><a href="games.html">Games</a></li>
           <li><button type="button" id="installAppBtn" class="nav-theme-btn" style="display:none;">Install App</button></li>
           <li><button type="button" id="themeToggleBtn" class="nav-theme-btn">Theme: Aurora</button></li>
         </ul>
@@ -949,9 +942,9 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Apps Galaxy</p>
-          <h2>Launch-ready app universe with live tools and fresh concept ideas.</h2>
+          <h2>Best work first, then live tools, then concept ideas still growing.</h2>
           <p class="lead">
-            Each app is built for a distinct purpose: productivity, learning, planning, tools, and AI ideation. You now have a bigger mix of live launches plus concept apps for what comes next. Press <strong>Ctrl/Cmd + K</strong> to open quick launcher.
+            This gallery is now easier to scan: featured launches show the strongest work, live tools show what people can use right now, and concept builds show what is coming next. Press <strong>Ctrl/Cmd + K</strong> to open quick launcher.
           </p>
         </div>
         <article class="app-verse-controls" aria-label="Apps Galaxy controls">
@@ -972,7 +965,13 @@
             </select>
           </div>
         </article>
-        <p id="appVerseStatus" class="command-status" role="status" aria-live="polite">Showing all apps.</p>
+        <div class="app-tier-filters" aria-label="Filter app tiers">
+          <button type="button" class="app-tier-btn is-active" data-tier-filter="all">All</button>
+          <button type="button" class="app-tier-btn" data-tier-filter="featured">Featured</button>
+          <button type="button" class="app-tier-btn" data-tier-filter="live">Live</button>
+          <button type="button" class="app-tier-btn" data-tier-filter="concept">Concept</button>
+        </div>
+        <p id="appVerseStatus" class="command-status" role="status" aria-live="polite">Showing all apps across featured, live, and concept tiers.</p>
         <article class="app-verse-core-links" aria-label="Core live pages">
           <div class="app-verse-head">
             <span class="card-kicker">Core Live Pages</span>
@@ -1000,15 +999,15 @@
         <div class="app-verse-meta">
           <article class="app-verse-stat">
             <strong id="appCountStat">0</strong>
-            <span>Total launch-ready apps</span>
+            <span>Apps in galaxy</span>
           </article>
           <article class="app-verse-stat">
             <strong id="categoryCountStat">0</strong>
-            <span>Distinct use categories</span>
+            <span>Featured launches</span>
           </article>
           <article class="app-verse-stat">
             <strong id="totalLaunchesStat">0</strong>
-            <span>Tracked app launches</span>
+            <span>Concept builds</span>
           </article>
           <article class="app-verse-stat">
             <strong id="backendModeStat">checking...</strong>
@@ -1016,7 +1015,7 @@
           </article>
         </div>
         <div class="app-verse-grid">
-          <a class="app-verse-card" href="study-planner.html" data-launch-name="Study Planner" data-launch-tags="study planner tasks">
+          <a class="app-verse-card" href="study-planner.html" data-launch-name="Study Planner" data-launch-tags="study planner tasks" data-tier="featured">
             <div class="app-verse-head">
               <img class="app-mini-logo-img" src="app-icon-study-planner.svg" alt="" loading="lazy" decoding="async" width="32" height="32" />
               <span class="card-kicker">Productivity</span>
@@ -1032,7 +1031,7 @@
             <h3>Quiz Zone</h3>
             <p>Practice with instant feedback and score flow.</p>
           </a>
-          <a class="app-verse-card" href="review-app.html" data-launch-name="Review App" data-launch-tags="review rating feedback">
+          <a class="app-verse-card" href="review-app.html" data-launch-name="Review App" data-launch-tags="review rating feedback" data-tier="featured">
             <div class="app-verse-head">
               <img class="app-mini-logo-img" src="app-icon-review-app.svg" alt="" loading="lazy" decoding="async" width="32" height="32" />
               <span class="card-kicker">Feedback</span>
@@ -1056,7 +1055,7 @@
             <h3>Habit Tracker</h3>
             <p>Build consistency with daily streak tracking.</p>
           </a>
-          <a class="app-verse-card" href="idea-lab-ai.html" data-launch-name="Idea Lab AI" data-launch-tags="ai ideas database">
+          <a class="app-verse-card" href="idea-lab-ai.html" data-launch-name="Idea Lab AI" data-launch-tags="ai ideas database" data-tier="featured">
             <div class="app-verse-head">
               <img class="app-mini-logo-img" src="app-icon-idea-lab-ai.svg" alt="" loading="lazy" decoding="async" width="32" height="32" />
               <span class="card-kicker">AI + Database</span>
@@ -1184,7 +1183,7 @@
             <h3>Random Picker</h3>
             <p>Pick random options quickly for games and decisions.</p>
           </a>
-          <a class="app-verse-card" href="krylo-blox-master-nexus.html" data-launch-name="Master Nexus" data-launch-tags="nexus yt portfolio">
+          <a class="app-verse-card" href="krylo-blox-master-nexus.html" data-launch-name="Master Nexus" data-launch-tags="nexus yt portfolio" data-tier="featured">
             <div class="app-verse-head">
               <img class="app-mini-logo-img" src="core-icon-master-nexus.svg" alt="" loading="lazy" decoding="async" width="32" height="32" />
               <span class="card-kicker">Core</span>
@@ -1280,7 +1279,7 @@
             <h3>Mind Map Board</h3>
             <p>Build connected idea nodes for projects and content.</p>
           </a>
-          <a class="app-verse-card" href="bazaar-blitz.html" data-launch-name="BazaarBlitz Prime" data-launch-tags="marketplace shopping cart amazon style products">
+          <a class="app-verse-card" href="bazaar-blitz.html" data-launch-name="BazaarBlitz Prime" data-launch-tags="marketplace shopping cart amazon style products" data-tier="featured" data-status="New">
             <div class="app-verse-head">
               <img class="app-mini-logo-img" src="app-icon-bazaar-blitz.svg" alt="" loading="lazy" decoding="async" width="32" height="32" />
               <span class="card-kicker">Marketplace</span>
@@ -1288,7 +1287,7 @@
             <h3>BazaarBlitz Prime</h3>
             <p>Amazon-style shopping experience with search, filters, cart, coupons, and checkout simulation.</p>
           </a>
-          <a class="app-verse-card" href="votestorm-arena.html" data-launch-name="VoteStorm Arena" data-launch-tags="poll voting community live chart">
+          <a class="app-verse-card" href="votestorm-arena.html" data-launch-name="VoteStorm Arena" data-launch-tags="poll voting community live chart" data-tier="featured" data-status="New">
             <div class="app-verse-head">
               <img class="app-mini-logo-img" src="app-icon-votestorm.svg" alt="" loading="lazy" decoding="async" width="32" height="32" />
               <span class="card-kicker">Community</span>
@@ -1344,7 +1343,7 @@
             <h3>Budget Battle Sim</h3>
             <p>Simulate money decisions and improve budgeting with a live score.</p>
           </a>
-          <article class="app-verse-card concept-card" data-launch-name="Homework Hub" data-launch-tags="school homework planner assignments concept" tabindex="0" aria-label="Concept app: Homework Hub">
+          <a class="app-verse-card concept-card" href="homework-hub.html" data-launch-name="Homework Hub" data-launch-tags="school homework planner assignments concept" aria-label="Open Homework Hub">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">HW</span>
               <span class="card-kicker">Concept</span>
@@ -1352,8 +1351,8 @@
             <h3>Homework Hub</h3>
             <span class="app-status-chip">Concept app</span>
             <p>One dashboard for homework tasks, due dates, and progress streaks.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Attendance Tracker" data-launch-tags="school attendance tracker concept" tabindex="0" aria-label="Concept app: Attendance Tracker">
+          </a>
+          <a class="app-verse-card concept-card" href="attendance-tracker.html" data-launch-name="Attendance Tracker" data-launch-tags="school attendance tracker concept" aria-label="Open Attendance Tracker">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">AT</span>
               <span class="card-kicker">Concept</span>
@@ -1361,8 +1360,8 @@
             <h3>Attendance Tracker</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Track school attendance, missed days, and monthly consistency at a glance.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Link Locker" data-launch-tags="creator links bookmarks organizer concept" tabindex="0" aria-label="Concept app: Link Locker">
+          </a>
+          <a class="app-verse-card concept-card" href="link-locker.html" data-launch-name="Link Locker" data-launch-tags="creator links bookmarks organizer concept" aria-label="Open Link Locker">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">LL</span>
               <span class="card-kicker">Concept</span>
@@ -1370,8 +1369,8 @@
             <h3>Link Locker</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Save creator links, tools, and references inside a clean searchable vault.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Habit Heatmap" data-launch-tags="habit tracker heatmap consistency concept" tabindex="0" aria-label="Concept app: Habit Heatmap">
+          </a>
+          <a class="app-verse-card concept-card" href="habit-heatmap.html" data-launch-name="Habit Heatmap" data-launch-tags="habit tracker heatmap consistency concept" aria-label="Open Habit Heatmap">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">HH</span>
               <span class="card-kicker">Concept</span>
@@ -1379,8 +1378,8 @@
             <h3>Habit Heatmap</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Visualize daily habits in a heatmap grid to spot momentum and weak zones.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Focus Music Deck" data-launch-tags="focus music productivity concept" tabindex="0" aria-label="Concept app: Focus Music Deck">
+          </a>
+          <a class="app-verse-card concept-card" href="focus-music-deck.html" data-launch-name="Focus Music Deck" data-launch-tags="focus music productivity concept" aria-label="Open Focus Music Deck">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">FM</span>
               <span class="card-kicker">Concept</span>
@@ -1388,8 +1387,8 @@
             <h3>Focus Music Deck</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Pair study sessions with themed music decks and smart timer presets.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Thumbnail Idea Board" data-launch-tags="youtube thumbnail ideas creator concept" tabindex="0" aria-label="Concept app: Thumbnail Idea Board">
+          </a>
+          <a class="app-verse-card concept-card" href="thumbnail-idea-board.html" data-launch-name="Thumbnail Idea Board" data-launch-tags="youtube thumbnail ideas creator concept" aria-label="Open Thumbnail Idea Board">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">TB</span>
               <span class="card-kicker">Concept</span>
@@ -1397,8 +1396,8 @@
             <h3>Thumbnail Idea Board</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Collect thumbnail titles, color notes, and hook ideas for future uploads.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Script Planner" data-launch-tags="youtube script planner writing creator concept" tabindex="0" aria-label="Concept app: Script Planner">
+          </a>
+          <a class="app-verse-card concept-card" href="script-planner.html" data-launch-name="Script Planner" data-launch-tags="youtube script planner writing creator concept" aria-label="Open Script Planner">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">SP</span>
               <span class="card-kicker">Concept</span>
@@ -1406,8 +1405,8 @@
             <h3>Script Planner</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Outline intros, scenes, and call-to-action lines for stronger creator scripts.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Upload Calendar" data-launch-tags="creator calendar planning uploads concept" tabindex="0" aria-label="Concept app: Upload Calendar">
+          </a>
+          <a class="app-verse-card concept-card" href="upload-calendar.html" data-launch-name="Upload Calendar" data-launch-tags="creator calendar planning uploads concept" aria-label="Open Upload Calendar">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">UC</span>
               <span class="card-kicker">Concept</span>
@@ -1415,8 +1414,8 @@
             <h3>Upload Calendar</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Plan videos, shorts, and community posts on a visual weekly content map.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Stream Overlay Kit" data-launch-tags="gaming stream overlay creator concept" tabindex="0" aria-label="Concept app: Stream Overlay Kit">
+          </a>
+          <a class="app-verse-card concept-card" href="stream-overlay-kit.html" data-launch-name="Stream Overlay Kit" data-launch-tags="gaming stream overlay creator concept" aria-label="Open Stream Overlay Kit">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">SO</span>
               <span class="card-kicker">Concept</span>
@@ -1424,8 +1423,8 @@
             <h3>Stream Overlay Kit</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Build scenes, alerts, and quick branding panels for gaming livestreams.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="QR Generator Pro" data-launch-tags="qr generator tool utility concept" tabindex="0" aria-label="Concept app: QR Generator Pro">
+          </a>
+          <a class="app-verse-card concept-card" href="qr-generator-pro.html" data-launch-name="QR Generator Pro" data-launch-tags="qr generator tool utility concept" aria-label="Open QR Generator Pro">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">QR</span>
               <span class="card-kicker">Concept</span>
@@ -1433,8 +1432,8 @@
             <h3>QR Generator Pro</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Create shareable QR codes for links, profiles, and quick event access.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Pomodoro Duel" data-launch-tags="pomodoro focus duel game concept" tabindex="0" aria-label="Concept app: Pomodoro Duel">
+          </a>
+          <a class="app-verse-card concept-card" href="pomodoro-duel.html" data-launch-name="Pomodoro Duel" data-launch-tags="pomodoro focus duel game concept" aria-label="Open Pomodoro Duel">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">PD</span>
               <span class="card-kicker">Concept</span>
@@ -1442,8 +1441,8 @@
             <h3>Pomodoro Duel</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Turn focus sessions into friendly score battles with streak bonuses.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Revision Race" data-launch-tags="study quiz revision race concept" tabindex="0" aria-label="Concept app: Revision Race">
+          </a>
+          <a class="app-verse-card concept-card" href="revision-race.html" data-launch-name="Revision Race" data-launch-tags="study quiz revision race concept" aria-label="Open Revision Race">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">RR</span>
               <span class="card-kicker">Concept</span>
@@ -1451,8 +1450,8 @@
             <h3>Revision Race</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Gamify exam revision with checkpoints, timed rounds, and score bursts.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Scholarship Finder" data-launch-tags="school scholarship finder career concept" tabindex="0" aria-label="Concept app: Scholarship Finder">
+          </a>
+          <a class="app-verse-card concept-card" href="scholarship-finder.html" data-launch-name="Scholarship Finder" data-launch-tags="school scholarship finder career concept" aria-label="Open Scholarship Finder">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">SF</span>
               <span class="card-kicker">Concept</span>
@@ -1460,8 +1459,8 @@
             <h3>Scholarship Finder</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Collect scholarship options, deadlines, and application checklists in one place.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Portfolio Asset Vault" data-launch-tags="portfolio design assets vault concept" tabindex="0" aria-label="Concept app: Portfolio Asset Vault">
+          </a>
+          <a class="app-verse-card concept-card" href="portfolio-asset-vault.html" data-launch-name="Portfolio Asset Vault" data-launch-tags="portfolio design assets vault concept" aria-label="Open Portfolio Asset Vault">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">PA</span>
               <span class="card-kicker">Concept</span>
@@ -1469,8 +1468,8 @@
             <h3>Portfolio Asset Vault</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Store screenshots, icons, and preview images for faster portfolio updates.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Poll Party" data-launch-tags="poll party social voting concept" tabindex="0" aria-label="Concept app: Poll Party">
+          </a>
+          <a class="app-verse-card concept-card" href="poll-party.html" data-launch-name="Poll Party" data-launch-tags="poll party social voting concept" aria-label="Open Poll Party">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">PP</span>
               <span class="card-kicker">Concept</span>
@@ -1478,8 +1477,8 @@
             <h3>Poll Party</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Create fun daily polls for friends, viewers, and community engagement.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Emoji Story Maker" data-launch-tags="emoji story maker creative concept" tabindex="0" aria-label="Concept app: Emoji Story Maker">
+          </a>
+          <a class="app-verse-card concept-card" href="emoji-story-maker.html" data-launch-name="Emoji Story Maker" data-launch-tags="emoji story maker creative concept" aria-label="Open Emoji Story Maker">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">ES</span>
               <span class="card-kicker">Concept</span>
@@ -1487,8 +1486,8 @@
             <h3>Emoji Story Maker</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Generate mini stories from emoji prompts and remix them into creative challenges.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Team Splitter" data-launch-tags="teams random groups school concept" tabindex="0" aria-label="Concept app: Team Splitter">
+          </a>
+          <a class="app-verse-card concept-card" href="team-splitter.html" data-launch-name="Team Splitter" data-launch-tags="teams random groups school concept" aria-label="Open Team Splitter">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">TS</span>
               <span class="card-kicker">Concept</span>
@@ -1496,8 +1495,8 @@
             <h3>Team Splitter</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Divide people into fair groups fast for games, class tasks, or challenges.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Exam Countdown" data-launch-tags="exam countdown school planner concept" tabindex="0" aria-label="Concept app: Exam Countdown">
+          </a>
+          <a class="app-verse-card concept-card" href="exam-countdown.html" data-launch-name="Exam Countdown" data-launch-tags="exam countdown school planner concept" aria-label="Open Exam Countdown">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">EC</span>
               <span class="card-kicker">Concept</span>
@@ -1505,8 +1504,8 @@
             <h3>Exam Countdown</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Track important exam dates with countdown widgets and revision reminders.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Screenshot Annotator" data-launch-tags="screenshots annotate design concept" tabindex="0" aria-label="Concept app: Screenshot Annotator">
+          </a>
+          <a class="app-verse-card concept-card" href="screenshot-annotator.html" data-launch-name="Screenshot Annotator" data-launch-tags="screenshots annotate design concept" aria-label="Open Screenshot Annotator">
             <div class="app-verse-head">
               <span class="app-mini-logo" aria-hidden="true">SA</span>
               <span class="card-kicker">Concept</span>
@@ -1514,52 +1513,7 @@
             <h3>Screenshot Annotator</h3>
             <span class="app-status-chip">Concept app</span>
             <p>Add arrows, notes, and highlight boxes to UI screenshots for feedback.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Mini CRM" data-launch-tags="contacts outreach opportunities concept" tabindex="0" aria-label="Concept app: Mini CRM">
-            <div class="app-verse-head">
-              <span class="app-mini-logo" aria-hidden="true">MC</span>
-              <span class="card-kicker">Concept</span>
-            </div>
-            <h3>Mini CRM</h3>
-            <span class="app-status-chip">Concept app</span>
-            <p>Track collaborations, replies, and contact history for creator opportunities.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Project Pitch Pad" data-launch-tags="project pitch ideas startup concept" tabindex="0" aria-label="Concept app: Project Pitch Pad">
-            <div class="app-verse-head">
-              <span class="app-mini-logo" aria-hidden="true">PJ</span>
-              <span class="card-kicker">Concept</span>
-            </div>
-            <h3>Project Pitch Pad</h3>
-            <span class="app-status-chip">Concept app</span>
-            <p>Shape project ideas into fast pitch cards with problem, solution, and benefits.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Prompt Builder" data-launch-tags="ai prompt builder generator concept" tabindex="0" aria-label="Concept app: Prompt Builder">
-            <div class="app-verse-head">
-              <span class="app-mini-logo" aria-hidden="true">PB</span>
-              <span class="card-kicker">Concept</span>
-            </div>
-            <h3>Prompt Builder</h3>
-            <span class="app-status-chip">Concept app</span>
-            <p>Assemble better AI prompts from reusable blocks, style tags, and goals.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Timetable Builder" data-launch-tags="school timetable schedule concept" tabindex="0" aria-label="Concept app: Timetable Builder">
-            <div class="app-verse-head">
-              <span class="app-mini-logo" aria-hidden="true">TT</span>
-              <span class="card-kicker">Concept</span>
-            </div>
-            <h3>Timetable Builder</h3>
-            <span class="app-status-chip">Concept app</span>
-            <p>Create neat weekly schedules for class, study, gaming, and creator time.</p>
-          </article>
-          <article class="app-verse-card concept-card" data-launch-name="Goal Radar" data-launch-tags="goals radar progress dashboard concept" tabindex="0" aria-label="Concept app: Goal Radar">
-            <div class="app-verse-head">
-              <span class="app-mini-logo" aria-hidden="true">GR</span>
-              <span class="card-kicker">Concept</span>
-            </div>
-            <h3>Goal Radar</h3>
-            <span class="app-status-chip">Concept app</span>
-            <p>See goal progress in a radar-style dashboard that makes priorities obvious.</p>
-          </article>
+          </a>
         </div>
         <div class="app-leaderboard-shell">
           <h3>Top Apps (Live Engagement)</h3>
@@ -2196,28 +2150,28 @@
         <div class="contact-stack">
           <div class="contact-list">
             <a class="contact-item" href="https://discord.gg/QZ3KfPsH4Y" target="_blank" rel="noopener noreferrer">
-              <img class="contact-icon" src="discord-icon.svg" alt="Discord icon" loading="lazy" decoding="async" width="96" height="96" />
+              <img class="contact-icon" src="https://img.icons8.com/color/96/discord-logo.png" alt="Discord icon" loading="lazy" decoding="async" width="96" height="96" />
               <span class="contact-text">
                 <span class="contact-label">Discord Server</span>
                 <span class="contact-value">Join the community</span>
               </span>
             </a>
             <a class="contact-item" href="https://www.youtube.com/@KryloBlox60" target="_blank" rel="noopener noreferrer">
-              <img class="contact-icon" src="youtube-icon.svg" alt="YouTube icon" loading="lazy" decoding="async" width="96" height="96" />
+              <img class="contact-icon" src="https://img.icons8.com/color/96/youtube-play.png" alt="YouTube icon" loading="lazy" decoding="async" width="96" height="96" />
               <span class="contact-text">
                 <span class="contact-label">YouTube</span>
                 <span class="contact-value">@KryloBlox60</span>
               </span>
             </a>
             <a class="contact-item" href="https://github.com/Krylo-60" target="_blank" rel="noopener noreferrer">
-              <img class="contact-icon" src="github-icon.svg" alt="GitHub icon" loading="lazy" decoding="async" width="96" height="96" />
+              <img class="contact-icon" src="https://img.icons8.com/color/96/github--v1.png" alt="GitHub icon" loading="lazy" decoding="async" width="96" height="96" />
               <span class="contact-text">
                 <span class="contact-label">GitHub</span>
                 <span class="contact-value">github.com/Krylo-60</span>
               </span>
             </a>
             <a class="contact-item" href="mailto:krylobloxyt@gmail.com">
-              <img class="contact-icon" src="gmail-icon.svg" alt="Gmail icon" loading="lazy" decoding="async" width="96" height="96" />
+              <img class="contact-icon" src="https://img.icons8.com/color/96/gmail-new.png" alt="Gmail icon" loading="lazy" decoding="async" width="96" height="96" />
               <span class="contact-text">
                 <span class="contact-label">Email</span>
                 <span class="contact-value">krylobloxyt@gmail.com</span>
@@ -2353,6 +2307,7 @@
       const appVerseSearch = document.getElementById('appVerseSearch');
       const appVerseCategory = document.getElementById('appVerseCategory');
       const appVerseStatus = document.getElementById('appVerseStatus');
+      const appTierButtons = Array.from(document.querySelectorAll('[data-tier-filter]'));
       const themeToggleBtn = document.getElementById('themeToggleBtn');
       const installAppBtn = document.getElementById('installAppBtn');
       const missionProgress = document.getElementById('missionProgress');
@@ -2617,11 +2572,59 @@
       const appCards = Array.from(document.querySelectorAll('.app-verse-card'));
       let appVerseSearchTerm = '';
       let appVerseCategoryValue = 'all';
+      let appVerseTierValue = 'all';
 
       const getAppCardCategory = (card) => {
         const kicker = card.querySelector('.card-kicker');
         return (kicker ? kicker.textContent : '').trim();
       };
+
+      const getAppCardTier = (card) => {
+        const tier = String(card.dataset.tier || '').trim().toLowerCase();
+        if (tier) return tier;
+        return card.classList.contains('concept-card') ? 'concept' : 'live';
+      };
+
+      const getAppCardStatus = (card) => {
+        const status = String(card.dataset.status || '').trim();
+        if (status) return status;
+        const tier = getAppCardTier(card);
+        if (tier === 'featured') return 'Featured';
+        if (tier === 'concept') return 'Concept';
+        return 'Live';
+      };
+
+      const ensureAppStatusChips = () => {
+        appCards.forEach((card) => {
+          let chip = card.querySelector('.app-status-chip');
+          if (!chip) {
+            chip = document.createElement('span');
+            chip.className = 'app-status-chip';
+            const heading = card.querySelector('h3');
+            if (heading) heading.insertAdjacentElement('afterend', chip);
+            else card.appendChild(chip);
+          }
+          const tier = getAppCardTier(card);
+          const status = getAppCardStatus(card);
+          chip.textContent = status;
+          chip.classList.toggle('is-featured', tier === 'featured');
+          chip.classList.toggle('is-live', tier === 'live');
+          chip.classList.toggle('is-concept', tier === 'concept');
+          chip.classList.toggle('is-new', status.toLowerCase() === 'new');
+          card.classList.toggle('is-featured-card', tier === 'featured');
+        });
+      };
+
+      const syncTierButtons = () => {
+        appTierButtons.forEach((button) => {
+          const isActive = button.dataset.tierFilter === appVerseTierValue;
+          button.classList.toggle('is-active', isActive);
+          button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+      };
+
+      ensureAppStatusChips();
+      syncTierButtons();
 
       const populateAppCategories = () => {
         if (!appVerseCategory) return;
@@ -2637,23 +2640,33 @@
       const applyAppFilter = () => {
         const term = appVerseSearchTerm.trim().toLowerCase();
         const category = appVerseCategoryValue;
+        const tier = appVerseTierValue;
         let visibleCount = 0;
 
         appCards.forEach((card) => {
           const name = String(card.dataset.launchName || '').toLowerCase();
           const tags = String(card.dataset.launchTags || '').toLowerCase();
           const categoryText = getAppCardCategory(card).toLowerCase();
+          const tierText = getAppCardTier(card);
           const matchesTerm = !term || name.includes(term) || tags.includes(term) || categoryText.includes(term);
           const matchesCategory = category === 'all' || categoryText === category;
-          const show = matchesTerm && matchesCategory;
+          const matchesTier = tier === 'all' || tierText === tier;
+          const show = matchesTerm && matchesCategory && matchesTier;
           card.style.display = show ? '' : 'none';
           if (show) visibleCount += 1;
         });
 
         if (appVerseStatus) {
-          appVerseStatus.textContent = visibleCount === appCards.length
-            ? 'Showing all apps.'
-            : 'Showing ' + visibleCount + ' of ' + appCards.length + ' apps.';
+          const activeFilters = [];
+          if (tier !== 'all') activeFilters.push(tier);
+          if (category !== 'all') activeFilters.push(category);
+          const filterLabel = activeFilters.length
+            ? ' in ' + activeFilters.join(' + ')
+            : ' across featured, live, and concept tiers';
+          const searchLabel = term ? ' matching "' + appVerseSearchTerm.trim() + '"' : '';
+          appVerseStatus.textContent = visibleCount === appCards.length && !term && category === 'all' && tier === 'all'
+            ? 'Showing all apps across featured, live, and concept tiers.'
+            : 'Showing ' + visibleCount + ' of ' + appCards.length + ' apps' + filterLabel + searchLabel + '.';
         }
       };
 
@@ -2687,18 +2700,13 @@
       };
       const renderAppStats = () => {
         const totalApps = appCards.length;
-        const categories = new Set(
-          appCards.map((card) => {
-            const kicker = card.querySelector('.card-kicker');
-            return (kicker ? kicker.textContent : '').trim();
-          }).filter(Boolean)
-        );
-        const totalLaunches = Object.values(launchAnalytics).reduce((acc, value) => acc + Number(value || 0), 0);
+        const featuredCount = appCards.filter((card) => getAppCardTier(card) === 'featured').length;
+        const conceptCount = appCards.filter((card) => getAppCardTier(card) === 'concept').length;
 
         if (appCountStat) appCountStat.textContent = String(totalApps);
         if (heroAppsStat) heroAppsStat.textContent = String(totalApps);
-        if (categoryCountStat) categoryCountStat.textContent = String(categories.size);
-        if (totalLaunchesStat) totalLaunchesStat.textContent = String(totalLaunches);
+        if (categoryCountStat) categoryCountStat.textContent = String(featuredCount);
+        if (totalLaunchesStat) totalLaunchesStat.textContent = String(conceptCount);
 
         if (appLeaderboard) {
           const top = appCards
@@ -2842,10 +2850,17 @@
       }
       if (appVerseCategory) {
         appVerseCategory.addEventListener('change', () => {
-          appVerseCategoryValue = appVerseCategory.value;
+          appVerseCategoryValue = String(appVerseCategory.value || 'all').toLowerCase();
           applyAppFilter();
         });
       }
+      appTierButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          appVerseTierValue = String(button.dataset.tierFilter || 'all').toLowerCase();
+          syncTierButtons();
+          applyAppFilter();
+        });
+      });
       loadAnalytics();
       renderAppStats();
       renderProofMetrics();
@@ -2947,9 +2962,11 @@
       loadFeedbackPreview();
       setInterval(loadFeedbackPreview, 90000);
 
-      const loadCommandCenterSync = async () => {
+      const loadCommandCenterSync = async (options = {}) => {
         try {
-          const response = await fetch('/api/yt-portfolio-sync', { cache: 'no-store' });
+          const fastMode = options.fast === true;
+          const syncPath = fastMode ? '/api/yt-portfolio-sync?fast=1' : '/api/yt-portfolio-sync';
+          const response = await fetch(syncPath, { cache: 'no-store' });
           if (!response.ok) throw new Error('sync fetch failed');
           const data = await response.json();
           if (ccSyncSource) ccSyncSource.textContent = String(data.syncSource || data.source || 'local');
@@ -2968,7 +2985,7 @@
           if (ccSyncTime) ccSyncTime.textContent = 'offline';
         }
       };
-      loadCommandCenterSync();
+      loadCommandCenterSync({ fast: true });
       setInterval(loadCommandCenterSync, 45000);
 
       const updateCommandCenterLiveStats = () => {
