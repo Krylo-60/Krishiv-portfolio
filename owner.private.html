@@ -20,6 +20,7 @@
       --err: #fb7185;
       --radius: 18px;
       --shadow: 0 18px 38px rgba(0, 0, 0, 0.34);
+      --gold: #fbbf24;
     }
     * { box-sizing: border-box; }
     body {
@@ -256,13 +257,24 @@
       padding-right: 2px;
     }
     .launch-card {
-      display: block;
+      display: grid;
+      gap: 8px;
       padding: 12px;
       border-radius: 14px;
       border: 1px solid rgba(125, 196, 255, 0.18);
       background: rgba(6, 16, 28, 0.68);
       text-decoration: none;
       color: var(--text);
+    }
+    .launch-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .launch-copy {
+      min-width: 0;
+      flex: 1;
     }
     .launch-card strong {
       display: block;
@@ -284,21 +296,87 @@
       filter: brightness(1.04);
       outline: none;
     }
+    .mini-icon-btn {
+      border: 1px solid rgba(125, 196, 255, 0.18);
+      border-radius: 999px;
+      background: rgba(13, 25, 42, 0.88);
+      color: #dff4ff;
+      padding: 6px 10px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      width: auto;
+    }
+    .mini-icon-btn.is-fav {
+      color: #10151d;
+      background: linear-gradient(135deg, #ffe58f, var(--gold));
+      border-color: transparent;
+    }
+    .smart-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .spotlight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .spotlight-card {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(125, 196, 255, 0.2);
+      background: rgba(6, 16, 28, 0.7);
+    }
+    .spotlight-card strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+    .favorites-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .favorite-link {
+      display: block;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(125, 196, 255, 0.18);
+      background: rgba(6, 16, 28, 0.64);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .favorite-link strong,
+    .favorite-link span,
+    .favorite-link code {
+      display: block;
+    }
+    .favorite-link span { color: var(--muted); font-size: 0.82rem; }
+    .favorite-link code { color: var(--accent); font-size: 0.74rem; margin-top: 5px; }
+    .notes-area {
+      min-height: 150px;
+    }
     @media (max-width: 980px) {
       .hero,
       .control-grid,
+      .smart-grid,
       .main-grid,
       .links-grid,
       .usage-grid {
         grid-template-columns: 1fr;
       }
       .grid-4,
+      .spotlight-grid,
+      .favorites-grid,
       .field-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
     @media (max-width: 640px) {
       .grid-4,
+      .spotlight-grid,
+      .favorites-grid,
       .field-grid {
         grid-template-columns: 1fr;
       }
@@ -379,6 +457,46 @@
         <input id="launcherSearch" class="launcher-search" type="search" placeholder="Search pages, sections, apps, easter eggs..." />
         <div class="chip-row" id="launcherFilters"></div>
         <div id="launcherGrid" class="launch-grid"></div>
+      </article>
+    </section>
+
+    <section class="smart-grid">
+      <article class="card stack">
+        <div>
+          <h2>Owner Spotlight</h2>
+          <p>See what matters most right now without scanning the whole dashboard.</p>
+        </div>
+        <div class="spotlight-grid">
+          <div class="spotlight-card">
+            <strong id="topPageSpotlight">waiting...</strong>
+            <span>Top page right now</span>
+          </div>
+          <div class="spotlight-card">
+            <strong id="topEventSpotlight">waiting...</strong>
+            <span>Latest event pulse</span>
+          </div>
+          <div class="spotlight-card">
+            <strong id="ownerSuggestion">waiting...</strong>
+            <span>Suggested owner move</span>
+          </div>
+        </div>
+      </article>
+      <article class="card stack">
+        <div>
+          <h2>Favorites + Notes</h2>
+          <p>Pin your most-used routes and keep quick owner notes saved in this browser.</p>
+        </div>
+        <div id="favoritesGrid" class="favorites-grid"></div>
+        <div>
+          <label for="ownerNotes">Owner notes</label>
+          <textarea id="ownerNotes" class="notes-area" placeholder="Write reminders, deploy notes, launch ideas, or fixes to do next..."></textarea>
+        </div>
+        <div class="actions">
+          <button id="saveNotesBtn" class="btn-secondary" type="button">Save Notes</button>
+          <button id="clearNotesBtn" class="btn-secondary" type="button">Clear Notes</button>
+          <button id="openAllAdminsBtn" class="btn-primary" type="button">Open Core Admin Set</button>
+        </div>
+        <p id="notesStatus" class="status-line">Favorites and notes ready.</p>
       </article>
     </section>
 
@@ -477,10 +595,12 @@
       const VERCEL_DASHBOARD = "https://vercel.com/krylos-projects/krishiv-new-portfoilo";
       const VERCEL_DEPLOYS = "https://vercel.com/krylos-projects/krishiv-new-portfoilo/deployments";
       const GITHUB_REPO = "https://github.com/Krylo-60/Krishiv-portfolio";
-      const GITHUB_COMMIT = "https://github.com/Krylo-60/Krishiv-portfolio/commit/aba40b3";
+      const GITHUB_COMMIT = "https://github.com/Krylo-60/Krishiv-portfolio/commit/6734ed9";
       const GITHUB_PAGES = "https://krylo-60.github.io/krishiv_new_portfoilo/";
       const THEME_KEY = "krishiv_theme_mode_v1";
       const FUTURE_MODE_KEY = "krishiv_future_mode_v1";
+      const OWNER_FAVORITES_KEY = "krishiv_owner_favorites_v1";
+      const OWNER_NOTES_KEY = "krishiv_owner_notes_v1";
       const THEME_ITEMS = [
         { key: "default", label: "Aurora" },
         { key: "neon", label: "Neon" },
@@ -586,6 +706,15 @@
       const launcherSearch = byId("launcherSearch");
       const launcherFilters = byId("launcherFilters");
       const launcherGrid = byId("launcherGrid");
+      const topPageSpotlight = byId("topPageSpotlight");
+      const topEventSpotlight = byId("topEventSpotlight");
+      const ownerSuggestion = byId("ownerSuggestion");
+      const favoritesGrid = byId("favoritesGrid");
+      const ownerNotes = byId("ownerNotes");
+      const saveNotesBtn = byId("saveNotesBtn");
+      const clearNotesBtn = byId("clearNotesBtn");
+      const openAllAdminsBtn = byId("openAllAdminsBtn");
+      const notesStatus = byId("notesStatus");
 
       const queryToken = String(new URLSearchParams(window.location.search).get("token") || "").trim();
       if (queryToken) {
@@ -603,6 +732,8 @@
 
       let autoTimer = 0;
       let activeLauncherFilter = "all";
+      let ownerFavorites = [];
+      let latestUsageSnapshot = { byPage: [], lastEvents: [] };
 
       function setStatus(node, text, level) {
         if (!node) return;
@@ -639,6 +770,17 @@
         try {
           localStorage.setItem(key, value);
         } catch {}
+      }
+
+      function readJsonStorage(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) return fallback;
+          const parsed = JSON.parse(raw);
+          return parsed == null ? fallback : parsed;
+        } catch {
+          return fallback;
+        }
       }
 
       async function api(path, options = {}) {
@@ -681,6 +823,57 @@
             return `<div class="event-row"><strong>${String(item.event || "event")}</strong> | <span>${String(item.page || "page")}</span> | <span>${time}</span></div>`;
           }).join("")
           : '<div class="event-row">No recent activity yet.</div>';
+      }
+
+      function renderFavorites() {
+        const favorites = ownerFavorites
+          .map((href) => LAUNCH_ITEMS.find((item) => item.href === href))
+          .filter(Boolean)
+          .slice(0, 6);
+        favoritesGrid.innerHTML = favorites.length
+          ? favorites.map((item) => `
+            <a class="favorite-link" href="${item.href}" target="_blank" rel="noopener noreferrer">
+              <strong>${item.label}</strong>
+              <span>${item.note}</span>
+              <code>${item.group}</code>
+            </a>
+          `).join("")
+          : '<div class="favorite-link"><strong>No pinned routes yet</strong><span>Use the star button in the launcher cards to pin your favorite pages.</span><code>favorites</code></div>';
+      }
+
+      function saveFavorites() {
+        writeStorage(OWNER_FAVORITES_KEY, JSON.stringify(ownerFavorites.slice(0, 12)));
+        renderFavorites();
+      }
+
+      function toggleFavorite(href) {
+        if (!href) return;
+        if (ownerFavorites.includes(href)) {
+          ownerFavorites = ownerFavorites.filter((item) => item !== href);
+          setStatus(notesStatus, "Removed route from favorites.", "warn");
+        } else {
+          ownerFavorites = [href, ...ownerFavorites.filter((item) => item !== href)].slice(0, 12);
+          setStatus(notesStatus, "Pinned route to favorites.", "ok");
+        }
+        saveFavorites();
+        renderLauncher();
+      }
+
+      function updateSpotlight() {
+        const topPage = Array.isArray(latestUsageSnapshot.byPage) && latestUsageSnapshot.byPage.length
+          ? latestUsageSnapshot.byPage[0]
+          : null;
+        const latestEvent = Array.isArray(latestUsageSnapshot.lastEvents) && latestUsageSnapshot.lastEvents.length
+          ? latestUsageSnapshot.lastEvents[0]
+          : null;
+        topPageSpotlight.textContent = topPage ? String(topPage.page || "unknown") : "no page data";
+        topEventSpotlight.textContent = latestEvent ? String(latestEvent.event || "event") : "no events";
+        let suggestion = "Review usage";
+        if (topPage && /review-app/i.test(String(topPage.page || ""))) suggestion = "Promote Review App";
+        else if (topPage && /games/i.test(String(topPage.page || ""))) suggestion = "Boost Games Hub";
+        else if (topPage && /index|home/i.test(String(topPage.page || ""))) suggestion = "Tune homepage";
+        else if (String(syncSourceStat.textContent || "").toLowerCase().includes("local")) suggestion = "Run full sync";
+        ownerSuggestion.textContent = suggestion;
       }
 
       async function loadHealth() {
@@ -739,6 +932,11 @@
         usageTotalStat.textContent = String(Number(data.totalEvents || 0));
         usageTodayStat.textContent = String(Number(data.uniqueSessionsToday || 0));
         renderTables(Array.isArray(data.byPage) ? data.byPage : [], Array.isArray(data.lastEvents) ? data.lastEvents : []);
+        latestUsageSnapshot = {
+          byPage: Array.isArray(data.byPage) ? data.byPage : [],
+          lastEvents: Array.isArray(data.lastEvents) ? data.lastEvents : []
+        };
+        updateSpotlight();
       }
 
       async function refreshAll(options = {}) {
@@ -823,11 +1021,18 @@
           return [item.label, item.note, item.href, item.group].join(" ").toLowerCase().includes(term);
         });
         launcherGrid.innerHTML = items.map((item) => `
-          <a class="launch-card" href="${item.href}" target="_blank" rel="noopener noreferrer">
-            <strong>${item.label}</strong>
-            <span>${item.note}</span>
-            <code>${item.group}</code>
-          </a>
+          <div class="launch-card">
+            <div class="launch-top">
+              <a class="launch-copy" href="${item.href}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">
+                <strong>${item.label}</strong>
+                <span>${item.note}</span>
+                <code>${item.group}</code>
+              </a>
+              <button class="mini-icon-btn ${ownerFavorites.includes(item.href) ? "is-fav" : ""}" type="button" data-fav-href="${item.href}">
+                ${ownerFavorites.includes(item.href) ? "Pinned" : "Pin"}
+              </button>
+            </div>
+          </div>
         `).join("");
         if (!items.length) {
           launcherGrid.innerHTML = '<div class="launch-card"><strong>No match</strong><span>Try another search or filter.</span><code>empty</code></div>';
@@ -902,8 +1107,13 @@
 
       renderThemeButtons();
       renderLauncherFilters();
+      ownerFavorites = readJsonStorage(OWNER_FAVORITES_KEY, []);
+      if (!Array.isArray(ownerFavorites)) ownerFavorites = [];
+      ownerNotes.value = String(readStorage(OWNER_NOTES_KEY, "") || "");
+      renderFavorites();
       renderLauncher();
       updateControlMeta();
+      updateSpotlight();
 
       refreshAllBtn.addEventListener("click", () => refreshAll({ fast: false }));
       loadSyncBtn.addEventListener("click", () => loadSync({ fast: false }).then(() => {
@@ -953,6 +1163,27 @@
         renderLauncher();
       });
       launcherSearch.addEventListener("input", renderLauncher);
+      launcherGrid.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-fav-href]");
+        if (!button) return;
+        event.preventDefault();
+        toggleFavorite(String(button.getAttribute("data-fav-href") || ""));
+      });
+      saveNotesBtn.addEventListener("click", () => {
+        writeStorage(OWNER_NOTES_KEY, String(ownerNotes.value || ""));
+        setStatus(notesStatus, "Owner notes saved in this browser.", "ok");
+      });
+      clearNotesBtn.addEventListener("click", () => {
+        ownerNotes.value = "";
+        writeStorage(OWNER_NOTES_KEY, "");
+        setStatus(notesStatus, "Owner notes cleared.", "warn");
+      });
+      openAllAdminsBtn.addEventListener("click", () => {
+        [withToken(BASE_URL + "/owner"), withToken(BASE_URL + "/admin"), withToken(BASE_URL + "/usage-admin")].forEach((href) => {
+          window.open(href, "_blank", "noopener,noreferrer");
+        });
+        setStatus(notesStatus, "Opened owner, main admin, and usage admin.", "ok");
+      });
 
       if (!token) {
         setStatus(ownerStatus, "Missing token. Open /owner?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
