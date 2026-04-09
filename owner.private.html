@@ -210,8 +210,83 @@
       font-size: 0.84rem;
     }
     .event-row:last-child { border-bottom: none; }
+    .control-grid {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .chip-row,
+    .theme-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip-btn {
+      border: 1px solid rgba(125, 196, 255, 0.22);
+      background: rgba(6, 16, 28, 0.7);
+      color: #dff2ff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .chip-btn.is-active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #05111d;
+      border-color: transparent;
+    }
+    .launcher-search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #06101b;
+      color: var(--text);
+      padding: 12px 14px;
+      outline: none;
+      font: inherit;
+      margin-bottom: 10px;
+    }
+    .launch-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      max-height: 420px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+    .launch-card {
+      display: block;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(125, 196, 255, 0.18);
+      background: rgba(6, 16, 28, 0.68);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .launch-card strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.94rem;
+    }
+    .launch-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .launch-card code {
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+    .launch-card:hover,
+    .launch-card:focus-visible {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+      outline: none;
+    }
     @media (max-width: 980px) {
       .hero,
+      .control-grid,
       .main-grid,
       .links-grid,
       .usage-grid {
@@ -230,6 +305,7 @@
       button,
       .link-btn { width: 100%; }
       .owner-link { align-items: flex-start; flex-direction: column; }
+      .launch-grid { grid-template-columns: 1fr; }
     }
   </style>
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
@@ -270,6 +346,40 @@
       <article class="stat"><strong id="syncSourceStat">checking...</strong><span>Sync source</span></article>
       <article class="stat"><strong id="usageTotalStat">0</strong><span>Total usage events</span></article>
       <article class="stat"><strong id="usageTodayStat">0</strong><span>Unique sessions today</span></article>
+    </section>
+
+    <section class="control-grid">
+      <article class="card stack">
+        <div>
+          <h2>Master Site Controls</h2>
+          <p>Change the live site theme, future mode, and hidden interface states from one owner panel.</p>
+        </div>
+        <div>
+          <label>Main theme</label>
+          <div class="theme-row" id="themeButtons"></div>
+        </div>
+        <div>
+          <label>Global toggles</label>
+          <div class="chip-row">
+            <button id="futureModeBtn" class="chip-btn" type="button">Future Mode</button>
+            <button id="openLauncherBtn" class="chip-btn" type="button">Open Public Launcher</button>
+            <button id="openSecretAuraBtn" class="chip-btn" type="button">Open Secret Aura</button>
+            <button id="copyThemePackBtn" class="chip-btn" type="button">Copy Owner State</button>
+          </div>
+        </div>
+        <p id="controlStatus" class="status-line">Theme and launcher controls ready.</p>
+        <p class="mono" id="controlMeta">Theme: default | Future mode: on</p>
+      </article>
+
+      <article class="card stack">
+        <div>
+          <h2>Global Quick Launcher</h2>
+          <p>Search every main page, section, app, concept page, hidden jump, and owner route from one place.</p>
+        </div>
+        <input id="launcherSearch" class="launcher-search" type="search" placeholder="Search pages, sections, apps, easter eggs..." />
+        <div class="chip-row" id="launcherFilters"></div>
+        <div id="launcherGrid" class="launch-grid"></div>
+      </article>
     </section>
 
     <section class="main-grid">
@@ -367,8 +477,79 @@
       const VERCEL_DASHBOARD = "https://vercel.com/krylos-projects/krishiv-new-portfoilo";
       const VERCEL_DEPLOYS = "https://vercel.com/krylos-projects/krishiv-new-portfoilo/deployments";
       const GITHUB_REPO = "https://github.com/Krylo-60/Krishiv-portfolio";
-      const GITHUB_COMMIT = "https://github.com/Krylo-60/Krishiv-portfolio/commit/020d872";
+      const GITHUB_COMMIT = "https://github.com/Krylo-60/Krishiv-portfolio/commit/aba40b3";
       const GITHUB_PAGES = "https://krylo-60.github.io/krishiv_new_portfoilo/";
+      const THEME_KEY = "krishiv_theme_mode_v1";
+      const FUTURE_MODE_KEY = "krishiv_future_mode_v1";
+      const THEME_ITEMS = [
+        { key: "default", label: "Aurora" },
+        { key: "neon", label: "Neon" },
+        { key: "solar", label: "Solar" }
+      ];
+      const LAUNCH_ITEMS = [
+        { label: "Home", note: "Main landing page", href: BASE_URL + "/", group: "main" },
+        { label: "Projects", note: "Projects page", href: BASE_URL + "/projects.html", group: "main" },
+        { label: "Contact", note: "Contact page", href: BASE_URL + "/contact.html", group: "main" },
+        { label: "Games Hub", note: "Games profile page", href: BASE_URL + "/games.html", group: "main" },
+        { label: "Review App", note: "Feedback tool", href: BASE_URL + "/review-app.html", group: "apps" },
+        { label: "Master Nexus", note: "YouTube creator live build", href: BASE_URL + "/krylo-blox-master-nexus.html", group: "main" },
+        { label: "Home > Projects Section", note: "Jump to public projects area", href: BASE_URL + "/#projects", group: "sections" },
+        { label: "Home > Contact Section", note: "Jump to public contact area", href: BASE_URL + "/#contact", group: "sections" },
+        { label: "Home > Future Section", note: "Jump to future plans", href: BASE_URL + "/#future", group: "sections" },
+        { label: "Home > App Verse", note: "Jump to app universe gallery", href: BASE_URL + "/#app-verse", group: "sections" },
+        { label: "Home > Command Center", note: "Jump to command center", href: BASE_URL + "/#command-center", group: "sections" },
+        { label: "Home > Secret Aura", note: "Jump to footer easter egg", href: BASE_URL + "/#contact", group: "easter" },
+        { label: "Owner Dashboard", note: "Private owner nexus", href: withToken(BASE_URL + "/owner"), group: "admin" },
+        { label: "Main Admin", note: "YouTube sync admin", href: withToken(BASE_URL + "/admin"), group: "admin" },
+        { label: "Usage Admin", note: "Usage analytics admin", href: withToken(BASE_URL + "/usage-admin"), group: "admin" },
+        { label: "Study Planner", note: "Productivity app", href: BASE_URL + "/study-planner.html", group: "apps" },
+        { label: "Quiz Zone", note: "Interactive quiz app", href: BASE_URL + "/quiz-zone.html", group: "apps" },
+        { label: "Focus Timer", note: "Focus tool", href: BASE_URL + "/focus-timer.html", group: "apps" },
+        { label: "Habit Tracker", note: "Habit streak system", href: BASE_URL + "/habit-tracker.html", group: "apps" },
+        { label: "Idea Lab AI", note: "Idea generation app", href: BASE_URL + "/idea-lab-ai.html", group: "apps" },
+        { label: "Expense Tracker", note: "Finance app", href: BASE_URL + "/expense-tracker.html", group: "apps" },
+        { label: "Notes Vault", note: "Notes manager", href: BASE_URL + "/notes-vault.html", group: "apps" },
+        { label: "Flashcards", note: "Revision helper", href: BASE_URL + "/flashcards.html", group: "apps" },
+        { label: "Typing Test", note: "Typing speed app", href: BASE_URL + "/typing-test.html", group: "apps" },
+        { label: "Task Kanban", note: "Task board", href: BASE_URL + "/task-kanban.html", group: "apps" },
+        { label: "Unit Converter", note: "Quick converter", href: BASE_URL + "/unit-converter.html", group: "apps" },
+        { label: "Grade Calculator", note: "Marks calculator", href: BASE_URL + "/grade-calculator.html", group: "apps" },
+        { label: "Daily Journal", note: "Journal app", href: BASE_URL + "/daily-journal.html", group: "apps" },
+        { label: "Goal Planner", note: "Goal planning app", href: BASE_URL + "/goal-planner.html", group: "apps" },
+        { label: "Reading Tracker", note: "Reading app", href: BASE_URL + "/reading-tracker.html", group: "apps" },
+        { label: "Water Reminder", note: "Hydration helper", href: BASE_URL + "/water-reminder.html", group: "apps" },
+        { label: "Presentation Planner", note: "School presentation app", href: BASE_URL + "/presentation-planner.html", group: "apps" },
+        { label: "Code Snippets Vault", note: "Code library", href: BASE_URL + "/code-snippets-vault.html", group: "apps" },
+        { label: "Mind Map Board", note: "Idea mapping app", href: BASE_URL + "/mind-map-board.html", group: "apps" },
+        { label: "Bazaar Blitz", note: "Marketplace app", href: BASE_URL + "/bazaar-blitz.html", group: "apps" },
+        { label: "VoteStorm Arena", note: "Voting app", href: BASE_URL + "/votestorm-arena.html", group: "apps" },
+        { label: "Time Capsule Lab", note: "Memory capsule app", href: BASE_URL + "/time-capsule-lab.html", group: "concepts" },
+        { label: "StoryForge Studio", note: "Story builder app", href: BASE_URL + "/storyforge-studio.html", group: "concepts" },
+        { label: "Meal Planner", note: "Meal planning app", href: BASE_URL + "/meal-planner.html", group: "concepts" },
+        { label: "Color Palette Lab", note: "Palette lab", href: BASE_URL + "/color-palette-lab.html", group: "concepts" },
+        { label: "Resume Studio", note: "Resume builder", href: BASE_URL + "/resume-studio.html", group: "concepts" },
+        { label: "Homework Hub", note: "Concept app", href: BASE_URL + "/homework-hub.html", group: "concepts" },
+        { label: "Attendance Tracker", note: "Concept app", href: BASE_URL + "/attendance-tracker.html", group: "concepts" },
+        { label: "Link Locker", note: "Concept app", href: BASE_URL + "/link-locker.html", group: "concepts" },
+        { label: "Habit Heatmap", note: "Concept app", href: BASE_URL + "/habit-heatmap.html", group: "concepts" },
+        { label: "Focus Music Deck", note: "Concept app", href: BASE_URL + "/focus-music-deck.html", group: "concepts" },
+        { label: "Thumbnail Idea Board", note: "Concept app", href: BASE_URL + "/thumbnail-idea-board.html", group: "concepts" },
+        { label: "Script Planner", note: "Concept app", href: BASE_URL + "/script-planner.html", group: "concepts" },
+        { label: "Upload Calendar", note: "Concept app", href: BASE_URL + "/upload-calendar.html", group: "concepts" },
+        { label: "Stream Overlay Kit", note: "Concept app", href: BASE_URL + "/stream-overlay-kit.html", group: "concepts" },
+        { label: "QR Generator Pro", note: "Concept app", href: BASE_URL + "/qr-generator-pro.html", group: "concepts" },
+        { label: "Pomodoro Duel", note: "Concept app", href: BASE_URL + "/pomodoro-duel.html", group: "concepts" },
+        { label: "Revision Race", note: "Concept app", href: BASE_URL + "/revision-race.html", group: "concepts" },
+        { label: "Scholarship Finder", note: "Concept app", href: BASE_URL + "/scholarship-finder.html", group: "concepts" },
+        { label: "Portfolio Asset Vault", note: "Concept app", href: BASE_URL + "/portfolio-asset-vault.html", group: "concepts" },
+        { label: "Poll Party", note: "Concept app", href: BASE_URL + "/poll-party.html", group: "concepts" },
+        { label: "Emoji Story Maker", note: "Concept app", href: BASE_URL + "/emoji-story-maker.html", group: "concepts" },
+        { label: "Team Splitter", note: "Concept app", href: BASE_URL + "/team-splitter.html", group: "concepts" },
+        { label: "Exam Countdown", note: "Concept app", href: BASE_URL + "/exam-countdown.html", group: "concepts" },
+        { label: "Screenshot Annotator", note: "Concept app", href: BASE_URL + "/screenshot-annotator.html", group: "concepts" },
+        { label: "Open Ctrl/Cmd + K Launcher", note: "Public quick launcher hint", href: BASE_URL + "/", group: "easter" },
+        { label: "Future Mode Toggle Hint", note: "Alt + F on supported pages", href: BASE_URL + "/", group: "easter" }
+      ];
 
       const byId = (id) => document.getElementById(id);
       const refreshAllBtn = byId("refreshAllBtn");
@@ -395,6 +576,16 @@
       const ownerSelfLink = byId("ownerSelfLink");
       const mainAdminLink = byId("mainAdminLink");
       const usageAdminLink = byId("usageAdminLink");
+      const themeButtons = byId("themeButtons");
+      const futureModeBtn = byId("futureModeBtn");
+      const openLauncherBtn = byId("openLauncherBtn");
+      const openSecretAuraBtn = byId("openSecretAuraBtn");
+      const copyThemePackBtn = byId("copyThemePackBtn");
+      const controlStatus = byId("controlStatus");
+      const controlMeta = byId("controlMeta");
+      const launcherSearch = byId("launcherSearch");
+      const launcherFilters = byId("launcherFilters");
+      const launcherGrid = byId("launcherGrid");
 
       const queryToken = String(new URLSearchParams(window.location.search).get("token") || "").trim();
       if (queryToken) {
@@ -411,6 +602,7 @@
         || String(localStorage.getItem(USAGE_KEY) || "").trim();
 
       let autoTimer = 0;
+      let activeLauncherFilter = "all";
 
       function setStatus(node, text, level) {
         if (!node) return;
@@ -432,6 +624,21 @@
         if (!token) return path;
         const joiner = path.includes("?") ? "&" : "?";
         return path + joiner + "token=" + encodeURIComponent(token);
+      }
+
+      function readStorage(key, fallback) {
+        try {
+          const value = localStorage.getItem(key);
+          return value == null || value === "" ? fallback : value;
+        } catch {
+          return fallback;
+        }
+      }
+
+      function writeStorage(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch {}
       }
 
       async function api(path, options = {}) {
@@ -553,6 +760,80 @@
         }
       }
 
+      function currentThemeKey() {
+        return String(readStorage(THEME_KEY, "default") || "default");
+      }
+
+      function currentFutureMode() {
+        return String(readStorage(FUTURE_MODE_KEY, "on") || "on");
+      }
+
+      function renderThemeButtons() {
+        const active = currentThemeKey();
+        themeButtons.innerHTML = THEME_ITEMS.map((item) => `
+          <button class="chip-btn ${item.key === active ? "is-active" : ""}" type="button" data-theme-key="${item.key}">
+            ${item.label}
+          </button>
+        `).join("");
+      }
+
+      function updateControlMeta() {
+        const theme = currentThemeKey();
+        const future = currentFutureMode();
+        controlMeta.textContent = "Theme: " + theme + " | Future mode: " + future;
+        futureModeBtn.classList.toggle("is-active", future === "on");
+        renderThemeButtons();
+      }
+
+      function applyThemeControl(themeKey) {
+        writeStorage(THEME_KEY, themeKey);
+        updateControlMeta();
+        setStatus(controlStatus, "Saved global theme: " + themeKey, "ok");
+      }
+
+      function toggleFutureMode() {
+        const next = currentFutureMode() === "on" ? "off" : "on";
+        writeStorage(FUTURE_MODE_KEY, next);
+        updateControlMeta();
+        setStatus(controlStatus, "Future mode set to " + next + ".", "ok");
+      }
+
+      function renderLauncherFilters() {
+        const filters = [
+          { key: "all", label: "All" },
+          { key: "main", label: "Main" },
+          { key: "sections", label: "Sections" },
+          { key: "admin", label: "Admin" },
+          { key: "apps", label: "Apps" },
+          { key: "concepts", label: "Concepts" },
+          { key: "easter", label: "Easter" }
+        ];
+        launcherFilters.innerHTML = filters.map((item) => `
+          <button class="chip-btn ${item.key === activeLauncherFilter ? "is-active" : ""}" type="button" data-filter-key="${item.key}">
+            ${item.label}
+          </button>
+        `).join("");
+      }
+
+      function renderLauncher() {
+        const term = String(launcherSearch.value || "").trim().toLowerCase();
+        const items = LAUNCH_ITEMS.filter((item) => {
+          if (activeLauncherFilter !== "all" && item.group !== activeLauncherFilter) return false;
+          if (!term) return true;
+          return [item.label, item.note, item.href, item.group].join(" ").toLowerCase().includes(term);
+        });
+        launcherGrid.innerHTML = items.map((item) => `
+          <a class="launch-card" href="${item.href}" target="_blank" rel="noopener noreferrer">
+            <strong>${item.label}</strong>
+            <span>${item.note}</span>
+            <code>${item.group}</code>
+          </a>
+        `).join("");
+        if (!items.length) {
+          launcherGrid.innerHTML = '<div class="launch-card"><strong>No match</strong><span>Try another search or filter.</span><code>empty</code></div>';
+        }
+      }
+
       function startAutoRefresh() {
         if (autoTimer) clearInterval(autoTimer);
         autoTimer = setInterval(() => refreshAll({ fast: true }), 20000);
@@ -579,6 +860,8 @@
           "Health API: " + BASE_URL + "/api/health",
           "Sync API: " + BASE_URL + "/api/yt-portfolio-sync",
           "Usage Stats API: " + withToken(BASE_URL + "/api/usage/stats"),
+          "Theme Key: " + currentThemeKey(),
+          "Future Mode: " + currentFutureMode(),
           "GitHub Repo: " + GITHUB_REPO,
           "Vercel Dashboard: " + VERCEL_DASHBOARD,
           "Vercel Deploys: " + VERCEL_DEPLOYS,
@@ -617,6 +900,11 @@
       mainAdminLink.href = withToken("/admin");
       usageAdminLink.href = withToken("/usage-admin");
 
+      renderThemeButtons();
+      renderLauncherFilters();
+      renderLauncher();
+      updateControlMeta();
+
       refreshAllBtn.addEventListener("click", () => refreshAll({ fast: false }));
       loadSyncBtn.addEventListener("click", () => loadSync({ fast: false }).then(() => {
         setStatus(publishStatus, "Loaded current sync values.", "ok");
@@ -629,6 +917,42 @@
         else startAutoRefresh();
       });
       copyPackBtn.addEventListener("click", copyLinkPack);
+      themeButtons.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-theme-key]");
+        if (!button) return;
+        applyThemeControl(String(button.getAttribute("data-theme-key") || "default"));
+      });
+      futureModeBtn.addEventListener("click", toggleFutureMode);
+      openLauncherBtn.addEventListener("click", () => {
+        window.open(BASE_URL + "/", "_blank", "noopener,noreferrer");
+        setStatus(controlStatus, "Opened live site. Press Ctrl/Cmd + K there for the public launcher.", "ok");
+      });
+      openSecretAuraBtn.addEventListener("click", () => {
+        window.open(BASE_URL + "/#contact", "_blank", "noopener,noreferrer");
+        setStatus(controlStatus, "Opened the home page near the hidden footer zone.", "ok");
+      });
+      copyThemePackBtn.addEventListener("click", async () => {
+        const payload = [
+          "Theme=" + currentThemeKey(),
+          "FutureMode=" + currentFutureMode(),
+          "LauncherHint=Ctrl/Cmd+K",
+          "FutureToggleHint=Alt+F"
+        ].join("\n");
+        try {
+          await navigator.clipboard.writeText(payload);
+          setStatus(controlStatus, "Copied owner control state.", "ok");
+        } catch {
+          setStatus(controlStatus, "Clipboard blocked while copying owner state.", "warn");
+        }
+      });
+      launcherFilters.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-filter-key]");
+        if (!button) return;
+        activeLauncherFilter = String(button.getAttribute("data-filter-key") || "all");
+        renderLauncherFilters();
+        renderLauncher();
+      });
+      launcherSearch.addEventListener("input", renderLauncher);
 
       if (!token) {
         setStatus(ownerStatus, "Missing token. Open /owner?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
