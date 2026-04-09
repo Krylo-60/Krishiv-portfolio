@@ -327,6 +327,36 @@
     if (event.key === THEME_KEY) {
       activeTheme = safeGet(THEME_KEY, activeTheme);
       refreshButtons();
+      return;
+    }
+    if (event.key === FAV_KEY) {
+      try {
+        favorites = JSON.parse(safeGet(FAV_KEY, "[]"));
+        if (!Array.isArray(favorites)) favorites = [];
+      } catch {
+        favorites = [];
+      }
+      renderGrid(searchInput ? searchInput.value : "");
+      return;
+    }
+    if (event.key === RECENT_KEY) {
+      try {
+        recents = JSON.parse(safeGet(RECENT_KEY, "[]"));
+        if (!Array.isArray(recents)) recents = [];
+      } catch {
+        recents = [];
+      }
+      renderGrid(searchInput ? searchInput.value : "");
+      return;
+    }
+    if (event.key === STATS_KEY) {
+      try {
+        stats = JSON.parse(safeGet(STATS_KEY, "{}"));
+        if (!stats || typeof stats !== "object") stats = {};
+      } catch {
+        stats = {};
+      }
+      renderGrid(searchInput ? searchInput.value : "");
     }
   });
 

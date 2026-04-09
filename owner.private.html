@@ -369,10 +369,45 @@
     .notes-area {
       min-height: 150px;
     }
+    .ops-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .audit-list {
+      display: grid;
+      gap: 8px;
+    }
+    .audit-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(125, 196, 255, 0.16);
+      background: rgba(6, 16, 28, 0.62);
+    }
+    .audit-row strong {
+      font-size: 0.9rem;
+    }
+    .audit-pill {
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      background: rgba(125, 196, 255, 0.12);
+      color: #dff5ff;
+    }
+    .audit-pill.ok { background: rgba(52, 211, 153, 0.18); color: #9ff0cc; }
+    .audit-pill.warn { background: rgba(245, 158, 11, 0.18); color: #ffd089; }
+    .audit-pill.err { background: rgba(251, 113, 133, 0.18); color: #ffb4c2; }
     @media (max-width: 980px) {
       .hero,
       .control-grid,
       .smart-grid,
+      .ops-grid,
       .main-grid,
       .links-grid,
       .usage-grid {
@@ -512,6 +547,34 @@
       </article>
     </section>
 
+    <section class="ops-grid">
+      <article class="card stack">
+        <div>
+          <h2>App Universe Controls</h2>
+          <p>Manage favorites, recents, and launch stats used by the public app shell and future panels.</p>
+        </div>
+        <div class="actions">
+          <button id="setStarterFavsBtn" class="btn-primary" type="button">Set Starter Favorites</button>
+          <button id="clearRecentsBtn" class="btn-secondary" type="button">Clear Recents</button>
+          <button id="resetLaunchStatsBtn" class="btn-secondary" type="button">Reset Launch Stats</button>
+          <button id="clearPublicStateBtn" class="btn-secondary" type="button">Clear Public State</button>
+        </div>
+        <p id="publicStateStatus" class="status-line">Public app state controls ready.</p>
+        <p class="mono" id="publicStateMeta">Favorites: 0 | Recents: 0 | Launch stats: 0</p>
+      </article>
+      <article class="card stack">
+        <div>
+          <h2>Live Feature Audit</h2>
+          <p>Check key pages and APIs from inside the owner dashboard to confirm the main web is healthy.</p>
+        </div>
+        <div class="actions">
+          <button id="runAuditBtn" class="btn-primary" type="button">Run Site Audit</button>
+        </div>
+        <div id="auditList" class="audit-list"></div>
+        <p id="auditStatus" class="status-line">Audit ready.</p>
+      </article>
+    </section>
+
     <section class="main-grid">
       <article class="card stack">
         <div>
@@ -613,6 +676,9 @@
       const FUTURE_MODE_KEY = "krishiv_future_mode_v1";
       const OWNER_FAVORITES_KEY = "krishiv_owner_favorites_v1";
       const OWNER_NOTES_KEY = "krishiv_owner_notes_v1";
+      const APP_FAVORITES_KEY = "krishiv_app_favorites_v1";
+      const APP_RECENTS_KEY = "krishiv_app_recents_v1";
+      const APP_STATS_KEY = "krishiv_app_launch_stats_v1";
       const THEME_ITEMS = [
         { key: "default", label: "Aurora" },
         { key: "neon", label: "Neon" },
@@ -663,6 +729,15 @@
       const clearNotesBtn = byId("clearNotesBtn");
       const openAllAdminsBtn = byId("openAllAdminsBtn");
       const notesStatus = byId("notesStatus");
+      const setStarterFavsBtn = byId("setStarterFavsBtn");
+      const clearRecentsBtn = byId("clearRecentsBtn");
+      const resetLaunchStatsBtn = byId("resetLaunchStatsBtn");
+      const clearPublicStateBtn = byId("clearPublicStateBtn");
+      const publicStateStatus = byId("publicStateStatus");
+      const publicStateMeta = byId("publicStateMeta");
+      const runAuditBtn = byId("runAuditBtn");
+      const auditList = byId("auditList");
+      const auditStatus = byId("auditStatus");
 
       const queryToken = String(new URLSearchParams(window.location.search).get("token") || "").trim();
       if (queryToken) {
@@ -798,6 +873,10 @@
         }
       }
 
+      function writeJsonStorage(key, value) {
+        writeStorage(key, JSON.stringify(value));
+      }
+
       async function api(path, options = {}) {
         const headers = {
           "x-admin-token": token,
@@ -889,6 +968,95 @@
         else if (topPage && /index|home/i.test(String(topPage.page || ""))) suggestion = "Tune homepage";
         else if (String(syncSourceStat.textContent || "").toLowerCase().includes("local")) suggestion = "Run full sync";
         ownerSuggestion.textContent = suggestion;
+      }
+
+      function starterFavorites() {
+        return [
+          "study-planner.html",
+          "review-app.html",
+          "idea-lab-ai.html",
+          "krylo-blox-master-nexus.html",
+          "games.html",
+          "projects.html"
+        ];
+      }
+
+      function updatePublicStateMeta() {
+        const favs = readJsonStorage(APP_FAVORITES_KEY, []);
+        const recs = readJsonStorage(APP_RECENTS_KEY, []);
+        const stats = readJsonStorage(APP_STATS_KEY, {});
+        const statCount = stats && typeof stats === "object" ? Object.keys(stats).length : 0;
+        publicStateMeta.textContent = "Favorites: " + (Array.isArray(favs) ? favs.length : 0)
+          + " | Recents: " + (Array.isArray(recs) ? recs.length : 0)
+          + " | Launch stats: " + statCount;
+      }
+
+      function setStarterFavorites() {
+        writeJsonStorage(APP_FAVORITES_KEY, starterFavorites());
+        updatePublicStateMeta();
+        setStatus(publicStateStatus, "Starter favorites saved for the public app shell.", "ok");
+      }
+
+      function clearRecents() {
+        writeJsonStorage(APP_RECENTS_KEY, []);
+        updatePublicStateMeta();
+        setStatus(publicStateStatus, "Public recents cleared.", "warn");
+      }
+
+      function resetLaunchStats() {
+        writeJsonStorage(APP_STATS_KEY, {});
+        updatePublicStateMeta();
+        updateSpotlight();
+        setStatus(publicStateStatus, "Launch stats reset.", "warn");
+      }
+
+      function clearPublicState() {
+        writeJsonStorage(APP_FAVORITES_KEY, []);
+        writeJsonStorage(APP_RECENTS_KEY, []);
+        writeJsonStorage(APP_STATS_KEY, {});
+        updatePublicStateMeta();
+        setStatus(publicStateStatus, "Cleared public app state keys.", "warn");
+      }
+
+      async function runAudit() {
+        const targets = [
+          { label: "Homepage", url: BASE_URL + "/", check: (text) => /Quick Launcher/.test(text) },
+          { label: "Projects Page", url: BASE_URL + "/projects.html", check: (text) => /Projects/i.test(text) },
+          { label: "Games Page", url: BASE_URL + "/games.html", check: (text) => /Aura: Maximum|Games/i.test(text) },
+          { label: "Review App", url: BASE_URL + "/review-app.html", check: (text) => /review/i.test(text) },
+          { label: "Health API", url: BASE_URL + "/api/health", check: (text) => /ok|healthy|true/i.test(text) },
+          { label: "Usage API", url: withToken(BASE_URL + "/api/usage/stats"), check: (text) => /totalEvents|uniqueSessionsToday/i.test(text) }
+        ];
+        setStatus(auditStatus, "Running live site audit...", "");
+        auditList.innerHTML = "";
+        const rows = [];
+        for (const item of targets) {
+          try {
+            const response = await fetch(item.url, { cache: "no-store" });
+            const text = await response.text();
+            const ok = response.ok && item.check(text);
+            rows.push({
+              label: item.label,
+              state: ok ? "ok" : "warn",
+              text: ok ? "pass" : "check"
+            });
+          } catch {
+            rows.push({
+              label: item.label,
+              state: "err",
+              text: "fail"
+            });
+          }
+        }
+        auditList.innerHTML = rows.map((row) => `
+          <div class="audit-row">
+            <strong>${row.label}</strong>
+            <span class="audit-pill ${row.state}">${row.text}</span>
+          </div>
+        `).join("");
+        const hasFail = rows.some((row) => row.state === "err");
+        const hasWarn = rows.some((row) => row.state === "warn");
+        setStatus(auditStatus, hasFail ? "Audit found failures." : hasWarn ? "Audit finished with checks." : "All key routes passed audit.", hasFail ? "err" : hasWarn ? "warn" : "ok");
       }
 
       async function loadHealth() {
@@ -1130,6 +1298,7 @@
       renderLauncher();
       updateControlMeta();
       updateSpotlight();
+      updatePublicStateMeta();
 
       window.addEventListener("storage", (event) => {
         if (event.key === THEME_KEY || event.key === FUTURE_MODE_KEY) {
@@ -1145,6 +1314,11 @@
         }
         if (event.key === OWNER_NOTES_KEY) {
           ownerNotes.value = String(readStorage(OWNER_NOTES_KEY, "") || "");
+          return;
+        }
+        if (event.key === APP_FAVORITES_KEY || event.key === APP_RECENTS_KEY || event.key === APP_STATS_KEY) {
+          updatePublicStateMeta();
+          updateSpotlight();
         }
       });
 
@@ -1217,6 +1391,11 @@
         });
         setStatus(notesStatus, "Opened owner, main admin, and usage admin.", "ok");
       });
+      setStarterFavsBtn.addEventListener("click", setStarterFavorites);
+      clearRecentsBtn.addEventListener("click", clearRecents);
+      resetLaunchStatsBtn.addEventListener("click", resetLaunchStats);
+      clearPublicStateBtn.addEventListener("click", clearPublicState);
+      runAuditBtn.addEventListener("click", runAudit);
 
       if (!token) {
         setStatus(ownerStatus, "Missing token. Open /owner?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
