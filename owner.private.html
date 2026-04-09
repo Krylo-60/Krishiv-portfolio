@@ -403,17 +403,72 @@
     .audit-pill.ok { background: rgba(52, 211, 153, 0.18); color: #9ff0cc; }
     .audit-pill.warn { background: rgba(245, 158, 11, 0.18); color: #ffd089; }
     .audit-pill.err { background: rgba(251, 113, 133, 0.18); color: #ffb4c2; }
+    .power-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .workflow-card {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(125, 196, 255, 0.18);
+      background: rgba(6, 16, 28, 0.66);
+    }
+    .workflow-card strong,
+    .workflow-card span,
+    .workflow-card code {
+      display: block;
+    }
+    .workflow-card span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin: 6px 0;
+    }
+    .workflow-card code {
+      color: var(--accent);
+      font-size: 0.74rem;
+      margin-bottom: 10px;
+    }
+    .console-box {
+      display: grid;
+      gap: 8px;
+      max-height: 280px;
+      overflow: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(125, 196, 255, 0.16);
+      background: rgba(6, 16, 28, 0.62);
+      padding: 10px;
+    }
+    .console-line {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 0.76rem;
+      color: #d9f0ff;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(125, 196, 255, 0.1);
+    }
+    .console-line:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
     @media (max-width: 980px) {
       .hero,
       .control-grid,
       .smart-grid,
       .ops-grid,
+      .power-grid,
       .main-grid,
       .links-grid,
       .usage-grid {
         grid-template-columns: 1fr;
       }
       .grid-4,
+      .workflow-grid,
       .spotlight-grid,
       .favorites-grid,
       .field-grid {
@@ -422,6 +477,7 @@
     }
     @media (max-width: 640px) {
       .grid-4,
+      .workflow-grid,
       .spotlight-grid,
       .favorites-grid,
       .field-grid {
@@ -572,6 +628,43 @@
         </div>
         <div id="auditList" class="audit-list"></div>
         <p id="auditStatus" class="status-line">Audit ready.</p>
+      </article>
+    </section>
+
+    <section class="power-grid">
+      <article class="card stack">
+        <div>
+          <h2>Command Deck</h2>
+          <p>Run high-impact owner workflows with one click instead of opening everything manually.</p>
+        </div>
+        <div class="workflow-grid">
+          <div class="workflow-card">
+            <strong>Creator Suite</strong>
+            <span>Open owner, main admin, usage admin, and Master Nexus together.</span>
+            <code>owner + admin + usage + nexus</code>
+            <button id="launchCreatorSuiteBtn" class="btn-primary" type="button">Launch</button>
+          </div>
+          <div class="workflow-card">
+            <strong>Audience Suite</strong>
+            <span>Open homepage, projects, contact, games, and review app together.</span>
+            <code>public showcase tabs</code>
+            <button id="launchAudienceSuiteBtn" class="btn-primary" type="button">Launch</button>
+          </div>
+          <div class="workflow-card">
+            <strong>Snapshot Pack</strong>
+            <span>Copy a clean text snapshot of live state, sync info, theme, and usage.</span>
+            <code>ready for notes or sharing</code>
+            <button id="copySnapshotBtn" class="btn-primary" type="button">Copy</button>
+          </div>
+        </div>
+        <p class="mono">Shortcuts: <code>/</code> focus launcher, <code>Shift + R</code> refresh, <code>Shift + A</code> run audit, <code>Shift + C</code> copy snapshot</p>
+      </article>
+      <article class="card stack">
+        <div>
+          <h2>Owner Console</h2>
+          <p>Every important owner action is logged here so you always know what just happened.</p>
+        </div>
+        <div id="ownerConsole" class="console-box"></div>
       </article>
     </section>
 
@@ -738,6 +831,10 @@
       const runAuditBtn = byId("runAuditBtn");
       const auditList = byId("auditList");
       const auditStatus = byId("auditStatus");
+      const launchCreatorSuiteBtn = byId("launchCreatorSuiteBtn");
+      const launchAudienceSuiteBtn = byId("launchAudienceSuiteBtn");
+      const copySnapshotBtn = byId("copySnapshotBtn");
+      const ownerConsole = byId("ownerConsole");
 
       const queryToken = String(new URLSearchParams(window.location.search).get("token") || "").trim();
       if (queryToken) {
@@ -757,11 +854,20 @@
       let activeLauncherFilter = "all";
       let ownerFavorites = [];
       let latestUsageSnapshot = { byPage: [], lastEvents: [] };
+      let ownerConsoleLines = [];
 
       function setStatus(node, text, level) {
         if (!node) return;
         node.textContent = text;
         node.className = "status-line " + (level || "");
+      }
+
+      function logAction(text) {
+        const line = "[" + new Date().toLocaleTimeString("en-IN") + "] " + text;
+        ownerConsoleLines = [line, ...ownerConsoleLines].slice(0, 18);
+        ownerConsole.innerHTML = ownerConsoleLines.length
+          ? ownerConsoleLines.map((item) => `<div class="console-line">${item}</div>`).join("")
+          : '<div class="console-line">Console ready.</div>';
       }
 
       function setSyncMeta(data) {
@@ -995,12 +1101,14 @@
         writeJsonStorage(APP_FAVORITES_KEY, starterFavorites());
         updatePublicStateMeta();
         setStatus(publicStateStatus, "Starter favorites saved for the public app shell.", "ok");
+        logAction("Saved starter public app favorites.");
       }
 
       function clearRecents() {
         writeJsonStorage(APP_RECENTS_KEY, []);
         updatePublicStateMeta();
         setStatus(publicStateStatus, "Public recents cleared.", "warn");
+        logAction("Cleared public app recents.");
       }
 
       function resetLaunchStats() {
@@ -1008,6 +1116,7 @@
         updatePublicStateMeta();
         updateSpotlight();
         setStatus(publicStateStatus, "Launch stats reset.", "warn");
+        logAction("Reset public launch stats.");
       }
 
       function clearPublicState() {
@@ -1016,6 +1125,7 @@
         writeJsonStorage(APP_STATS_KEY, {});
         updatePublicStateMeta();
         setStatus(publicStateStatus, "Cleared public app state keys.", "warn");
+        logAction("Cleared public app state.");
       }
 
       async function runAudit() {
@@ -1057,6 +1167,36 @@
         const hasFail = rows.some((row) => row.state === "err");
         const hasWarn = rows.some((row) => row.state === "warn");
         setStatus(auditStatus, hasFail ? "Audit found failures." : hasWarn ? "Audit finished with checks." : "All key routes passed audit.", hasFail ? "err" : hasWarn ? "warn" : "ok");
+        logAction(hasFail ? "Live audit found failures." : hasWarn ? "Live audit finished with checks." : "Live audit passed.");
+      }
+
+      async function copySnapshot() {
+        const snapshot = [
+          "Owner Snapshot",
+          "Theme: " + currentThemeKey(),
+          "Future mode: " + currentFutureMode(),
+          "Sync source: " + String(syncSourceStat.textContent || "unknown"),
+          "API health: " + String(healthState.textContent || "unknown"),
+          "Usage events: " + String(usageTotalStat.textContent || "0"),
+          "Unique sessions today: " + String(usageTodayStat.textContent || "0"),
+          "Top page: " + String(topPageSpotlight.textContent || "none"),
+          "Latest event: " + String(topEventSpotlight.textContent || "none"),
+          "Suggestion: " + String(ownerSuggestion.textContent || "none"),
+          "Last refresh: " + String(lastRefreshLine.textContent || "--")
+        ].join("\n");
+        try {
+          await navigator.clipboard.writeText(snapshot);
+          setStatus(ownerStatus, "Owner snapshot copied.", "ok");
+          logAction("Copied owner snapshot to clipboard.");
+        } catch {
+          setStatus(ownerStatus, "Snapshot copy failed.", "warn");
+          logAction("Snapshot copy failed.");
+        }
+      }
+
+      function openMany(urls, label) {
+        urls.forEach((href) => window.open(href, "_blank", "noopener,noreferrer"));
+        logAction("Opened " + label + ".");
       }
 
       async function loadHealth() {
@@ -1299,6 +1439,7 @@
       updateControlMeta();
       updateSpotlight();
       updatePublicStateMeta();
+      logAction("Owner dashboard ready.");
 
       window.addEventListener("storage", (event) => {
         if (event.key === THEME_KEY || event.key === FUTURE_MODE_KEY) {
@@ -1390,12 +1531,55 @@
           window.open(href, "_blank", "noopener,noreferrer");
         });
         setStatus(notesStatus, "Opened owner, main admin, and usage admin.", "ok");
+        logAction("Opened core admin set.");
       });
       setStarterFavsBtn.addEventListener("click", setStarterFavorites);
       clearRecentsBtn.addEventListener("click", clearRecents);
       resetLaunchStatsBtn.addEventListener("click", resetLaunchStats);
       clearPublicStateBtn.addEventListener("click", clearPublicState);
       runAuditBtn.addEventListener("click", runAudit);
+      launchCreatorSuiteBtn.addEventListener("click", () => {
+        openMany([
+          withToken(BASE_URL + "/owner"),
+          withToken(BASE_URL + "/admin"),
+          withToken(BASE_URL + "/usage-admin"),
+          BASE_URL + "/krylo-blox-master-nexus.html"
+        ], "creator suite");
+      });
+      launchAudienceSuiteBtn.addEventListener("click", () => {
+        openMany([
+          BASE_URL + "/",
+          BASE_URL + "/projects.html",
+          BASE_URL + "/contact.html",
+          BASE_URL + "/games.html",
+          BASE_URL + "/review-app.html"
+        ], "audience suite");
+      });
+      copySnapshotBtn.addEventListener("click", copySnapshot);
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "/" && !event.ctrlKey && !event.metaKey && document.activeElement !== launcherSearch) {
+          event.preventDefault();
+          launcherSearch.focus();
+          launcherSearch.select();
+          return;
+        }
+        if (event.shiftKey && event.key.toLowerCase() === "r") {
+          event.preventDefault();
+          refreshAll({ fast: false });
+          logAction("Manual full refresh started from keyboard.");
+          return;
+        }
+        if (event.shiftKey && event.key.toLowerCase() === "a") {
+          event.preventDefault();
+          runAudit();
+          return;
+        }
+        if (event.shiftKey && event.key.toLowerCase() === "c") {
+          event.preventDefault();
+          copySnapshot();
+        }
+      });
 
       if (!token) {
         setStatus(ownerStatus, "Missing token. Open /owner?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
