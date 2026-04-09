@@ -16,6 +16,7 @@ const DATA_FILE = path.join(DATA_DIR, "reviews.json");
 const IDEAS_DATA_FILE = path.join(DATA_DIR, "ideas.json");
 const YT_NEXUS_DATA_FILE = path.join(DATA_DIR, "yt-nexus.json");
 const PRIVATE_ADMIN_UI_FILE = path.join(ROOT_DIR, "admin.private.html");
+const OWNER_ADMIN_UI_FILE = path.join(ROOT_DIR, "owner.private.html");
 const USAGE_ADMIN_UI_FILE = path.join(ROOT_DIR, "usage-admin.private.html");
 const USAGE_DATA_FILE = path.join(DATA_DIR, "usage-analytics.json");
 const GOOGLE_API_KEY = String(process.env.GOOGLE_API_KEY || "").trim();
@@ -1112,8 +1113,20 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === "GET" && pathname === "/owner.html") {
+      sendText(res, 404, "Not Found");
+      return;
+    }
+
     if (req.method === "GET" && pathname === "/yt-admin") {
       const target = `/admin${url.search || ""}`;
+      res.writeHead(307, { Location: target, "Cache-Control": "no-store" });
+      res.end();
+      return;
+    }
+
+    if (req.method === "GET" && pathname === "/owner-admin") {
+      const target = `/owner${url.search || ""}`;
       res.writeHead(307, { Location: target, "Cache-Control": "no-store" });
       res.end();
       return;
@@ -1130,6 +1143,28 @@ const server = http.createServer(async (req, res) => {
       }
       try {
         const html = await fs.readFile(PRIVATE_ADMIN_UI_FILE);
+        res.writeHead(200, {
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "no-store"
+        });
+        res.end(html);
+      } catch {
+        sendText(res, 404, "Not Found");
+      }
+      return;
+    }
+
+    if (req.method === "GET" && pathname === "/owner") {
+      if (!REVIEW_ADMIN_TOKEN) {
+        sendText(res, 403, "Owner route is disabled: set REVIEW_ADMIN_TOKEN");
+        return;
+      }
+      if (!isPrivateAdminAuthorized(req, url)) {
+        sendText(res, 401, "Unauthorized");
+        return;
+      }
+      try {
+        const html = await fs.readFile(OWNER_ADMIN_UI_FILE);
         res.writeHead(200, {
           "Content-Type": "text/html; charset=utf-8",
           "Cache-Control": "no-store"

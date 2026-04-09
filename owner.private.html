@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Owner Nexus | Krishiv PB</title>
+  <style>
+    :root {
+      --bg: #040b15;
+      --panel: #0c1829;
+      --panel-2: #091220;
+      --line: rgba(125, 196, 255, 0.26);
+      --text: #ebf8ff;
+      --muted: #9ebdd9;
+      --accent: #7dd3fc;
+      --accent-2: #63f5d2;
+      --ok: #34d399;
+      --warn: #f59e0b;
+      --err: #fb7185;
+      --radius: 18px;
+      --shadow: 0 18px 38px rgba(0, 0, 0, 0.34);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 1rem;
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 14% 10%, rgba(99, 245, 210, 0.14), transparent 34%),
+        radial-gradient(circle at 86% 12%, rgba(116, 167, 255, 0.14), transparent 32%),
+        linear-gradient(160deg, #030813, #071221 52%, #0c1b31);
+    }
+    .wrap { width: min(1240px, 100%); margin: 0 auto; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 18%),
+        linear-gradient(160deg, rgba(12, 24, 40, 0.96), rgba(7, 15, 27, 0.97));
+      box-shadow: var(--shadow);
+    }
+    .stack { display: grid; gap: 12px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    h1, h2, h3, p { margin: 0 0 8px; }
+    h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); }
+    h2 { font-size: 1.08rem; }
+    h3 { font-size: 0.98rem; }
+    p { color: var(--muted); }
+    .mono {
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 0.78rem;
+      color: #cfe8ff;
+    }
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 196, 255, 0.24);
+      background: rgba(7, 20, 34, 0.68);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #d7f4ff;
+    }
+    .actions,
+    .mini-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    button,
+    .link-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.18s ease, filter 0.18s ease, border-color 0.18s ease;
+    }
+    button:hover,
+    .link-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #04111d; }
+    .btn-secondary,
+    .link-btn {
+      background: #1a2a40;
+      color: #dcefff;
+      border: 1px solid var(--line);
+    }
+    .status-line {
+      min-height: 22px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .err { color: var(--err); }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .stat {
+      border: 1px solid rgba(125, 196, 255, 0.22);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(6, 16, 28, 0.72);
+    }
+    .stat strong {
+      display: block;
+      font-size: 1.25rem;
+      line-height: 1.05;
+      margin-bottom: 4px;
+    }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    label {
+      display: block;
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #06101b;
+      color: var(--text);
+      padding: 10px 12px;
+      outline: none;
+      font: inherit;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .link-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .owner-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(125, 196, 255, 0.18);
+      background: rgba(6, 16, 28, 0.66);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .owner-link span:last-child {
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+    .usage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid rgba(125, 196, 255, 0.18);
+      padding: 7px 6px;
+      font-size: 0.88rem;
+    }
+    th { color: #d8eeff; }
+    .events {
+      max-height: 300px;
+      overflow: auto;
+      border: 1px solid rgba(125, 196, 255, 0.16);
+      border-radius: 12px;
+      background: rgba(6, 16, 28, 0.58);
+    }
+    .event-row {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(125, 196, 255, 0.12);
+      font-size: 0.84rem;
+    }
+    .event-row:last-child { border-bottom: none; }
+    @media (max-width: 980px) {
+      .hero,
+      .main-grid,
+      .links-grid,
+      .usage-grid {
+        grid-template-columns: 1fr;
+      }
+      .grid-4,
+      .field-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .grid-4,
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+      button,
+      .link-btn { width: 100%; }
+      .owner-link { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <article class="card stack">
+        <div class="hero-kicker">Owner Nexus Active</div>
+        <div>
+          <h1>One owner dashboard for the whole project.</h1>
+          <p>Use this private page to control the YouTube sync, watch live project health, track usage, and open every important admin, Vercel, GitHub, API, and live-site link from one place.</p>
+        </div>
+        <p class="mono">Route: <code>/owner?token=YOUR_REVIEW_ADMIN_TOKEN</code></p>
+        <div class="actions">
+          <button id="refreshAllBtn" class="btn-primary" type="button">Refresh Everything</button>
+          <button id="autoBtn" class="btn-secondary" type="button">Auto Refresh: ON</button>
+          <button id="copyPackBtn" class="btn-secondary" type="button">Copy Link Pack</button>
+        </div>
+        <p id="ownerStatus" class="status-line">Ready.</p>
+      </article>
+      <article class="card stack">
+        <h2>Quick Launch</h2>
+        <div class="mini-actions">
+          <a class="link-btn" id="ownerSelfLink" href="/owner" target="_blank" rel="noopener noreferrer">Open Owner</a>
+          <a class="link-btn" id="mainAdminLink" href="/admin" target="_blank" rel="noopener noreferrer">Open Main Admin</a>
+          <a class="link-btn" id="usageAdminLink" href="/usage-admin" target="_blank" rel="noopener noreferrer">Open Usage Admin</a>
+          <a class="link-btn" href="https://krishiv-new-portfoilo.vercel.app" target="_blank" rel="noopener noreferrer">Open Live Site</a>
+          <a class="link-btn" href="https://vercel.com/krylos-projects/krishiv-new-portfoilo" target="_blank" rel="noopener noreferrer">Open Vercel</a>
+          <a class="link-btn" href="https://github.com/Krylo-60/Krishiv-portfolio" target="_blank" rel="noopener noreferrer">Open GitHub</a>
+        </div>
+        <p class="mono" id="lastRefreshLine">Last refresh: --</p>
+      </article>
+    </section>
+
+    <section class="grid-4">
+      <article class="stat"><strong id="healthState">checking...</strong><span>API health</span></article>
+      <article class="stat"><strong id="syncSourceStat">checking...</strong><span>Sync source</span></article>
+      <article class="stat"><strong id="usageTotalStat">0</strong><span>Total usage events</span></article>
+      <article class="stat"><strong id="usageTodayStat">0</strong><span>Unique sessions today</span></article>
+    </section>
+
+    <section class="main-grid">
+      <article class="card stack">
+        <div>
+          <h2>Main Sync Control</h2>
+          <p>Load the current YouTube portfolio values and publish updates without leaving the owner dashboard.</p>
+        </div>
+        <div>
+          <label for="msg">Live wall message</label>
+          <textarea id="msg" placeholder="Enter broadcast message...">Subscribe to Krylo-Blox</textarea>
+        </div>
+        <div class="field-grid">
+          <div>
+            <label for="subs">Subs</label>
+            <input id="subs" type="number" min="0" value="7" />
+          </div>
+          <div>
+            <label for="views">Views</label>
+            <input id="views" type="number" min="0" value="7" />
+          </div>
+          <div>
+            <label for="uploads">Uploads</label>
+            <input id="uploads" type="number" min="0" value="0" />
+          </div>
+        </div>
+        <div class="actions">
+          <button id="loadSyncBtn" class="btn-secondary" type="button">Load Current</button>
+          <button id="publishBtn" class="btn-primary" type="button">Publish Sync</button>
+        </div>
+        <p id="publishStatus" class="status-line">Sync panel ready.</p>
+        <p class="mono" id="syncMeta">Sync source: unknown | Last sync: unknown</p>
+      </article>
+
+      <article class="card stack">
+        <div>
+          <h2>Live Project Links</h2>
+          <p>Open the parts of the project you use most without digging through tabs.</p>
+        </div>
+        <div class="link-list">
+          <a class="owner-link" href="https://krishiv-new-portfoilo.vercel.app/" target="_blank" rel="noopener noreferrer"><span>Main site</span><span>Open</span></a>
+          <a class="owner-link" href="https://krishiv-new-portfoilo.vercel.app/projects.html" target="_blank" rel="noopener noreferrer"><span>Projects page</span><span>Open</span></a>
+          <a class="owner-link" href="https://krishiv-new-portfoilo.vercel.app/contact.html" target="_blank" rel="noopener noreferrer"><span>Contact page</span><span>Open</span></a>
+          <a class="owner-link" href="https://krishiv-new-portfoilo.vercel.app/games.html" target="_blank" rel="noopener noreferrer"><span>Games page</span><span>Open</span></a>
+          <a class="owner-link" href="https://krishiv-new-portfoilo.vercel.app/review-app.html" target="_blank" rel="noopener noreferrer"><span>Review App</span><span>Open</span></a>
+          <a class="owner-link" href="https://krishiv-new-portfoilo.vercel.app/krylo-blox-master-nexus.html" target="_blank" rel="noopener noreferrer"><span>Master Nexus</span><span>Open</span></a>
+        </div>
+      </article>
+    </section>
+
+    <section class="links-grid">
+      <article class="card stack">
+        <div>
+          <h2>Owner + Admin Links</h2>
+          <p>Your private controls, all reachable from the same saved token.</p>
+        </div>
+        <div class="link-list" id="privateLinks"></div>
+      </article>
+      <article class="card stack">
+        <div>
+          <h2>Infra + API Links</h2>
+          <p>Vercel, GitHub, health, sync, reviews, and usage links in one block.</p>
+        </div>
+        <div class="link-list" id="infraLinks"></div>
+      </article>
+    </section>
+
+    <section class="usage-grid">
+      <article class="card stack">
+        <div>
+          <h2>Top Pages</h2>
+          <p>See which pages are getting the most traffic right now.</p>
+        </div>
+        <table>
+          <thead><tr><th>Page</th><th>Hits</th></tr></thead>
+          <tbody id="pagesBody"></tbody>
+        </table>
+      </article>
+      <article class="card stack">
+        <div>
+          <h2>Recent Activity</h2>
+          <p>Fresh tracked events from your live site usage feed.</p>
+        </div>
+        <div id="recentList" class="events"></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const TOKEN_KEY = "krishiv_owner_admin_token_v1";
+      const ADMIN_KEY = "krishiv_private_admin_token_v1";
+      const USAGE_KEY = "krishiv_usage_admin_token_v1";
+      const BASE_URL = "https://krishiv-new-portfoilo.vercel.app";
+      const VERCEL_DASHBOARD = "https://vercel.com/krylos-projects/krishiv-new-portfoilo";
+      const VERCEL_DEPLOYS = "https://vercel.com/krylos-projects/krishiv-new-portfoilo/deployments";
+      const GITHUB_REPO = "https://github.com/Krylo-60/Krishiv-portfolio";
+      const GITHUB_COMMIT = "https://github.com/Krylo-60/Krishiv-portfolio/commit/020d872";
+      const GITHUB_PAGES = "https://krylo-60.github.io/krishiv_new_portfoilo/";
+
+      const byId = (id) => document.getElementById(id);
+      const refreshAllBtn = byId("refreshAllBtn");
+      const autoBtn = byId("autoBtn");
+      const copyPackBtn = byId("copyPackBtn");
+      const ownerStatus = byId("ownerStatus");
+      const lastRefreshLine = byId("lastRefreshLine");
+      const msg = byId("msg");
+      const subs = byId("subs");
+      const views = byId("views");
+      const uploads = byId("uploads");
+      const loadSyncBtn = byId("loadSyncBtn");
+      const publishBtn = byId("publishBtn");
+      const publishStatus = byId("publishStatus");
+      const syncMeta = byId("syncMeta");
+      const healthState = byId("healthState");
+      const syncSourceStat = byId("syncSourceStat");
+      const usageTotalStat = byId("usageTotalStat");
+      const usageTodayStat = byId("usageTodayStat");
+      const pagesBody = byId("pagesBody");
+      const recentList = byId("recentList");
+      const privateLinks = byId("privateLinks");
+      const infraLinks = byId("infraLinks");
+      const ownerSelfLink = byId("ownerSelfLink");
+      const mainAdminLink = byId("mainAdminLink");
+      const usageAdminLink = byId("usageAdminLink");
+
+      const queryToken = String(new URLSearchParams(window.location.search).get("token") || "").trim();
+      if (queryToken) {
+        localStorage.setItem(TOKEN_KEY, queryToken);
+        localStorage.setItem(ADMIN_KEY, queryToken);
+        localStorage.setItem(USAGE_KEY, queryToken);
+        if (window.location.pathname !== "/owner" || window.location.search) {
+          window.history.replaceState({}, "", "/owner");
+        }
+      }
+      const token = queryToken
+        || String(localStorage.getItem(TOKEN_KEY) || "").trim()
+        || String(localStorage.getItem(ADMIN_KEY) || "").trim()
+        || String(localStorage.getItem(USAGE_KEY) || "").trim();
+
+      let autoTimer = 0;
+
+      function setStatus(node, text, level) {
+        if (!node) return;
+        node.textContent = text;
+        node.className = "status-line " + (level || "");
+      }
+
+      function setSyncMeta(data) {
+        const source = String(data && (data.syncSource || data.source) || "unknown");
+        const syncedAt = data && data.syncedAt ? new Date(data.syncedAt) : null;
+        const timeText = syncedAt && !Number.isNaN(syncedAt.getTime())
+          ? syncedAt.toLocaleString("en-IN")
+          : "unknown";
+        syncMeta.textContent = "Sync source: " + source + " | Last sync: " + timeText;
+        syncSourceStat.textContent = source;
+      }
+
+      function withToken(path) {
+        if (!token) return path;
+        const joiner = path.includes("?") ? "&" : "?";
+        return path + joiner + "token=" + encodeURIComponent(token);
+      }
+
+      async function api(path, options = {}) {
+        const headers = {
+          "x-admin-token": token,
+          ...(options.headers || {})
+        };
+        if (options.body && !headers["Content-Type"]) {
+          headers["Content-Type"] = "application/json";
+        }
+        const response = await fetch(withToken(path), {
+          ...options,
+          headers,
+          cache: "no-store"
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || "Request failed");
+        }
+        return data;
+      }
+
+      function renderLinkSection(node, items) {
+        node.innerHTML = items.map((item) => `
+          <a class="owner-link" href="${item.href}" target="_blank" rel="noopener noreferrer">
+            <span>${item.label}</span>
+            <span>Open</span>
+          </a>
+        `).join("");
+      }
+
+      function renderTables(pages, events) {
+        pagesBody.innerHTML = pages.length
+          ? pages.map((row) => `<tr><td>${String(row.page || "")}</td><td>${Number(row.count || 0)}</td></tr>`).join("")
+          : '<tr><td colspan="2">No data yet.</td></tr>';
+
+        recentList.innerHTML = events.length
+          ? events.map((item) => {
+            const time = item.at ? new Date(item.at).toLocaleString("en-IN") : "unknown";
+            return `<div class="event-row"><strong>${String(item.event || "event")}</strong> | <span>${String(item.page || "page")}</span> | <span>${time}</span></div>`;
+          }).join("")
+          : '<div class="event-row">No recent activity yet.</div>';
+      }
+
+      async function loadHealth() {
+        try {
+          const response = await fetch("/api/health", { cache: "no-store" });
+          if (!response.ok) throw new Error("offline");
+          const data = await response.json();
+          healthState.textContent = data.ok ? "healthy" : "error";
+        } catch {
+          healthState.textContent = "offline";
+        }
+      }
+
+      async function loadSync(options = {}) {
+        const fastMode = options.fast !== false;
+        const path = fastMode ? "/api/yt-portfolio-sync?fast=1" : "/api/yt-portfolio-sync";
+        const data = await api(path, { method: "GET" });
+        msg.value = String(data.message || "");
+        subs.value = String(Number(data.subs || 0));
+        views.value = String(Number(data.views || 0));
+        uploads.value = String(Number(data.uploads || 0));
+        setSyncMeta(data);
+        return data;
+      }
+
+      async function publishSync() {
+        if (!token) {
+          setStatus(publishStatus, "Missing token. Open /owner?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
+          return;
+        }
+        setStatus(publishStatus, "Publishing sync...", "");
+        try {
+          const payload = {
+            message: String(msg.value || "").trim(),
+            subs: Number(subs.value || 0),
+            views: Number(views.value || 0),
+            uploads: Number(uploads.value || 0)
+          };
+          const data = await api("/api/yt-portfolio-sync", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+          setSyncMeta(data);
+          setStatus(
+            publishStatus,
+            data.firebaseSynced ? "Published and synced to Firebase." : "Published to backend. Firebase sync unavailable right now.",
+            data.firebaseSynced ? "ok" : "warn"
+          );
+        } catch (error) {
+          setStatus(publishStatus, "Publish failed: " + error.message, "err");
+        }
+      }
+
+      async function loadUsage() {
+        const data = await api("/api/usage/stats", { method: "GET" });
+        usageTotalStat.textContent = String(Number(data.totalEvents || 0));
+        usageTodayStat.textContent = String(Number(data.uniqueSessionsToday || 0));
+        renderTables(Array.isArray(data.byPage) ? data.byPage : [], Array.isArray(data.lastEvents) ? data.lastEvents : []);
+      }
+
+      async function refreshAll(options = {}) {
+        if (!token) {
+          setStatus(ownerStatus, "Missing token. Open /owner?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
+          return;
+        }
+        setStatus(ownerStatus, "Refreshing owner dashboard...", "");
+        try {
+          await Promise.all([
+            loadHealth(),
+            loadSync({ fast: options.fast !== false }),
+            loadUsage()
+          ]);
+          lastRefreshLine.textContent = "Last refresh: " + new Date().toLocaleString("en-IN");
+          setStatus(ownerStatus, "Owner dashboard updated.", "ok");
+        } catch (error) {
+          setStatus(ownerStatus, "Refresh failed: " + error.message, "err");
+        }
+      }
+
+      function startAutoRefresh() {
+        if (autoTimer) clearInterval(autoTimer);
+        autoTimer = setInterval(() => refreshAll({ fast: true }), 20000);
+        autoBtn.textContent = "Auto Refresh: ON";
+      }
+
+      function stopAutoRefresh() {
+        if (autoTimer) clearInterval(autoTimer);
+        autoTimer = 0;
+        autoBtn.textContent = "Auto Refresh: OFF";
+      }
+
+      async function copyLinkPack() {
+        const lines = [
+          "Owner: " + withToken(BASE_URL + "/owner"),
+          "Main Admin: " + withToken(BASE_URL + "/admin"),
+          "Usage Admin: " + withToken(BASE_URL + "/usage-admin"),
+          "Live Site: " + BASE_URL + "/",
+          "Projects: " + BASE_URL + "/projects.html",
+          "Contact: " + BASE_URL + "/contact.html",
+          "Games: " + BASE_URL + "/games.html",
+          "Review App: " + BASE_URL + "/review-app.html",
+          "Master Nexus: " + BASE_URL + "/krylo-blox-master-nexus.html",
+          "Health API: " + BASE_URL + "/api/health",
+          "Sync API: " + BASE_URL + "/api/yt-portfolio-sync",
+          "Usage Stats API: " + withToken(BASE_URL + "/api/usage/stats"),
+          "GitHub Repo: " + GITHUB_REPO,
+          "Vercel Dashboard: " + VERCEL_DASHBOARD,
+          "Vercel Deploys: " + VERCEL_DEPLOYS,
+          "GitHub Pages: " + GITHUB_PAGES
+        ];
+        try {
+          await navigator.clipboard.writeText(lines.join("\n"));
+          setStatus(ownerStatus, "Link pack copied.", "ok");
+        } catch {
+          setStatus(ownerStatus, "Copy failed. Clipboard permission unavailable.", "warn");
+        }
+      }
+
+      renderLinkSection(privateLinks, [
+        { label: "Owner dashboard", href: withToken(BASE_URL + "/owner") },
+        { label: "Main admin", href: withToken(BASE_URL + "/admin") },
+        { label: "Usage admin", href: withToken(BASE_URL + "/usage-admin") },
+        { label: "Legacy yt-admin redirect", href: withToken(BASE_URL + "/yt-admin") },
+        { label: "Legacy owner-admin redirect", href: withToken(BASE_URL + "/owner-admin") },
+        { label: "Legacy usage-admin redirect", href: withToken(BASE_URL + "/app-usage-admin") }
+      ]);
+
+      renderLinkSection(infraLinks, [
+        { label: "Vercel dashboard", href: VERCEL_DASHBOARD },
+        { label: "Vercel deployments", href: VERCEL_DEPLOYS },
+        { label: "GitHub repo", href: GITHUB_REPO },
+        { label: "Latest synced commit", href: GITHUB_COMMIT },
+        { label: "Health API", href: BASE_URL + "/api/health" },
+        { label: "Reviews API", href: BASE_URL + "/api/reviews" },
+        { label: "Sync API", href: BASE_URL + "/api/yt-portfolio-sync" },
+        { label: "Usage stats API", href: withToken(BASE_URL + "/api/usage/stats") },
+        { label: "GitHub Pages reference", href: GITHUB_PAGES }
+      ]);
+
+      ownerSelfLink.href = withToken("/owner");
+      mainAdminLink.href = withToken("/admin");
+      usageAdminLink.href = withToken("/usage-admin");
+
+      refreshAllBtn.addEventListener("click", () => refreshAll({ fast: false }));
+      loadSyncBtn.addEventListener("click", () => loadSync({ fast: false }).then(() => {
+        setStatus(publishStatus, "Loaded current sync values.", "ok");
+      }).catch((error) => {
+        setStatus(publishStatus, "Load failed: " + error.message, "err");
+      }));
+      publishBtn.addEventListener("click", publishSync);
+      autoBtn.addEventListener("click", () => {
+        if (autoTimer) stopAutoRefresh();
+        else startAutoRefresh();
+      });
+      copyPackBtn.addEventListener("click", copyLinkPack);
+
+      if (!token) {
+        setStatus(ownerStatus, "Missing token. Open /owner?token=YOUR_REVIEW_ADMIN_TOKEN once.", "err");
+        stopAutoRefresh();
+        return;
+      }
+
+      startAutoRefresh();
+      refreshAll({ fast: true });
+    })();
+  </script>
+</body>
+</html>
