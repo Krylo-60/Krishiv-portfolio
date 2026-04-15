@@ -96,6 +96,7 @@ let ytNexusBootstrapped = false;
 let ytLastSyncedAt = "";
 let ytLastSyncSource = "local";
 let usageBootstrapped = false;
+let googleKeyCursor = 0;
 let usageAnalytics = {
   totalEvents: 0,
   byEvent: {},
@@ -511,6 +512,16 @@ function getAvailableGoogleKeys() {
     }
   }
   return keys;
+}
+
+function getBalancedGoogleKeys() {
+  const keys = getAvailableGoogleKeys();
+  if (keys.length <= 1) {
+    return keys;
+  }
+  const startIndex = googleKeyCursor % keys.length;
+  googleKeyCursor = (googleKeyCursor + 1) % keys.length;
+  return keys.slice(startIndex).concat(keys.slice(0, startIndex));
 }
 
 function getAvailableYouTubeKeys() {
@@ -1263,7 +1274,7 @@ function solveDetectedMath(intent) {
 }
 
 async function callGoogleModel(prompt, systemInstruction = "") {
-  const keys = getAvailableGoogleKeys();
+  const keys = getBalancedGoogleKeys();
   if (!keys.length) {
     throw new Error("No Google API key configured");
   }
