@@ -1619,6 +1619,41 @@ h3 {
   margin-top: 0.18rem;
 }
 
+.command-center-stats.compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.command-center-list {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.command-center-list-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+  border: 1px solid rgba(132, 164, 214, 0.22);
+  border-radius: 12px;
+  padding: 0.68rem 0.74rem;
+  background: linear-gradient(160deg, rgba(11, 24, 41, 0.82), rgba(8, 18, 33, 0.9));
+}
+
+.command-center-list-item span,
+.command-center-list-item em {
+  color: var(--muted);
+  font: 700 11px/1.2 "JetBrains Mono", Consolas, monospace;
+  font-style: normal;
+}
+
+.command-center-list-item strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .command-center-card {
   border: 1px solid rgba(99, 245, 210, 0.18);
   background:

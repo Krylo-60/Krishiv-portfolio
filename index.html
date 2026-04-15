@@ -907,6 +907,28 @@
               <a class="btn secondary" href="review-app.html">Open Review App</a>
             </div>
           </article>
+          <article class="process-card command-center-card">
+            <h3>AI Mesh</h3>
+            <div class="command-center-stats compact">
+              <div><span class="mini-label">Loaded Keys</span><strong id="ccAiLoaded">0</strong></div>
+              <div><span class="mini-label">Ready Keys</span><strong id="ccAiReady">0</strong></div>
+              <div><span class="mini-label">Cooling</span><strong id="ccAiCooling">0</strong></div>
+              <div><span class="mini-label">Successes</span><strong id="ccAiSuccesses">0</strong></div>
+            </div>
+            <p class="meta" id="ccAiStatus">AI pool metrics loading...</p>
+          </article>
+          <article class="process-card command-center-card">
+            <h3>Launch Radar</h3>
+            <div class="command-center-stats compact">
+              <div><span class="mini-label">Public Apps</span><strong id="ccPublicApps">0</strong></div>
+              <div><span class="mini-label">Reviews</span><strong id="ccReviewCount">0</strong></div>
+              <div><span class="mini-label">Ideas</span><strong id="ccIdeaCount">0</strong></div>
+              <div><span class="mini-label">Sessions</span><strong id="ccSessionCount">0</strong></div>
+            </div>
+            <div class="command-center-list" id="ccTopApps">
+              <p class="meta">Top apps are loading...</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -2324,6 +2346,16 @@
       const ccMessage = document.getElementById('ccMessage');
       const ccClock = document.getElementById('ccClock');
       const ccQualityScore = document.getElementById('ccQualityScore');
+      const ccAiLoaded = document.getElementById('ccAiLoaded');
+      const ccAiReady = document.getElementById('ccAiReady');
+      const ccAiCooling = document.getElementById('ccAiCooling');
+      const ccAiSuccesses = document.getElementById('ccAiSuccesses');
+      const ccAiStatus = document.getElementById('ccAiStatus');
+      const ccPublicApps = document.getElementById('ccPublicApps');
+      const ccReviewCount = document.getElementById('ccReviewCount');
+      const ccIdeaCount = document.getElementById('ccIdeaCount');
+      const ccSessionCount = document.getElementById('ccSessionCount');
+      const ccTopApps = document.getElementById('ccTopApps');
       const proofProjectCount = document.getElementById('proofProjectCount');
       const proofLiveCount = document.getElementById('proofLiveCount');
       const proofAppCount = document.getElementById('proofAppCount');
@@ -2925,6 +2957,42 @@
       };
       loadBackendHealth();
       setInterval(loadBackendHealth, 60000);
+
+      const loadPlatformOverview = async () => {
+        try {
+          const response = await fetch('/api/platform/overview', { cache: 'no-store' });
+          if (!response.ok) throw new Error('platform overview failed');
+          const data = await response.json();
+          if (ccAiLoaded) ccAiLoaded.textContent = String(Number(data?.ai?.loadedKeys || 0));
+          if (ccAiReady) ccAiReady.textContent = String(Number(data?.ai?.readyKeys || 0));
+          if (ccAiCooling) ccAiCooling.textContent = String(Number(data?.ai?.coolingKeys || 0));
+          if (ccAiSuccesses) ccAiSuccesses.textContent = String(Number(data?.ai?.totalSuccesses || 0));
+          if (ccAiStatus) {
+            ccAiStatus.textContent = 'Model: ' + String(data?.ai?.model || 'unknown') + ' · failures tracked: ' + String(Number(data?.ai?.totalFailures || 0));
+          }
+          if (ccPublicApps) ccPublicApps.textContent = String(Number(data?.appCount || 0));
+          if (ccReviewCount) ccReviewCount.textContent = String(Number(data?.reviewCount || 0));
+          if (ccIdeaCount) ccIdeaCount.textContent = String(Number(data?.ideaCount || 0));
+          if (ccSessionCount) ccSessionCount.textContent = String(Number(data?.usage?.uniqueSessionsTotal || 0));
+          if (ccTopApps) {
+            const topApps = Array.isArray(data?.usage?.topApps) ? data.usage.topApps : [];
+            ccTopApps.innerHTML = topApps.length
+              ? topApps.map((item, index) => `
+                  <div class="command-center-list-item">
+                    <span>#${index + 1}</span>
+                    <strong>${escapeHtml(String(item.page || 'unknown'))}</strong>
+                    <em>${Number(item.count || 0)} launches</em>
+                  </div>
+                `).join('')
+              : `<p class="meta">Top app usage will appear here after more activity.</p>`;
+          }
+        } catch {
+          if (ccAiStatus) ccAiStatus.textContent = 'Platform overview unavailable right now.';
+          if (ccTopApps) ccTopApps.innerHTML = `<p class="meta">Live overview is offline for this session.</p>`;
+        }
+      };
+      loadPlatformOverview();
+      setInterval(loadPlatformOverview, 90000);
 
       const loadFeedbackPreview = async () => {
         if (!feedbackPreviewGrid || !feedbackSummary) return;

@@ -2,6 +2,7 @@
   const path = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
   const BLOCKED_PATHS = new Set(["index.html", "games.html", "admin.private.html"]);
   if (BLOCKED_PATHS.has(path)) return;
+
   const safeGet = (key, fallback = "") => {
     try {
       const value = localStorage.getItem(key);
@@ -10,8 +11,11 @@
       return fallback;
     }
   };
+
   const safeSet = (key, value) => {
-    try { localStorage.setItem(key, value); } catch {}
+    try {
+      localStorage.setItem(key, value);
+    } catch {}
   };
 
   function getUsageSessionId() {
@@ -171,9 +175,25 @@
   let favorites = [];
   let recents = [];
   let stats = {};
-  try { favorites = JSON.parse(safeGet(FAV_KEY, "[]")); if (!Array.isArray(favorites)) favorites = []; } catch { favorites = []; }
-  try { recents = JSON.parse(safeGet(RECENT_KEY, "[]")); if (!Array.isArray(recents)) recents = []; } catch { recents = []; }
-  try { stats = JSON.parse(safeGet(STATS_KEY, "{}")); if (!stats || typeof stats !== "object") stats = {}; } catch { stats = {}; }
+  try {
+    favorites = JSON.parse(safeGet(FAV_KEY, "[]"));
+    if (!Array.isArray(favorites)) favorites = [];
+  } catch {
+    favorites = [];
+  }
+  try {
+    recents = JSON.parse(safeGet(RECENT_KEY, "[]"));
+    if (!Array.isArray(recents)) recents = [];
+  } catch {
+    recents = [];
+  }
+  try {
+    stats = JSON.parse(safeGet(STATS_KEY, "{}"));
+    if (!stats || typeof stats !== "object") stats = {};
+  } catch {
+    stats = {};
+  }
+
   applyTheme(activeTheme);
   document.body.setAttribute("data-mode", "dark");
   document.documentElement.setAttribute("data-mode", "dark");
@@ -183,8 +203,7 @@
     if (!path || path === "index.html" || path === "admin.private.html") return;
     stats[path] = Number(stats[path] || 0) + 1;
     safeSet(STATS_KEY, JSON.stringify(stats));
-    const nextRecents = [path, ...recents.filter((item) => item !== path)].slice(0, 8);
-    recents = nextRecents;
+    recents = [path, ...recents.filter((item) => item !== path)].slice(0, 8);
     safeSet(RECENT_KEY, JSON.stringify(recents));
     postUsage("page_view", path);
     postUsage("app_open", path);
@@ -205,10 +224,19 @@
   overlay.innerHTML = `
     <section class="app-shell-panel" role="dialog" aria-modal="true" aria-label="Apps Galaxy">
       <header class="app-shell-head">
-        <h2 class="app-shell-title">Apps Galaxy</h2>
+        <div class="app-shell-head-copy">
+          <h2 class="app-shell-title">Apps Galaxy</h2>
+          <p class="app-shell-subtitle">Your fastest route to favorites, AI tools, and live builds.</p>
+        </div>
         <input class="app-shell-search" id="shellSearchInput" type="search" placeholder="Search app..." />
         <button type="button" class="app-shell-btn" id="shellCloseBtn">Close</button>
       </header>
+      <div class="app-shell-insights" id="shellInsights"></div>
+      <div class="app-shell-actions">
+        <button type="button" class="app-shell-quick" data-action="featured">Open Random Featured</button>
+        <button type="button" class="app-shell-quick" data-action="top">Open Most Used</button>
+        <button type="button" class="app-shell-quick" data-action="ai">Open AI Zone</button>
+      </div>
       <div class="app-shell-grid" id="shellGrid"></div>
     </section>
   `;
@@ -222,6 +250,7 @@
   const closeBtn = document.getElementById("shellCloseBtn");
   const grid = document.getElementById("shellGrid");
   const searchInput = document.getElementById("shellSearchInput");
+  const insights = document.getElementById("shellInsights");
 
   function saveFavs() {
     safeSet(FAV_KEY, JSON.stringify(favorites));
@@ -246,11 +275,20 @@
     return withRank;
   }
 
-  function renderGrid(term) {
-    const q = String(term || "").toLowerCase().trim();
-    const filtered = APPS.filter((item) => !q || item.name.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q) || item.href.toLowerCase().includes(q));
-    const ordered = resolveOrder(filtered);
-    grid.innerHTML = ordered.map(({ item, isFav, launches }) => `
+  function renderInsightStrip() {
+    const totalLaunches = Object.values(stats).reduce((sum, value) => sum + Number(value || 0), 0);
+    if (!insights) return;
+    insights.innerHTML = `
+      <article class="app-shell-insight"><strong>${APPS.length}</strong><span>apps indexed</span></article>
+      <article class="app-shell-insight"><strong>${APPS.filter((item) => item.tier === "featured").length}</strong><span>featured</span></article>
+      <article class="app-shell-insight"><strong>${favorites.length}</strong><span>favorites</span></article>
+      <article class="app-shell-insight"><strong>${recents.length}</strong><span>recents</span></article>
+      <article class="app-shell-insight"><strong>${totalLaunches}</strong><span>launches</span></article>
+    `;
+  }
+
+  function renderCard({ item, isFav, launches }) {
+    return `
       <article class="app-shell-link" data-href="${item.href}">
         <div class="app-shell-link-row">
           <a href="${item.href}" style="color:inherit;text-decoration:none;display:block;flex:1;">
@@ -261,7 +299,69 @@
           <button type="button" class="app-shell-fav ${isFav ? "is-on" : ""}" data-fav="${item.href}" aria-label="Toggle favorite">${isFav ? "Fav" : "+"}</button>
         </div>
       </article>
-    `).join("");
+    `;
+  }
+
+  function renderSection(label, items, emptyText) {
+    return `
+      <section class="app-shell-section">
+        <p class="app-shell-section-label">${label}</p>
+        ${items.length ? items.map(renderCard).join("") : `<div class="app-shell-empty">${emptyText}</div>`}
+      </section>
+    `;
+  }
+
+  function launchHref(href) {
+    if (!href) return;
+    window.location.href = href;
+  }
+
+  function openRandomFeatured() {
+    const featured = APPS.filter((item) => item.tier === "featured");
+    if (!featured.length) return;
+    launchHref(featured[Math.floor(Math.random() * featured.length)].href);
+  }
+
+  function openMostUsed() {
+    const topEntry = Object.entries(stats)
+      .sort((left, right) => Number(right[1] || 0) - Number(left[1] || 0))
+      .find(([href, count]) => href && Number(count || 0) > 0);
+    if (topEntry) {
+      launchHref(topEntry[0]);
+      return;
+    }
+    openRandomFeatured();
+  }
+
+  function openAiZone() {
+    launchHref(path === "aether-core-v104.html" ? "idea-lab-ai.html" : "aether-core-v104.html");
+  }
+
+  function renderGrid(term) {
+    const q = String(term || "").toLowerCase().trim();
+    const filtered = APPS.filter((item) => !q || item.name.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q) || item.href.toLowerCase().includes(q));
+    const ordered = resolveOrder(filtered);
+    renderInsightStrip();
+
+    if (q) {
+      grid.innerHTML = renderSection("Search Results", ordered, "No matching apps yet.");
+      return;
+    }
+
+    const favoriteSet = new Set(favorites);
+    const recentSet = new Set(recents);
+    const favoriteItems = ordered.filter(({ item }) => favoriteSet.has(item.href)).slice(0, 6);
+    const recentItems = ordered.filter(({ item }) => recentSet.has(item.href)).slice(0, 6);
+    const featuredItems = ordered.filter(({ item }) => item.tier === "featured").slice(0, 8);
+    const trendingItems = ordered.filter(({ launches }) => launches > 0).sort((a, b) => b.launches - a.launches).slice(0, 6);
+    const directoryItems = ordered.slice(0, 18);
+    grid.innerHTML = [
+      renderSection("Favorites", favoriteItems, "Star an app to pin it here."),
+      renderSection("Recent Launches", recentItems, "Open a few apps and they will show up here."),
+      renderSection("Featured Builds", featuredItems, "Featured builds are warming up."),
+      renderSection("Trending in This Browser", trendingItems, "This appears after you launch apps."),
+      renderSection("Directory Snapshot", directoryItems, "Directory unavailable.")
+    ].join("");
   }
 
   function openOverlay() {
@@ -292,7 +392,18 @@
   if (closeBtn) closeBtn.addEventListener("click", closeOverlay);
   if (overlay) {
     overlay.addEventListener("click", (event) => {
-      if (event.target === overlay) closeOverlay();
+      if (event.target === overlay) {
+        closeOverlay();
+        return;
+      }
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const quickAction = target.closest("[data-action]");
+      if (!(quickAction instanceof HTMLButtonElement)) return;
+      const action = String(quickAction.dataset.action || "");
+      if (action === "featured") openRandomFeatured();
+      if (action === "top") openMostUsed();
+      if (action === "ai") openAiZone();
     });
   }
   if (searchInput) {
@@ -306,8 +417,11 @@
       if (favBtn instanceof HTMLButtonElement) {
         const href = String(favBtn.dataset.fav || "");
         if (!href) return;
-        if (favorites.includes(href)) favorites = favorites.filter((x) => x !== href);
-        else favorites.unshift(href);
+        if (favorites.includes(href)) {
+          favorites = favorites.filter((item) => item !== href);
+        } else {
+          favorites.unshift(href);
+        }
         saveFavs();
         renderGrid(searchInput ? searchInput.value : "");
       }

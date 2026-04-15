@@ -244,10 +244,20 @@ body.app-theme-root label {
   background: rgba(8, 20, 35, 0.96);
 }
 
+.app-shell-head-copy {
+  min-width: 0;
+}
+
 .app-shell-title {
   margin: 0;
   font: 800 14px/1.2 "Space Grotesk", "Segoe UI", Arial, sans-serif;
   color: #f2f8ff;
+}
+
+.app-shell-subtitle {
+  margin: 4px 0 0;
+  color: #92b6d8;
+  font: 600 11px/1.35 "JetBrains Mono", Consolas, monospace;
 }
 
 .app-shell-search {
@@ -263,9 +273,66 @@ body.app-theme-root label {
 
 .app-shell-grid {
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   padding: 12px;
+}
+
+.app-shell-insights {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  padding: 12px 12px 0;
+}
+
+.app-shell-insight {
+  border: 1px solid rgba(124, 194, 255, 0.24);
+  border-radius: 12px;
+  padding: 10px;
+  background: linear-gradient(150deg, rgba(12, 27, 46, 0.92), rgba(6, 16, 28, 0.96));
+}
+
+.app-shell-insight strong {
+  display: block;
+  color: #f3f8ff;
+  font: 800 15px/1 "Space Grotesk", "Segoe UI", Arial, sans-serif;
+}
+
+.app-shell-insight span {
+  display: block;
+  margin-top: 4px;
+  color: #8fb0d1;
+  font: 600 10px/1.2 "JetBrains Mono", Consolas, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.app-shell-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+}
+
+.app-shell-quick {
+  border: 1px solid rgba(124, 194, 255, 0.28);
+  border-radius: 999px;
+  padding: 8px 11px;
+  background: linear-gradient(145deg, rgba(13, 28, 48, 0.92), rgba(7, 18, 32, 0.96));
+  color: #e4f1ff;
+  font: 700 11px/1.1 "JetBrains Mono", Consolas, monospace;
+  cursor: pointer;
+}
+
+.app-shell-quick:hover,
+.app-shell-quick:focus-visible {
+  border-color: rgba(124, 212, 255, 0.7);
+}
+
+.app-shell-section {
+  display: grid;
+  gap: 10px;
+  align-content: start;
 }
 
 .app-shell-link {
@@ -308,11 +375,20 @@ body.app-theme-root label {
 }
 
 .app-shell-section-label {
-  margin: 4px 12px 0;
+  margin: 0;
   color: #9ec1e3;
   font: 700 11px/1.2 "JetBrains Mono", Consolas, monospace;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.app-shell-empty {
+  border: 1px dashed rgba(124, 194, 255, 0.22);
+  border-radius: 12px;
+  padding: 12px;
+  color: #8dafcf;
+  background: rgba(9, 21, 35, 0.58);
+  font: 600 11px/1.4 "JetBrains Mono", Consolas, monospace;
 }
 
 .app-shell-link strong {
@@ -351,6 +427,10 @@ body.app-theme-root .row > * {
 
 @media (max-width: 840px) {
   .app-shell-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell-insights {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -383,6 +463,10 @@ body.app-theme-root .row > * {
     grid-template-columns: 1fr;
   }
 
+  .app-shell-insights {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .app-shell-head {
     flex-wrap: wrap;
     align-items: stretch;
@@ -391,6 +475,10 @@ body.app-theme-root .row > * {
   .app-shell-search {
     width: 100%;
     order: 3;
+  }
+
+  .app-shell-head-copy {
+    width: 100%;
   }
 
   .app-shell-dock {

@@ -75,6 +75,12 @@ const MIME_TYPES = {
   ".ico": "image/x-icon"
 };
 
+const PRIVATE_HTML_FILES = new Set([
+  "admin.private.html",
+  "owner.private.html",
+  "usage-admin.private.html"
+]);
+
 function fetchWithTimeout(resource, options = {}, timeoutMs = 6000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -515,6 +521,86 @@ function getAvailableGoogleKeys() {
     }
   }
   return keys;
+}
+
+function summarizeGoogleKeyHealth() {
+  const now = Date.now();
+  const keys = getAvailableGoogleKeys();
+  const states = keys.map((key) => {
+    const state = googleKeyHealth.get(key) || {
+      cooldownUntil: 0,
+      successCount: 0,
+      failureCount: 0,
+      lastUsedAt: 0,
+      lastFailureAt: 0
+    };
+    return {
+      ready: state.cooldownUntil <= now,
+      coolingDown: state.cooldownUntil > now,
+      cooldownMsRemaining: Math.max(0, state.cooldownUntil - now),
+      successCount: Number(state.successCount || 0),
+      failureCount: Number(state.failureCount || 0),
+      lastUsedAt: state.lastUsedAt || 0,
+      lastFailureAt: state.lastFailureAt || 0
+    };
+  });
+
+  return {
+    loadedKeys: keys.length,
+    readyKeys: states.filter((state) => state.ready).length,
+    coolingKeys: states.filter((state) => state.coolingDown).length,
+    totalSuccesses: states.reduce((sum, state) => sum + state.successCount, 0),
+    totalFailures: states.reduce((sum, state) => sum + state.failureCount, 0),
+    cooldownMsRemaining: states.reduce((max, state) => Math.max(max, state.cooldownMsRemaining), 0)
+  };
+}
+
+async function getPublicHtmlFiles() {
+  try {
+    const entries = await fs.readdir(ROOT_DIR, { withFileTypes: true });
+    return entries
+      .filter((entry) => entry.isFile())
+      .map((entry) => entry.name)
+      .filter((name) => name.toLowerCase().endsWith(".html"))
+      .filter((name) => !PRIVATE_HTML_FILES.has(name.toLowerCase()))
+      .sort((left, right) => left.localeCompare(right));
+  } catch {
+    return [];
+  }
+}
+
+async function buildPlatformOverview() {
+  const [usageData, reviews, ideas, apps] = await Promise.all([
+    loadUsageAnalytics(),
+    loadReviews(),
+    loadIdeas(),
+    getPublicHtmlFiles()
+  ]);
+  const usageSummary = summarizeUsage(usageData);
+  const googleHealth = summarizeGoogleKeyHealth();
+  const topApps = usageSummary.byPage
+    .filter((item) => String(item.page || "").toLowerCase().endsWith(".html"))
+    .filter((item) => !PRIVATE_HTML_FILES.has(String(item.page || "").toLowerCase()))
+    .slice(0, 5);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    appCount: apps.length,
+    publicApps: apps.slice(0, 24),
+    reviewCount: reviews.length,
+    ideaCount: ideas.length,
+    usage: {
+      totalEvents: usageSummary.totalEvents,
+      uniqueSessionsTotal: usageSummary.uniqueSessionsTotal,
+      uniqueSessionsToday: usageSummary.uniqueSessionsToday,
+      topApps
+    },
+    ai: {
+      provider: "google",
+      model: GOOGLE_MODEL,
+      ...googleHealth
+    }
+  };
 }
 
 function getBalancedGoogleKeys() {
@@ -1459,11 +1545,22 @@ const server = http.createServer(async (req, res) => {
     const { pathname } = url;
 
     if (req.method === "GET" && pathname === "/api/health") {
+      const googleHealth = summarizeGoogleKeyHealth();
       sendJson(res, 200, {
         ok: true,
         service: "review-backend",
-        reviewStorage: getConfiguredReviewStorage()
+        reviewStorage: getConfiguredReviewStorage(),
+        aiProvider: "google",
+        aiModel: GOOGLE_MODEL,
+        aiLoadedKeys: googleHealth.loadedKeys,
+        aiReadyKeys: googleHealth.readyKeys
       });
+      return;
+    }
+
+    if (req.method === "GET" && pathname === "/api/platform/overview") {
+      const overview = await buildPlatformOverview();
+      sendJson(res, 200, { ok: true, ...overview });
       return;
     }
 
