@@ -996,6 +996,277 @@ async function recordUsageEvent(input, req) {
   await saveUsageAnalytics(next);
 }
 
+function formatMathNumber(value) {
+  if (!Number.isFinite(value)) {
+    return String(value);
+  }
+  if (Math.abs(value) < 1e-10) {
+    return "0";
+  }
+  const rounded = Number(value.toFixed(10));
+  return Number.isInteger(rounded) ? String(rounded) : String(rounded);
+}
+
+function insertImplicitMultiplication(tokens) {
+  const nextTokens = [];
+  for (let index = 0; index < tokens.length; index += 1) {
+    const current = tokens[index];
+    const next = tokens[index + 1];
+    nextTokens.push(current);
+    if (!next) {
+      continue;
+    }
+
+    const currentCanMultiply = current.type === "number" || current.type === "variable" || current.value === ")";
+    const nextCanMultiply = next.type === "number" || next.type === "variable" || next.value === "(";
+    if (currentCanMultiply && nextCanMultiply) {
+      nextTokens.push({ type: "operator", value: "*" });
+    }
+  }
+  return nextTokens;
+}
+
+function tokenizeLinearExpression(expression, variableName) {
+  const rawTokens = [];
+  let index = 0;
+  while (index < expression.length) {
+    const char = expression[index];
+    if (/\s/.test(char)) {
+      index += 1;
+      continue;
+    }
+    if (/\d|\./.test(char)) {
+      let value = char;
+      index += 1;
+      while (index < expression.length && /[\d.]/.test(expression[index])) {
+        value += expression[index];
+        index += 1;
+      }
+      if (!/^\d*\.?\d+$/.test(value)) {
+        throw new Error("Invalid number");
+      }
+      rawTokens.push({ type: "number", value: Number(value) });
+      continue;
+    }
+    if (char.toLowerCase() === variableName) {
+      rawTokens.push({ type: "variable", value: variableName });
+      index += 1;
+      continue;
+    }
+    if ("+-*/()".includes(char)) {
+      rawTokens.push({ type: "operator", value: char });
+      index += 1;
+      continue;
+    }
+    throw new Error("Unsupported character");
+  }
+  return insertImplicitMultiplication(rawTokens);
+}
+
+function combineLinearTerms(left, operator, right) {
+  if (operator === "+") {
+    return { a: left.a + right.a, b: left.b + right.b };
+  }
+  if (operator === "-") {
+    return { a: left.a - right.a, b: left.b - right.b };
+  }
+  if (operator === "*") {
+    if (Math.abs(left.a) > 1e-10 && Math.abs(right.a) > 1e-10) {
+      throw new Error("Non-linear multiplication");
+    }
+    if (Math.abs(right.a) > 1e-10) {
+      return {
+        a: right.a * left.b,
+        b: right.b * left.b
+      };
+    }
+    return {
+      a: left.a * right.b,
+      b: left.b * right.b
+    };
+  }
+  if (operator === "/") {
+    if (Math.abs(right.a) > 1e-10 || Math.abs(right.b) < 1e-10) {
+      throw new Error("Invalid division");
+    }
+    return {
+      a: left.a / right.b,
+      b: left.b / right.b
+    };
+  }
+  throw new Error("Unsupported operator");
+}
+
+function parseLinearExpression(expression, variableName = "x") {
+  const tokens = tokenizeLinearExpression(expression, variableName);
+  let index = 0;
+
+  function peek() {
+    return tokens[index];
+  }
+
+  function consume(expected) {
+    const token = tokens[index];
+    if (!token || (expected && token.value !== expected)) {
+      throw new Error("Unexpected token");
+    }
+    index += 1;
+    return token;
+  }
+
+  function parsePrimary() {
+    const token = peek();
+    if (!token) {
+      throw new Error("Unexpected end");
+    }
+    if (token.type === "number") {
+      consume();
+      return { a: 0, b: token.value };
+    }
+    if (token.type === "variable") {
+      consume();
+      return { a: 1, b: 0 };
+    }
+    if (token.value === "(") {
+      consume("(");
+      const result = parseExpression();
+      consume(")");
+      return result;
+    }
+    throw new Error("Invalid expression");
+  }
+
+  function parseUnary() {
+    const token = peek();
+    if (token?.value === "+") {
+      consume("+");
+      return parseUnary();
+    }
+    if (token?.value === "-") {
+      consume("-");
+      const value = parseUnary();
+      return { a: -value.a, b: -value.b };
+    }
+    return parsePrimary();
+  }
+
+  function parseTerm() {
+    let result = parseUnary();
+    while (peek() && (peek().value === "*" || peek().value === "/")) {
+      const operator = consume().value;
+      const right = parseUnary();
+      result = combineLinearTerms(result, operator, right);
+    }
+    return result;
+  }
+
+  function parseExpression() {
+    let result = parseTerm();
+    while (peek() && (peek().value === "+" || peek().value === "-")) {
+      const operator = consume().value;
+      const right = parseTerm();
+      result = combineLinearTerms(result, operator, right);
+    }
+    return result;
+  }
+
+  const result = parseExpression();
+  if (index !== tokens.length) {
+    throw new Error("Unexpected trailing token");
+  }
+  return result;
+}
+
+function stripMathWrappers(input) {
+  return String(input || "")
+    .toLowerCase()
+    .replace(/[×]/g, "*")
+    .replace(/[÷]/g, "/")
+    .replace(/[–—]/g, "-")
+    .replace(/\b(what|is|calculate|compute|evaluate|answer|please|pls|find|show|me|the|result|of|for|solve)\b/g, " ")
+    .replace(/\?/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function detectLocalMathIntent(prompt) {
+  const normalized = stripMathWrappers(prompt);
+  const compact = normalized.replace(/\s+/g, "");
+  if (!compact) {
+    return null;
+  }
+
+  if (/^[0-9a-z+\-*/().=]+$/i.test(compact) && compact.includes("=") && /[a-z]/i.test(compact)) {
+    const letters = [...new Set((compact.match(/[a-z]/gi) || []).map((letter) => letter.toLowerCase()))];
+    if (letters.length === 1) {
+      return { type: "equation", expression: compact, variableName: letters[0] };
+    }
+  }
+
+  if (/^[0-9+\-*/().]+$/.test(compact) && /[+\-*/]/.test(compact)) {
+    return { type: "math", expression: compact };
+  }
+
+  return null;
+}
+
+function solveDetectedMath(intent) {
+  if (!intent) {
+    return null;
+  }
+
+  if (intent.type === "math") {
+    const result = parseLinearExpression(intent.expression);
+    if (Math.abs(result.a) > 1e-10) {
+      return null;
+    }
+    return {
+      type: "math",
+      text: [
+        "Local math mode",
+        `Expression: ${intent.expression}`,
+        `Answer: ${formatMathNumber(result.b)}`
+      ].join("\n")
+    };
+  }
+
+  if (intent.type === "equation") {
+    const [leftText, rightText] = intent.expression.split("=");
+    if (!leftText || !rightText) {
+      return null;
+    }
+    const left = parseLinearExpression(leftText, intent.variableName);
+    const right = parseLinearExpression(rightText, intent.variableName);
+    const netA = left.a - right.a;
+    const netB = left.b - right.b;
+
+    if (Math.abs(netA) < 1e-10) {
+      const status = Math.abs(netB) < 1e-10 ? "Infinite solutions" : "No solution";
+      return {
+        type: "equation",
+        text: [
+          "Local equation mode",
+          `Equation: ${intent.expression}`,
+          status
+        ].join("\n")
+      };
+    }
+
+    const solution = -netB / netA;
+    return {
+      type: "equation",
+      text: [
+        "Local equation mode",
+        `Equation: ${intent.expression}`,
+        `Step 1: ${formatMathNumber(netA)}${intent.variableName} = ${formatMathNumber(-netB)}`,
+        `Step 2: ${intent.variableName} = ${formatMathNumber(solution)}`
+      ].join("\n")
+    };
+  }
+
+  return null;
+}
+
 async function callGoogleModel(prompt, systemInstruction = "") {
   const keys = getAvailableGoogleKeys();
   if (!keys.length) {
@@ -1457,6 +1728,20 @@ const server = http.createServer(async (req, res) => {
       if (prompt.length < 1) {
         sendJson(res, 400, { error: "prompt is required" });
         return;
+      }
+
+      try {
+        const localResult = solveDetectedMath(detectLocalMathIntent(prompt));
+        if (localResult) {
+          sendJson(res, 200, {
+            text: localResult.text,
+            mode: localResult.type,
+            model: "local-math-engine"
+          });
+          return;
+        }
+      } catch {
+        // If local parsing fails, continue to the AI backend.
       }
 
       if (!getAvailableGoogleKeys().length) {

@@ -203,8 +203,8 @@
             const res = await fetch("/api/aether/chat", {
                 method: "POST", headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({
-                    prompt: `${protocol} ${prompt}`,
-                    systemPrompt: "You are AETHER_CORE v2.5. Respond with concise expert guidance and clear structure."
+                    prompt,
+                    systemPrompt: `${protocol} You are AETHER_CORE v2.5. Respond with concise expert guidance and clear structure.`
                 })
             });
             if(!res.ok) {
