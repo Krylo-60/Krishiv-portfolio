@@ -97,6 +97,9 @@ let ytLastSyncedAt = "";
 let ytLastSyncSource = "local";
 let usageBootstrapped = false;
 let googleKeyCursor = 0;
+const googleKeyHealth = new Map();
+const GOOGLE_KEY_RATE_LIMIT_COOLDOWN_MS = 10 * 60 * 1000;
+const GOOGLE_KEY_ERROR_COOLDOWN_MS = 90 * 1000;
 let usageAnalytics = {
   totalEvents: 0,
   byEvent: {},
@@ -519,9 +522,80 @@ function getBalancedGoogleKeys() {
   if (keys.length <= 1) {
     return keys;
   }
-  const startIndex = googleKeyCursor % keys.length;
-  googleKeyCursor = (googleKeyCursor + 1) % keys.length;
-  return keys.slice(startIndex).concat(keys.slice(0, startIndex));
+  const now = Date.now();
+  const withHealth = keys.map((key, index) => {
+    const state = googleKeyHealth.get(key) || {
+      cooldownUntil: 0,
+      successCount: 0,
+      failureCount: 0,
+      lastUsedAt: 0,
+      lastFailureAt: 0
+    };
+    return { key, index, state };
+  });
+
+  const ready = withHealth.filter((item) => item.state.cooldownUntil <= now);
+  const pool = ready.length ? ready : withHealth;
+  const startIndex = googleKeyCursor % pool.length;
+  googleKeyCursor = (googleKeyCursor + 1) % pool.length;
+  const rotated = pool.slice(startIndex).concat(pool.slice(0, startIndex));
+
+  rotated.sort((left, right) => {
+    const scoreA = left.state.successCount - (left.state.failureCount * 2);
+    const scoreB = right.state.successCount - (right.state.failureCount * 2);
+    if (scoreA !== scoreB) {
+      return scoreB - scoreA;
+    }
+    if (left.state.lastUsedAt !== right.state.lastUsedAt) {
+      return left.state.lastUsedAt - right.state.lastUsedAt;
+    }
+    return left.index - right.index;
+  });
+
+  return rotated.map((item) => item.key);
+}
+
+function getGoogleKeyState(key) {
+  const state = googleKeyHealth.get(key) || {
+    cooldownUntil: 0,
+    successCount: 0,
+    failureCount: 0,
+    lastUsedAt: 0,
+    lastFailureAt: 0
+  };
+  googleKeyHealth.set(key, state);
+  return state;
+}
+
+function isGoogleRateLimitError(error, statusCode, message) {
+  if (statusCode === 429) {
+    return true;
+  }
+  const normalized = String(message || error?.message || "").toLowerCase();
+  return normalized.includes("rate limit")
+    || normalized.includes("quota")
+    || normalized.includes("resource exhausted")
+    || normalized.includes("too many requests");
+}
+
+function markGoogleKeySuccess(key) {
+  const state = getGoogleKeyState(key);
+  state.successCount += 1;
+  state.lastUsedAt = Date.now();
+  state.cooldownUntil = 0;
+}
+
+function markGoogleKeyFailure(key, error, statusCode, message) {
+  const state = getGoogleKeyState(key);
+  const now = Date.now();
+  state.failureCount += 1;
+  state.lastUsedAt = now;
+  state.lastFailureAt = now;
+  state.cooldownUntil = now + (
+    isGoogleRateLimitError(error, statusCode, message)
+      ? GOOGLE_KEY_RATE_LIMIT_COOLDOWN_MS
+      : GOOGLE_KEY_ERROR_COOLDOWN_MS
+  );
 }
 
 function getAvailableYouTubeKeys() {
@@ -1296,6 +1370,7 @@ async function callGoogleModel(prompt, systemInstruction = "") {
     }
 
     try {
+      getGoogleKeyState(key).lastUsedAt = Date.now();
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1304,7 +1379,9 @@ async function callGoogleModel(prompt, systemInstruction = "") {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error?.message || `Google API failed with status ${response.status}`);
+        const failureMessage = data.error?.message || `Google API failed with status ${response.status}`;
+        markGoogleKeyFailure(key, null, response.status, failureMessage);
+        throw new Error(failureMessage);
       }
 
       const parts = data.candidates?.[0]?.content?.parts || [];
@@ -1314,10 +1391,15 @@ async function callGoogleModel(prompt, systemInstruction = "") {
         .trim();
 
       if (text) {
+        markGoogleKeySuccess(key);
         return { text, keySource: "google" };
       }
+      markGoogleKeyFailure(key, null, 200, "Google API returned empty response");
       throw new Error("Google API returned empty response");
     } catch (error) {
+      if (!(error instanceof Error && /Google API failed with status|Google API returned empty response/.test(error.message))) {
+        markGoogleKeyFailure(key, error, 0, error instanceof Error ? error.message : "");
+      }
       lastError = error;
     }
   }
