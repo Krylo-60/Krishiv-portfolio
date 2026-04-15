@@ -1223,9 +1223,7 @@ function solveDetectedMath(intent) {
     return {
       type: "math",
       text: [
-        "Local math mode",
-        `Expression: ${intent.expression}`,
-        `Answer: ${formatMathNumber(result.b)}`
+        `The answer is ${formatMathNumber(result.b)}.`
       ].join("\n")
     };
   }
@@ -1245,8 +1243,6 @@ function solveDetectedMath(intent) {
       return {
         type: "equation",
         text: [
-          "Local equation mode",
-          `Equation: ${intent.expression}`,
           status
         ].join("\n")
       };
@@ -1256,10 +1252,9 @@ function solveDetectedMath(intent) {
     return {
       type: "equation",
       text: [
-        "Local equation mode",
-        `Equation: ${intent.expression}`,
         `Step 1: ${formatMathNumber(netA)}${intent.variableName} = ${formatMathNumber(-netB)}`,
-        `Step 2: ${intent.variableName} = ${formatMathNumber(solution)}`
+        `Step 2: ${intent.variableName} = ${formatMathNumber(solution)}`,
+        `Final answer: ${intent.variableName} = ${formatMathNumber(solution)}`
       ].join("\n")
     };
   }
