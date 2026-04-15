@@ -34,20 +34,7 @@
 
   function applyMode() {
     document.body.classList.toggle("future-mode", modeOn());
-    toggle.textContent = modeOn() ? "Future: ON" : "Future: OFF";
-    toggle.setAttribute("aria-pressed", modeOn() ? "true" : "false");
   }
-
-  const toggle = document.createElement("button");
-  toggle.type = "button";
-  toggle.className = "future-toggle-btn";
-  toggle.setAttribute("aria-label", "Toggle future interface mode");
-  toggle.addEventListener("click", () => {
-    futureMode = modeOn() ? "off" : "on";
-    safeSet(MODE_KEY, futureMode);
-    applyMode();
-  });
-  document.body.appendChild(toggle);
   applyMode();
 
   const futureClock = document.getElementById("futureClock");
@@ -88,13 +75,6 @@
 
   syncFuturePanel();
   setInterval(syncFuturePanel, 1000);
-
-  window.addEventListener("keydown", (event) => {
-    if (event.altKey && event.key.toLowerCase() === "f") {
-      event.preventDefault();
-      toggle.click();
-    }
-  });
 
   window.addEventListener("storage", (event) => {
     if (event.key === MODE_KEY) {
