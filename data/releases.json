@@ -130,5 +130,17 @@
       "Upgraded the shared app launcher with favorites, recents, featured builds, and quick actions.",
       "Expanded the homepage Command Center with AI Mesh and Launch Radar panels."
     ]
+  },
+  {
+    "date": "2026-04-15",
+    "version": "v4.1.0",
+    "title": "App Identity and Release System Upgrade",
+    "summary": "The app gallery became clearer and more complete with working-app labels, SVG icon coverage, owner-only future controls, and stronger public navigation.",
+    "tags": ["apps", "icons", "release-notes"],
+    "items": [
+      "Added SVG icons for every app shown in the homepage gallery, including concept builds.",
+      "Changed live app chips to clearer working-app labels so usable builds stand out instantly.",
+      "Expanded the public web map with the all-links directory, nav search, and matching release-note coverage."
+    ]
   }
 ]

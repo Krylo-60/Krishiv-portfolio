@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Poll Party icon">
+  <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#73dfff"/><stop offset="100%" stop-color="#64ffb7"/></linearGradient></defs>
+  <rect width="96" height="96" rx="24" fill="#081422"/>
+  <path d="M26 70V46M48 70V34M70 70V54" stroke="url(#g)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M22 74h52" stroke="#dffcff" stroke-width="5" stroke-linecap="round"/>
+</svg>

@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const path = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
   const BLOCKED_PATHS = new Set(["index.html", "games.html", "admin.private.html"]);
   if (BLOCKED_PATHS.has(path)) return;
@@ -155,6 +155,68 @@
     { name: "Screenshot Annotator", href: "screenshot-annotator.html", tag: "Concept" }
   ];
 
+  const APP_ICONS = {
+    "study-planner.html": "app-icon-study-planner.svg",
+    "quiz-zone.html": "app-icon-quiz-zone.svg",
+    "review-app.html": "app-icon-review-app.svg",
+    "focus-timer.html": "app-icon-focus-timer.svg",
+    "habit-tracker.html": "app-icon-habit-tracker.svg",
+    "idea-lab-ai.html": "app-icon-idea-lab-ai.svg",
+    "expense-tracker.html": "app-icon-expense-tracker.svg",
+    "notes-vault.html": "app-icon-notes-vault.svg",
+    "flashcards.html": "app-icon-flashcards.svg",
+    "typing-test.html": "app-icon-typing-test.svg",
+    "task-kanban.html": "app-icon-task-kanban.svg",
+    "unit-converter.html": "app-icon-unit-converter.svg",
+    "grade-calculator.html": "app-icon-grade-calculator.svg",
+    "daily-journal.html": "app-icon-daily-journal.svg",
+    "goal-planner.html": "app-icon-goal-planner.svg",
+    "reading-tracker.html": "app-icon-reading-tracker.svg",
+    "water-reminder.html": "app-icon-water-reminder.svg",
+    "presentation-planner.html": "app-icon-presentation-planner.svg",
+    "code-snippets-vault.html": "app-icon-code-snippets.svg",
+    "mind-map-board.html": "app-icon-mind-map.svg",
+    "bazaar-blitz.html": "app-icon-bazaar-blitz.svg",
+    "votestorm-arena.html": "app-icon-votestorm.svg",
+    "time-capsule-lab.html": "app-icon-time-capsule.svg",
+    "storyforge-studio.html": "app-icon-storyforge.svg",
+    "meal-planner.html": "app-icon-meal-planner.svg",
+    "color-palette-lab.html": "app-icon-color-palette-lab.svg",
+    "resume-studio.html": "app-icon-resume-studio.svg",
+    "budget-battle.html": "app-icon-budget-battle.svg",
+    "games.html": "app-icon-games-hub.svg",
+    "reaction-blitz.html": "app-icon-reaction-blitz.svg",
+    "memory-matrix.html": "app-icon-memory-matrix.svg",
+    "color-switch-rush.html": "app-icon-color-switch-rush.svg",
+    "projects.html": "app-icon-projects-page.svg",
+    "contact.html": "app-icon-contact-page.svg",
+    "all-links.html": "app-icon-all-links.svg",
+    "release-notes.html": "logo.svg",
+    "krylo-blox-master-nexus.html": "core-icon-master-nexus.svg",
+    "aether-core-v104.html": "core-icon-aether-v104.svg",
+    "aether-core-v55.html": "core-icon-aether-v55.svg",
+    "aether-core-v25.html": "core-icon-aether-v25.svg",
+    "homework-hub.html": "app-icon-homework-hub.svg",
+    "attendance-tracker.html": "app-icon-attendance-tracker.svg",
+    "link-locker.html": "app-icon-link-locker.svg",
+    "habit-heatmap.html": "app-icon-habit-heatmap.svg",
+    "focus-music-deck.html": "app-icon-focus-music-deck.svg",
+    "thumbnail-idea-board.html": "app-icon-thumbnail-idea-board.svg",
+    "script-planner.html": "app-icon-script-planner.svg",
+    "upload-calendar.html": "app-icon-upload-calendar.svg",
+    "stream-overlay-kit.html": "app-icon-stream-overlay-kit.svg",
+    "qr-generator-pro.html": "app-icon-qr-generator-pro.svg",
+    "pomodoro-duel.html": "app-icon-pomodoro-duel.svg",
+    "revision-race.html": "app-icon-revision-race.svg",
+    "scholarship-finder.html": "app-icon-scholarship-finder.svg",
+    "portfolio-asset-vault.html": "app-icon-portfolio-asset-vault.svg",
+    "poll-party.html": "app-icon-poll-party.svg",
+    "emoji-story-maker.html": "app-icon-emoji-story-maker.svg",
+    "team-splitter.html": "app-icon-team-splitter.svg",
+    "exam-countdown.html": "app-icon-exam-countdown.svg",
+    "screenshot-annotator.html": "app-icon-screenshot-annotator.svg"
+  };
+
   const THEME_KEY = "krishiv_theme_mode_v1";
   const FAV_KEY = "krishiv_app_favorites_v1";
   const RECENT_KEY = "krishiv_app_recents_v1";
@@ -290,12 +352,17 @@
   }
 
   function renderCard({ item, isFav, launches }) {
+    const icon = APP_ICONS[item.href] || "logo.svg";
+    const tierLabel = item.tier === "featured" ? "Featured build" : item.tag;
     return `
       <article class="app-shell-link" data-href="${item.href}">
         <div class="app-shell-link-row">
           <a href="${item.href}" style="color:inherit;text-decoration:none;display:block;flex:1;">
-            <strong>${item.name}</strong>
-            <span>${item.tag}${item.tier === "featured" ? " • Featured" : ""}</span>
+            <span style="display:flex;align-items:center;gap:0.7rem;">
+              <img src="${icon}" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:10px;flex:0 0 auto;" />
+              <strong>${item.name}</strong>
+            </span>
+            <span>${tierLabel}</span>
             <span class="app-shell-meta">${item.href} | launches: ${launches}</span>
           </a>
           <button type="button" class="app-shell-fav ${isFav ? "is-on" : ""}" data-fav="${item.href}" aria-label="Toggle favorite">${isFav ? "Fav" : "+"}</button>
@@ -487,3 +554,4 @@
     }
   });
 })();
+
