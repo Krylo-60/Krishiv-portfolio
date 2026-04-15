@@ -128,6 +128,7 @@
     { name: "Color Switch Rush", href: "color-switch-rush.html", tag: "Gaming" },
     { name: "Projects", href: "projects.html", tag: "Navigation" },
     { name: "Contact", href: "contact.html", tag: "Navigation" },
+    { name: "All Links Directory", href: "all-links.html", tag: "Navigation", tier: "featured" },
     { name: "Release Notes", href: "release-notes.html", tag: "Updates", tier: "featured" },
     { name: "Master Nexus", href: "krylo-blox-master-nexus.html", tag: "Core", tier: "featured" },
     { name: "Aether v104", href: "aether-core-v104.html", tag: "Core" },

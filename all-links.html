@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>All Links Directory | Krishiv Velocity</title>
+  <meta
+    name="description"
+    content="Full live directory for Krishiv Velocity with the homepage, AI builds, tools, games, and release notes in one place."
+  />
+  <link rel="canonical" href="https://krishiv-new-portfoilo.vercel.app/all-links.html" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .links-page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(17, 153, 142, 0.24), transparent 34%),
+        radial-gradient(circle at top right, rgba(255, 119, 48, 0.2), transparent 28%),
+        linear-gradient(180deg, rgba(5, 12, 20, 0.96), rgba(3, 10, 18, 1));
+    }
+
+    .links-hero {
+      padding: 7rem 0 2rem;
+    }
+
+    .links-hero-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+      align-items: start;
+    }
+
+    .links-panel,
+    .links-side-card,
+    .links-group {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 16, 29, 0.82);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(18px);
+    }
+
+    .links-panel,
+    .links-side-card {
+      border-radius: 28px;
+      padding: 1.5rem;
+    }
+
+    .links-panel h1 {
+      margin: 0.4rem 0 0.8rem;
+      font-size: clamp(2.3rem, 4vw, 4.6rem);
+      line-height: 0.95;
+    }
+
+    .links-panel .lead {
+      max-width: 58rem;
+    }
+
+    .links-actions,
+    .links-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .links-stat {
+      min-width: 160px;
+      padding: 0.9rem 1rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .links-stat strong {
+      display: block;
+      font-size: 1.35rem;
+    }
+
+    .links-side-card h2,
+    .links-group h2 {
+      margin-top: 0;
+    }
+
+    .links-side-card p {
+      margin-bottom: 1rem;
+    }
+
+    .links-shell {
+      padding: 1rem 0 4rem;
+    }
+
+    .links-group {
+      border-radius: 24px;
+      padding: 1.35rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .links-group-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .links-chip {
+      border-radius: 999px;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8fe8ff;
+      background: rgba(44, 190, 255, 0.12);
+      border: 1px solid rgba(44, 190, 255, 0.18);
+    }
+
+    .links-grid {
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .link-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      min-height: 100%;
+      padding: 1rem;
+      border-radius: 18px;
+      color: inherit;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .link-card:hover,
+    .link-card:focus-visible {
+      transform: translateY(-3px);
+      border-color: rgba(121, 255, 214, 0.4);
+      background: rgba(121, 255, 214, 0.08);
+    }
+
+    .link-card strong {
+      font-size: 1rem;
+    }
+
+    .link-card span {
+      color: rgba(229, 239, 255, 0.74);
+      line-height: 1.5;
+      word-break: break-word;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.86rem;
+    }
+
+    .links-note {
+      margin-top: 1.5rem;
+      color: rgba(229, 239, 255, 0.72);
+    }
+
+    @media (max-width: 900px) {
+      .links-hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="links-page app-theme-root" data-theme="default" data-mode="dark">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">
+        <img class="site-logo" src="logo.svg" alt="Krishiv Velocity website logo" decoding="async" width="32" height="32" />
+        <span>Krishiv Velocity</span>
+      </a>
+      <nav aria-label="Directory navigation">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="games.html">Games</a></li>
+          <li><a class="active" href="all-links.html">All Links</a></li>
+          <li><a href="release-notes.html">Release Notes</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="links-hero">
+      <div class="container links-hero-grid">
+        <article class="links-panel">
+          <p class="eyebrow">Full Web Directory</p>
+          <h1>Every important Krishiv Velocity link in one place.</h1>
+          <p class="lead">
+            This page keeps the full live directory visible on the web, including the homepage, AI builds, study tools,
+            creative apps, games, and release history.
+          </p>
+          <div class="links-actions">
+            <a class="btn primary" href="https://krishiv-new-portfoilo.vercel.app">Open Base Site</a>
+            <button class="btn secondary" type="button" id="copyAllLinksBtn">Copy All URLs</button>
+          </div>
+          <div class="links-stats">
+            <div class="links-stat">
+              <strong>67+</strong>
+              <span>live links listed</span>
+            </div>
+            <div class="links-stat">
+              <strong>5</strong>
+              <span>main navigation groups</span>
+            </div>
+            <div class="links-stat">
+              <strong>Forever</strong>
+              <span>meant to stay on the site</span>
+            </div>
+          </div>
+        </article>
+
+        <aside class="links-side-card">
+          <p class="eyebrow">Quick Routes</p>
+          <h2>Fast access to the biggest pages.</h2>
+          <p>Use these if you only need the main public jumps.</p>
+          <div class="links-actions">
+            <a class="btn secondary" href="index.html">Home</a>
+            <a class="btn secondary" href="all-links.html">Directory</a>
+            <a class="btn secondary" href="release-notes.html">Release Notes</a>
+            <a class="btn secondary" href="aether-core-v104.html">Aether v104</a>
+          </div>
+          <p class="links-note" id="copyStatus">Everything here points to the live production site.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="links-shell">
+      <div class="container" id="linksDirectory"></div>
+    </section>
+  </main>
+
+  <script src="app-universe-shell.js"></script>
+  <script>
+    const BASE_URL = "https://krishiv-new-portfoilo.vercel.app";
+    const DIRECTORY = [
+      {
+        title: "Main Pages",
+        tag: "Core",
+        links: [
+          "index.html",
+          "projects.html",
+          "contact.html",
+          "games.html",
+          "release-notes.html"
+        ]
+      },
+      {
+        title: "AI Pages",
+        tag: "AI",
+        links: [
+          "aether-core-v104.html",
+          "aether-core-v55.html",
+          "aether-core-v25.html",
+          "idea-lab-ai.html",
+          "review-app.html"
+        ]
+      },
+      {
+        title: "Tools and Apps",
+        tag: "Apps",
+        links: [
+          "attendance-tracker.html",
+          "bmi-health.html",
+          "budget-battle.html",
+          "code-snippets-vault.html",
+          "color-palette-lab.html",
+          "daily-journal.html",
+          "exam-countdown.html",
+          "expense-tracker.html",
+          "flashcards.html",
+          "focus-music-deck.html",
+          "focus-timer.html",
+          "goal-planner.html",
+          "grade-calculator.html",
+          "habit-heatmap.html",
+          "habit-tracker.html",
+          "homework-hub.html",
+          "link-locker.html",
+          "meal-planner.html",
+          "mind-map-board.html",
+          "notes-vault.html",
+          "password-lab.html",
+          "portfolio-asset-vault.html",
+          "presentation-planner.html",
+          "qr-generator-pro.html",
+          "quiz-zone.html",
+          "random-picker.html",
+          "reading-tracker.html",
+          "resume-studio.html",
+          "scholarship-finder.html",
+          "screenshot-annotator.html",
+          "script-planner.html",
+          "storyforge-studio.html",
+          "stream-overlay-kit.html",
+          "study-planner.html",
+          "task-kanban.html",
+          "team-splitter.html",
+          "thumbnail-idea-board.html",
+          "time-capsule-lab.html",
+          "typing-test.html",
+          "unit-converter.html",
+          "upload-calendar.html",
+          "water-reminder.html"
+        ]
+      },
+      {
+        title: "Games and Fun",
+        tag: "Play",
+        links: [
+          "bazaar-blitz.html",
+          "color-switch-rush.html",
+          "emoji-story-maker.html",
+          "krylo-blox-master-nexus.html",
+          "memory-matrix.html",
+          "poll-party.html",
+          "pomodoro-duel.html",
+          "reaction-blitz.html",
+          "revision-race.html",
+          "votestorm-arena.html"
+        ]
+      },
+      {
+        title: "Base Site",
+        tag: "Root",
+        links: [""]
+      }
+    ];
+
+    function fullUrl(path) {
+      return path ? BASE_URL + "/" + path : BASE_URL;
+    }
+
+    function labelFromPath(path) {
+      if (!path) return "Base Site";
+      return path
+        .replace(".html", "")
+        .split("-")
+        .map((part) => part ? part.charAt(0).toUpperCase() + part.slice(1) : "")
+        .join(" ");
+    }
+
+    function renderDirectory() {
+      const host = document.getElementById("linksDirectory");
+      host.innerHTML = DIRECTORY.map((group) => `
+        <section class="links-group">
+          <div class="links-group-head">
+            <div>
+              <p class="eyebrow">${group.tag}</p>
+              <h2>${group.title}</h2>
+            </div>
+            <span class="links-chip">${group.links.length} links</span>
+          </div>
+          <div class="links-grid">
+            ${group.links.map((path) => `
+              <a class="link-card" href="${fullUrl(path)}" target="_blank" rel="noopener noreferrer">
+                <strong>${labelFromPath(path)}</strong>
+                <span>${fullUrl(path)}</span>
+              </a>
+            `).join("")}
+          </div>
+        </section>
+      `).join("");
+    }
+
+    async function copyAllLinks() {
+      const status = document.getElementById("copyStatus");
+      const allUrls = DIRECTORY.flatMap((group) => group.links.map((path) => fullUrl(path))).join("\n");
+      try {
+        await navigator.clipboard.writeText(allUrls);
+        status.textContent = "Copied the full live URL list.";
+      } catch {
+        status.textContent = "Copy failed on this device, but the full list is still visible below.";
+      }
+    }
+
+    renderDirectory();
+    document.getElementById("copyAllLinksBtn").addEventListener("click", copyAllLinks);
+  </script>
+</body>
+</html>

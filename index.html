@@ -96,9 +96,25 @@
           <li><a href="#wins">Wins</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a href="games.html">Games</a></li>
-          <li><button type="button" id="installAppBtn" class="nav-theme-btn" style="display:none;">Install App</button></li>
-          <li><button type="button" id="themeToggleBtn" class="nav-theme-btn">Theme: Aurora</button></li>
+          <li><a href="all-links.html">All Links</a></li>
         </ul>
+        <div class="nav-utility">
+          <form class="nav-search-form" id="navSearchForm">
+            <label class="sr-only" for="navSearchInput">Search pages or sections</label>
+            <input
+              id="navSearchInput"
+              name="nav-search"
+              type="search"
+              list="navSearchOptions"
+              placeholder="Search pages or sections..."
+              autocomplete="off"
+            />
+            <button type="submit" class="nav-search-btn">Go</button>
+            <datalist id="navSearchOptions"></datalist>
+          </form>
+          <button type="button" id="installAppBtn" class="nav-theme-btn" style="display:none;">Install App</button>
+          <button type="button" id="themeToggleBtn" class="nav-theme-btn">Theme: Aurora</button>
+        </div>
       </nav>
     </div>
   </header>
@@ -169,6 +185,7 @@
           </div>
           <div class="hero-links">
             <a href="games.html">Games I Play</a>
+            <a href="all-links.html">Full Web Directory</a>
             <a href="#about">More About Me</a>
           </div>
           <div class="hero-stats">
@@ -1181,6 +1198,14 @@
             <h3>Contact Page</h3>
             <p>Public contact links and communication routes.</p>
           </a>
+          <a class="app-verse-card" href="all-links.html" data-launch-name="All Links Directory" data-launch-tags="directory all links web map navigation" data-tier="featured">
+            <div class="app-verse-head">
+              <img class="app-mini-logo-img" src="logo.svg" alt="" loading="lazy" decoding="async" width="32" height="32" />
+              <span class="card-kicker">Navigation</span>
+            </div>
+            <h3>All Links Directory</h3>
+            <p>The full public map of the website with every important live route.</p>
+          </a>
           <a class="app-verse-card" href="password-lab.html" data-launch-name="Password Lab" data-launch-tags="security password generator">
             <div class="app-verse-head">
               <img class="app-mini-logo-img" src="app-icon-password-lab.svg" alt="" loading="lazy" decoding="async" width="32" height="32" />
@@ -2039,6 +2064,7 @@
           </p>
           <div class="hero-actions">
             <a class="btn secondary" href="release-notes.html">Open Full Release Notes</a>
+            <a class="btn secondary" href="all-links.html">Open All Links Directory</a>
           </div>
         </div>
 
@@ -2317,6 +2343,9 @@
       const paletteSearch = document.getElementById('paletteSearch');
       const paletteList = document.getElementById('paletteList');
       const paletteCloseBtn = document.getElementById('paletteCloseBtn');
+      const navSearchForm = document.getElementById('navSearchForm');
+      const navSearchInput = document.getElementById('navSearchInput');
+      const navSearchOptions = document.getElementById('navSearchOptions');
       const heroQuickApp = document.getElementById('heroQuickApp');
       const heroQuickGo = document.getElementById('heroQuickGo');
       const heroRandomGo = document.getElementById('heroRandomGo');
@@ -2365,6 +2394,58 @@
       const proofSectionCount = document.getElementById('proofSectionCount');
       const feedbackSummary = document.getElementById('feedbackSummary');
       const feedbackPreviewGrid = document.getElementById('feedbackPreviewGrid');
+      const navDestinations = [
+        { label: 'Home', url: '#home', keywords: 'top hero landing' },
+        { label: 'About', url: '#about', keywords: 'profile story intro' },
+        { label: 'Projects', url: '#projects', keywords: 'work showcase build' },
+        { label: 'Apps', url: '#app-verse', keywords: 'apps tools galaxy directory' },
+        { label: 'Signature', url: '#signature', keywords: 'style code craft' },
+        { label: 'Creator', url: '#creator', keywords: 'youtube gaming creator' },
+        { label: 'Wins', url: '#wins', keywords: 'achievements progress' },
+        { label: 'Contact', url: '#contact', keywords: 'email discord reach out' },
+        { label: 'Games', url: 'games.html', keywords: 'fun gaming hub' },
+        { label: 'All Links Directory', url: 'all-links.html', keywords: 'all links map directory every page' },
+        { label: 'Release Notes', url: 'release-notes.html', keywords: 'updates changelog versions' },
+        { label: 'Aether v104', url: 'aether-core-v104.html', keywords: 'ai chat gemini math' },
+        { label: 'Aether v55', url: 'aether-core-v55.html', keywords: 'ai chat' },
+        { label: 'Aether v2.5', url: 'aether-core-v25.html', keywords: 'ai chat' },
+        { label: 'Idea Lab AI', url: 'idea-lab-ai.html', keywords: 'brainstorm ai ideas' },
+        { label: 'Review App', url: 'review-app.html', keywords: 'feedback reviews creator mode' },
+        { label: 'Study Planner', url: 'study-planner.html', keywords: 'school productivity' },
+        { label: 'Quiz Zone', url: 'quiz-zone.html', keywords: 'questions learning' },
+        { label: 'Projects Page', url: 'projects.html', keywords: 'portfolio project list' },
+        { label: 'Contact Page', url: 'contact.html', keywords: 'contact links' }
+      ];
+
+      if (navSearchOptions) {
+        navSearchOptions.innerHTML = navDestinations
+          .map((item) => '<option value="' + item.label + '"></option>')
+          .join('');
+      }
+
+      if (navSearchForm && navSearchInput) {
+        navSearchForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const query = navSearchInput.value.trim().toLowerCase();
+          if (!query) {
+            navSearchInput.focus();
+            return;
+          }
+
+          const match = navDestinations.find((item) => {
+            const haystack = (item.label + ' ' + item.keywords + ' ' + item.url).toLowerCase();
+            return haystack.includes(query);
+          });
+
+          if (!match) {
+            navSearchInput.select();
+            return;
+          }
+
+          closeMobileMenu();
+          window.location.href = match.url;
+        });
+      }
 
       const closeMobileMenu = () => {
         document.body.classList.remove('nav-open');
