@@ -1,0 +1,134 @@
+[
+  {
+    "date": "2026-02-04",
+    "version": "v1.0.0",
+    "title": "Initial Portfolio Launch",
+    "summary": "The first live version of the portfolio went online with the core homepage, projects, and creator identity.",
+    "tags": ["launch", "foundation", "portfolio"],
+    "items": [
+      "Published the first public site structure and portfolio identity.",
+      "Established the first project showcase and contact flow.",
+      "Created the base for future app pages and creator expansion."
+    ]
+  },
+  {
+    "date": "2026-04-07",
+    "version": "v2.0.0",
+    "title": "App Suite Expansion",
+    "summary": "The site grew from a portfolio into a larger app ecosystem with more tools, concept pages, and stronger contact coverage.",
+    "tags": ["apps", "growth", "content"],
+    "items": [
+      "Expanded the portfolio app suite with new student and creator tool ideas.",
+      "Refreshed the contact area for better discovery and outreach.",
+      "Pushed the site toward a wider multi-page product feel."
+    ]
+  },
+  {
+    "date": "2026-04-09",
+    "version": "v2.1.0",
+    "title": "Sync Stability Upgrade",
+    "summary": "Core portfolio app flows and sync behavior were stabilized so live systems felt more reliable.",
+    "tags": ["stability", "sync", "backend"],
+    "items": [
+      "Fixed sync lag issues across connected portfolio systems.",
+      "Improved reliability for app flows tied to live data.",
+      "Reduced weak points in the portfolio control flow."
+    ]
+  },
+  {
+    "date": "2026-04-09",
+    "version": "v2.2.0",
+    "title": "Private Owner Dashboard Launch",
+    "summary": "A protected owner dashboard was added to manage and inspect the project more like a real product.",
+    "tags": ["owner", "private", "dashboard"],
+    "items": [
+      "Added the private owner dashboard route and UI.",
+      "Created a stronger control surface for project operations.",
+      "Moved toward product-grade management instead of static admin pages."
+    ]
+  },
+  {
+    "date": "2026-04-09",
+    "version": "v2.3.0",
+    "title": "Owner Launcher Controls Expansion",
+    "summary": "The owner dashboard became more capable with richer launcher and control actions.",
+    "tags": ["owner", "controls", "launcher"],
+    "items": [
+      "Expanded owner launcher controls for faster operations.",
+      "Improved utility and navigation inside the private surface.",
+      "Made it easier to act on project workflows in one place."
+    ]
+  },
+  {
+    "date": "2026-04-09",
+    "version": "v2.4.0",
+    "title": "Owner Experience Polish",
+    "summary": "Typography, layout polish, and dashboard sync consistency were tightened across the owner experience.",
+    "tags": ["design", "owner", "polish"],
+    "items": [
+      "Refined typography and visual rhythm in the owner dashboard.",
+      "Synced owner controls across the live site for consistency.",
+      "Improved overall clarity and readability."
+    ]
+  },
+  {
+    "date": "2026-04-09",
+    "version": "v2.5.0",
+    "title": "Owner Audits and Command Center Upgrade",
+    "summary": "The private command center evolved into a more complete operational surface with audits and app state controls.",
+    "tags": ["audits", "owner", "ops"],
+    "items": [
+      "Added owner audits and stronger app state controls.",
+      "Expanded the owner command center for broader project oversight.",
+      "Improved confidence when managing live systems."
+    ]
+  },
+  {
+    "date": "2026-04-15",
+    "version": "v3.0.0",
+    "title": "Aether Local Math Engine",
+    "summary": "Aether builds gained instant math and equation solving locally before the Gemini fallback.",
+    "tags": ["aether", "ai", "math"],
+    "items": [
+      "Added a local math solver for arithmetic and simple equations.",
+      "Kept non-math prompts routed to Gemini.",
+      "Removed visible local-routing labels so answers stay natural."
+    ]
+  },
+  {
+    "date": "2026-04-15",
+    "version": "v3.1.0",
+    "title": "Gemini Key Pool Rotation",
+    "summary": "The Google AI backend moved from a single-key pattern to a rotating key pool with failover.",
+    "tags": ["ai", "keys", "failover"],
+    "items": [
+      "Added a shared Google API key pool for backend AI requests.",
+      "Rotated requests across keys to spread load.",
+      "Prepared the backend for stronger uptime during higher usage."
+    ]
+  },
+  {
+    "date": "2026-04-15",
+    "version": "v3.2.0",
+    "title": "Quota Saver AI Routing",
+    "summary": "The AI backend became health-aware and started cooling down stressed keys instead of burning through them.",
+    "tags": ["ai", "quota", "backend"],
+    "items": [
+      "Tracked per-key health in memory.",
+      "Added cooldowns for rate-limited or failing keys.",
+      "Preferred healthier keys to preserve the overall pool."
+    ]
+  },
+  {
+    "date": "2026-04-15",
+    "version": "v4.0.0",
+    "title": "Platform Control Center Major Update",
+    "summary": "The website became more like a connected product ecosystem with live platform stats, AI mesh reporting, and a stronger launcher experience.",
+    "tags": ["major", "platform", "dashboard"],
+    "items": [
+      "Added a public platform overview endpoint for live ecosystem data.",
+      "Upgraded the shared app launcher with favorites, recents, featured builds, and quick actions.",
+      "Expanded the homepage Command Center with AI Mesh and Launch Radar panels."
+    ]
+  }
+]

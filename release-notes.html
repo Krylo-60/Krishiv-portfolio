@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Krishiv PB" />
+  <title>Release Notes | Krishiv Velocity</title>
+  <meta name="description" content="Full release history for Krishiv Velocity from the first launch to every major upgrade that follows." />
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    :root {
+      --bg: #071223;
+      --panel: rgba(15, 32, 56, 0.92);
+      --panel-strong: rgba(8, 20, 37, 0.96);
+      --line: rgba(121, 216, 255, 0.28);
+      --text: #eef7ff;
+      --muted: #9fc0de;
+      --accent: #79d8ff;
+      --accent-2: #58d4a8;
+      --accent-3: #ffd166;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 14%, rgba(121, 216, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 82% 12%, rgba(88, 212, 168, 0.14), transparent 20%),
+        linear-gradient(160deg, #020913, #0a2037 46%, #13375c);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1180px, 94vw);
+      margin: 0 auto;
+      padding: 28px 0 120px;
+    }
+
+    .hero,
+    .panel,
+    .release-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(160deg, var(--panel), var(--panel-strong));
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .hero {
+      padding: 28px;
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1.6fr 1fr;
+      align-items: start;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font: 700 12px/1.2 "JetBrains Mono", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.02; margin-bottom: 12px; }
+    .lead { color: var(--muted); font-size: 1.03rem; max-width: 60ch; }
+
+    .hero-actions,
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn,
+    input,
+    select {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      font: inherit;
+    }
+
+    .btn {
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(8, 22, 38, 0.8);
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn.primary {
+      color: #062033;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-color: transparent;
+    }
+
+    .stat-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stat-card {
+      border: 1px solid rgba(121, 216, 255, 0.2);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font: 700 11px/1.2 "JetBrains Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .panel {
+      margin-top: 18px;
+      padding: 20px;
+    }
+
+    .toolbar {
+      margin-top: 16px;
+      align-items: center;
+    }
+
+    input,
+    select {
+      color: var(--text);
+      background: rgba(8, 21, 36, 0.88);
+      min-width: 0;
+    }
+
+    .timeline {
+      margin-top: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .release-card {
+      padding: 18px 18px 18px 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .release-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2), var(--accent-3));
+    }
+
+    .release-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .release-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .release-version,
+    .release-tag {
+      border-radius: 999px;
+      padding: 5px 9px;
+      font: 700 11px/1.2 "JetBrains Mono", monospace;
+    }
+
+    .release-version {
+      color: #062033;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .release-tag {
+      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(121, 216, 255, 0.18);
+    }
+
+    .release-date {
+      color: var(--accent-3);
+      font: 700 12px/1.2 "JetBrains Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .release-summary {
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .release-points {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+    }
+
+    .release-points li { margin: 6px 0; }
+    .meta { color: var(--muted); }
+
+    .empty-state {
+      padding: 22px;
+      border: 1px dashed rgba(121, 216, 255, 0.28);
+      border-radius: 18px;
+      color: var(--muted);
+      background: rgba(7, 18, 31, 0.6);
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(1180px, 96vw); }
+      .stat-grid { grid-template-columns: 1fr; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      input, select { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Forever Log</p>
+        <h1>Release Notes from the first launch to every upgrade after it.</h1>
+        <p class="lead">
+          This page is the permanent timeline for Krishiv Velocity. It starts from the beginning, tracks major events already shipped, and is built to keep growing with every future release.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="index.html#changelog">Back to Homepage Changelog</a>
+          <a class="btn" href="projects.html">Open Projects</a>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <article class="stat-card">
+          <strong id="releaseCount">0</strong>
+          <span>Total Releases</span>
+        </article>
+        <article class="stat-card">
+          <strong id="firstRelease">-</strong>
+          <span>Started</span>
+        </article>
+        <article class="stat-card">
+          <strong id="latestRelease">-</strong>
+          <span>Latest Version</span>
+        </article>
+        <article class="stat-card">
+          <strong id="latestDate">-</strong>
+          <span>Latest Release Date</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <p class="eyebrow">Filter Timeline</p>
+      <h2>Search events, versions, tags, and milestone titles.</h2>
+      <div class="toolbar">
+        <input id="releaseSearch" type="search" placeholder="Search release notes..." />
+        <select id="releaseTagFilter">
+          <option value="all">All tags</option>
+        </select>
+        <button class="btn" type="button" id="resetFilters">Reset Filters</button>
+      </div>
+      <p class="meta" id="releaseSummary">Loading release history...</p>
+      <div class="timeline" id="releaseTimeline"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const searchInput = document.getElementById("releaseSearch");
+      const tagFilter = document.getElementById("releaseTagFilter");
+      const resetBtn = document.getElementById("resetFilters");
+      const summary = document.getElementById("releaseSummary");
+      const timeline = document.getElementById("releaseTimeline");
+      const releaseCount = document.getElementById("releaseCount");
+      const firstRelease = document.getElementById("firstRelease");
+      const latestRelease = document.getElementById("latestRelease");
+      const latestDate = document.getElementById("latestDate");
+      let releases = [];
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function renderStats(items) {
+        releaseCount.textContent = String(items.length);
+        firstRelease.textContent = items.length ? items[items.length - 1].date : "-";
+        latestRelease.textContent = items.length ? items[0].version : "-";
+        latestDate.textContent = items.length ? items[0].date : "-";
+      }
+
+      function renderTimeline() {
+        const query = String(searchInput.value || "").trim().toLowerCase();
+        const tag = String(tagFilter.value || "all");
+        const filtered = releases.filter((release) => {
+          const haystack = [
+            release.date,
+            release.version,
+            release.title,
+            release.summary,
+            ...(release.tags || []),
+            ...(release.items || [])
+          ].join(" ").toLowerCase();
+          const matchesQuery = !query || haystack.includes(query);
+          const matchesTag = tag === "all" || (release.tags || []).includes(tag);
+          return matchesQuery && matchesTag;
+        });
+
+        renderStats(releases);
+        summary.textContent = filtered.length
+          ? `Showing ${filtered.length} release event${filtered.length === 1 ? "" : "s"} in the permanent timeline.`
+          : "No releases match the current filters.";
+
+        timeline.innerHTML = filtered.length
+          ? filtered.map((release) => `
+              <article class="release-card">
+                <div class="release-head">
+                  <div>
+                    <div class="release-meta">
+                      <span class="release-version">${escapeHtml(release.version)}</span>
+                      ${(release.tags || []).map((tagItem) => `<span class="release-tag">${escapeHtml(tagItem)}</span>`).join("")}
+                    </div>
+                    <h3>${escapeHtml(release.title)}</h3>
+                  </div>
+                  <span class="release-date">${escapeHtml(release.date)}</span>
+                </div>
+                <p class="release-summary">${escapeHtml(release.summary)}</p>
+                <ul class="release-points">
+                  ${(release.items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+                </ul>
+              </article>
+            `).join("")
+          : `<div class="empty-state">Try a different search or tag filter. This page is built to keep every future release visible here.</div>`;
+      }
+
+      async function loadReleases() {
+        try {
+          const response = await fetch("data/releases.json", { cache: "no-store" });
+          if (!response.ok) throw new Error("release data unavailable");
+          const data = await response.json();
+          releases = Array.isArray(data) ? data.slice().sort((a, b) => String(b.date).localeCompare(String(a.date))) : [];
+          const tags = [...new Set(releases.flatMap((release) => Array.isArray(release.tags) ? release.tags : []))].sort();
+          tagFilter.innerHTML = [`<option value="all">All tags</option>`]
+            .concat(tags.map((tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`))
+            .join("");
+          renderTimeline();
+        } catch (error) {
+          summary.textContent = "Release history could not load right now.";
+          timeline.innerHTML = `<div class="empty-state">The release notes timeline is temporarily unavailable.</div>`;
+        }
+      }
+
+      searchInput.addEventListener("input", renderTimeline);
+      tagFilter.addEventListener("change", renderTimeline);
+      resetBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        tagFilter.value = "all";
+        renderTimeline();
+      });
+
+      loadReleases();
+    })();
+  </script>
+
+  <script src="app-universe-shell.js" defer></script>
+</body>
+</html>
