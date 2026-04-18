@@ -157,8 +157,11 @@
 <script>
     const SECRET = "24714";
     const VIRTUAL_NODE_COUNT = 25;
+    const PROMPT_HISTORY_KEY = 'aether_v55_prompt_history';
     
     let isGodMode = (localStorage.getItem('ignite_god') === 'true');
+    let promptHistory = JSON.parse(localStorage.getItem(PROMPT_HISTORY_KEY) || '[]');
+    let historyIndex = -1;
 
     const FESTIVALS = { 
         "1-13": "Lohri", "1-14": "Makar Sankranti", "1-23": "Vasant Panchami", "1-26": "Republic Day",
@@ -270,10 +273,23 @@
         const input = document.getElementById('userInput');
         const val = input.value.trim();
         if(!val) return;
+        promptHistory = [val, ...promptHistory.filter((item) => item !== val)].slice(0, 30);
+        localStorage.setItem(PROMPT_HISTORY_KEY, JSON.stringify(promptHistory));
+        historyIndex = -1;
         input.value = '';
         addMsg(val, "user");
         const loader = addMsg("<i>SYNTHESIZING_NEURAL_LOGIC...</i>", "bot");
         await attemptRequest(0, val, loader);
+    }
+
+    function recallPrompt(step) {
+        const input = document.getElementById('userInput');
+        if (!input || !promptHistory.length) return;
+        if (historyIndex < 0) historyIndex = 0;
+        else historyIndex = Math.min(promptHistory.length - 1, Math.max(0, historyIndex + step));
+        input.value = promptHistory[historyIndex] || '';
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
     }
 
     function missionPack(type) {
@@ -325,6 +341,32 @@
 
     window.onload = () => {
         if(localStorage.getItem('ignite_locked') !== 'false') document.getElementById('gate').style.display = 'flex';
+        const promptInput = document.getElementById('userInput');
+        if (promptInput) {
+            promptInput.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    recallPrompt(1);
+                    return;
+                }
+                if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    if (historyIndex <= 0) {
+                        historyIndex = -1;
+                        promptInput.value = '';
+                        return;
+                    }
+                    recallPrompt(-1);
+                    return;
+                }
+                if (event.key === 'Tab' && !event.shiftKey) {
+                    event.preventDefault();
+                    recallPrompt(historyIndex < 0 ? 0 : 1);
+                    return;
+                }
+                historyIndex = -1;
+            });
+        }
         
         const map = document.getElementById('map');
         for(let i=0; i<15; i++) {

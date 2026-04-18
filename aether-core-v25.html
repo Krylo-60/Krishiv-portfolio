@@ -184,6 +184,9 @@
     let currentIdx = 0;
     let lastAnswer = "";
     let systemMode = "SYNTHESIS";
+    const PROMPT_HISTORY_KEY = 'aether_v25_prompt_history';
+    let promptHistory = JSON.parse(localStorage.getItem(PROMPT_HISTORY_KEY) || '[]');
+    let historyIndex = -1;
 
     function setMode(m, el) {
         systemMode = m;
@@ -207,10 +210,23 @@
         const input = document.getElementById('userInput');
         const val = input.value.trim();
         if(!val) return;
+        promptHistory = [val, ...promptHistory.filter((item) => item !== val)].slice(0, 30);
+        localStorage.setItem(PROMPT_HISTORY_KEY, JSON.stringify(promptHistory));
+        historyIndex = -1;
         render('user', val);
         input.value = '';
         const loader = render('bot', 'Processing...');
         await fetchAI(val, loader);
+    }
+
+    function recallPrompt(step) {
+        const input = document.getElementById('userInput');
+        if (!input || !promptHistory.length) return;
+        if (historyIndex < 0) historyIndex = 0;
+        else historyIndex = Math.min(promptHistory.length - 1, Math.max(0, historyIndex + step));
+        input.value = promptHistory[historyIndex] || '';
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
     }
 
     async function fetchAI(prompt, loader) {
@@ -260,6 +276,30 @@
         a.click();
         URL.revokeObjectURL(url);
     }
+
+    document.getElementById('userInput').addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            recallPrompt(1);
+            return;
+        }
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            if (historyIndex <= 0) {
+                historyIndex = -1;
+                event.currentTarget.value = '';
+                return;
+            }
+            recallPrompt(-1);
+            return;
+        }
+        if (event.key === 'Tab' && !event.shiftKey) {
+            event.preventDefault();
+            recallPrompt(historyIndex < 0 ? 0 : 1);
+            return;
+        }
+        historyIndex = -1;
+    });
 
     // --- NEURAL BACKGROUND ENGINE ---
     const canvas = document.getElementById('bg-canvas');

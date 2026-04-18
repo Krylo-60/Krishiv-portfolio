@@ -213,6 +213,7 @@
     let buffer = "";
     let lastBotResponse = "";
     let logs = JSON.parse(localStorage.getItem('titan_ultimate_logs') || '[]');
+    let historyIndex = -1;
 
     // Build Nodes
     Array.from({ length: VIRTUAL_NODE_COUNT }).forEach((_, i) => {
@@ -234,6 +235,40 @@
         f.innerHTML = logs.slice(0, 8).map(l => `<div style="padding:12px; border-bottom:1px solid #111; font-size:12px; color:#555; cursor:pointer;" onclick="document.getElementById('userInput').value='${l}'">${l}</div>`).join('');
     }
     refreshLogs();
+
+    function recallHistory(step) {
+        const input = document.getElementById('userInput');
+        if (!logs.length || !input) return;
+        if (historyIndex < 0) historyIndex = 0;
+        else historyIndex = Math.min(logs.length - 1, Math.max(0, historyIndex + step));
+        input.value = logs[historyIndex] || "";
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+    }
+
+    document.getElementById('userInput').addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            recallHistory(1);
+            return;
+        }
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            if (historyIndex <= 0) {
+                historyIndex = -1;
+                event.currentTarget.value = "";
+                return;
+            }
+            recallHistory(-1);
+            return;
+        }
+        if (event.key === 'Tab' && !event.shiftKey) {
+            event.preventDefault();
+            recallHistory(historyIndex < 0 ? 0 : 1);
+            return;
+        }
+        historyIndex = -1;
+    });
 
     async function processFile(input) {
         const f = input.files[0];
@@ -262,6 +297,7 @@
         if(document.getElementById('hero')) document.getElementById('chatWall').innerHTML = '';
         if(cmd) {
             logs.unshift(cmd);
+            logs = Array.from(new Set(logs)).slice(0, 30);
             localStorage.setItem('titan_ultimate_logs', JSON.stringify(logs));
             refreshLogs();
         }

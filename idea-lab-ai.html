@@ -108,6 +108,9 @@
       const ideasSearch = document.getElementById("ideasSearch");
       const templateButtons = Array.from(document.querySelectorAll(".templateBtn"));
       let allIdeas = [];
+      const PROMPT_HISTORY_KEY = "idea_lab_prompt_history_v1";
+      let promptHistory = [];
+      let historyIndex = -1;
 
       async function api(path, options = {}) {
         const response = await fetch(path, {
@@ -126,6 +129,32 @@
           .replace(/>/g, "&gt;")
           .replace(/"/g, "&quot;")
           .replace(/'/g, "&#39;");
+      }
+
+      try {
+        promptHistory = JSON.parse(localStorage.getItem(PROMPT_HISTORY_KEY) || "[]");
+        if (!Array.isArray(promptHistory)) promptHistory = [];
+      } catch {
+        promptHistory = [];
+      }
+
+      function savePromptHistory(entry) {
+        const signature = JSON.stringify(entry);
+        promptHistory = [entry, ...promptHistory.filter((item) => JSON.stringify(item) !== signature)].slice(0, 25);
+        localStorage.setItem(PROMPT_HISTORY_KEY, JSON.stringify(promptHistory));
+        historyIndex = -1;
+      }
+
+      function applyPromptHistory(step) {
+        if (!promptHistory.length) return;
+        if (historyIndex < 0) historyIndex = 0;
+        else historyIndex = Math.min(promptHistory.length - 1, Math.max(0, historyIndex + step));
+        const entry = promptHistory[historyIndex] || {};
+        goal.value = String(entry.goal || "");
+        audience.value = String(entry.audience || "");
+        constraints.value = String(entry.constraints || "");
+        goal.focus();
+        goal.setSelectionRange(goal.value.length, goal.value.length);
       }
 
       async function loadIdeas() {
@@ -165,6 +194,12 @@
           alert("Goal must be at least 5 characters.");
           return;
         }
+
+        savePromptHistory({
+          goal: payload.goal,
+          audience: payload.audience,
+          constraints: payload.constraints
+        });
 
         result.value = "Generating idea...";
         genMode.textContent = "";
@@ -241,6 +276,31 @@
       templateButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
           goal.value = btn.dataset.template || "";
+        });
+      });
+
+      [goal, audience, constraints].forEach((field) => {
+        field.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowUp") {
+            event.preventDefault();
+            applyPromptHistory(1);
+            return;
+          }
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            if (historyIndex <= 0) {
+              historyIndex = -1;
+              return;
+            }
+            applyPromptHistory(-1);
+            return;
+          }
+          if (event.key === "Tab" && !event.shiftKey) {
+            event.preventDefault();
+            applyPromptHistory(historyIndex < 0 ? 0 : 1);
+            return;
+          }
+          historyIndex = -1;
         });
       });
 
