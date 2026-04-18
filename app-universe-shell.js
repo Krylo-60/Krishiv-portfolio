@@ -134,25 +134,25 @@
     { name: "Aether v104", href: "aether-core-v104.html", tag: "Core" },
     { name: "Aether v55", href: "aether-core-v55.html", tag: "Core" },
     { name: "Aether v2.5", href: "aether-core-v25.html", tag: "Core" },
-    { name: "Homework Hub", href: "homework-hub.html", tag: "Concept" },
-    { name: "Attendance Tracker", href: "attendance-tracker.html", tag: "Concept" },
-    { name: "Link Locker", href: "link-locker.html", tag: "Concept" },
-    { name: "Habit Heatmap", href: "habit-heatmap.html", tag: "Concept" },
-    { name: "Focus Music Deck", href: "focus-music-deck.html", tag: "Concept" },
-    { name: "Thumbnail Idea Board", href: "thumbnail-idea-board.html", tag: "Concept" },
-    { name: "Script Planner", href: "script-planner.html", tag: "Concept" },
-    { name: "Upload Calendar", href: "upload-calendar.html", tag: "Concept" },
-    { name: "Stream Overlay Kit", href: "stream-overlay-kit.html", tag: "Concept" },
-    { name: "QR Generator Pro", href: "qr-generator-pro.html", tag: "Concept" },
-    { name: "Pomodoro Duel", href: "pomodoro-duel.html", tag: "Concept" },
-    { name: "Revision Race", href: "revision-race.html", tag: "Concept" },
-    { name: "Scholarship Finder", href: "scholarship-finder.html", tag: "Concept" },
-    { name: "Portfolio Asset Vault", href: "portfolio-asset-vault.html", tag: "Concept" },
-    { name: "Poll Party", href: "poll-party.html", tag: "Concept" },
-    { name: "Emoji Story Maker", href: "emoji-story-maker.html", tag: "Concept" },
-    { name: "Team Splitter", href: "team-splitter.html", tag: "Concept" },
-    { name: "Exam Countdown", href: "exam-countdown.html", tag: "Concept" },
-    { name: "Screenshot Annotator", href: "screenshot-annotator.html", tag: "Concept" }
+    { name: "Homework Hub", href: "homework-hub.html", tag: "App" },
+    { name: "Attendance Tracker", href: "attendance-tracker.html", tag: "App" },
+    { name: "Link Locker", href: "link-locker.html", tag: "App" },
+    { name: "Habit Heatmap", href: "habit-heatmap.html", tag: "App" },
+    { name: "Focus Music Deck", href: "focus-music-deck.html", tag: "App" },
+    { name: "Thumbnail Idea Board", href: "thumbnail-idea-board.html", tag: "App" },
+    { name: "Script Planner", href: "script-planner.html", tag: "App" },
+    { name: "Upload Calendar", href: "upload-calendar.html", tag: "App" },
+    { name: "Stream Overlay Kit", href: "stream-overlay-kit.html", tag: "App" },
+    { name: "QR Generator Pro", href: "qr-generator-pro.html", tag: "App" },
+    { name: "Pomodoro Duel", href: "pomodoro-duel.html", tag: "App" },
+    { name: "Revision Race", href: "revision-race.html", tag: "App" },
+    { name: "Scholarship Finder", href: "scholarship-finder.html", tag: "App" },
+    { name: "Portfolio Asset Vault", href: "portfolio-asset-vault.html", tag: "App" },
+    { name: "Poll Party", href: "poll-party.html", tag: "App" },
+    { name: "Emoji Story Maker", href: "emoji-story-maker.html", tag: "App" },
+    { name: "Team Splitter", href: "team-splitter.html", tag: "App" },
+    { name: "Exam Countdown", href: "exam-countdown.html", tag: "App" },
+    { name: "Screenshot Annotator", href: "screenshot-annotator.html", tag: "App" }
   ];
 
   const APP_ICONS = {
@@ -554,4 +554,5 @@
     }
   });
 })();
+
 

@@ -142,5 +142,17 @@
       "Changed live app chips to clearer working-app labels so usable builds stand out instantly.",
       "Expanded the public web map with the all-links directory, nav search, and matching release-note coverage."
     ]
+  },
+  {
+    "date": "2026-04-18",
+    "version": "v4.2.0",
+    "title": "Concept Apps Promoted to Working Apps",
+    "summary": "Former concept cards were promoted into the working app lineup so the gallery now treats them as usable apps instead of placeholders.",
+    "tags": ["apps", "labels", "gallery"],
+    "items": [
+      "Removed concept-only labeling from the promoted app cards.",
+      "Reclassified those builds into the working app tier for filtering and stats.",
+      "Updated gallery wording so the site presents them as real apps across the homepage and launcher."
+    ]
   }
 ]
