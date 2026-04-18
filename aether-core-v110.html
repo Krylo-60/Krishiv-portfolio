@@ -840,6 +840,14 @@
       nodeMatrix.appendChild(node);
     });
 
+    function safeMarkdown(text) {
+      const value = String(text || "");
+      if (window.marked && typeof window.marked.parse === "function") {
+        return window.marked.parse(value);
+      }
+      return escapeHtml(value).replace(/\n/g, "<br>");
+    }
+
     function escapeHtml(text) {
       return String(text)
         .replace(/&/g, "&amp;")
@@ -1004,7 +1012,7 @@
 
     async function routePrompt(prompt, loader, index = 0) {
       if (index >= NODE_COUNT) {
-        loader.innerHTML = marked.parse("I couldn't complete the request because every route in the mesh failed. Please try again.");
+        loader.innerHTML = safeMarkdown("I couldn't complete the request because every route in the mesh failed. Please try again.");
         document.getElementById("meshStatus").textContent = "Mesh fault";
         pushStatus("All nodes exhausted during failover");
         return;
@@ -1029,42 +1037,55 @@
 
         const text = String(data.text || "No response.");
         lastResponse = text;
-        loader.innerHTML = marked.parse(text);
+        loader.innerHTML = safeMarkdown(text);
         markNodeState(index, "complete");
         document.getElementById("meshStatus").textContent = `Stable on N${index + 1}`;
         document.getElementById("chatMeta").textContent = `${MODE_SIGNAL_MAP[currentMode].label} response complete`;
         document.getElementById("lastOutputMetric").textContent = `${text.length} chars`;
         pushStatus(`Response completed on node ${index + 1}`);
-      } catch {
+      } catch (error) {
         failoverCount += 1;
         document.getElementById("failoverCount").textContent = String(failoverCount);
         markNodeState(index, "failed");
-        pushStatus(`Node ${index + 1} failed, rerouting`);
+        pushStatus(`Node ${index + 1} failed, rerouting (${error && error.message ? error.message : "request error"})`);
         await routePrompt(prompt, loader, index + 1);
       }
     }
 
     async function execute() {
-      const value = input.value.trim();
-      if (!value && !uploadedContext) return;
+      let loader = null;
+      try {
+        const value = input.value.trim();
+        if (!value && !uploadedContext) {
+          pushStatus("No prompt was submitted");
+          return;
+        }
 
-      const finalPrompt = uploadedContext
-        ? `[Context file: ${uploadedName}]\n${uploadedContext}\n\n[User request]\n${value || "Analyze the uploaded context and respond."}`
-        : value;
+        const finalPrompt = uploadedContext
+          ? `[Context file: ${uploadedName}]\n${uploadedContext}\n\n[User request]\n${value || "Analyze the uploaded context and respond."}`
+          : value;
 
-      if (value) {
-        promptHistory = [value, ...promptHistory.filter((item) => item !== value)].slice(0, 30);
-        localStorage.setItem(PROMPT_HISTORY_KEY, JSON.stringify(promptHistory));
-        renderHistory();
+        if (value) {
+          promptHistory = [value, ...promptHistory.filter((item) => item !== value)].slice(0, 30);
+          localStorage.setItem(PROMPT_HISTORY_KEY, JSON.stringify(promptHistory));
+          renderHistory();
+        }
+
+        historyIndex = -1;
+        render("user", escapeHtml(value || `Use the attached context file: ${uploadedName}`));
+        input.value = "";
+        loader = render("bot", "<span class=\"mini-meta\">Aether v110 is composing a response...</span>");
+        resetNodeStates();
+        pushStatus("Prompt accepted");
+        await routePrompt(finalPrompt, loader);
+        clearContext();
+      } catch (error) {
+        pushStatus(`Execute failed (${error && error.message ? error.message : "unknown error"})`);
+        if (!loader) {
+          loader = render("bot", "");
+        }
+        loader.innerHTML = safeMarkdown("Something went wrong before the request could finish. Please try again.");
       }
-
-      historyIndex = -1;
-      render("user", escapeHtml(value || `Use the attached context file: ${uploadedName}`));
-      input.value = "";
-      const loader = render("bot", "<span class=\"mini-meta\">Aether v110 is composing a response...</span>");
-      resetNodeStates();
-      await routePrompt(finalPrompt, loader);
-      clearContext();
     }
 
     async function copyLastResponse() {
@@ -1211,6 +1232,15 @@
       seedMesh();
     });
 
+    window.addEventListener("error", (event) => {
+      pushStatus(`UI error (${event.message || "unknown"})`);
+    });
+
+    window.addEventListener("unhandledrejection", (event) => {
+      const reason = event && event.reason && event.reason.message ? event.reason.message : "promise rejected";
+      pushStatus(`Async error (${reason})`);
+    });
+
     resizeMesh();
     seedMesh();
     animateMesh();
@@ -1219,6 +1249,14 @@
     renderContext();
     updateModeRadar(currentMode);
     pushStatus("Aether Core v110 initialized");
+    window.execute = execute;
+    window.injectPrompt = injectPrompt;
+    window.copyLastResponse = copyLastResponse;
+    window.exportTranscript = exportTranscript;
+    window.resetSystem = resetSystem;
+    window.scanNodes = scanNodes;
+    window.setMode = setMode;
+    window.clearContext = clearContext;
   </script>
   <script src="app-universe-shell.js" defer></script>
 </body>
