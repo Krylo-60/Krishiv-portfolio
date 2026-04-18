@@ -1441,47 +1441,80 @@ async function callGoogleModel(prompt, systemInstruction = "") {
 
   let lastError = null;
   for (const key of keys) {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GOOGLE_MODEL)}:generateContent?key=${encodeURIComponent(key)}`;
-    const body = {
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        topP: 0.9,
-        maxOutputTokens: 1200
-      }
-    };
-
-    if (systemInstruction) {
-      body.system_instruction = { parts: [{ text: systemInstruction }] };
-    }
-
     try {
-      getGoogleKeyState(key).lastUsedAt = Date.now();
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GOOGLE_MODEL)}:generateContent?key=${encodeURIComponent(key)}`;
+      let accumulatedText = "";
+      let currentPrompt = prompt;
 
-      const data = await response.json();
-      if (!response.ok) {
-        const failureMessage = data.error?.message || `Google API failed with status ${response.status}`;
-        markGoogleKeyFailure(key, null, response.status, failureMessage);
-        throw new Error(failureMessage);
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        const body = {
+          contents: [{ role: "user", parts: [{ text: currentPrompt }] }],
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.9,
+            maxOutputTokens: 4096
+          }
+        };
+
+        if (systemInstruction) {
+          body.system_instruction = { parts: [{ text: systemInstruction }] };
+        }
+
+        getGoogleKeyState(key).lastUsedAt = Date.now();
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          const failureMessage = data.error?.message || `Google API failed with status ${response.status}`;
+          markGoogleKeyFailure(key, null, response.status, failureMessage);
+          throw new Error(failureMessage);
+        }
+
+        const candidate = data.candidates?.[0] || {};
+        const parts = candidate?.content?.parts || [];
+        const text = parts
+          .map((part) => (typeof part.text === "string" ? part.text : ""))
+          .join("")
+          .trim();
+        const finishReason = String(candidate.finishReason || "").trim().toUpperCase();
+
+        if (!text) {
+          markGoogleKeyFailure(key, null, 200, "Google API returned empty response");
+          throw new Error("Google API returned empty response");
+        }
+
+        accumulatedText = accumulatedText
+          ? `${accumulatedText}\n${text}`.trim()
+          : text;
+
+        if (finishReason !== "MAX_TOKENS") {
+          markGoogleKeySuccess(key);
+          return { text: accumulatedText, keySource: "google" };
+        }
+
+        currentPrompt = [
+          "Continue exactly from where you stopped.",
+          "Do not restart, summarize, or repeat earlier text.",
+          "",
+          "Original user request:",
+          prompt,
+          "",
+          "Text produced so far:",
+          accumulatedText
+        ].join("\n");
       }
 
-      const parts = data.candidates?.[0]?.content?.parts || [];
-      const text = parts
-        .map((part) => (typeof part.text === "string" ? part.text : ""))
-        .join("")
-        .trim();
-
-      if (text) {
+      if (accumulatedText) {
         markGoogleKeySuccess(key);
-        return { text, keySource: "google" };
+        return { text: accumulatedText, keySource: "google" };
       }
-      markGoogleKeyFailure(key, null, 200, "Google API returned empty response");
-      throw new Error("Google API returned empty response");
+
+      markGoogleKeyFailure(key, null, 200, "Google API stopped before producing text");
+      throw new Error("Google API stopped before producing text");
     } catch (error) {
       if (!(error instanceof Error && /Google API failed with status|Google API returned empty response/.test(error.message))) {
         markGoogleKeyFailure(key, error, 0, error instanceof Error ? error.message : "");
