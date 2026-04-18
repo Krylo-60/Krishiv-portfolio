@@ -166,5 +166,17 @@
       "Added saved prompt-set recall in Idea Lab AI for goal, audience, and constraints together.",
       "Stored recent prompt history locally in the browser for faster repeat use."
     ]
+  },
+  {
+    "date": "2026-04-18",
+    "version": "v4.4.0",
+    "title": "Aether Core v110 Fusion Launch",
+    "summary": "A new Aether public build launched with the strongest features from v2.5, v55, and v104 combined into one richer AI command page.",
+    "tags": ["aether", "ai", "launch"],
+    "items": [
+      "Launched Aether Core v110 with multi-mode reasoning, node mesh routing, quick prompt packs, and prompt recall.",
+      "Added file-context loading with plain text and PPTX support so prompts can use uploaded content directly.",
+      "Integrated v110 across the public launcher, homepage gallery, links directory, and project listings."
+    ]
   }
 ]
