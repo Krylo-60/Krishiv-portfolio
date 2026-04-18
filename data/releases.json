@@ -38,11 +38,11 @@
   {
     "date": "2026-04-09",
     "version": "v2.2.0",
-    "title": "Private Owner Dashboard Launch",
-    "summary": "A protected owner dashboard was added to manage and inspect the project more like a real product.",
-    "tags": ["owner", "private", "dashboard"],
+    "title": "Project Operations Dashboard Launch",
+    "summary": "A protected operations dashboard was added to manage and inspect the project more like a real product.",
+    "tags": ["ops", "private", "dashboard"],
     "items": [
-      "Added the private owner dashboard route and UI.",
+      "Added the protected operations dashboard route and UI.",
       "Created a stronger control surface for project operations.",
       "Moved toward product-grade management instead of static admin pages."
     ]
@@ -50,11 +50,11 @@
   {
     "date": "2026-04-09",
     "version": "v2.3.0",
-    "title": "Owner Launcher Controls Expansion",
-    "summary": "The owner dashboard became more capable with richer launcher and control actions.",
-    "tags": ["owner", "controls", "launcher"],
+    "title": "Operations Launcher Controls Expansion",
+    "summary": "The private operations dashboard became more capable with richer launcher and control actions.",
+    "tags": ["ops", "controls", "launcher"],
     "items": [
-      "Expanded owner launcher controls for faster operations.",
+      "Expanded private launcher controls for faster operations.",
       "Improved utility and navigation inside the private surface.",
       "Made it easier to act on project workflows in one place."
     ]
@@ -62,24 +62,24 @@
   {
     "date": "2026-04-09",
     "version": "v2.4.0",
-    "title": "Owner Experience Polish",
-    "summary": "Typography, layout polish, and dashboard sync consistency were tightened across the owner experience.",
-    "tags": ["design", "owner", "polish"],
+    "title": "Operations Experience Polish",
+    "summary": "Typography, layout polish, and dashboard sync consistency were tightened across the private operations experience.",
+    "tags": ["design", "ops", "polish"],
     "items": [
-      "Refined typography and visual rhythm in the owner dashboard.",
-      "Synced owner controls across the live site for consistency.",
+      "Refined typography and visual rhythm in the private dashboard.",
+      "Synced private controls across the live site for consistency.",
       "Improved overall clarity and readability."
     ]
   },
   {
     "date": "2026-04-09",
     "version": "v2.5.0",
-    "title": "Owner Audits and Command Center Upgrade",
+    "title": "Ops Audits and Command Center Upgrade",
     "summary": "The private command center evolved into a more complete operational surface with audits and app state controls.",
-    "tags": ["audits", "owner", "ops"],
+    "tags": ["audits", "ops", "dashboard"],
     "items": [
-      "Added owner audits and stronger app state controls.",
-      "Expanded the owner command center for broader project oversight.",
+      "Added private audits and stronger app state controls.",
+      "Expanded the private command center for broader project oversight.",
       "Improved confidence when managing live systems."
     ]
   },
@@ -135,7 +135,7 @@
     "date": "2026-04-15",
     "version": "v4.1.0",
     "title": "App Identity and Release System Upgrade",
-    "summary": "The app gallery became clearer and more complete with working-app labels, SVG icon coverage, owner-only future controls, and stronger public navigation.",
+    "summary": "The app gallery became clearer and more complete with working-app labels, SVG icon coverage, and stronger public navigation.",
     "tags": ["apps", "icons", "release-notes"],
     "items": [
       "Added SVG icons for every app shown in the homepage gallery, including concept builds.",
@@ -165,18 +165,6 @@
       "Added prompt recall with ArrowUp and Tab on Aether v104, v55, and v2.5.",
       "Added saved prompt-set recall in Idea Lab AI for goal, audience, and constraints together.",
       "Stored recent prompt history locally in the browser for faster repeat use."
-    ]
-  },
-  {
-    "date": "2026-04-18",
-    "version": "v5.0.0",
-    "title": "Owner Nexus Major Upgrade",
-    "summary": "The private owner dashboard became a much larger mission-control surface with release intelligence, ecosystem radar, and stronger command packs for private operations.",
-    "tags": ["major", "owner", "ops"],
-    "items": [
-      "Added release intelligence with latest release feed, digest copy, and next-release draft generation.",
-      "Added ecosystem radar cards for AI pool state, public app totals, reviews, ideas, and sessions.",
-      "Expanded owner-only command packs for AI testing, deploy rail workflows, and working app QA."
     ]
   }
 ]
