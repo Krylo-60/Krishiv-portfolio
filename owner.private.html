@@ -456,9 +456,90 @@
       border-bottom: none;
       padding-bottom: 0;
     }
+    .mission-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .release-feed {
+      display: grid;
+      gap: 10px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+    .release-item {
+      border: 1px solid rgba(125, 196, 255, 0.18);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(6, 16, 28, 0.68);
+    }
+    .release-item strong,
+    .release-item span,
+    .release-item code {
+      display: block;
+    }
+    .release-item span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin: 5px 0;
+    }
+    .release-item code {
+      color: var(--accent);
+      font-size: 0.74rem;
+    }
+    .ops-matrix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .ops-tile {
+      border: 1px solid rgba(125, 196, 255, 0.18);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(6, 16, 28, 0.68);
+    }
+    .ops-tile strong,
+    .ops-tile span,
+    .ops-tile code {
+      display: block;
+    }
+    .ops-tile span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin: 6px 0;
+    }
+    .ops-tile code {
+      color: var(--accent);
+      font-size: 0.74rem;
+      margin-bottom: 10px;
+    }
+    .eco-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .eco-card {
+      border: 1px solid rgba(125, 196, 255, 0.18);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(6, 16, 28, 0.68);
+    }
+    .eco-card strong {
+      display: block;
+      font-size: 1.08rem;
+      margin-bottom: 4px;
+    }
+    .eco-card span {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
     @media (max-width: 980px) {
       .hero,
       .control-grid,
+      .mission-grid,
       .smart-grid,
       .ops-grid,
       .power-grid,
@@ -469,6 +550,7 @@
       }
       .grid-4,
       .workflow-grid,
+      .eco-grid,
       .spotlight-grid,
       .favorites-grid,
       .field-grid {
@@ -478,6 +560,7 @@
     @media (max-width: 640px) {
       .grid-4,
       .workflow-grid,
+      .eco-grid,
       .spotlight-grid,
       .favorites-grid,
       .field-grid {
@@ -571,7 +654,7 @@
       <article class="card stack">
         <div>
           <h2>Global Quick Launcher</h2>
-          <p>Search every main page, section, app, concept page, hidden jump, and owner route from one place.</p>
+          <p>Search every main page, section, app, hidden jump, and owner route from one place.</p>
         </div>
         <input id="launcherSearch" class="launcher-search" type="search" placeholder="Search pages, sections, apps, easter eggs..." />
         <div class="chip-row" id="launcherFilters"></div>
@@ -682,6 +765,74 @@
         </div>
         <div id="ownerConsole" class="console-box"></div>
       </article>
+    </section>
+
+    <section class="mission-grid">
+      <article class="card stack">
+        <div>
+          <h2>Release Intelligence</h2>
+          <p>Track the latest shipped updates, prep the next release summary, and keep feature history visible from the owner side.</p>
+        </div>
+        <div class="actions">
+          <button id="copyReleaseDigestBtn" class="btn-primary" type="button">Copy Release Digest</button>
+          <button id="copyReleaseDraftBtn" class="btn-secondary" type="button">Draft Next Release</button>
+          <a class="link-btn" href="release-notes.html" target="_blank" rel="noopener noreferrer">Open Release Notes</a>
+        </div>
+        <div id="releaseFeed" class="release-feed"></div>
+        <p id="releaseStatus" class="status-line">Release intelligence ready.</p>
+      </article>
+
+      <article class="card stack">
+        <div>
+          <h2>Owner Mission Matrix</h2>
+          <p>Private launch packs and system commands for the biggest owner workflows, without exposing this dashboard on the public site.</p>
+        </div>
+        <div class="ops-matrix">
+          <div class="ops-tile">
+            <strong>AI Command Pack</strong>
+            <span>Open every core AI app together for testing and checking.</span>
+            <code>aether + idea lab + review</code>
+            <button id="openAiSuiteBtn" class="btn-primary" type="button">Open Pack</button>
+          </div>
+          <div class="ops-tile">
+            <strong>Deploy Rail</strong>
+            <span>Open Vercel dashboard, deployments, GitHub repo, and release notes together.</span>
+            <code>deploy + releases + repo</code>
+            <button id="openDeployRailBtn" class="btn-primary" type="button">Open Rail</button>
+          </div>
+          <div class="ops-tile">
+            <strong>Working App Pack</strong>
+            <span>Open the strongest working apps in one click for fast QA.</span>
+            <code>study + quiz + notes + focus</code>
+            <button id="openWorkingAppsBtn" class="btn-primary" type="button">Open Pack</button>
+          </div>
+          <div class="ops-tile">
+            <strong>Ops Matrix Copy</strong>
+            <span>Copy a private owner text pack with routes, health, usage, and release info.</span>
+            <code>owner status export</code>
+            <button id="copyOpsMatrixBtn" class="btn-primary" type="button">Copy Matrix</button>
+          </div>
+        </div>
+        <p id="missionStatus" class="status-line">Mission matrix ready.</p>
+      </article>
+    </section>
+
+    <section class="card stack" style="margin-bottom:12px;">
+      <div>
+        <h2>Ecosystem Radar</h2>
+        <p>Private live overview for AI pool state, public app count, review volume, ideas, and sessions pulled into one owner-only panel.</p>
+      </div>
+      <div class="eco-grid">
+        <div class="eco-card"><strong id="ecoAiLoaded">--</strong><span>AI keys loaded</span></div>
+        <div class="eco-card"><strong id="ecoAiReady">--</strong><span>AI keys ready</span></div>
+        <div class="eco-card"><strong id="ecoAiCooling">--</strong><span>AI keys cooling</span></div>
+        <div class="eco-card"><strong id="ecoAiSuccess">--</strong><span>AI successes</span></div>
+        <div class="eco-card"><strong id="ecoPublicApps">--</strong><span>Public apps</span></div>
+        <div class="eco-card"><strong id="ecoReviews">--</strong><span>Reviews saved</span></div>
+        <div class="eco-card"><strong id="ecoIdeas">--</strong><span>Ideas saved</span></div>
+        <div class="eco-card"><strong id="ecoSessions">--</strong><span>Tracked sessions</span></div>
+      </div>
+      <p id="ecoStatus" class="status-line">Ecosystem radar ready.</p>
     </section>
 
     <section class="main-grid">
@@ -851,6 +1002,24 @@
       const launchAudienceSuiteBtn = byId("launchAudienceSuiteBtn");
       const copySnapshotBtn = byId("copySnapshotBtn");
       const ownerConsole = byId("ownerConsole");
+      const copyReleaseDigestBtn = byId("copyReleaseDigestBtn");
+      const copyReleaseDraftBtn = byId("copyReleaseDraftBtn");
+      const releaseFeed = byId("releaseFeed");
+      const releaseStatus = byId("releaseStatus");
+      const openAiSuiteBtn = byId("openAiSuiteBtn");
+      const openDeployRailBtn = byId("openDeployRailBtn");
+      const openWorkingAppsBtn = byId("openWorkingAppsBtn");
+      const copyOpsMatrixBtn = byId("copyOpsMatrixBtn");
+      const missionStatus = byId("missionStatus");
+      const ecoAiLoaded = byId("ecoAiLoaded");
+      const ecoAiReady = byId("ecoAiReady");
+      const ecoAiCooling = byId("ecoAiCooling");
+      const ecoAiSuccess = byId("ecoAiSuccess");
+      const ecoPublicApps = byId("ecoPublicApps");
+      const ecoReviews = byId("ecoReviews");
+      const ecoIdeas = byId("ecoIdeas");
+      const ecoSessions = byId("ecoSessions");
+      const ecoStatus = byId("ecoStatus");
 
       const queryToken = String(new URLSearchParams(window.location.search).get("token") || "").trim();
       if (queryToken) {
@@ -871,6 +1040,7 @@
       let ownerFavorites = [];
       let latestUsageSnapshot = { byPage: [], lastEvents: [] };
       let ownerConsoleLines = [];
+      let releaseEntries = [];
 
       function setStatus(node, text, level) {
         if (!node) return;
@@ -940,30 +1110,30 @@
           { label: "Mind Map Board", note: "Idea mapping app", href: BASE_URL + "/mind-map-board.html", group: "apps" },
           { label: "Bazaar Blitz", note: "Marketplace app", href: BASE_URL + "/bazaar-blitz.html", group: "apps" },
           { label: "VoteStorm Arena", note: "Voting app", href: BASE_URL + "/votestorm-arena.html", group: "apps" },
-          { label: "Time Capsule Lab", note: "Memory capsule app", href: BASE_URL + "/time-capsule-lab.html", group: "concepts" },
-          { label: "StoryForge Studio", note: "Story builder app", href: BASE_URL + "/storyforge-studio.html", group: "concepts" },
-          { label: "Meal Planner", note: "Meal planning app", href: BASE_URL + "/meal-planner.html", group: "concepts" },
-          { label: "Color Palette Lab", note: "Palette lab", href: BASE_URL + "/color-palette-lab.html", group: "concepts" },
-          { label: "Resume Studio", note: "Resume builder", href: BASE_URL + "/resume-studio.html", group: "concepts" },
-          { label: "Homework Hub", note: "Concept app", href: BASE_URL + "/homework-hub.html", group: "concepts" },
-          { label: "Attendance Tracker", note: "Concept app", href: BASE_URL + "/attendance-tracker.html", group: "concepts" },
-          { label: "Link Locker", note: "Concept app", href: BASE_URL + "/link-locker.html", group: "concepts" },
-          { label: "Habit Heatmap", note: "Concept app", href: BASE_URL + "/habit-heatmap.html", group: "concepts" },
-          { label: "Focus Music Deck", note: "Concept app", href: BASE_URL + "/focus-music-deck.html", group: "concepts" },
-          { label: "Thumbnail Idea Board", note: "Concept app", href: BASE_URL + "/thumbnail-idea-board.html", group: "concepts" },
-          { label: "Script Planner", note: "Concept app", href: BASE_URL + "/script-planner.html", group: "concepts" },
-          { label: "Upload Calendar", note: "Concept app", href: BASE_URL + "/upload-calendar.html", group: "concepts" },
-          { label: "Stream Overlay Kit", note: "Concept app", href: BASE_URL + "/stream-overlay-kit.html", group: "concepts" },
-          { label: "QR Generator Pro", note: "Concept app", href: BASE_URL + "/qr-generator-pro.html", group: "concepts" },
-          { label: "Pomodoro Duel", note: "Concept app", href: BASE_URL + "/pomodoro-duel.html", group: "concepts" },
-          { label: "Revision Race", note: "Concept app", href: BASE_URL + "/revision-race.html", group: "concepts" },
-          { label: "Scholarship Finder", note: "Concept app", href: BASE_URL + "/scholarship-finder.html", group: "concepts" },
-          { label: "Portfolio Asset Vault", note: "Concept app", href: BASE_URL + "/portfolio-asset-vault.html", group: "concepts" },
-          { label: "Poll Party", note: "Concept app", href: BASE_URL + "/poll-party.html", group: "concepts" },
-          { label: "Emoji Story Maker", note: "Concept app", href: BASE_URL + "/emoji-story-maker.html", group: "concepts" },
-          { label: "Team Splitter", note: "Concept app", href: BASE_URL + "/team-splitter.html", group: "concepts" },
-          { label: "Exam Countdown", note: "Concept app", href: BASE_URL + "/exam-countdown.html", group: "concepts" },
-          { label: "Screenshot Annotator", note: "Concept app", href: BASE_URL + "/screenshot-annotator.html", group: "concepts" },
+          { label: "Time Capsule Lab", note: "Memory capsule app", href: BASE_URL + "/time-capsule-lab.html", group: "apps" },
+          { label: "StoryForge Studio", note: "Story builder app", href: BASE_URL + "/storyforge-studio.html", group: "apps" },
+          { label: "Meal Planner", note: "Meal planning app", href: BASE_URL + "/meal-planner.html", group: "apps" },
+          { label: "Color Palette Lab", note: "Palette lab", href: BASE_URL + "/color-palette-lab.html", group: "apps" },
+          { label: "Resume Studio", note: "Resume builder", href: BASE_URL + "/resume-studio.html", group: "apps" },
+          { label: "Homework Hub", note: "Working app", href: BASE_URL + "/homework-hub.html", group: "apps" },
+          { label: "Attendance Tracker", note: "Working app", href: BASE_URL + "/attendance-tracker.html", group: "apps" },
+          { label: "Link Locker", note: "Working app", href: BASE_URL + "/link-locker.html", group: "apps" },
+          { label: "Habit Heatmap", note: "Working app", href: BASE_URL + "/habit-heatmap.html", group: "apps" },
+          { label: "Focus Music Deck", note: "Working app", href: BASE_URL + "/focus-music-deck.html", group: "apps" },
+          { label: "Thumbnail Idea Board", note: "Working app", href: BASE_URL + "/thumbnail-idea-board.html", group: "apps" },
+          { label: "Script Planner", note: "Working app", href: BASE_URL + "/script-planner.html", group: "apps" },
+          { label: "Upload Calendar", note: "Working app", href: BASE_URL + "/upload-calendar.html", group: "apps" },
+          { label: "Stream Overlay Kit", note: "Working app", href: BASE_URL + "/stream-overlay-kit.html", group: "apps" },
+          { label: "QR Generator Pro", note: "Working app", href: BASE_URL + "/qr-generator-pro.html", group: "apps" },
+          { label: "Pomodoro Duel", note: "Working app", href: BASE_URL + "/pomodoro-duel.html", group: "apps" },
+          { label: "Revision Race", note: "Working app", href: BASE_URL + "/revision-race.html", group: "apps" },
+          { label: "Scholarship Finder", note: "Working app", href: BASE_URL + "/scholarship-finder.html", group: "apps" },
+          { label: "Portfolio Asset Vault", note: "Working app", href: BASE_URL + "/portfolio-asset-vault.html", group: "apps" },
+          { label: "Poll Party", note: "Working app", href: BASE_URL + "/poll-party.html", group: "apps" },
+          { label: "Emoji Story Maker", note: "Working app", href: BASE_URL + "/emoji-story-maker.html", group: "apps" },
+          { label: "Team Splitter", note: "Working app", href: BASE_URL + "/team-splitter.html", group: "apps" },
+          { label: "Exam Countdown", note: "Working app", href: BASE_URL + "/exam-countdown.html", group: "apps" },
+          { label: "Screenshot Annotator", note: "Working app", href: BASE_URL + "/screenshot-annotator.html", group: "apps" },
           { label: "Open Ctrl/Cmd + K Launcher", note: "Public quick launcher hint", href: BASE_URL + "/", group: "easter" },
           { label: "Future Mode Control", note: "Owner-only control from this dashboard", href: withToken(BASE_URL + "/owner"), group: "admin" }
         ];
@@ -1111,6 +1281,111 @@
         publicStateMeta.textContent = "Favorites: " + (Array.isArray(favs) ? favs.length : 0)
           + " | Recents: " + (Array.isArray(recs) ? recs.length : 0)
           + " | Launch stats: " + statCount;
+      }
+
+      async function loadReleaseFeed() {
+        try {
+          const response = await fetch("data/releases.json", { cache: "no-store" });
+          if (!response.ok) throw new Error("release feed unavailable");
+          const data = await response.json();
+          releaseEntries = Array.isArray(data) ? data.slice().reverse() : [];
+          releaseFeed.innerHTML = releaseEntries.slice(0, 6).map((entry) => `
+            <div class="release-item">
+              <strong>${String(entry.version || "v?.?.?")} · ${String(entry.title || "Release")}</strong>
+              <span>${String(entry.summary || "No summary yet.")}</span>
+              <code>${String(entry.date || "unknown")} | ${(Array.isArray(entry.tags) ? entry.tags.join(" · ") : "release")}</code>
+            </div>
+          `).join("") || '<div class="release-item"><strong>No releases yet</strong><span>Add releases to the feed to track them here.</span><code>release-feed</code></div>';
+          setStatus(releaseStatus, "Release intelligence synced.", "ok");
+        } catch (error) {
+          releaseFeed.innerHTML = '<div class="release-item"><strong>Release feed unavailable</strong><span>Could not load release notes right now.</span><code>release-feed</code></div>';
+          setStatus(releaseStatus, "Release feed load failed: " + error.message, "warn");
+        }
+      }
+
+      async function copyReleaseDigest() {
+        const lines = releaseEntries.slice(0, 5).map((entry) => {
+          return [
+            String(entry.version || "v?.?.?"),
+            String(entry.title || "Release"),
+            String(entry.summary || ""),
+            Array.isArray(entry.items) ? entry.items.map((item) => "- " + item).join("\n") : ""
+          ].filter(Boolean).join("\n");
+        }).join("\n\n");
+        try {
+          await navigator.clipboard.writeText(lines || "No release entries available.");
+          setStatus(releaseStatus, "Release digest copied.", "ok");
+          logAction("Copied release digest.");
+        } catch {
+          setStatus(releaseStatus, "Could not copy release digest.", "warn");
+        }
+      }
+
+      async function copyReleaseDraft() {
+        const template = [
+          "{",
+          '  "date": "' + new Date().toISOString().slice(0, 10) + '",',
+          '  "version": "vNext",',
+          '  "title": "New Major Update",',
+          '  "summary": "Describe the update in one strong sentence.",',
+          '  "tags": ["major", "owner", "update"],',
+          '  "items": [',
+          '    "Main change 1",',
+          '    "Main change 2",',
+          '    "Main change 3"',
+          "  ]",
+          "}"
+        ].join("\n");
+        try {
+          await navigator.clipboard.writeText(template);
+          setStatus(releaseStatus, "Release draft copied.", "ok");
+          logAction("Copied next release draft template.");
+        } catch {
+          setStatus(releaseStatus, "Could not copy release draft.", "warn");
+        }
+      }
+
+      async function loadOverview() {
+        try {
+          const response = await fetch("/api/platform/overview", { cache: "no-store" });
+          if (!response.ok) throw new Error("overview unavailable");
+          const data = await response.json();
+          const ai = data.ai || {};
+          ecoAiLoaded.textContent = String(Number(ai.loaded || 0));
+          ecoAiReady.textContent = String(Number(ai.ready || 0));
+          ecoAiCooling.textContent = String(Number(ai.cooling || 0));
+          ecoAiSuccess.textContent = String(Number(ai.successes || 0));
+          ecoPublicApps.textContent = String(Number(data.publicApps || 0));
+          ecoReviews.textContent = String(Number(data.reviewCount || 0));
+          ecoIdeas.textContent = String(Number(data.ideaCount || 0));
+          ecoSessions.textContent = String(Number(data.sessionCount || 0));
+          setStatus(ecoStatus, "Ecosystem radar synced.", "ok");
+        } catch {
+          setStatus(ecoStatus, "Ecosystem radar unavailable right now.", "warn");
+        }
+      }
+
+      async function copyOpsMatrix() {
+        const payload = [
+          "Owner Ops Matrix",
+          "Health: " + String(healthState.textContent || "unknown"),
+          "Sync source: " + String(syncSourceStat.textContent || "unknown"),
+          "Usage events: " + String(usageTotalStat.textContent || "0"),
+          "Sessions today: " + String(usageTodayStat.textContent || "0"),
+          "AI loaded: " + String(ecoAiLoaded.textContent || "--"),
+          "AI ready: " + String(ecoAiReady.textContent || "--"),
+          "AI cooling: " + String(ecoAiCooling.textContent || "--"),
+          "Reviews: " + String(ecoReviews.textContent || "--"),
+          "Ideas: " + String(ecoIdeas.textContent || "--"),
+          "Latest release: " + (releaseEntries[0] ? String(releaseEntries[0].version + " " + releaseEntries[0].title) : "none")
+        ].join("\n");
+        try {
+          await navigator.clipboard.writeText(payload);
+          setStatus(missionStatus, "Owner ops matrix copied.", "ok");
+          logAction("Copied owner ops matrix.");
+        } catch {
+          setStatus(missionStatus, "Could not copy owner ops matrix.", "warn");
+        }
       }
 
       function setStarterFavorites() {
@@ -1288,7 +1563,9 @@
           await Promise.all([
             loadHealth(),
             loadSync({ fast: options.fast !== false }),
-            loadUsage()
+            loadUsage(),
+            loadOverview(),
+            loadReleaseFeed()
           ]);
           lastRefreshLine.textContent = "Last refresh: " + new Date().toLocaleString("en-IN");
           setStatus(ownerStatus, "Owner dashboard updated.", "ok");
@@ -1342,7 +1619,6 @@
           { key: "sections", label: "Sections" },
           { key: "admin", label: "Admin" },
           { key: "apps", label: "Apps" },
-          { key: "concepts", label: "Concepts" },
           { key: "easter", label: "Easter" }
         ];
         launcherFilters.innerHTML = filters.map((item) => `
@@ -1572,6 +1848,38 @@
         ], "audience suite");
       });
       copySnapshotBtn.addEventListener("click", copySnapshot);
+      copyReleaseDigestBtn.addEventListener("click", copyReleaseDigest);
+      copyReleaseDraftBtn.addEventListener("click", copyReleaseDraft);
+      openAiSuiteBtn.addEventListener("click", () => {
+        openMany([
+          BASE_URL + "/aether-core-v104.html",
+          BASE_URL + "/aether-core-v55.html",
+          BASE_URL + "/aether-core-v25.html",
+          BASE_URL + "/idea-lab-ai.html",
+          BASE_URL + "/review-app.html"
+        ], "ai command pack");
+        setStatus(missionStatus, "Opened AI command pack.", "ok");
+      });
+      openDeployRailBtn.addEventListener("click", () => {
+        openMany([
+          VERCEL_DASHBOARD,
+          VERCEL_DEPLOYS,
+          GITHUB_REPO,
+          BASE_URL + "/release-notes.html"
+        ], "deploy rail");
+        setStatus(missionStatus, "Opened deploy rail.", "ok");
+      });
+      openWorkingAppsBtn.addEventListener("click", () => {
+        openMany([
+          BASE_URL + "/study-planner.html",
+          BASE_URL + "/quiz-zone.html",
+          BASE_URL + "/focus-timer.html",
+          BASE_URL + "/notes-vault.html",
+          BASE_URL + "/task-kanban.html"
+        ], "working apps pack");
+        setStatus(missionStatus, "Opened working app pack.", "ok");
+      });
+      copyOpsMatrixBtn.addEventListener("click", copyOpsMatrix);
 
       window.addEventListener("keydown", (event) => {
         if (event.key === "/" && !event.ctrlKey && !event.metaKey && document.activeElement !== launcherSearch) {

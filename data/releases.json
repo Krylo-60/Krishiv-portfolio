@@ -154,5 +154,29 @@
       "Reclassified those builds into the working app tier for filtering and stats.",
       "Updated gallery wording so the site presents them as real apps across the homepage and launcher."
     ]
+  },
+  {
+    "date": "2026-04-18",
+    "version": "v4.3.0",
+    "title": "AI Prompt History Recall",
+    "summary": "Core AI pages now remember earlier prompts so people can bring messages back with keyboard shortcuts instead of retyping them.",
+    "tags": ["ai", "ux", "history"],
+    "items": [
+      "Added prompt recall with ArrowUp and Tab on Aether v104, v55, and v2.5.",
+      "Added saved prompt-set recall in Idea Lab AI for goal, audience, and constraints together.",
+      "Stored recent prompt history locally in the browser for faster repeat use."
+    ]
+  },
+  {
+    "date": "2026-04-18",
+    "version": "v5.0.0",
+    "title": "Owner Nexus Major Upgrade",
+    "summary": "The private owner dashboard became a much larger mission-control surface with release intelligence, ecosystem radar, and stronger command packs for private operations.",
+    "tags": ["major", "owner", "ops"],
+    "items": [
+      "Added release intelligence with latest release feed, digest copy, and next-release draft generation.",
+      "Added ecosystem radar cards for AI pool state, public app totals, reviews, ideas, and sessions.",
+      "Expanded owner-only command packs for AI testing, deploy rail workflows, and working app QA."
+    ]
   }
 ]

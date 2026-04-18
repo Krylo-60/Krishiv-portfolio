@@ -997,9 +997,9 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Apps Galaxy</p>
-          <h2>Best work first, then featured builds, then Working Apps ready to open.</h2>
+          <h2>Best work first, then featured builds, then working apps ready to open.</h2>
           <p class="lead">
-            This gallery is now easier to scan: featured launches show the strongest work, and Working Apps show what people can open and use right now. Press <strong>Ctrl/Cmd + K</strong> to open quick launcher.
+            This gallery is now easier to scan: featured launches show the strongest work, and working apps show what people can open and use right now. Press <strong>Ctrl/Cmd + K</strong> to open quick launcher.
           </p>
         </div>
         <article class="app-verse-controls" aria-label="Apps Galaxy controls">
@@ -1025,7 +1025,7 @@
           <button type="button" class="app-tier-btn" data-tier-filter="featured">Featured</button>
           <button type="button" class="app-tier-btn" data-tier-filter="live">Apps</button>
         </div>
-        <p id="appVerseStatus" class="command-status" role="status" aria-live="polite">Showing all apps across featured and Working App tiers.</p>
+        <p id="appVerseStatus" class="command-status" role="status" aria-live="polite">Showing all apps across featured and working app tiers.</p>
         <article class="app-verse-core-links" aria-label="Core live pages">
           <div class="app-verse-head">
             <span class="card-kicker">Core Live Pages</span>
@@ -1061,7 +1061,7 @@
           </article>
           <article class="app-verse-stat">
             <strong id="totalLaunchesStat">0</strong>
-            <span>Working Apps</span>
+            <span>Working apps</span>
           </article>
           <article class="app-verse-stat">
             <strong id="backendModeStat">checking...</strong>
@@ -2085,14 +2085,14 @@
 
         <div class="changelog-grid">
           <article class="proof-card">
-            <span class="card-kicker">v4.2.0 · April 2026</span>
-            <h3>Concept Apps Promoted to Working Apps</h3>
-            <p>Promoted former concept cards into the Working App lineup so the gallery now shows them as usable apps.</p>
+            <span class="card-kicker">v5.0.0 · April 2026</span>
+            <h3>Owner Nexus Major Upgrade</h3>
+            <p>Expanded the private owner dashboard with release intelligence, ecosystem radar, and stronger command packs for private operations.</p>
           </article>
           <article class="proof-card">
-            <span class="card-kicker">v4.1.0 · April 2026</span>
-            <h3>App Identity and Release System Upgrade</h3>
-            <p>Added SVG icons for every app card, clearer working-app labels, and stronger links plus release-note discovery.</p>
+            <span class="card-kicker">v4.3.0 · April 2026</span>
+            <h3>AI Prompt History Recall</h3>
+            <p>Added keyboard recall for previous prompts on the core AI pages so repeated commands are much faster to reuse.</p>
           </article>
           <article class="proof-card">
             <span class="card-kicker">v3.2.0 · April 2026</span>
@@ -2794,14 +2794,14 @@
 
         if (appVerseStatus) {
           const activeFilters = [];
-          if (tier !== 'all') activeFilters.push(tier === 'live' ? 'Working Apps' : tier);
+          if (tier !== 'all') activeFilters.push(tier === 'live' ? 'working apps' : tier);
           if (category !== 'all') activeFilters.push(category);
           const filterLabel = activeFilters.length
             ? ' in ' + activeFilters.join(' + ')
-            : ' across featured and Working App tiers';
+            : ' across featured and working app tiers';
           const searchLabel = term ? ' matching "' + appVerseSearchTerm.trim() + '"' : '';
           appVerseStatus.textContent = visibleCount === appCards.length && !term && category === 'all' && tier === 'all'
-            ? 'Showing all apps across featured and Working App tiers.'
+            ? 'Showing all apps across featured and working app tiers.'
             : 'Showing ' + visibleCount + ' of ' + appCards.length + ' apps' + filterLabel + searchLabel + '.';
         }
       };
