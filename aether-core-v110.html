@@ -24,7 +24,7 @@
       --accent-2: #2d7dff;
       --accent-3: #67ffb0;
       --danger: #ff6b8d;
-      --glow: 0 0 28px rgba(108, 232, 255, 0.18);
+      --glow: 0 10px 30px rgba(0, 0, 0, 0.18);
       --mono: "JetBrains Mono", monospace;
       --sans: "Space Grotesk", "Segoe UI", sans-serif;
       --display: "Orbitron", "Space Grotesk", sans-serif;
@@ -93,7 +93,7 @@
       background: var(--bg-soft);
       backdrop-filter: blur(18px);
       border-right: 1px solid var(--line);
-      padding: 1.4rem;
+      padding: 1.1rem;
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -109,12 +109,12 @@
     .panel {
       border: 1px solid var(--line);
       background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-      border-radius: 1.2rem;
-      padding: 1rem;
+      border-radius: 1rem;
+      padding: 0.78rem;
       box-shadow: var(--glow);
     }
 
-    .brand-block { display: flex; flex-direction: column; gap: 0.7rem; }
+    .brand-block { display: flex; flex-direction: column; gap: 0.55rem; }
     .eyebrow {
       margin: 0;
       color: var(--accent);
@@ -125,7 +125,7 @@
 
     .brand-mark {
       margin: 0;
-      font-size: 2rem;
+      font-size: 1.8rem;
       line-height: 0.95;
       letter-spacing: 0.06em;
     }
@@ -133,24 +133,25 @@
     .brand-sub {
       margin: 0;
       color: var(--muted);
-      font-size: 0.96rem;
-      line-height: 1.5;
+      font-size: 0.88rem;
+      line-height: 1.45;
     }
 
     .feature-grid, .quick-grid, .metric-grid, .command-grid { display: grid; gap: 0.7rem; }
-    .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
 
     .feature-chip, .mode-btn, .tool-btn, .command-btn, .history-btn {
       border: 1px solid var(--line);
-      border-radius: 0.95rem;
+      border-radius: 0.85rem;
       background: rgba(255, 255, 255, 0.03);
       color: var(--text);
     }
 
     .feature-chip {
-      padding: 0.8rem 0.7rem;
+      padding: 0.55rem 0.5rem;
       text-align: center;
-      font-size: 0.78rem;
+      font-size: 0.68rem;
+      font-weight: 700;
       color: #c9ecff;
     }
 
@@ -173,14 +174,14 @@
       box-shadow: 0 0 0 1px rgba(108, 232, 255, 0.08) inset;
     }
 
-    .mode-btn strong { display: block; font-size: 0.95rem; margin-bottom: 0.25rem; }
-    .mode-btn span { display: block; color: var(--muted); font-size: 0.82rem; line-height: 1.4; }
+    .mode-btn strong { display: block; font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .mode-btn span { display: block; color: var(--muted); font-size: 0.77rem; line-height: 1.35; }
 
     .mode-chip {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 0.16em;
@@ -189,9 +190,9 @@
 
     .quick-grid, .command-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .tool-btn, .command-btn, .history-btn {
-      padding: 0.82rem 0.78rem;
+      padding: 0.72rem 0.72rem;
       cursor: pointer;
-      font-size: 0.77rem;
+      font-size: 0.74rem;
       font-weight: 700;
       letter-spacing: 0.04em;
     }
@@ -199,9 +200,9 @@
     .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .metric-card {
       border: 1px solid var(--line);
-      border-radius: 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 0.9rem;
+      border-radius: 0.85rem;
+      background: rgba(255, 255, 255, 0.025);
+      padding: 0.72rem;
     }
 
     .metric-label {
@@ -213,11 +214,11 @@
       text-transform: uppercase;
     }
 
-    .metric-card strong { font-size: 1.08rem; color: var(--accent); }
+    .metric-card strong { font-size: 1rem; color: var(--accent); }
     .status-feed, .history-feed {
       display: grid;
-      gap: 0.55rem;
-      max-height: 14rem;
+      gap: 0.45rem;
+      max-height: 13rem;
       overflow: auto;
       padding-right: 0.15rem;
     }
@@ -225,9 +226,9 @@
     .status-item, .history-btn { font-size: 0.82rem; line-height: 1.4; }
     .status-item {
       border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 0.9rem;
+      border-radius: 0.8rem;
       background: rgba(255, 255, 255, 0.025);
-      padding: 0.78rem;
+      padding: 0.68rem;
       color: #bfd5e4;
     }
 
@@ -237,18 +238,18 @@
       flex-direction: column;
       min-height: 0;
       overflow: hidden;
-      padding: 1.4rem 1.35rem 1.25rem;
-      gap: 1rem;
+      padding: 1rem 1rem 0.95rem;
+      gap: 0.8rem;
     }
 
     .hero-panel {
       border: 1px solid var(--line);
-      border-radius: 1.4rem;
-      padding: 1.2rem 1.25rem;
+      border-radius: 1rem;
+      padding: 0.92rem 0.95rem;
       background: linear-gradient(135deg, rgba(108, 232, 255, 0.08), rgba(45, 125, 255, 0.06) 45%, rgba(255,255,255,0.02));
       display: grid;
       grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
-      gap: 1rem;
+      gap: 0.85rem;
       overflow: hidden;
       position: relative;
     }
@@ -262,7 +263,7 @@
       pointer-events: none;
     }
 
-    .hero-copy { display: flex; flex-direction: column; gap: 0.8rem; min-width: 0; }
+    .hero-copy { display: flex; flex-direction: column; gap: 0.65rem; min-width: 0; }
     .hero-title {
       margin: 0;
       font-size: clamp(2rem, 4vw, 3.25rem);
@@ -285,9 +286,9 @@
 
     .hero-radar {
       border: 1px solid var(--line);
-      border-radius: 1.2rem;
-      background: rgba(5, 14, 24, 0.52);
-      padding: 1rem;
+      border-radius: 1rem;
+      background: rgba(5, 14, 24, 0.44);
+      padding: 0.9rem;
       display: flex;
       flex-direction: column;
       gap: 0.9rem;
@@ -322,7 +323,7 @@
       flex: 1;
       min-height: 0;
       border: 1px solid var(--line);
-      border-radius: 1.4rem;
+      border-radius: 1rem;
       background: rgba(8, 17, 28, 0.82);
       backdrop-filter: blur(16px);
       display: flex;
@@ -336,7 +337,7 @@
       align-items: center;
       gap: 1rem;
       padding: 0.9rem 1.1rem;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid rgba(120, 201, 255, 0.1);
       background: rgba(255,255,255,0.03);
     }
 
@@ -347,7 +348,7 @@
       flex: 1;
       min-height: 0;
       overflow: auto;
-      padding: 1.2rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -375,13 +376,13 @@
     .msg-badge { color: var(--accent); font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; }
     .msg-bubble {
       max-width: min(54rem, 88%);
-      border-radius: 1.25rem;
-      padding: 1rem 1.05rem;
+      border-radius: 1rem;
+      padding: 0.9rem 0.95rem;
       border: 1px solid var(--line);
       background: rgba(255,255,255,0.04);
       line-height: 1.72;
       font-size: 0.96rem;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
     }
 
     .msg.user .msg-bubble {
@@ -400,7 +401,7 @@
     .msg-bubble code { color: #92f0ff; }
 
     .composer {
-      padding: 1rem 1.1rem 1.1rem;
+      padding: 0.85rem 0.95rem 0.95rem;
       border-top: 1px solid var(--line);
       display: grid;
       gap: 0.8rem;
@@ -464,7 +465,7 @@
 
     .action-btn {
       border: 1px solid var(--line);
-      border-radius: 1.1rem;
+      border-radius: 0.9rem;
       background: rgba(255,255,255,0.05);
       color: var(--text);
       padding: 0 1rem;
@@ -497,7 +498,7 @@
 
     .node-dot {
       height: 2.3rem;
-      border-radius: 0.9rem;
+      border-radius: 0.75rem;
       border: 1px solid rgba(255,255,255,0.07);
       background: rgba(255,255,255,0.03);
       display: grid;
@@ -539,7 +540,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 0.8rem;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.65rem;
     }
 
     .panel-title h3,
@@ -600,14 +601,14 @@
       <section class="panel brand-block">
         <p class="eyebrow">Fusion Build</p>
         <h1 class="brand-mark">AETHER CORE v110</h1>
-        <p class="brand-sub">The merged command build that pulls the smartest features from v2.5, v55, and v104 into one stronger public AI interface.</p>
+        <p class="brand-sub">The clean all-in-one Aether build with the best parts of v2.5, v55, and v104.</p>
         <div class="feature-grid">
-          <div class="feature-chip">Prompt history recall</div>
-          <div class="feature-chip">Mode switching</div>
-          <div class="feature-chip">Node failover routing</div>
-          <div class="feature-chip">File context ingest</div>
-          <div class="feature-chip">Quick prompt packs</div>
-          <div class="feature-chip">Copy + export tools</div>
+          <div class="feature-chip">History</div>
+          <div class="feature-chip">Modes</div>
+          <div class="feature-chip">Failover</div>
+          <div class="feature-chip">Uploads</div>
+          <div class="feature-chip">Quick Packs</div>
+          <div class="feature-chip">Export</div>
         </div>
       </section>
 
@@ -661,7 +662,7 @@
         <div class="hero-copy">
           <p class="eyebrow">Omni Fusion Layer</p>
           <h2 class="hero-title">One build. All the best Aether features.</h2>
-          <p>v110 combines the clean mode system from v2.5, the operator energy from v55, and the polished power tools from v104. It supports file context, message recall with <code>ArrowUp</code> and <code>Tab</code>, quick packs, live node routing visuals, transcript export, copy-last, and stronger response shaping in one command station.</p>
+          <p>v110 keeps every important Aether feature, but presents them in a cleaner command station. You still get modes, file context, prompt recall, node routing, export, copy-last, and the same shared AI backend.</p>
           <div class="hero-tags">
             <span>Context Upload</span>
             <span>Math + General AI</span>
@@ -724,7 +725,7 @@
             <button class="action-btn primary" type="button" onclick="execute()">Ignite</button>
           </div>
           <div class="helper-line">
-            <span>Use <strong>Enter</strong> to send. Press <strong>ArrowUp</strong> or <strong>Tab</strong> to recall previous prompts.</span>
+            <span><strong>Enter</strong> sends. <strong>ArrowUp</strong> and <strong>Tab</strong> recall previous prompts.</span>
             <span id="helperStatus">No context loaded</span>
           </div>
           <input id="fileInput" type="file" hidden />
@@ -761,8 +762,8 @@
 
       <section class="panel">
         <div class="panel-title">
-          <h2>Command Tools</h2>
-          <span>v104 + v55</span>
+          <h2>Actions</h2>
+          <span>Core tools</span>
         </div>
         <div class="command-grid">
           <button class="command-btn" type="button" onclick="copyLastResponse()">Copy Last</button>
@@ -774,7 +775,7 @@
 
       <section class="panel">
         <div class="panel-title">
-          <h2>System Log</h2>
+          <h2>Activity</h2>
           <span>Live events</span>
         </div>
         <div class="status-feed" id="statusFeed"></div>
@@ -782,8 +783,8 @@
 
       <section class="panel">
         <div class="panel-title">
-          <h2>Prompt Recall</h2>
-          <span>Recent memory</span>
+          <h2>Recall</h2>
+          <span>Recent prompts</span>
         </div>
         <div class="history-feed" id="historyFeed"></div>
       </section>
