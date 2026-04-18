@@ -405,7 +405,7 @@
   }
 
   function openAiZone() {
-    launchHref(path === "aether-core-v104.html" ? "idea-lab-ai.html" : "aether-core-v104.html");
+    launchHref(path === "aether-core-v110.html" ? "idea-lab-ai.html" : "aether-core-v110.html");
   }
 
   function renderGrid(term) {
