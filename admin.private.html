@@ -89,7 +89,7 @@
   <main class="panel">
     <h1>Private Nexus Admin</h1>
     <p>Authorized route only. Updates are written via backend and then pushed to Firebase.</p>
-    <p class="mono">Route: <code>/admin?token=Krishiv_YT_2026</code></p>
+    <p class="mono">Route: <code>/admin?token=YOUR_TOKEN</code></p>
 
     <label for="msg">Live wall message</label>
     <textarea id="msg" placeholder="Enter broadcast message...">Subscribe to Krylo-Blox</textarea>
@@ -168,7 +168,7 @@
 
       async function loadCurrent(options = {}) {
         if (!token) {
-          setStatus("Missing token. Open /admin?token=Krishiv_YT_2026 once.", "err");
+          setStatus("Missing token. Open /admin?token=YOUR_TOKEN once.", "err");
           return;
         }
         setStatus("Loading current values...", "");
@@ -189,7 +189,7 @@
 
       async function publish() {
         if (!token) {
-          setStatus("Missing token. Open /admin?token=Krishiv_YT_2026 once.", "err");
+          setStatus("Missing token. Open /admin?token=YOUR_TOKEN once.", "err");
           return;
         }
         setStatus("Publishing...", "");
