@@ -1,71 +1,524 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Krishiv PB" />
-  <title>Projects Hub | Krishiv PB</title>
-  <style>
-    :root{--bg:#061223;--panel:#10253f;--line:#355b80;--text:#eef7ff;--muted:#a8c4e4;--accent:#79d8ff;--ok:#57d9aa}
-    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#04101b,#0a2139 50%,#13365b)}
-    .wrap{width:min(1060px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(8,20,38,.95));margin-bottom:12px}
-    h1,h2,h3,p{margin:0 0 8px}p{color:var(--muted)}a{color:#9fd8ff;text-decoration:none;font-weight:700}
-    .grid{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
-    .item{border:1px solid rgba(110,162,215,.26);border-radius:12px;padding:10px;background:rgba(6,18,32,.72)}
-    .credit{font-weight:700;color:#d9ecff}
-    @media(max-width:860px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:620px){.grid{grid-template-columns:1fr}}
-  </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
+  <title>Projects Hub | Krishiv Velocity</title>
+  <meta
+    name="description"
+    content="Explore the main project highlights from Krishiv PB including core AI builds, student tools, and launch-ready web apps inside Krishiv Velocity."
+  />
+  <meta name="theme-color" content="#04111d" />
+  <link rel="canonical" href="https://krishiv-new-portfoilo.vercel.app/projects.html" />
+  <meta property="og:title" content="Projects Hub | Krishiv Velocity" />
+  <meta property="og:description" content="Main project highlights from Krishiv PB across core builds, student tools, and launch-ready apps." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://krishiv-new-portfoilo.vercel.app/projects.html" />
+  <meta property="og:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Projects Hub | Krishiv Velocity" />
+  <meta name="twitter:description" content="Main project highlights from Krishiv PB across core builds, student tools, and launch-ready apps." />
+  <meta name="twitter:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <style>
+    :root {
+      --page-bg: #050a14;
+      --page-panel: rgba(8, 18, 32, 0.84);
+      --page-panel-strong: rgba(12, 27, 48, 0.92);
+      --page-line: rgba(124, 196, 255, 0.16);
+      --page-text: #edf7ff;
+      --page-muted: #a7c5e7;
+      --page-accent: #7bdcff;
+      --page-accent-2: #6bf0c0;
     }
 
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
+    * {
+      box-sizing: border-box;
     }
 
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--page-text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(52, 188, 255, 0.16), transparent 28%),
+        radial-gradient(circle at 82% 14%, rgba(107, 240, 192, 0.12), transparent 22%),
+        linear-gradient(180deg, #030913 0%, #06111f 40%, #0b1c31 100%);
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 14px;
+      top: -44px;
+      z-index: 30;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      background: #f4fbff;
+      color: #04111d;
+      text-decoration: none;
+      font-weight: 700;
+      transition: top 0.2s ease;
+    }
+
+    .skip-link:focus {
+      top: 14px;
+    }
+
+    .wrap {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 2rem 0 7rem;
+    }
+
+    .topbar,
+    .hero-actions,
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .topbar {
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: inherit;
+      font-weight: 700;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+    }
+
+    .hero,
+    .project-card,
+    .insight-card {
+      border: 1px solid var(--page-line);
+      background: linear-gradient(160deg, var(--page-panel-strong), var(--page-panel));
+      box-shadow: 0 24px 66px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      padding: clamp(1.5rem, 4vw, 3rem);
+      border-radius: 34px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: auto auto -90px -40px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(123, 220, 255, 0.16), transparent 72%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      color: var(--page-accent);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font: 700 0.78rem/1.2 "JetBrains Mono", monospace;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Orbitron", "Space Grotesk", sans-serif;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4.8rem);
+      line-height: 0.96;
+      max-width: 11ch;
+    }
+
+    p {
+      margin: 0;
+      color: var(--page-muted);
+      line-height: 1.66;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 0.35rem;
+    }
+
+    .stat-card {
+      padding: 1rem;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .stat-card strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--page-text);
+      font-size: 1.3rem;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .insight-card {
+      border-radius: 26px;
+      padding: 1.3rem;
+    }
+
+    .insight-card ul {
+      margin: 1rem 0 0;
+      padding-left: 1.15rem;
+      color: var(--page-muted);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0.8rem 1.15rem;
+      border-radius: 999px;
+      border: 1px solid rgba(123, 220, 255, 0.22);
+      text-decoration: none;
+      color: inherit;
+      background: rgba(255, 255, 255, 0.04);
+      font-weight: 700;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(123, 220, 255, 0.5);
+      background: rgba(123, 220, 255, 0.08);
+    }
+
+    .btn.primary {
+      color: #061420;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--page-accent), var(--page-accent-2));
+    }
+
+    .section {
+      margin-top: 1.6rem;
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 1rem;
+    }
+
+    .project-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      min-height: 100%;
+      border-radius: 26px;
+      padding: 1.3rem;
+    }
+
+    .card-pill {
+      align-self: flex-start;
+      padding: 0.35rem 0.72rem;
+      border-radius: 999px;
+      color: #061521;
+      background: linear-gradient(135deg, var(--page-accent), var(--page-accent-2));
+      font: 700 0.76rem/1.2 "JetBrains Mono", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card-meta {
+      color: var(--page-muted);
+      font: 600 0.82rem/1.45 "JetBrains Mono", monospace;
+    }
+
+    .card-actions {
+      margin-top: auto;
+    }
+
+    @media (max-width: 920px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .wrap {
+        width: min(100% - 20px, 1160px);
+      }
+
+      .topbar,
+      .hero-actions,
+      .card-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      h1 {
+        max-width: none;
+      }
     }
   </style>
 </head>
 <body data-theme="default" data-mode="dark">
-  <main class="wrap">
-    <section class="card">
-      <h1>Projects Hub</h1>
-      <p>This page gives a focused view of Krishiv PB projects with clear categories and launch links.</p>
-      <p class="credit">Credit: Krishiv PB</p>
-      <p><a href="index.html#projects">Open full projects section</a></p>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <main id="main-content" class="wrap">
+    <div class="topbar">
+      <a class="brand" href="index.html">
+        <img src="logo.svg" alt="Krishiv Velocity logo" width="42" height="42" />
+        <span>Krishiv Velocity</span>
+      </a>
+      <div class="hero-actions">
+        <a class="btn" href="index.html#projects">Main projects section</a>
+        <a class="btn primary" href="all-links.html">Open all links</a>
+      </div>
+    </div>
+
+    <section class="hero" aria-labelledby="projects-title">
+      <div class="hero-copy">
+        <div>
+          <p class="eyebrow">Project Showcase</p>
+          <h1 id="projects-title">A focused launch pad for the strongest work in Krishiv Velocity.</h1>
+        </div>
+        <p>
+          This page turns the project list into a cleaner showcase with clearer categories, faster jumps,
+          and better visual hierarchy so visitors can find the most impressive builds immediately.
+        </p>
+        <div class="hero-stats" aria-label="Projects hub highlights">
+          <article class="stat-card">
+            <strong>10+</strong>
+            <span>featured launches on this page</span>
+          </article>
+          <article class="stat-card">
+            <strong>3</strong>
+            <span>main showcase categories</span>
+          </article>
+          <article class="stat-card">
+            <strong>Live</strong>
+            <span>direct links into real project pages</span>
+          </article>
+        </div>
+      </div>
+
+      <aside class="hero-side">
+        <section class="insight-card">
+          <p class="eyebrow">Why This Exists</p>
+          <h2>Project discovery should feel sharp.</h2>
+          <ul>
+            <li>Core builds get their own clearer spotlight</li>
+            <li>Student tools stay easy to scan and launch</li>
+            <li>The page works as a compact showcase separate from the larger homepage</li>
+          </ul>
+        </section>
+        <section class="insight-card">
+          <p class="eyebrow">Credit</p>
+          <h2>Built by Krishiv PB</h2>
+          <p>This hub sits inside the Krishiv Velocity system and connects back to the main homepage, games area, and full directory.</p>
+        </section>
+      </aside>
     </section>
-    <section class="card">
-      <h2>Core Builds</h2>
-      <div class="grid">
-        <article class="item"><h3>Master Nexus</h3><p>Live creator sync page with dashboard style.</p><a href="krylo-blox-master-nexus.html">Launch</a></article>
-        <article class="item"><h3>Aether v110</h3><p>Fusion Aether build with modes, node mesh, uploads, and recall tools.</p><a href="aether-core-v110.html">Launch</a></article>
-        <article class="item"><h3>Aether v104</h3><p>Advanced Aether core build with rich system UI.</p><a href="aether-core-v104.html">Launch</a></article>
-        <article class="item"><h3>Aether v55</h3><p>Focused core build for lightweight performance.</p><a href="aether-core-v55.html">Launch</a></article>
+
+    <section class="section" aria-labelledby="core-builds-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Core Builds</p>
+          <h2 id="core-builds-title">Flagship pages and advanced creator systems.</h2>
+        </div>
+      </div>
+      <div class="project-grid">
+        <article class="project-card">
+          <span class="card-pill">Core</span>
+          <h3>Master Nexus</h3>
+          <p>Live creator sync page with a dashboard feel and a stronger command-center presence.</p>
+          <span class="card-meta">Focus: creator identity, status, live hub</span>
+          <div class="card-actions">
+            <a class="btn primary" href="krylo-blox-master-nexus.html">Launch</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Core</span>
+          <h3>Aether v110</h3>
+          <p>Fusion Aether build with multiple system layers, uploads, and rich interface energy.</p>
+          <span class="card-meta">Focus: advanced UI, system tools, experimentation</span>
+          <div class="card-actions">
+            <a class="btn primary" href="aether-core-v110.html">Launch</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Core</span>
+          <h3>Aether v104</h3>
+          <p>An earlier advanced Aether build with a dense system look and strong command-style visuals.</p>
+          <span class="card-meta">Focus: rich interface design, creator tooling</span>
+          <div class="card-actions">
+            <a class="btn primary" href="aether-core-v104.html">Launch</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Core</span>
+          <h3>Aether v55</h3>
+          <p>A lighter, faster Aether version that keeps the system identity while staying more compact.</p>
+          <span class="card-meta">Focus: performance, simplified core experience</span>
+          <div class="card-actions">
+            <a class="btn primary" href="aether-core-v55.html">Launch</a>
+          </div>
+        </article>
       </div>
     </section>
-    <section class="card">
-      <h2>Student + Utility Apps</h2>
-      <div class="grid">
-        <article class="item"><h3>Study Planner</h3><p>Task organization and deadlines.</p><a href="study-planner.html">Open</a></article>
-        <article class="item"><h3>Quiz Zone</h3><p>Interactive knowledge checks.</p><a href="quiz-zone.html">Open</a></article>
-        <article class="item"><h3>Review App</h3><p>Feedback + ratings with backend.</p><a href="review-app.html">Open</a></article>
-        <article class="item"><h3>Grade Calculator</h3><p>Weighted grade estimate tool.</p><a href="grade-calculator.html">Open</a></article>
-        <article class="item"><h3>Reading Tracker</h3><p>Book progress and completion flow.</p><a href="reading-tracker.html">Open</a></article>
-        <article class="item"><h3>Code Snippets Vault</h3><p>Reusable coding snippets storage.</p><a href="code-snippets-vault.html">Open</a></article>
+
+    <section class="section" aria-labelledby="apps-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Student and Utility Apps</p>
+          <h2 id="apps-title">Useful projects built for learning, focus, and daily workflows.</h2>
+        </div>
+      </div>
+      <div class="project-grid">
+        <article class="project-card">
+          <span class="card-pill">Apps</span>
+          <h3>Study Planner</h3>
+          <p>Organizes tasks, deadlines, and study momentum inside a focused student workflow.</p>
+          <span class="card-meta">Focus: planning, school productivity</span>
+          <div class="card-actions">
+            <a class="btn primary" href="study-planner.html">Open</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Apps</span>
+          <h3>Quiz Zone</h3>
+          <p>Interactive knowledge checks with a cleaner challenge-style learning experience.</p>
+          <span class="card-meta">Focus: testing knowledge, interactivity</span>
+          <div class="card-actions">
+            <a class="btn primary" href="quiz-zone.html">Open</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Apps</span>
+          <h3>Review App</h3>
+          <p>Feedback and rating flow connected to a backend, making it one of the stronger functional builds.</p>
+          <span class="card-meta">Focus: forms, backend, public responses</span>
+          <div class="card-actions">
+            <a class="btn primary" href="review-app.html">Open</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Apps</span>
+          <h3>Grade Calculator</h3>
+          <p>Quick weighted grade estimates with a simple, practical student-first utility angle.</p>
+          <span class="card-meta">Focus: calculation, school use</span>
+          <div class="card-actions">
+            <a class="btn primary" href="grade-calculator.html">Open</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Apps</span>
+          <h3>Reading Tracker</h3>
+          <p>Tracks book progress and reading completion with a calmer productivity feel.</p>
+          <span class="card-meta">Focus: habits, progress tracking</span>
+          <div class="card-actions">
+            <a class="btn primary" href="reading-tracker.html">Open</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Apps</span>
+          <h3>Code Snippets Vault</h3>
+          <p>Stores reusable coding snippets and supports a more builder-focused workflow inside the portfolio.</p>
+          <span class="card-meta">Focus: developer utility, reuse</span>
+          <div class="card-actions">
+            <a class="btn primary" href="code-snippets-vault.html">Open</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="next-steps-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Next Steps</p>
+          <h2 id="next-steps-title">Keep moving through the portfolio system.</h2>
+        </div>
+      </div>
+      <div class="project-grid">
+        <article class="project-card">
+          <span class="card-pill">Home</span>
+          <h3>Main Portfolio</h3>
+          <p>See the larger homepage with stats, creator sections, featured apps, and full storytelling.</p>
+          <div class="card-actions">
+            <a class="btn primary" href="index.html">Open homepage</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Directory</span>
+          <h3>All Links</h3>
+          <p>Browse the full public directory if you want every major page gathered in one place.</p>
+          <div class="card-actions">
+            <a class="btn primary" href="all-links.html">Open directory</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <span class="card-pill">Games</span>
+          <h3>Games Hub</h3>
+          <p>Switch to the games page to see the creator and gaming side of the portfolio identity.</p>
+          <div class="card-actions">
+            <a class="btn primary" href="games.html">Open games hub</a>
+          </div>
+        </article>
       </div>
     </section>
   </main>
+
   <script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-

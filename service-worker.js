@@ -1,4 +1,4 @@
-const CACHE_NAME = "krishiv-velocity-v1002-1";
+const CACHE_NAME = "krishiv-velocity-v1003-1";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -30,7 +30,12 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const requestUrl = new URL(event.request.url);
+  const pathname = requestUrl.pathname.toLowerCase();
   if (requestUrl.pathname.startsWith("/api/")) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+  if (pathname.includes(".private.") || pathname === "/admin" || pathname === "/owner" || pathname === "/usage-admin") {
     event.respondWith(fetch(event.request));
     return;
   }
@@ -50,8 +55,10 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone)).catch(() => {});
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone)).catch(() => {});
+          }
           return response;
         })
         .catch(() =>
@@ -68,7 +75,7 @@ self.addEventListener("fetch", (event) => {
     caches.match(event.request).then((cached) => {
       const networkFetch = fetch(event.request)
         .then((response) => {
-          if (isSameOrigin) {
+          if (isSameOrigin && response.ok) {
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone)).catch(() => {});
           }

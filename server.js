@@ -705,13 +705,21 @@ function getAvailableYouTubeKeys() {
 function sendJson(res, statusCode, body) {
   res.writeHead(statusCode, {
     "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store"
+    "Cache-Control": "no-store",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "SAMEORIGIN"
   });
   res.end(JSON.stringify(body));
 }
 
 function sendText(res, statusCode, text) {
-  res.writeHead(statusCode, { "Content-Type": "text/plain; charset=utf-8" });
+  res.writeHead(statusCode, {
+    "Content-Type": "text/plain; charset=utf-8",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "SAMEORIGIN"
+  });
   res.end(text);
 }
 
@@ -1564,7 +1572,10 @@ async function serveStatic(req, res) {
     const isCoreTextAsset = extension === ".html" || extension === ".css" || extension === ".js" || extension === ".webmanifest" || extension === ".json";
     res.writeHead(200, {
       "Content-Type": contentType,
-      "Cache-Control": isCoreTextAsset || isSw ? "no-store, max-age=0" : "public, max-age=604800"
+      "Cache-Control": isCoreTextAsset || isSw ? "no-store, max-age=0" : "public, max-age=604800",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "SAMEORIGIN"
     });
     res.end(content);
   } catch {

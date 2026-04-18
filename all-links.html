@@ -9,7 +9,19 @@
     name="description"
     content="Full live directory for Krishiv Velocity with the homepage, AI builds, tools, games, and release notes in one place."
   />
+  <meta name="theme-color" content="#04111d" />
   <link rel="canonical" href="https://krishiv-new-portfoilo.vercel.app/all-links.html" />
+  <meta property="og:site_name" content="Krishiv Velocity" />
+  <meta property="og:title" content="All Links Directory | Krishiv Velocity" />
+  <meta property="og:description" content="Full live directory for Krishiv Velocity with the homepage, AI builds, tools, games, and release notes in one place." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://krishiv-new-portfoilo.vercel.app/all-links.html" />
+  <meta property="og:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
+  <meta property="og:image:alt" content="Krishiv PB portrait" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="All Links Directory | Krishiv Velocity" />
+  <meta name="twitter:description" content="Full live directory for Krishiv Velocity with the homepage, AI builds, tools, games, and release notes in one place." />
+  <meta name="twitter:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -173,9 +185,6 @@
       }
     }
   </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
   <style id="codex-shared-fonts">
     body, button, input, select, textarea {
       font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
@@ -191,6 +200,7 @@
   </style>
 </head>
 <body class="links-page app-theme-root" data-theme="default" data-mode="dark">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="brand" href="index.html">
@@ -210,7 +220,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="links-hero">
       <div class="container links-hero-grid">
         <article class="links-panel">
@@ -262,7 +272,10 @@
 
   <script src="app-universe-shell.js"></script>
   <script>
-    const BASE_URL = "https://krishiv-new-portfoilo.vercel.app";
+    const PROD_BASE_URL = "https://krishiv-new-portfoilo.vercel.app";
+    const BASE_URL = /^https?:$/.test(window.location.protocol) && window.location.hostname
+      ? window.location.origin
+      : PROD_BASE_URL;
     const DIRECTORY = [
       {
         title: "Main Pages",
