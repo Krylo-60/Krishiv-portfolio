@@ -1,5 +1,18 @@
 [
   {
+    "date": "2026-04-18",
+    "version": "v5.0.0",
+    "title": "Kid-Made Masterpiece Major Update",
+    "summary": "The portfolio got its biggest personality jump yet with a more personal voice, a giant homepage major-update section, and upgraded release notes that treat the site like a real evolving creation.",
+    "tags": ["major", "kid-made", "design", "release-notes"],
+    "items": [
+      "Reworked the homepage tone so the site feels more like Krishiv speaking and less like a generic AI-written product page.",
+      "Added a full major-update spotlight section that makes the site feel like a huge real release instead of a tiny patch.",
+      "Upgraded the release-notes page with a latest-release spotlight and major-release highlighting.",
+      "Turned the whole update into a real v5.0.0 launch across the homepage and permanent release history."
+    ]
+  },
+  {
     "date": "2026-02-04",
     "version": "v1.0.0",
     "title": "Initial Portfolio Launch",

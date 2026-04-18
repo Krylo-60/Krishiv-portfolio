@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Krishiv PB" />
   <title>Release Notes | Krishiv Velocity</title>
-  <meta name="description" content="Full release history for Krishiv Velocity from the first launch to every major upgrade that follows." />
+  <meta name="description" content="Full release history for Krishiv Velocity, including the giant v5.0.0 kid-made masterpiece update and every earlier release." />
   <link rel="stylesheet" href="app-universe-shell.css" />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
   <style>
@@ -129,6 +129,43 @@
       padding: 20px;
     }
 
+    .spotlight {
+      margin-top: 18px;
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1.15fr 0.85fr;
+      border: 1px solid rgba(255, 209, 102, 0.26);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 209, 102, 0.16), transparent 24%),
+        linear-gradient(160deg, rgba(18, 36, 60, 0.96), rgba(8, 20, 37, 0.98));
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .spotlight-note {
+      margin: 0;
+      color: #fff2c5;
+      font: 700 1.25rem/1.15 "Patrick Hand", "Comic Sans MS", cursive;
+    }
+
+    .spotlight-points {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+    }
+
+    .spotlight-points li {
+      margin: 6px 0;
+    }
+
+    .spotlight-side {
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px dashed rgba(121, 216, 255, 0.28);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
     .toolbar {
       margin-top: 16px;
       align-items: center;
@@ -151,6 +188,14 @@
       padding: 18px 18px 18px 22px;
       position: relative;
       overflow: hidden;
+    }
+
+    .release-card.is-major {
+      border-color: rgba(255, 209, 102, 0.34);
+      background:
+        radial-gradient(circle at top right, rgba(255, 209, 102, 0.14), transparent 26%),
+        linear-gradient(160deg, rgba(18, 35, 58, 0.98), rgba(10, 23, 41, 0.98));
+      transform: translateY(-2px);
     }
 
     .release-card::before {
@@ -231,6 +276,10 @@
         grid-template-columns: 1fr;
       }
 
+      .spotlight {
+        grid-template-columns: 1fr;
+      }
+
       .stat-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -245,7 +294,7 @@
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;700;800&family=Patrick+Hand&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
   <style id="codex-shared-fonts">
     body, button, input, select, textarea {
       font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
@@ -265,9 +314,9 @@
     <section class="hero">
       <div>
         <p class="eyebrow">Forever Log</p>
-        <h1>Release Notes from the first launch to every upgrade after it.</h1>
+        <h1>Release Notes from the first launch to the giant v5.0.0 update.</h1>
         <p class="lead">
-          This page is the permanent timeline for Krishiv Velocity. It starts from the beginning, tracks major events already shipped, and is built to keep growing with every future release.
+          This page keeps the whole story of the site, but right now the main event is the new major version that pushes the portfolio into its biggest kid-made era yet.
         </p>
         <div class="hero-actions">
           <a class="btn primary" href="index.html#changelog">Back to Homepage Changelog</a>
@@ -291,6 +340,21 @@
           <strong id="latestDate">-</strong>
           <span>Latest Release Date</span>
         </article>
+      </div>
+    </section>
+
+    <section class="spotlight" id="releaseSpotlight">
+      <div>
+        <p class="eyebrow">Latest Big Release</p>
+        <h2 id="spotlightTitle">Loading latest release...</h2>
+        <p class="lead" id="spotlightSummary">Checking the newest entry from the release log.</p>
+        <p class="spotlight-note">This version is supposed to feel way bigger, more personal, and more unforgettable.</p>
+      </div>
+      <div class="spotlight-side">
+        <p class="eyebrow">Highlights</p>
+        <ul class="spotlight-points" id="spotlightPoints">
+          <li>Loading release points...</li>
+        </ul>
       </div>
     </section>
 
@@ -320,6 +384,9 @@
       const firstRelease = document.getElementById("firstRelease");
       const latestRelease = document.getElementById("latestRelease");
       const latestDate = document.getElementById("latestDate");
+      const spotlightTitle = document.getElementById("spotlightTitle");
+      const spotlightSummary = document.getElementById("spotlightSummary");
+      const spotlightPoints = document.getElementById("spotlightPoints");
       let releases = [];
 
       function escapeHtml(value) {
@@ -336,6 +403,19 @@
         firstRelease.textContent = items.length ? items[items.length - 1].date : "-";
         latestRelease.textContent = items.length ? items[0].version : "-";
         latestDate.textContent = items.length ? items[0].date : "-";
+      }
+
+      function renderSpotlight(items) {
+        const latest = items[0];
+        if (!latest) {
+          spotlightTitle.textContent = "No release found";
+          spotlightSummary.textContent = "There is no release data to spotlight yet.";
+          spotlightPoints.innerHTML = "<li>Add a release entry to light this panel up.</li>";
+          return;
+        }
+        spotlightTitle.textContent = `${latest.version} — ${latest.title}`;
+        spotlightSummary.textContent = latest.summary;
+        spotlightPoints.innerHTML = (latest.items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
       }
 
       function renderTimeline() {
@@ -356,13 +436,14 @@
         });
 
         renderStats(releases);
+        renderSpotlight(releases);
         summary.textContent = filtered.length
           ? `Showing ${filtered.length} release event${filtered.length === 1 ? "" : "s"} in the permanent timeline.`
           : "No releases match the current filters.";
 
         timeline.innerHTML = filtered.length
           ? filtered.map((release) => `
-              <article class="release-card">
+              <article class="release-card ${(release.tags || []).includes("major") ? "is-major" : ""}">
                 <div class="release-head">
                   <div>
                     <div class="release-meta">
@@ -395,6 +476,9 @@
           renderTimeline();
         } catch (error) {
           summary.textContent = "Release history could not load right now.";
+          spotlightTitle.textContent = "Release spotlight unavailable";
+          spotlightSummary.textContent = "The release notes page could not load the latest update right now.";
+          spotlightPoints.innerHTML = `<li>Try refreshing the page in a moment.</li>`;
           timeline.innerHTML = `<div class="empty-state">The release notes timeline is temporarily unavailable.</div>`;
         }
       }
