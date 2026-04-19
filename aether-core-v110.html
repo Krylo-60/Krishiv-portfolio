@@ -6,6 +6,7 @@
   <meta name="author" content="Krishiv PB" />
   <title>Aether Core v110 | Fusion Command</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <link rel="stylesheet" href="app-universe-shell.css" />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
@@ -402,7 +403,8 @@
     .msg.user { align-items: flex-end; }
     .msg-badge { color: var(--accent); font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; }
     .msg-bubble {
-      max-width: min(54rem, 88%);
+      max-width: min(76rem, 95%);
+      width: 100%;
       border-radius: 1rem;
       padding: 0.9rem 0.95rem;
       border: 1px solid var(--line);
@@ -479,7 +481,7 @@
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(5, 12, 20, 0.84);
       color: var(--text);
-      min-height: 8.5rem;
+      min-height: 4.5rem;
       padding: 1rem 1.05rem;
       font-size: 0.96rem;
       line-height: 1.55;
@@ -761,7 +763,7 @@
             <span><strong>Enter</strong> sends. <strong>Shift+Enter</strong> adds a new line. <strong>ArrowUp</strong> and <strong>Tab</strong> recall previous prompts.</span>
             <span id="helperStatus">No context loaded</span>
           </div>
-          <input id="fileInput" type="file" hidden />
+          <input id="fileInput" type="file" accept=".txt,.md,.json,.csv,.js,.html,.css,.pptx" hidden />
         </div>
       </section>
     </main>
@@ -871,7 +873,9 @@
     function safeMarkdown(text) {
       const value = String(text || "");
       if (window.marked && typeof window.marked.parse === "function") {
-        return window.marked.parse(value);
+        window.marked.setOptions({ breaks: true });
+        const html = window.marked.parse(value);
+        return window.DOMPurify ? window.DOMPurify.sanitize(html) : html;
       }
       return escapeHtml(value).replace(/\n/g, "<br>");
     }
@@ -1012,13 +1016,16 @@
       const file = event.target.files && event.target.files[0];
       if (!file) return;
       uploadedName = file.name;
-      renderContext();
+      
+      contextBar.innerHTML = `<span class="context-pill" style="opacity: 0.7;">${escapeHtml(uploadedName)} (Loading...)</span>`;
+      document.getElementById("helperStatus").textContent = "Parsing file...";
       pushStatus(`Parsing ${file.name}`);
+      
       try {
         uploadedContext = (await readUploadedFile(file)).trim();
         renderContext();
         pushStatus(`Context stream ready from ${file.name}`);
-      } catch {
+      } catch (e) {
         uploadedContext = "";
         uploadedName = "";
         renderContext();
@@ -1089,6 +1096,9 @@
           return;
         }
 
+        const heroPanel = document.querySelector(".hero-panel");
+        if (heroPanel) heroPanel.style.display = "none";
+
         const finalPrompt = uploadedContext
           ? `[Context file: ${uploadedName}]\n${uploadedContext}\n\n[User request]\n${value || "Analyze the uploaded context and respond."}`
           : value;
@@ -1104,6 +1114,26 @@
         input.value = "";
         loader = render("bot", "<span class=\"mini-meta\">Aether v110 is composing a response...</span>");
         resetNodeStates();
+
+        if (!uploadedContext && /^[0-9+\-*/().^\%√\s]+$/.test(value) && /[0-9]/.test(value) && value.replace(/\s/g, '').length >= 3) {
+            try {
+                const safeExpr = value.replace(/\s/g, '').replace(/\^/g, '**').replace(/√/g, 'Math.sqrt');
+                const result = eval(safeExpr);
+                if (result !== null && result !== undefined && !isNaN(result) && result !== Infinity) {
+                    setTimeout(() => {
+                        lastResponse = `The calculated result is: **${result}**`;
+                        loader.innerHTML = safeMarkdown(lastResponse);
+                        pushStatus(`Response completed on node ${Math.floor(Math.random()*12)+1}`);
+                        document.getElementById("chatMeta").textContent = `${MODE_SIGNAL_MAP[currentMode] ? MODE_SIGNAL_MAP[currentMode].label : 'SYNTHESIS'} response complete`;
+                        document.getElementById("lastOutputMetric").textContent = `${lastResponse.length} chars`;
+                        resetNodeStates();
+                        clearContext();
+                    }, 600 + Math.random() * 400);
+                    return;
+                }
+            } catch (e) {}
+        }
+
         pushStatus("Prompt accepted");
         await routePrompt(finalPrompt, loader);
         clearContext();
@@ -1146,6 +1176,9 @@
           <p>Fresh thread initialized. Ask a new question, attach a file, or use one of the quick packs.</p>
         </div>
       `;
+      const heroPanel = document.querySelector(".hero-panel");
+      if (heroPanel) heroPanel.style.display = "";
+      
       lastResponse = "";
       clearContext();
       resetNodeStates();
@@ -1199,6 +1232,7 @@
     });
 
     fileInput.addEventListener("change", handleFileSelect);
+    fileInput.addEventListener("click", function() { this.value = null; });
 
     historyFeed.addEventListener("click", (event) => {
       const target = event.target.closest("[data-history-index]");
@@ -1255,9 +1289,13 @@
       requestAnimationFrame(animateMesh);
     }
 
+    let resizeTimeout;
     window.addEventListener("resize", () => {
-      resizeMesh();
-      seedMesh();
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        resizeMesh();
+        seedMesh();
+      }, 150);
     });
 
     window.addEventListener("error", (event) => {

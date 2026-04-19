@@ -212,4 +212,11 @@
 
   renderSeeds();
   renderList();
+
+  if (!document.querySelector('script[src="premium-ui-injector.js"]')) {
+    const pScript = document.createElement("script");
+    pScript.src = "premium-ui-injector.js";
+    pScript.defer = true;
+    document.head.appendChild(pScript);
+  }
 })();

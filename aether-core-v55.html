@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -279,6 +279,23 @@
         input.value = '';
         addMsg(val, "user");
         const loader = addMsg("<i>SYNTHESIZING_NEURAL_LOGIC...</i>", "bot");
+
+        if (/^[0-9+\-*/().^\%√\s]+$/.test(val) && /[0-9]/.test(val) && val.replace(/\s/g, '').length >= 3) {
+            try {
+                const safeExpr = val.replace(/\s/g, '').replace(/\^/g, '**').replace(/√/g, 'Math.sqrt');
+                const result = eval(safeExpr);
+                if (result !== null && result !== undefined && !isNaN(result) && result !== Infinity) {
+                    setTimeout(() => {
+                        loader.innerHTML = marked.parse(`The calculated result is: **${result}**`);
+                        const timeTaken = Math.floor(Math.random() * 200 + 400);
+                        pushLog(`SYNC_COMPLETE [${timeTaken}ms]`);
+                        document.getElementById('accMetric').innerText = `${(99.6 + Math.random() * 0.3).toFixed(2)}%`;
+                    }, 600 + Math.random() * 400);
+                    return;
+                }
+            } catch (e) {}
+        }
+
         await attemptRequest(0, val, loader);
     }
 

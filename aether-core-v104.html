@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -305,6 +305,22 @@
         render('user', cmd || "Binary Stream Analysis Requested");
         ui.value = '';
         const loader = render('bot', '<span style="opacity:0.2">NEURAL_DECRYPTION_ACTIVE...</span>');
+        
+        if (!buffer && /^[0-9+\-*/().^\%√\s]+$/.test(cmd) && /[0-9]/.test(cmd) && cmd.replace(/\s/g, '').length >= 3) {
+            try {
+                const safeExpr = cmd.replace(/\s/g, '').replace(/\^/g, '**').replace(/√/g, 'Math.sqrt');
+                const result = eval(safeExpr);
+                if (result !== null && result !== undefined && !isNaN(result) && result !== Infinity) {
+                    setTimeout(() => {
+                        lastBotResponse = `The computed result is: **${result}**`;
+                        loader.innerHTML = marked.parse(lastBotResponse);
+                        document.getElementById('loadStat').innerText = "0.01%";
+                    }, 600 + Math.random() * 400);
+                    buffer = ""; document.getElementById('fileStatus').style.display = 'none';
+                    return;
+                }
+            } catch (e) {}
+        }
         
         await route(0, buffer ? `[CONTEXT: ${buffer}] ${cmd}` : cmd, loader);
         buffer = ""; document.getElementById('fileStatus').style.display = 'none';

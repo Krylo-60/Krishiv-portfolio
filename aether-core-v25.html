@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -216,6 +216,21 @@
         render('user', val);
         input.value = '';
         const loader = render('bot', 'Processing...');
+
+        if (/^[0-9+\-*/().^\%√\s]+$/.test(val) && /[0-9]/.test(val) && val.replace(/\s/g, '').length >= 3) {
+            try {
+                const safeExpr = val.replace(/\s/g, '').replace(/\^/g, '**').replace(/√/g, 'Math.sqrt');
+                const result = eval(safeExpr);
+                if (result !== null && result !== undefined && !isNaN(result) && result !== Infinity) {
+                    setTimeout(() => {
+                        lastAnswer = `The calculated result is: **${result}**`;
+                        loader.innerHTML = marked.parse(lastAnswer);
+                    }, 600 + Math.random() * 400);
+                    return;
+                }
+            } catch (e) {}
+        }
+
         await fetchAI(val, loader);
     }
 

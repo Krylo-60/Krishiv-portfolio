@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const path = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
   const BLOCKED_PATHS = new Set(["index.html", "games.html", "admin.private.html"]);
   if (BLOCKED_PATHS.has(path)) return;
@@ -555,6 +555,13 @@
       closeOverlay();
     }
   });
+
+  if (!document.querySelector('script[src="premium-ui-injector.js"]')) {
+    const pScript = document.createElement("script");
+    pScript.src = "premium-ui-injector.js";
+    pScript.defer = true;
+    document.head.appendChild(pScript);
+  }
 })();
 
 
