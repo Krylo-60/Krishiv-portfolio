@@ -38,6 +38,7 @@
   const categoryEl = byId("appCategory");
   const leadEl = byId("appLead");
   const helperEl = byId("helperCopy");
+  const heroPill = document.querySelector(".concept-pill");
   const boardTitleEl = byId("boardTitle");
   const titleLabelEl = byId("titleLabel");
   const metaLabelEl = byId("metaLabel");
@@ -54,12 +55,63 @@
   const totalEl = byId("totalCount");
   const pinnedEl = byId("pinnedCount");
   const doneEl = byId("doneCount");
+  let currentEditId = "";
+
+  const toolBar = document.createElement("div");
+  toolBar.className = "concept-tools";
+  toolBar.innerHTML = `
+    <select id="statusFilter"></select>
+    <select id="sortFilter">
+      <option value="newest">Sort: Newest</option>
+      <option value="oldest">Sort: Oldest</option>
+      <option value="pinned">Sort: Pinned First</option>
+      <option value="state">Sort: Status</option>
+    </select>
+    <button type="button" class="concept-btn-secondary" id="exportBtn">Export</button>
+    <button type="button" class="concept-btn-secondary" id="clearDoneBtn">Clear Done</button>
+  `;
+  const boardHead = document.querySelector(".concept-board-head");
+  if (boardHead && boardHead.parentNode) {
+    boardHead.parentNode.insertBefore(toolBar, boardHead.nextSibling);
+  }
+
+  const hero = document.querySelector(".concept-hero");
+  const upgradePanel = document.createElement("section");
+  upgradePanel.className = "concept-shell concept-upgrade-panel";
+  upgradePanel.innerHTML = `
+    <div class="concept-upgrade-grid">
+      <article class="concept-upgrade-card">
+        <strong id="activeCount">0</strong>
+        <span>active items</span>
+      </article>
+      <article class="concept-upgrade-card">
+        <strong id="todayCount">0</strong>
+        <span>added today</span>
+      </article>
+      <article class="concept-upgrade-card">
+        <strong id="lastEditStamp">none yet</strong>
+        <span>last update</span>
+      </article>
+    </div>
+  `;
+  if (hero && hero.parentNode) {
+    hero.parentNode.insertBefore(upgradePanel, hero.nextSibling);
+  }
+
+  const statusFilter = byId("statusFilter");
+  const sortFilter = byId("sortFilter");
+  const exportBtn = byId("exportBtn");
+  const clearDoneBtn = byId("clearDoneBtn");
+  const activeCountEl = byId("activeCount");
+  const todayCountEl = byId("todayCount");
+  const lastEditStampEl = byId("lastEditStamp");
 
   document.title = `${config.title} | Krishiv PB`;
   titleEl.textContent = config.title;
   categoryEl.textContent = config.category;
   leadEl.textContent = config.lead;
   helperEl.textContent = config.helper;
+  if (heroPill) heroPill.textContent = "Full app board";
   boardTitleEl.textContent = config.boardTitle;
   titleLabelEl.textContent = config.titleLabel;
   metaLabelEl.textContent = config.metaLabel;
@@ -72,6 +124,11 @@
   searchInput.placeholder = config.searchPlaceholder;
 
   stateInput.innerHTML = config.statuses.map((status) => `<option value="${status}">${status}</option>`).join("");
+  if (statusFilter) {
+    statusFilter.innerHTML = [`<option value="all">All status</option>`]
+      .concat(config.statuses.map((status) => `<option value="${status}">${status}</option>`))
+      .join("");
+  }
 
   let items = [];
   try {
@@ -89,6 +146,19 @@
     totalEl.textContent = String(items.length);
     pinnedEl.textContent = String(items.filter((item) => item.pinned).length);
     doneEl.textContent = String(items.filter((item) => item.done).length);
+    if (activeCountEl) activeCountEl.textContent = String(items.filter((item) => !item.done).length);
+    if (todayCountEl) {
+      const today = new Date().toISOString().slice(0, 10);
+      todayCountEl.textContent = String(items.filter((item) => String(item.createdAt || "").slice(0, 10) === today).length);
+    }
+    if (lastEditStampEl) {
+      const latest = items
+        .map((item) => item.updatedAt || item.createdAt || "")
+        .filter(Boolean)
+        .sort()
+        .pop();
+      lastEditStampEl.textContent = latest ? new Date(latest).toLocaleDateString() : "none yet";
+    }
   }
 
   function renderSeeds() {
@@ -100,10 +170,21 @@
 
   function renderList() {
     const q = String(searchInput.value || "").trim().toLowerCase();
-    const filtered = items.filter((item) => {
+    const statusValue = String(statusFilter?.value || "all");
+    const sortValue = String(sortFilter?.value || "newest");
+    let filtered = items.filter((item) => {
       const hay = `${item.title} ${item.meta} ${item.notes} ${item.state}`.toLowerCase();
+      if (statusValue !== "all" && item.state !== statusValue) return false;
       return !q || hay.includes(q);
     });
+
+    if (sortValue === "oldest") filtered = filtered.slice().reverse();
+    if (sortValue === "pinned") {
+      filtered = filtered.slice().sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
+    }
+    if (sortValue === "state") {
+      filtered = filtered.slice().sort((a, b) => String(a.state).localeCompare(String(b.state)));
+    }
 
     if (!filtered.length) {
       listEl.innerHTML = `<div class="concept-empty"><strong>${config.emptyTitle}</strong><p>${config.emptyLead}</p></div>`;
@@ -125,7 +206,10 @@
           </div>
         </div>
         <p>${item.notes || "No notes added yet."}</p>
+        <p class="concept-item-stamp">Updated ${new Date(item.updatedAt || item.createdAt || Date.now()).toLocaleString()}</p>
         <div class="concept-item-actions">
+          <button type="button" data-action="edit">Edit</button>
+          <button type="button" data-action="duplicate">Duplicate</button>
           <button type="button" data-action="pin">${item.pinned ? "Unpin" : "Pin"}</button>
           <button type="button" data-action="done">${item.done ? "Mark active" : "Mark done"}</button>
           <button type="button" data-action="delete">Delete</button>
@@ -152,15 +236,26 @@
       alert(`Please enter a valid ${config.titleLabel.toLowerCase()}.`);
       return;
     }
-    items.unshift({
-      id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`,
-      title,
-      meta,
-      notes,
-      state,
-      pinned: false,
-      done: false
-    });
+    const now = new Date().toISOString();
+    if (currentEditId) {
+      items = items.map((entry) => entry.id === currentEditId
+        ? { ...entry, title, meta, notes, state, updatedAt: now }
+        : entry);
+      currentEditId = "";
+      addBtn.textContent = config.ctaLabel;
+    } else {
+      items.unshift({
+        id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`,
+        title,
+        meta,
+        notes,
+        state,
+        pinned: false,
+        done: false,
+        createdAt: now,
+        updatedAt: now
+      });
+    }
     titleInput.value = "";
     metaInput.value = "";
     notesInput.value = "";
@@ -201,14 +296,44 @@
     const item = items.find((entry) => entry.id === id);
     if (!item) return;
     const action = target.dataset.action;
+    if (action === "edit") {
+      fillFromSeed(item);
+      currentEditId = item.id;
+      addBtn.textContent = "Update entry";
+    }
+    if (action === "duplicate") {
+      items.unshift({
+        ...item,
+        id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`,
+        title: `${item.title} copy`,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    }
     if (action === "pin") item.pinned = !item.pinned;
     if (action === "done") item.done = !item.done;
     if (action === "delete") items = items.filter((entry) => entry.id !== id);
+    if (action === "pin" || action === "done") item.updatedAt = new Date().toISOString();
     save();
     renderList();
   });
 
   searchInput.addEventListener("input", renderList);
+  statusFilter?.addEventListener("change", renderList);
+  sortFilter?.addEventListener("change", renderList);
+  exportBtn?.addEventListener("click", () => {
+    const payload = JSON.stringify(items, null, 2);
+    navigator.clipboard.writeText(payload).then(() => {
+      if (window.safeNotify) window.safeNotify(`${config.title} exported to clipboard.`);
+    }).catch(() => {
+      alert(payload);
+    });
+  });
+  clearDoneBtn?.addEventListener("click", () => {
+    items = items.filter((entry) => !entry.done);
+    save();
+    renderList();
+  });
 
   renderSeeds();
   renderList();

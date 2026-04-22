@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+  <title id="title">Among Us inspired poster</title>
+  <desc id="desc">Stylized social deduction poster inspired by Among Us.</desc>
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0c3550"/><stop offset="100%" stop-color="#6d28d9"/></linearGradient></defs>
+  <rect width="960" height="640" fill="url(#bg)"/>
+  <circle cx="772" cy="134" r="94" fill="#dbeafe" opacity=".14"/>
+  <circle cx="250" cy="460" r="42" fill="#22d3ee" opacity=".22"/>
+  <path d="M432 450c0-116 62-214 142-214s142 98 142 214" fill="#0f172a" opacity=".18"/>
+  <rect x="402" y="176" width="184" height="286" rx="76" fill="#ef4444"/>
+  <rect x="446" y="208" width="122" height="90" rx="38" fill="#dbeafe"/>
+  <rect x="398" y="276" width="40" height="128" rx="18" fill="#ef4444"/>
+  <rect x="550" y="276" width="40" height="128" rx="18" fill="#ef4444"/>
+  <rect x="82" y="82" width="292" height="58" rx="29" fill="rgba(5,16,27,.42)" stroke="rgba(255,255,255,.22)"/>
+  <text x="112" y="121" font-family="Space Grotesk, Arial, sans-serif" font-size="32" font-weight="700" fill="#f8fbff">AMONG US</text>
+</svg>

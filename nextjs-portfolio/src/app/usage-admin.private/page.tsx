@@ -1,0 +1,9 @@
+export default function Page() {
+  return (
+    <div 
+      className="legacy-html-wrapper" 
+      dangerouslySetInnerHTML={{ __html: "\n  <main class=\"wrap\">\n    <section class=\"card\">\n      <h1>Private Usage Admin</h1>\n      <p>Track how many people use your app and which pages get the most traffic.</p>\n      <p class=\"mono\">Route: <code>/usage-admin?token=YOUR_TOKEN</code></p>\n      <div class=\"actions\">\n        <button id=\"refreshBtn\" class=\"btn-primary\" type=\"button\">Refresh Stats</button>\n        <button id=\"autoBtn\" class=\"btn-secondary\" type=\"button\">Auto Refresh: OFF</button>\n      </div>\n      <p id=\"status\" class=\"status\">Ready.</p>\n      <p id=\"generatedAt\" class=\"mono\">Generated at: --</p>\n    </section>\n\n    <section class=\"card stats\">\n      <article class=\"stat\"><strong id=\"totalEvents\">0</strong><span>Total tracked events</span></article>\n      <article class=\"stat\"><strong id=\"uniqueTotal\">0</strong><span>Unique sessions (all time)</span></article>\n      <article class=\"stat\"><strong id=\"uniqueToday\">0</strong><span>Unique sessions (today)</span></article>\n    </section>\n\n    <section class=\"grid\">\n      <article class=\"card\">\n        <h2>Top Pages</h2>\n        <table>\n          <thead><tr><th>Page</th><th>Hits</th></tr></thead>\n          <tbody id=\"pagesBody\"></tbody>\n        </table>\n      </article>\n      <article class=\"card\">\n        <h2>Event Types</h2>\n        <table>\n          <thead><tr><th>Event</th><th>Count</th></tr></thead>\n          <tbody id=\"eventsBody\"></tbody>\n        </table>\n      </article>\n    </section>\n\n    <section class=\"card\">\n      <h2>Recent Activity</h2>\n      <div id=\"recentList\" class=\"events\"></div>\n    </section>\n  </main>\n\n  \n" }} 
+      suppressHydrationWarning 
+    />
+  );
+}

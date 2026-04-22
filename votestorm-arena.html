@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -14,6 +14,8 @@
       --muted: #a9c5e8;
       --accent: #79d8ff;
       --good: #5ad6a7;
+      --hot: #ff8bc7;
+      --gold: #ffd166;
     }
     * { box-sizing: border-box; }
     body {
@@ -23,16 +25,62 @@
       background: linear-gradient(160deg, #04101f, #0d2848 52%, #10395f);
       min-height: 100vh;
     }
-    .wrap { width: min(980px, 94%); margin: 24px auto 90px; }
+    .wrap { width: min(1040px, 94%); margin: 24px auto 90px; }
     .card {
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 18px;
+      padding: 16px;
       background: linear-gradient(160deg, rgba(18, 41, 67, 0.96), rgba(9, 23, 41, 0.96));
       margin-bottom: 12px;
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.22);
     }
-    .row { display: flex; gap: 8px; flex-wrap: wrap; }
-    input, button, textarea {
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(255, 139, 199, 0.14), transparent 24%),
+        radial-gradient(circle at left center, rgba(90, 214, 167, 0.12), transparent 24%),
+        linear-gradient(160deg, rgba(18, 41, 67, 0.98), rgba(8, 21, 38, 0.98));
+    }
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(121, 216, 255, 0.08), transparent 40%, rgba(255, 139, 199, 0.08));
+    }
+    .hero-card > * { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 209, 102, 0.28);
+      background: rgba(255, 209, 102, 0.1);
+      color: #fff2bf;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .hero-stat {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(121, 216, 255, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .hero-stat strong { display: block; margin-bottom: 4px; }
+    .hero-stat span { color: var(--muted); font-size: 0.82rem; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .row.between { justify-content: space-between; }
+    input, button, textarea, select {
       border: 1px solid var(--line);
       border-radius: 10px;
       background: #0a1b30;
@@ -40,26 +88,81 @@
       padding: 9px 10px;
       font: inherit;
     }
-    textarea { width: 100%; min-height: 78px; resize: vertical; }
+    textarea { width: 100%; min-height: 82px; resize: vertical; }
+    input[type="text"] { width: 100%; }
     button { cursor: pointer; font-weight: 700; }
     .btn-main { background: linear-gradient(135deg, #79d8ff, #5ad6a7); color: #042333; border: none; }
+    .quick-pill {
+      width: auto;
+      padding-inline: 12px;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .poll-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
     .poll {
       border: 1px solid rgba(122, 177, 238, 0.35);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 12px;
       margin-bottom: 10px;
       background: rgba(6, 18, 33, 0.72);
     }
-    .option { margin-bottom: 8px; }
+    .poll-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .poll-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.74rem;
+      color: #dffff4;
+      background: rgba(90, 214, 167, 0.12);
+      border: 1px solid rgba(90, 214, 167, 0.24);
+      text-transform: uppercase;
+    }
+    .option { margin-bottom: 10px; }
     .bar {
-      height: 8px;
+      height: 9px;
       border-radius: 999px;
       background: rgba(121, 216, 255, 0.16);
       overflow: hidden;
       margin-top: 4px;
     }
     .bar span { display: block; height: 100%; background: linear-gradient(90deg, #79d8ff, #5ad6a7); }
-    .meta { font-size: .88rem; color: var(--muted); }
+    .meta { font-size: 0.88rem; color: var(--muted); }
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .insight-card {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(121, 216, 255, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .insight-card strong { display: block; margin-bottom: 4px; }
+    .empty-note { color: var(--muted); }
+    @media (max-width: 920px) {
+      .hero-stats,
+      .poll-grid,
+      .insight-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
   <link rel="stylesheet" href="app-universe-shell.css" />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
@@ -70,11 +173,9 @@
     body, button, input, select, textarea {
       font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
     }
-
     h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
       font-family: "Orbitron", "Space Grotesk", sans-serif !important;
     }
-
     code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
       font-family: "JetBrains Mono", monospace !important;
     }
@@ -82,20 +183,43 @@
 </head>
 <body>
   <main class="wrap">
-    <section class="card">
+    <section class="card hero-card">
+      <div class="row between">
+        <div class="hero-badge">Vote battle mode</div>
+        <a href="index.html#app-verse">Back to Apps Galaxy</a>
+      </div>
       <h1>VoteStorm Arena</h1>
-      <p class="meta">Create fast polls, vote instantly, and watch live percentage bars.</p>
+      <p class="meta">Create fast polls, vote instantly, watch live percentage bars, and run your own mini battle arena for opinions.</p>
       <p class="meta">Created by Krishiv PB</p>
-      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>Instant</strong><span>live vote bars</span></div>
+        <div class="hero-stat"><strong>v9.1</strong><span>standalone app upgrade</span></div>
+        <div class="hero-stat"><strong>3</strong><span>quick poll templates</span></div>
+        <div class="hero-stat"><strong>Kid-made</strong><span>battle style poll energy</span></div>
+      </div>
     </section>
 
     <section class="card">
       <h2>Create Poll</h2>
       <input id="qInput" placeholder="Poll question..." style="width:100%; margin-bottom:8px;" />
       <textarea id="oInput" placeholder="Options (one per line)&#10;Option A&#10;Option B&#10;Option C"></textarea>
+      <div class="toolbar">
+        <button class="quick-pill" id="seedGamingBtn" type="button">Gaming poll</button>
+        <button class="quick-pill" id="seedSchoolBtn" type="button">School poll</button>
+        <button class="quick-pill" id="seedCreatorBtn" type="button">Creator poll</button>
+      </div>
       <div class="row" style="margin-top:8px;">
         <button id="createBtn" class="btn-main" type="button">Create Poll</button>
         <button id="clearBtn" type="button">Clear All</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Arena Stats</h2>
+      <div class="insight-grid">
+        <div class="insight-card"><strong id="totalPolls">0</strong><span class="meta">polls created</span></div>
+        <div class="insight-card"><strong id="totalVotes">0</strong><span class="meta">votes cast</span></div>
+        <div class="insight-card"><strong id="topOption">none yet</strong><span class="meta">top choice right now</span></div>
       </div>
     </section>
 
@@ -108,56 +232,103 @@
   <script>
     (() => {
       const KEY = "krishiv_votestorm_v1";
+      const VOTED_KEY = "krishiv_votestorm_votes_v1";
       const qInput = document.getElementById("qInput");
       const oInput = document.getElementById("oInput");
       const createBtn = document.getElementById("createBtn");
       const clearBtn = document.getElementById("clearBtn");
+      const seedGamingBtn = document.getElementById("seedGamingBtn");
+      const seedSchoolBtn = document.getElementById("seedSchoolBtn");
+      const seedCreatorBtn = document.getElementById("seedCreatorBtn");
       const pollsEl = document.getElementById("polls");
+      const totalPollsEl = document.getElementById("totalPolls");
+      const totalVotesEl = document.getElementById("totalVotes");
+      const topOptionEl = document.getElementById("topOption");
       let polls = [];
+      let voted = {};
 
       function load() {
         try {
           polls = JSON.parse(localStorage.getItem(KEY) || "[]");
           if (!Array.isArray(polls)) polls = [];
         } catch { polls = []; }
+        try {
+          voted = JSON.parse(localStorage.getItem(VOTED_KEY) || "{}") || {};
+        } catch { voted = {}; }
       }
-      function save() { localStorage.setItem(KEY, JSON.stringify(polls)); }
+
+      function save() {
+        localStorage.setItem(KEY, JSON.stringify(polls));
+        localStorage.setItem(VOTED_KEY, JSON.stringify(voted));
+      }
+
       function esc(s) {
         return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       }
 
+      function setSeed(type) {
+        if (type === "gaming") {
+          qInput.value = "Best game to grind this weekend?";
+          oInput.value = "Roblox\nValorant\nClash Royale\nFree Fire";
+        }
+        if (type === "school") {
+          qInput.value = "Which subject needs the biggest comeback?";
+          oInput.value = "Math\nScience\nEnglish\nHistory";
+        }
+        if (type === "creator") {
+          qInput.value = "What should I make next?";
+          oInput.value = "Gaming video\nNew app page\nAI tool\nPortfolio update";
+        }
+      }
+
+      function updateStats() {
+        const voteTotal = polls.reduce((sum, poll) => sum + poll.options.reduce((inner, option) => inner + option.votes, 0), 0);
+        const best = polls.flatMap((poll) => poll.options).sort((a, b) => b.votes - a.votes)[0];
+        totalPollsEl.textContent = String(polls.length);
+        totalVotesEl.textContent = String(voteTotal);
+        topOptionEl.textContent = best && best.votes > 0 ? `${best.label} (${best.votes})` : "none yet";
+      }
+
       function render() {
-        pollsEl.innerHTML = polls.map((p) => {
-          const total = p.options.reduce((n, o) => n + o.votes, 0);
-          const ops = p.options.map((o, i) => {
-            const ratio = total ? Math.round((o.votes / total) * 100) : 0;
+        updateStats();
+        pollsEl.innerHTML = polls.map((poll) => {
+          const total = poll.options.reduce((n, option) => n + option.votes, 0);
+          const alreadyVoted = Boolean(voted[poll.id]);
+          const options = poll.options.map((option, index) => {
+            const ratio = total ? Math.round((option.votes / total) * 100) : 0;
             return `
               <div class="option">
-                <div class="row">
-                  <span>${esc(o.label)}</span>
-                  <strong>${ratio}% (${o.votes})</strong>
+                <div class="row between">
+                  <span>${esc(option.label)}</span>
+                  <strong>${ratio}% (${option.votes})</strong>
                 </div>
                 <div class="bar"><span style="width:${ratio}%"></span></div>
-                <button type="button" data-vote="${p.id}|${i}" style="margin-top:6px;">Vote</button>
+                <button type="button" data-vote="${poll.id}|${index}" style="margin-top:6px;" ${alreadyVoted ? "disabled" : ""}>${alreadyVoted ? "Voted" : "Vote"}</button>
               </div>
             `;
           }).join("");
           return `
             <article class="poll">
-              <h3>${esc(p.question)}</h3>
-              <p class="meta">Total votes: ${total}</p>
-              ${ops}
+              <div class="poll-head">
+                <div>
+                  <h3>${esc(poll.question)}</h3>
+                  <p class="meta">Total votes: ${total}</p>
+                </div>
+                <span class="poll-badge">${esc(poll.theme || "custom poll")}</span>
+              </div>
+              ${options}
               <div class="row" style="margin-top:8px;">
-                <button type="button" data-del="${p.id}">Delete Poll</button>
+                <button type="button" data-copy="${poll.id}">Copy Results</button>
+                <button type="button" data-del="${poll.id}">Delete Poll</button>
               </div>
             </article>
           `;
-        }).join("") || `<p class="meta">No polls yet. Create one above.</p>`;
+        }).join("") || `<p class="empty-note">No polls yet. Create one above.</p>`;
       }
 
       createBtn.addEventListener("click", () => {
         const question = qInput.value.trim();
-        const options = oInput.value.split(/\r?\n/).map((v) => v.trim()).filter(Boolean).slice(0, 8);
+        const options = oInput.value.split(/\r?\n/).map((value) => value.trim()).filter(Boolean).slice(0, 8);
         if (question.length < 4 || options.length < 2) {
           alert("Add a question and at least 2 options.");
           return;
@@ -165,6 +336,7 @@
         polls.unshift({
           id: "P" + Date.now().toString(36),
           question,
+          theme: question.toLowerCase().includes("game") ? "gaming poll" : question.toLowerCase().includes("make") ? "creator poll" : "school poll",
           options: options.map((label) => ({ label, votes: 0 })),
           createdAt: new Date().toISOString()
         });
@@ -177,27 +349,56 @@
       clearBtn.addEventListener("click", () => {
         if (!confirm("Delete all polls?")) return;
         polls = [];
+        voted = {};
         save();
         render();
       });
 
-      pollsEl.addEventListener("click", (e) => {
-        const t = e.target;
-        if (!(t instanceof HTMLButtonElement)) return;
-        const voteData = t.dataset.vote;
-        const delId = t.dataset.del;
+      seedGamingBtn.addEventListener("click", () => setSeed("gaming"));
+      seedSchoolBtn.addEventListener("click", () => setSeed("school"));
+      seedCreatorBtn.addEventListener("click", () => setSeed("creator"));
+
+      pollsEl.addEventListener("click", async (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) return;
+        const voteData = target.dataset.vote;
+        const delId = target.dataset.del;
+        const copyId = target.dataset.copy;
+
         if (voteData) {
-          const [pollId, idxStr] = voteData.split("|");
-          const poll = polls.find((x) => x.id === pollId);
-          const idx = Number(idxStr);
-          if (!poll || !poll.options[idx]) return;
-          poll.options[idx].votes += 1;
+          const [pollId, indexText] = voteData.split("|");
+          const poll = polls.find((entry) => entry.id === pollId);
+          const index = Number(indexText);
+          if (!poll || !poll.options[index] || voted[pollId]) return;
+          poll.options[index].votes += 1;
+          voted[pollId] = poll.options[index].label;
           save();
           render();
+          if (window.safeNotify) window.safeNotify("Vote locked in.");
           return;
         }
+
+        if (copyId) {
+          const poll = polls.find((entry) => entry.id === copyId);
+          if (!poll) return;
+          const total = poll.options.reduce((sum, option) => sum + option.votes, 0);
+          const text = [
+            poll.question,
+            ...poll.options.map((option) => {
+              const ratio = total ? Math.round((option.votes / total) * 100) : 0;
+              return `${option.label}: ${ratio}% (${option.votes})`;
+            })
+          ].join("\n");
+          try {
+            await navigator.clipboard.writeText(text);
+            if (window.safeNotify) window.safeNotify("Copied poll results.");
+          } catch {}
+          return;
+        }
+
         if (delId) {
-          polls = polls.filter((x) => x.id !== delId);
+          polls = polls.filter((entry) => entry.id !== delId);
+          delete voted[delId];
           save();
           render();
         }
@@ -210,7 +411,3 @@
   <script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-
-

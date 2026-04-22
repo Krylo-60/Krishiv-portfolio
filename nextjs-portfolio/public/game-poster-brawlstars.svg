@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+  <title id="title">Brawl Stars inspired poster</title>
+  <desc id="desc">Stylized action poster inspired by Brawl Stars.</desc>
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4a0d1f"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs>
+  <rect width="960" height="640" fill="url(#bg)"/>
+  <circle cx="748" cy="144" r="92" fill="#ffd8a8" opacity=".24"/>
+  <path d="M116 490c54-92 130-144 226-144 78 0 122 34 192 34 86 0 148-48 290-166-44 138-110 226-206 274-100 48-278 48-502 2z" fill="#240915" opacity=".54"/>
+  <circle cx="356" cy="276" r="90" fill="#fff4e7" opacity=".9"/>
+  <circle cx="356" cy="276" r="52" fill="#ffcf33"/>
+  <path d="M324 262h64M338 286h36" stroke="#5a2208" stroke-width="14" stroke-linecap="round"/>
+  <rect x="82" y="82" width="336" height="58" rx="29" fill="rgba(5,16,27,.44)" stroke="rgba(255,255,255,.22)"/>
+  <text x="112" y="121" font-family="Space Grotesk, Arial, sans-serif" font-size="32" font-weight="700" fill="#fff5ea">BRAWL STARS</text>
+</svg>

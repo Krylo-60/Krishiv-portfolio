@@ -19,6 +19,9 @@ const PRIVATE_ADMIN_UI_FILE = path.join(ROOT_DIR, "admin.private.html");
 const OWNER_ADMIN_UI_FILE = path.join(ROOT_DIR, "owner.private.html");
 const USAGE_ADMIN_UI_FILE = path.join(ROOT_DIR, "usage-admin.private.html");
 const USAGE_DATA_FILE = path.join(DATA_DIR, "usage-analytics.json");
+const IDEAS_STATE_KEY = "ideas_v1";
+const USAGE_STATE_KEY = "usage_v1";
+const YT_NEXUS_STATE_KEY = "yt_nexus_v1";
 const GOOGLE_API_KEY = String(process.env.GOOGLE_API_KEY || "").trim();
 const GOOGLE_API_KEYS = String(process.env.GOOGLE_API_KEYS || "")
   .split(/[,\r\n]+/)
@@ -317,11 +320,21 @@ async function ensurePostgresTable() {
       delete_token TEXT NOT NULL
     )
   `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS app_state (
+      key TEXT PRIMARY KEY,
+      value JSONB NOT NULL
+    )
+  `);
   pgBootstrapped = true;
 }
 
 function hasKvStorage() {
   return Boolean(KV_REST_API_URL && KV_REST_API_TOKEN);
+}
+
+function hasDurableAppStateStorage() {
+  return hasPostgresStorage() || hasFirebaseStorage() || hasKvStorage();
 }
 
 async function kvCommand(command, ...args) {
@@ -487,12 +500,82 @@ async function saveReviews(reviews) {
   }
 }
 
+async function readAppState(key) {
+  if (hasPostgresStorage()) {
+    try {
+      const pool = await getPgPool();
+      await ensurePostgresTable();
+      const result = await pool.query('SELECT value FROM app_state WHERE key = $1', [key]);
+      if (result.rows.length > 0) return result.rows[0].value;
+    } catch { /* fallback */ }
+  }
+  if (hasFirebaseStorage()) {
+    try {
+      const node = sanitizeFirebaseNode(key);
+      const response = await fetchWithTimeout(firebaseUrl(`/${node}`), {
+        method: "GET",
+        headers: await getFirebaseHeaders()
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data) return data;
+      }
+    } catch { /* fallback */ }
+  }
+  if (hasKvStorage()) {
+    try {
+      const raw = await kvCommand("get", key);
+      if (raw) return JSON.parse(String(raw));
+    } catch { /* fallback */ }
+  }
+  return null;
+}
+
+async function writeAppState(key, value) {
+  if (hasPostgresStorage()) {
+    try {
+      const pool = await getPgPool();
+      await ensurePostgresTable();
+      await pool.query(
+        'INSERT INTO app_state (key, value) VALUES ($1, $2::jsonb) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value',
+        [key, JSON.stringify(value)]
+      );
+      return;
+    } catch { /* fallback */ }
+  }
+  if (hasFirebaseStorage()) {
+    try {
+      const node = sanitizeFirebaseNode(key);
+      await fetchWithTimeout(firebaseUrl(`/${node}`), {
+        method: "PUT",
+        headers: await getFirebaseHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify(value)
+      });
+      return;
+    } catch { /* fallback */ }
+  }
+  if (hasKvStorage()) {
+    try {
+      await kvCommand("set", key, JSON.stringify(value));
+      return;
+    } catch { /* fallback */ }
+  }
+}
+
 async function loadIdeas() {
   await bootstrapIdeaStorage();
+  const state = await readAppState(IDEAS_STATE_KEY);
+  if (Array.isArray(state)) {
+    inMemoryIdeas = state;
+    return inMemoryIdeas;
+  }
   try {
     const raw = await fs.readFile(IDEAS_DATA_FILE, "utf8");
     const parsed = JSON.parse(raw);
     inMemoryIdeas = Array.isArray(parsed) ? parsed : inMemoryIdeas;
+    if (hasDurableAppStateStorage()) {
+      await writeAppState(IDEAS_STATE_KEY, inMemoryIdeas);
+    }
   } catch {
     // On serverless/read-only runtimes, fallback to memory.
   }
@@ -502,6 +585,7 @@ async function loadIdeas() {
 async function saveIdeas(ideas) {
   await bootstrapIdeaStorage();
   inMemoryIdeas = Array.isArray(ideas) ? ideas : inMemoryIdeas;
+  await writeAppState(IDEAS_STATE_KEY, inMemoryIdeas);
   try {
     await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(IDEAS_DATA_FILE, JSON.stringify(inMemoryIdeas, null, 2), "utf8");
@@ -1042,12 +1126,21 @@ async function loadYtNexus() {
   if (ytNexusBootstrapped) {
     return inMemoryYtNexus;
   }
+  const state = await readAppState(YT_NEXUS_STATE_KEY);
+  if (state) {
+    inMemoryYtNexus = normalizeYtNexusPayload(state);
+    ytNexusBootstrapped = true;
+    return inMemoryYtNexus;
+  }
   try {
     const raw = await fs.readFile(YT_NEXUS_DATA_FILE, "utf8");
     const parsed = JSON.parse(raw);
     inMemoryYtNexus = normalizeYtNexusPayload(parsed);
   } catch {
     // Keep in-memory default when file does not exist in serverless/runtime.
+  }
+  if (hasDurableAppStateStorage()) {
+    await writeAppState(YT_NEXUS_STATE_KEY, inMemoryYtNexus);
   }
   ytNexusBootstrapped = true;
   return inMemoryYtNexus;
@@ -1057,6 +1150,7 @@ async function saveYtNexus(nextPayload) {
   const normalized = normalizeYtNexusPayload(nextPayload);
   inMemoryYtNexus = normalized;
   ytNexusBootstrapped = true;
+  await writeAppState(YT_NEXUS_STATE_KEY, normalized);
   try {
     await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(YT_NEXUS_DATA_FILE, JSON.stringify(normalized, null, 2), "utf8");
@@ -1089,9 +1183,18 @@ function normalizeUsageAnalytics(raw) {
 
 async function loadUsageAnalytics() {
   if (!usageBootstrapped) {
+    const state = await readAppState(USAGE_STATE_KEY);
+    if (state && typeof state === "object" && !Array.isArray(state)) {
+      usageAnalytics = normalizeUsageAnalytics(state);
+      usageBootstrapped = true;
+      return usageAnalytics;
+    }
     try {
       const raw = await fs.readFile(USAGE_DATA_FILE, "utf8");
       usageAnalytics = normalizeUsageAnalytics(JSON.parse(raw));
+      if (hasDurableAppStateStorage()) {
+        await writeAppState(USAGE_STATE_KEY, usageAnalytics);
+      }
     } catch {
       usageAnalytics = defaultUsageAnalytics();
     }
@@ -1103,6 +1206,7 @@ async function loadUsageAnalytics() {
 async function saveUsageAnalytics(next) {
   usageAnalytics = normalizeUsageAnalytics(next);
   usageBootstrapped = true;
+  await writeAppState(USAGE_STATE_KEY, usageAnalytics);
   try {
     await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(USAGE_DATA_FILE, JSON.stringify(usageAnalytics, null, 2), "utf8");

@@ -132,6 +132,11 @@
           <button type="button" id="themeToggleBtn" class="nav-theme-btn">Theme: Aurora</button>
         </div>
       </nav>
+      <div class="header-shortcuts" aria-label="Quick actions">
+        <button class="header-shortcut-btn" type="button" id="headerTopBtn">Top</button>
+        <button class="header-shortcut-btn" type="button" id="headerGamesBtn">Games</button>
+        <button class="header-shortcut-btn header-shortcut-btn-primary" type="button" id="headerLaunchBtn">Launch</button>
+      </div>
     </div>
   </header>
 
@@ -145,10 +150,10 @@
             I like making websites, random apps, game pages, and new ideas when I get excited. Some parts are neat, some parts are experimental, but all of it is really mine and I keep upgrading it.
           </p>
           <div class="hero-ribbon" aria-label="Portfolio highlights">
-            <span>best version so far</span>
+            <span>my biggest version yet</span>
             <span>I love coding</span>
             <span>I also love games</span>
-            <span>made by a real kid</span>
+            <span>built by a real kid</span>
           </div>
           <div class="hero-actions">
             <a class="btn primary" href="#projects">See What I Made</a>
@@ -209,19 +214,19 @@
           </div>
           <div class="hero-stats">
             <article class="hero-stat">
-              <strong><span class="stat-number" data-target="6">0</span>+</strong>
-              <span>projects I keep working on</span>
+              <strong id="heroProjectsStat">0</strong>
+              <span>featured projects on this homepage</span>
             </article>
             <article class="hero-stat">
-              <strong><span class="stat-number" data-target="20">0</span>+</strong>
-              <span>videos made or planned</span>
+              <strong id="heroPagesStat">0</strong>
+              <span>public pages built so far</span>
             </article>
             <article class="hero-stat">
               <strong id="heroAppsStat">0</strong>
               <span>apps on this site</span>
             </article>
             <article class="hero-stat">
-              <strong id="heroBackendStat">checking...</strong>
+              <strong id="heroBackendStat">loading</strong>
               <span>site brain status</span>
             </article>
           </div>
@@ -283,11 +288,11 @@
     <section id="major-update" class="section-pad mega-shell">
       <div class="container">
         <div class="section-heading mega-heading">
-          <p class="eyebrow">Major Update v5.0.0</p>
-          <h2>This is the biggest version of my website I have made yet.</h2>
+          <p class="eyebrow">Major Update v9.1.0</p>
+          <h2>This is the giant update where more of the app galaxy turns into real, feature-packed kid-made products.</h2>
           <p class="lead">
-            I wanted this update to feel huge, personal, and impossible to confuse with a normal template.
-            It is brighter, more alive, more me, and way more like a giant kid project.
+            I wanted this version to push deeper into the app galaxy instead of only making the homepage louder.
+            It is supposed to feel like I kept returning to the apps, giving them better features, more personality, and more reasons to actually open them instead of just looking at them.
           </p>
           <div class="hero-actions">
             <a class="btn primary" href="release-notes.html">Read the full release notes</a>
@@ -297,13 +302,13 @@
 
         <div class="mega-grid">
           <article class="mega-card mega-card-featured">
-            <span class="mega-stamp">v5.0.0</span>
+            <span class="mega-stamp">v9.1.0</span>
             <h3>What changed in this giant update</h3>
             <ul class="mega-list">
-              <li>The homepage feels more like my personality and less like a robot wrote it.</li>
-              <li>I added playful details so the site feels hand-built instead of over-polished.</li>
-              <li>The release notes now treat this like a real major launch, not a tiny patch.</li>
-              <li>The whole site feels more like a kid's dream project than a fake company page.</li>
+              <li>I upgraded more standalone apps so they feel less like quick experiments and more like full kid-made products with their own tools and personality.</li>
+              <li>VoteStorm Arena now has stronger poll battles, one-vote tracking, quick templates, and live arena stats.</li>
+              <li>StoryForge Studio and Time Capsule Lab now have richer controls, saved-library upgrades, and way more reasons to keep using them.</li>
+              <li>The release notes still keep every older release in the permanent timeline, so the full history stays visible while the newest jump gets the spotlight.</li>
             </ul>
           </article>
 
@@ -312,8 +317,8 @@
             <h3>I wanted people to think:</h3>
             <p class="mega-quote">"Wait... an actual kid made this?"</p>
             <p>
-              Not because it looks messy, but because it feels full of ideas, energy, experiments,
-              and real imagination instead of safe boring design.
+              Not because it looks messy, but because it feels packed with ideas, motion, experiments,
+              and imagination instead of safe copy-paste design.
             </p>
           </article>
 
@@ -321,14 +326,147 @@
             <span class="card-kicker">Why it matters</span>
             <h3>This is not just a portfolio anymore.</h3>
             <p>
-              It is turning into my own internet world with projects, games, release history,
-              experiments, and proof that I keep shipping new things.
+              It is my own internet planet with projects, games, release history, experiments,
+              AI pages, and proof that I keep shipping new things instead of only talking about them.
             </p>
             <div class="mega-mini-stats" aria-label="Major update highlights">
-              <div><strong>Huge</strong><span>design jump</span></div>
+              <div><strong>Huge</strong><span>kid-made jump</span></div>
               <div><strong>More Me</strong><span>real voice</span></div>
-              <div><strong>v5</strong><span>major release</span></div>
+              <div><strong>v9</strong><span>major release</span></div>
             </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="kid-lab" class="section-pad kid-lab-shell">
+      <div class="container kid-lab-grid">
+        <article class="kid-lab-main">
+          <p class="eyebrow">Kid Build Manifesto</p>
+          <h2>I did not want this site to feel perfect. I wanted it to feel alive.</h2>
+          <p class="lead">
+            The best part about being a kid builder is that I can chase weird ideas fast. I can make a study tool,
+            then an AI page, then a games hub, then something random at 1 a.m. in my brain, and it all still belongs here.
+          </p>
+          <div class="kid-lab-sticky-grid">
+            <article class="kid-sticky kid-sticky-blue">
+              <span class="card-kicker">Rule 01</span>
+              <h3>Make it fun first</h3>
+              <p>If it feels boring, I keep changing it until it has energy again.</p>
+            </article>
+            <article class="kid-sticky kid-sticky-yellow">
+              <span class="card-kicker">Rule 02</span>
+              <h3>Ship the idea</h3>
+              <p>I would rather launch a real project and improve it later than leave it trapped in my head.</p>
+            </article>
+            <article class="kid-sticky kid-sticky-mint">
+              <span class="card-kicker">Rule 03</span>
+              <h3>Keep the weird ideas</h3>
+              <p>The fun experiments are part of what makes this site mine.</p>
+            </article>
+          </div>
+        </article>
+
+        <aside class="kid-lab-side">
+          <div class="kid-doodle-card">
+            <span class="kid-doodle-label">My build notebook</span>
+            <ul class="kid-doodle-list">
+              <li>make the homepage feel impossible to forget</li>
+              <li>keep adding apps until the site feels huge</li>
+              <li>treat release notes like real history</li>
+              <li>never let it feel like a template</li>
+            </ul>
+          </div>
+          <div class="kid-lab-score">
+            <div>
+              <strong>100%</strong>
+              <span>kid energy</span>
+            </div>
+            <div>
+              <strong>0%</strong>
+              <span>boring template vibes</span>
+            </div>
+            <div>
+              <strong>Always</strong>
+              <span>more ideas coming</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="playground" class="section-pad playground-shell">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Project Playground</p>
+          <h2>This part is for the fun chaos, the sketches, and the giant ideas.</h2>
+          <p class="lead">
+            I do not build in a straight line. I build like a kid with too many tabs open in my brain.
+            That is why this site has apps, experiments, game pages, AI stuff, and random ideas all living together.
+          </p>
+        </div>
+
+        <div class="playground-grid">
+          <article class="playground-panel playground-panel-big">
+            <span class="card-kicker">What my brain sounds like</span>
+            <div class="brain-burst" aria-label="Idea burst list">
+              <span>make it glow more</span>
+              <span>add one more app</span>
+              <span>what if the homepage felt like a game menu</span>
+              <span>build an AI thing</span>
+              <span>fix that bug</span>
+              <span>make the release notes feel important</span>
+              <span>turn the site into its own universe</span>
+            </div>
+          </article>
+
+          <article class="playground-panel">
+            <span class="card-kicker">Builder Mood Board</span>
+            <ul class="playground-list">
+              <li>bright colors</li>
+              <li>glow everywhere</li>
+              <li>buttons that feel fun to press</li>
+              <li>pages that look alive</li>
+            </ul>
+          </article>
+
+          <article class="playground-panel">
+            <span class="card-kicker">Current mission</span>
+            <h3>Keep making the site impossible to forget.</h3>
+            <p>I want people to leave the page thinking the work was fun, real, and surprisingly ambitious for a kid builder.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="dream-map" class="section-pad dream-map-shell">
+      <div class="container">
+        <div class="section-heading compact">
+          <p class="eyebrow">Dream Map</p>
+          <h2>The site today, the bigger dream tomorrow.</h2>
+          <p class="lead">This is the path I want the portfolio to keep following as it grows from cool pages into real products.</p>
+        </div>
+
+        <div class="dream-map-grid">
+          <article class="dream-node">
+            <span class="dream-step">01</span>
+            <h3>Fun pages</h3>
+            <p>Keep making pages that instantly feel like mine.</p>
+          </article>
+          <article class="dream-node">
+            <span class="dream-step">02</span>
+            <h3>Useful apps</h3>
+            <p>Build more tools for students, creators, and random ideas I want to test.</p>
+          </article>
+          <article class="dream-node">
+            <span class="dream-step">03</span>
+            <h3>Smarter systems</h3>
+            <p>Use backend storage, AI flows, and stronger product thinking.</p>
+          </article>
+          <article class="dream-node">
+            <span class="dream-step">04</span>
+            <h3>Big future</h3>
+            <p>Turn this into proof that I started early and kept leveling up for real.</p>
           </article>
         </div>
       </div>
@@ -1454,7 +1592,7 @@
               <span class="card-kicker">Lifestyle</span>
             </div>
             <h3>Meal Planner Pro</h3>
-            <p>Plan your week’s meals and auto-build a smart grocery checklist.</p>
+            <p>Plan your week's meals and auto-build a smart grocery checklist.</p>
           </a>
           <a class="app-verse-card" href="color-palette-lab.html" data-launch-name="Color Palette Lab" data-launch-tags="design palette colors hex generator">
             <div class="app-verse-head">
@@ -2105,7 +2243,7 @@
               <span class="timeline-dot"></span>
               <div>
                 <h4>Day 6-7: Review</h4>
-                <p>Collect feedback, fix weak points, and define next week’s lead feature.</p>
+                <p>Collect feedback, fix weak points, and define next week's lead feature.</p>
               </div>
             </div>
           </div>
@@ -2160,24 +2298,24 @@
 
         <div class="changelog-grid">
           <article class="proof-card">
-            <span class="card-kicker">v5.0.0 · April 2026</span>
-            <h3>Kid-Made Masterpiece Major Update</h3>
-            <p>Rebuilt the portfolio voice, added a giant major-update layer, and made the whole site feel more personal, playful, and unforgettable.</p>
+            <span class="card-kicker">v9.1.0 - April 2026</span>
+            <h3>Standalone App Power-Up Major Update</h3>
+            <p>Pushed the site deeper into the app galaxy by upgrading more standalone apps, adding bigger feature sets, and making more pages feel like real kid-made products instead of quick experiments.</p>
           </article>
           <article class="proof-card">
-            <span class="card-kicker">v4.4.0 · April 2026</span>
-            <h3>Aether Core v110 Fusion Launch</h3>
-            <p>Launched the strongest Aether public build yet with richer tools, multiple modes, and better integration across the site.</p>
+            <span class="card-kicker">v8.0.0 - April 2026</span>
+            <h3>Kid Galaxy Expansion Major Update</h3>
+            <p>Pushed the site further with stronger homepage release messaging, a more upgraded BazaarBlitz build, and a bigger feeling that the whole website is an expanding kid-made internet world.</p>
           </article>
           <article class="proof-card">
-            <span class="card-kicker">v4.3.0 · April 2026</span>
-            <h3>AI Prompt History Recall</h3>
-            <p>Added keyboard recall for previous prompts on the core AI pages so repeated commands are much faster to reuse.</p>
+            <span class="card-kicker">v7.0.0 - April 2026</span>
+            <h3>Kid Universe Major Update</h3>
+            <p>Pushed the site into an even bigger, more playful direction with extra kid-made sections, a stronger world-building vibe, and a homepage that feels more like an entire internet universe.</p>
           </article>
           <article class="proof-card">
-            <span class="card-kicker">v4.2.0 · April 2026</span>
-            <h3>Concept Apps Promoted to Working Apps</h3>
-            <p>Promoted former concept cards into the working app lineup so the gallery now shows them as usable apps.</p>
+            <span class="card-kicker">v6.0.0 - April 2026</span>
+            <h3>Kid Internet World Major Update</h3>
+            <p>Pushed the site into a bigger, louder, more handmade direction with a new manifesto section, stronger release spotlighting, and more real-kid energy across the homepage.</p>
           </article>
         </div>
       </div>
@@ -2430,6 +2568,9 @@
       const quickTopBtn = document.getElementById('quickTopBtn');
       const gamesHubBtn = document.getElementById('gamesHubBtn');
       const launcherBtn = document.getElementById('launcherBtn');
+      const headerTopBtn = document.getElementById('headerTopBtn');
+      const headerGamesBtn = document.getElementById('headerGamesBtn');
+      const headerLaunchBtn = document.getElementById('headerLaunchBtn');
       const commandPalette = document.getElementById('commandPalette');
       const paletteSearch = document.getElementById('paletteSearch');
       const paletteList = document.getElementById('paletteList');
@@ -2440,6 +2581,8 @@
       const heroQuickApp = document.getElementById('heroQuickApp');
       const heroQuickGo = document.getElementById('heroQuickGo');
       const heroRandomGo = document.getElementById('heroRandomGo');
+      const heroProjectsStat = document.getElementById('heroProjectsStat');
+      const heroPagesStat = document.getElementById('heroPagesStat');
       const heroAppsStat = document.getElementById('heroAppsStat');
       const heroBackendStat = document.getElementById('heroBackendStat');
       const appCountStat = document.getElementById('appCountStat');
@@ -2579,7 +2722,7 @@
       });
 
       const revealTargets = Array.from(document.querySelectorAll(
-        '.hero-copy > *, .hero-showcase > *, .story-grid > *, .journey-grid > *, .milestone-grid > *, .proof-grid > *, .proof-metric-grid > *, .project-command, .project-grid > *, .case-study-grid > *, .app-verse-grid > *, .command-center-grid > *, .signature-grid > *, .skills-grid > *, .skill-level-grid > *, .process-grid > *, .creator-grid > *, .codebase-grid > *, .future-grid > *, .now-building-grid > *, .strategy-grid > *, .devlog-grid > *, .changelog-grid > *, .wins-grid > *, .feedback-loop-grid > *, .faq-grid > *, .contact-grid > *, .contact-quick-actions, .final-cta'
+        '.hero-copy > *, .hero-showcase > *, .story-grid > *, .journey-grid > *, .milestone-grid > *, .proof-grid > *, .proof-metric-grid > *, .project-command, .project-grid > *, .case-study-grid > *, .app-verse-grid > *, .command-center-grid > *, .signature-grid > *, .skills-grid > *, .skill-level-grid > *, .process-grid > *, .creator-grid > *, .codebase-grid > *, .future-portal, .future-grid > *, .now-building-grid > *, .strategy-grid > *, .devlog-grid > *, .changelog-grid > *, .wins-grid > *, .feedback-loop-grid > *, .faq-grid > *, .contact-grid > *, .contact-quick-actions, .final-cta'
       ));
       const sectionShells = Array.from(document.querySelectorAll('main > section'));
 
@@ -2632,8 +2775,15 @@
 
       const updateViewportEffects = () => {
         const scrollY = window.scrollY || document.documentElement.scrollTop;
+        const heroSection = document.getElementById('home');
+        const heroRevealThreshold = heroSection
+          ? Math.max(220, heroSection.offsetHeight - Math.min(window.innerHeight * 0.55, 420))
+          : 520;
         if (header) header.classList.toggle('is-scrolled', scrollY > 12);
-        if (quickTopBtn) quickTopBtn.classList.toggle('is-visible', scrollY > 520);
+        if (quickTopBtn) quickTopBtn.classList.toggle('is-visible', scrollY > heroRevealThreshold);
+        if (headerTopBtn) headerTopBtn.classList.toggle('is-visible', scrollY > heroRevealThreshold);
+        if (gamesHubBtn) gamesHubBtn.style.display = 'none';
+        if (launcherBtn) launcherBtn.style.display = 'none';
 
         if (scrollProgressBar) {
           const doc = document.documentElement;
@@ -2652,9 +2802,19 @@
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       }
+      if (headerTopBtn) {
+        headerTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
 
       if (gamesHubBtn) {
         gamesHubBtn.addEventListener('click', () => {
+          launchHref('games.html');
+        });
+      }
+      if (headerGamesBtn) {
+        headerGamesBtn.addEventListener('click', () => {
           launchHref('games.html');
         });
       }
@@ -2974,10 +3134,17 @@
         }
       };
       const renderProofMetrics = () => {
+        const projectCards = Array.from(document.querySelectorAll('.project-card'));
         const liveProjectCount = projectCards.filter((card) => {
           const stateText = ((card.querySelector('.project-state') || {}).textContent || '').toLowerCase();
           return /live now|active/.test(stateText);
         }).length;
+        const publicPages = Array.from(document.querySelectorAll('.app-verse-card'))
+          .map((card) => String(card.getAttribute('href') || '').trim())
+          .filter((href) => href.endsWith('.html'));
+        const uniquePublicPages = new Set(publicPages);
+        if (heroProjectsStat) heroProjectsStat.textContent = String(projectCards.length);
+        if (heroPagesStat) heroPagesStat.textContent = String(uniquePublicPages.size);
         if (proofProjectCount) proofProjectCount.textContent = String(projectCards.length);
         if (proofLiveCount) proofLiveCount.textContent = String(liveProjectCount);
         if (proofAppCount) proofAppCount.textContent = String(appCards.length);
@@ -3120,14 +3287,16 @@
           const data = await response.json();
           const mode = String(data.reviewStorage || 'unknown');
           backendModeStat.textContent = mode;
-          if (heroBackendStat) heroBackendStat.textContent = mode;
+          if (heroBackendStat) heroBackendStat.textContent = 'online';
           if (ccBackendMode) ccBackendMode.textContent = mode;
           backendModeStat.title = 'Live from /api/health';
+          if (heroBackendStat) heroBackendStat.title = 'Backend connected using ' + mode + ' storage';
         } catch {
           backendModeStat.textContent = 'offline';
           if (heroBackendStat) heroBackendStat.textContent = 'offline';
           if (ccBackendMode) ccBackendMode.textContent = 'offline';
           backendModeStat.title = 'Backend not reachable from this session';
+          if (heroBackendStat) heroBackendStat.title = 'Backend not reachable from this session';
         }
       };
       loadBackendHealth();
@@ -3143,7 +3312,7 @@
           if (ccAiCooling) ccAiCooling.textContent = String(Number(data?.ai?.coolingKeys || 0));
           if (ccAiSuccesses) ccAiSuccesses.textContent = String(Number(data?.ai?.totalSuccesses || 0));
           if (ccAiStatus) {
-            ccAiStatus.textContent = 'Model: ' + String(data?.ai?.model || 'unknown') + ' · failures tracked: ' + String(Number(data?.ai?.totalFailures || 0));
+            ccAiStatus.textContent = 'Model: ' + String(data?.ai?.model || 'unknown') + ' - failures tracked: ' + String(Number(data?.ai?.totalFailures || 0));
           }
           if (ccPublicApps) ccPublicApps.textContent = String(Number(data?.appCount || 0));
           if (ccReviewCount) ccReviewCount.textContent = String(Number(data?.reviewCount || 0));
@@ -3189,10 +3358,10 @@
           }
 
           const avgRating = reviews.reduce((sum, item) => sum + Number(item.rating || 0), 0) / Math.max(1, reviews.length);
-          feedbackSummary.textContent = 'Showing ' + Math.min(3, reviews.length) + ' recent reviews · Average rating ' + avgRating.toFixed(1) + '/5';
+          feedbackSummary.textContent = 'Showing ' + Math.min(3, reviews.length) + ' recent reviews - Average rating ' + avgRating.toFixed(1) + '/5';
           feedbackPreviewGrid.innerHTML = reviews.slice(0, 3).map((item) => `
             <article class="feedback-card">
-              <span class="card-kicker">${escapeHtml(item.category || 'Feedback')} · ${'★'.repeat(Math.max(1, Math.min(5, Number(item.rating || 0))))}</span>
+              <span class="card-kicker">${escapeHtml(item.category || 'Feedback')} - ${'\u2605'.repeat(Math.max(1, Math.min(5, Number(item.rating || 0))))}</span>
               <h3>${escapeHtml(item.name || 'Anonymous builder')}</h3>
               <p>${escapeHtml(item.message || 'Shared feedback appears here.')}</p>
             </article>
@@ -3291,7 +3460,7 @@
         paletteList.innerHTML = filtered.map((item) => `
           <a class="palette-item" href="${item.href}" data-palette-item="true">
             <strong>${item.title}</strong>
-            <span>${item.subtitle} · ${item.href}</span>
+            <span>${item.subtitle} - ${item.href}</span>
           </a>
         `).join('') || '<p class="meta">No matching sections or apps.</p>';
         paletteActiveIndex = -1;
@@ -3328,6 +3497,9 @@
 
       if (launcherBtn) {
         launcherBtn.addEventListener('click', openPalette);
+      }
+      if (headerLaunchBtn) {
+        headerLaunchBtn.addEventListener('click', openPalette);
       }
       if (paletteCloseBtn) {
         paletteCloseBtn.addEventListener('click', closePalette);

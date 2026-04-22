@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="StoryForge icon">
+  <defs>
+    <linearGradient id="sf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#79d8ff"/>
+      <stop offset="100%" stop-color="#5ad6a7"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="52" height="52" rx="14" fill="#0f243a"/>
+  <path d="M18 18h18a6 6 0 016 6v22H24a6 6 0 01-6-6z" fill="none" stroke="url(#sf)" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M26 28h12M26 35h10" stroke="#79d8ff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M45 40l4 4" stroke="#5ad6a7" stroke-width="3" stroke-linecap="round"/>
+</svg>
+

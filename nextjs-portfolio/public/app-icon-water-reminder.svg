@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Water Reminder icon">
+  <defs>
+    <linearGradient id="wrBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#wrBg)"/>
+  <rect x="24" y="13" width="16" height="7" rx="3.5" fill="#e0f2fe"/>
+  <path d="M22 20h20v26a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8z" fill="#0b2540" opacity=".92"/>
+  <path d="M26 32c3 2 9 2 12 0 0 5-3 8-6 8s-6-3-6-8z" fill="#7dd3fc"/>
+</svg>

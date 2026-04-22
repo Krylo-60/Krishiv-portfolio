@@ -1,0 +1,294 @@
+{
+  "generatedAt": "2026-04-22T14:00:58.542Z",
+  "visual": [
+    {
+      "viewport": "desktop",
+      "page": "home",
+      "url": "https://krishiv-new-portfoilo.vercel.app/",
+      "status": 200,
+      "title": "Krishiv Velocity | Krishiv PB",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-home.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "all-links",
+      "url": "https://krishiv-new-portfoilo.vercel.app/all-links.html",
+      "status": 200,
+      "title": "All Links Directory | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-all-links.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "release-notes",
+      "url": "https://krishiv-new-portfoilo.vercel.app/release-notes.html",
+      "status": 200,
+      "title": "Release Notes | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-release-notes.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "projects",
+      "url": "https://krishiv-new-portfoilo.vercel.app/projects.html",
+      "status": 200,
+      "title": "Projects Hub | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-projects.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "games",
+      "url": "https://krishiv-new-portfoilo.vercel.app/games.html",
+      "status": 200,
+      "title": "Games I Play | Krishiv PB | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-games.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "contact",
+      "url": "https://krishiv-new-portfoilo.vercel.app/contact.html",
+      "status": 200,
+      "title": "Contact Hub | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-contact.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "review-app",
+      "url": "https://krishiv-new-portfoilo.vercel.app/review-app.html",
+      "status": 200,
+      "title": "Review App | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-review-app.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "study-planner",
+      "url": "https://krishiv-new-portfoilo.vercel.app/study-planner.html",
+      "status": 200,
+      "title": "Study Planner App",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-study-planner.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "quiz-zone",
+      "url": "https://krishiv-new-portfoilo.vercel.app/quiz-zone.html",
+      "status": 200,
+      "title": "JavaScript Quiz Zone",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-quiz-zone.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "idea-lab-ai",
+      "url": "https://krishiv-new-portfoilo.vercel.app/idea-lab-ai.html",
+      "status": 200,
+      "title": "Idea Lab AI | Krishiv PB",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-idea-lab-ai.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "desktop",
+      "page": "aether-v110",
+      "url": "https://krishiv-new-portfoilo.vercel.app/aether-core-v110.html",
+      "status": 200,
+      "title": "Aether Core v110 | Fusion Command",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-aether-v110.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "home",
+      "url": "https://krishiv-new-portfoilo.vercel.app/",
+      "status": 200,
+      "title": "Krishiv Velocity | Krishiv PB",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-home.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "all-links",
+      "url": "https://krishiv-new-portfoilo.vercel.app/all-links.html",
+      "status": 200,
+      "title": "All Links Directory | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-all-links.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "release-notes",
+      "url": "https://krishiv-new-portfoilo.vercel.app/release-notes.html",
+      "status": 200,
+      "title": "Release Notes | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-release-notes.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "projects",
+      "url": "https://krishiv-new-portfoilo.vercel.app/projects.html",
+      "status": 200,
+      "title": "Projects Hub | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-projects.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "games",
+      "url": "https://krishiv-new-portfoilo.vercel.app/games.html",
+      "status": 200,
+      "title": "Games I Play | Krishiv PB | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-games.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "contact",
+      "url": "https://krishiv-new-portfoilo.vercel.app/contact.html",
+      "status": 200,
+      "title": "Contact Hub | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-contact.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "review-app",
+      "url": "https://krishiv-new-portfoilo.vercel.app/review-app.html",
+      "status": 200,
+      "title": "Review App | Krishiv Velocity",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-review-app.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "study-planner",
+      "url": "https://krishiv-new-portfoilo.vercel.app/study-planner.html",
+      "status": 200,
+      "title": "Study Planner App",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-study-planner.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "quiz-zone",
+      "url": "https://krishiv-new-portfoilo.vercel.app/quiz-zone.html",
+      "status": 200,
+      "title": "JavaScript Quiz Zone",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-quiz-zone.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "idea-lab-ai",
+      "url": "https://krishiv-new-portfoilo.vercel.app/idea-lab-ai.html",
+      "status": 200,
+      "title": "Idea Lab AI | Krishiv PB",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-idea-lab-ai.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    },
+    {
+      "viewport": "mobile",
+      "page": "aether-v110",
+      "url": "https://krishiv-new-portfoilo.vercel.app/aether-core-v110.html",
+      "status": 200,
+      "title": "Aether Core v110 | Fusion Command",
+      "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-aether-v110.png",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "hasPlainButtonCluster": false
+    }
+  ],
+  "interactions": [
+    {
+      "name": "all-links overlay opens",
+      "ok": true
+    },
+    {
+      "name": "all-links overlay closes",
+      "ok": true
+    },
+    {
+      "name": "review-app interactive controls exist",
+      "ok": true,
+      "detail": "controls=32"
+    },
+    {
+      "name": "idea-lab-ai interactive controls exist",
+      "ok": true,
+      "detail": "controls=14"
+    },
+    {
+      "name": "aether input auto-grows",
+      "ok": true,
+      "detail": "before=44, after=116"
+    }
+  ]
+}

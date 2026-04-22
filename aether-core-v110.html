@@ -472,7 +472,7 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 0.75rem;
-      align-items: stretch;
+      align-items: end;
     }
 
     #userInput {
@@ -481,16 +481,16 @@
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(5, 12, 20, 0.84);
       color: var(--text);
-      min-height: 3.2rem;
-      max-height: 180px;
-      padding: 0.8rem 1.05rem;
+      min-height: 2.9rem;
+      max-height: min(38vh, 260px);
+      padding: 0.72rem 1rem;
       font-size: 0.96rem;
       line-height: 1.55;
       outline: none;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
       resize: none;
       overflow-y: auto;
-      transition: height 0.1s ease;
+      transition: height 0.1s ease, border-color 0.16s ease, box-shadow 0.16s ease;
     }
 
     #userInput:focus {
@@ -503,11 +503,13 @@
       border-radius: 0.9rem;
       background: rgba(255,255,255,0.05);
       color: var(--text);
-      padding: 0 1rem;
+      padding: 0.85rem 1rem;
       min-width: 6.1rem;
+      min-height: 2.9rem;
       cursor: pointer;
       font-weight: 700;
       letter-spacing: 0.04em;
+      align-self: end;
     }
 
     .action-btn.primary {
@@ -917,7 +919,7 @@
         document.getElementById("helperStatus").textContent = "No context loaded";
         return;
       }
-      contextBar.innerHTML = `<span class="context-pill">${escapeHtml(uploadedName)} <button type="button" onclick="clearContext()" aria-label="Remove context">×</button></span>`;
+      contextBar.innerHTML = `<span class="context-pill">${escapeHtml(uploadedName)} <button type="button" onclick="clearContext()" aria-label="Remove context">x</button></span>`;
       document.getElementById("helperStatus").textContent = "Context file attached";
     }
 
@@ -929,9 +931,21 @@
       pushStatus("Context stream cleared");
     }
 
+    function resizeInput(forceReset = false) {
+      if (!input) return;
+      const baseHeight = "2.9rem";
+      input.style.height = "auto";
+      if (forceReset || !input.value.trim()) {
+        input.style.height = baseHeight;
+        return;
+      }
+      input.style.height = `${Math.min(input.scrollHeight, 260)}px`;
+    }
+
     function reusePrompt(index) {
       const text = promptHistory[index] || "";
       input.value = text;
+      resizeInput();
       input.focus();
       input.setSelectionRange(input.value.length, input.value.length);
     }
@@ -987,6 +1001,7 @@
 
     function injectPrompt(text) {
       input.value = text;
+      resizeInput();
       input.focus();
       input.setSelectionRange(input.value.length, input.value.length);
     }
@@ -996,6 +1011,7 @@
       if (historyIndex < 0) historyIndex = 0;
       else historyIndex = Math.min(promptHistory.length - 1, Math.max(0, historyIndex + step));
       input.value = promptHistory[historyIndex] || "";
+      resizeInput();
       input.focus();
       input.setSelectionRange(input.value.length, input.value.length);
     }
@@ -1115,12 +1131,13 @@
         historyIndex = -1;
         render("user", escapeHtml(value || `Use the attached context file: ${uploadedName}`));
         input.value = "";
+        resizeInput(true);
         loader = render("bot", "<span class=\"mini-meta\">Aether v110 is composing a response...</span>");
         resetNodeStates();
 
-        if (!uploadedContext && /^[0-9+\-*/().^\%√\s]+$/.test(value) && /[0-9]/.test(value) && value.replace(/\s/g, '').length >= 3) {
+        if (!uploadedContext && /^[0-9+\-*/().^%\u221a\s]+$/.test(value) && /[0-9]/.test(value) && value.replace(/\s/g, '').length >= 3) {
             try {
-                const safeExpr = value.replace(/\s/g, '').replace(/\^/g, '**').replace(/√/g, 'Math.sqrt');
+                const safeExpr = value.replace(/\s/g, '').replace(/\^/g, '**').replace(/\u221a/g, 'Math.sqrt');
                 const result = eval(safeExpr);
                 if (result !== null && result !== undefined && !isNaN(result) && result !== Infinity) {
                     setTimeout(() => {
@@ -1183,6 +1200,8 @@
       if (heroPanel) heroPanel.style.display = "";
       
       lastResponse = "";
+      input.value = "";
+      resizeInput(true);
       clearContext();
       resetNodeStates();
       document.getElementById("chatMeta").textContent = "Fresh thread initialized";
@@ -1221,6 +1240,7 @@
         if (historyIndex <= 0) {
           historyIndex = -1;
           input.value = "";
+          resizeInput(true);
           return;
         }
         recallPrompt(-1);
@@ -1317,16 +1337,10 @@
     renderHistory();
     renderContext();
     updateModeRadar(currentMode);
-    const resizableInput = document.getElementById("userInput");
-    if (resizableInput) {
-      resizableInput.addEventListener("input", function() {
-        this.style.height = "auto";
-        this.style.height = (this.scrollHeight) + "px";
-        if (!this.value.trim()) {
-           this.style.height = "3.2rem";
-        }
-      });
-    }
+    resizeInput(true);
+    input.addEventListener("input", () => {
+      resizeInput();
+    });
 
     pushStatus("Aether Core v110 initialized");
     window.execute = execute;

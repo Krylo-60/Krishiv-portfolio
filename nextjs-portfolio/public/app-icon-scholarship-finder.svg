@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Scholarship Finder icon">
+  <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#75dfff"/><stop offset="100%" stop-color="#66ffbb"/></linearGradient></defs>
+  <rect width="96" height="96" rx="24" fill="#081422"/>
+  <path d="M48 22 20 34l28 12 22-9.4V56h6V34L48 22Zm-16 28v10c0 6 8 12 16 12s16-6 16-12V50L48 58 32 50Z" fill="url(#g)"/>
+</svg>

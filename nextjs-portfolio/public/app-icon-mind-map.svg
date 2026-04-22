@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Mind Map icon">
+  <defs>
+    <linearGradient id="mmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#mmBg)"/>
+  <circle cx="32" cy="32" r="8" fill="#f5f3ff"/>
+  <circle cx="18" cy="20" r="5" fill="#fde68a"/>
+  <circle cx="46" cy="18" r="5" fill="#bfdbfe"/>
+  <circle cx="18" cy="45" r="5" fill="#86efac"/>
+  <circle cx="46" cy="45" r="5" fill="#f9a8d4"/>
+  <path d="M26 28 21 23M38 27l5-5M26 36l-5 5M38 37l5 5" stroke="#0f172a" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

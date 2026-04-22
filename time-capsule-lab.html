@@ -1,10 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Krishiv PB" />
   <title>Time Capsule Lab | Krishiv PB</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #071223;
@@ -14,60 +19,174 @@
       --muted: #acc7e8;
       --accent: #79d8ff;
       --good: #62dfb1;
+      --gold: #ffd166;
+      --hot: #ff8bc7;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
       color: var(--text);
-      background: linear-gradient(165deg, #040f1c, #0b2541 48%, #12395f);
+      background:
+        radial-gradient(circle at top right, rgba(255, 139, 199, 0.12), transparent 24%),
+        radial-gradient(circle at left center, rgba(121, 216, 255, 0.1), transparent 24%),
+        linear-gradient(165deg, #040f1c, #0b2541 48%, #12395f);
       min-height: 100vh;
     }
-    .wrap { width: min(980px, 94%); margin: 24px auto 90px; }
+    .wrap { width: min(1100px, 94%); margin: 24px auto 90px; }
     .card {
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 18px;
+      padding: 16px;
       background: linear-gradient(160deg, rgba(18, 40, 68, 0.96), rgba(9, 22, 40, 0.96));
       margin-bottom: 12px;
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.22);
     }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    input, textarea, button {
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(255, 209, 102, 0.1), transparent 24%),
+        linear-gradient(160deg, rgba(18, 40, 68, 0.98), rgba(8, 21, 38, 0.98));
+    }
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(121, 216, 255, 0.08), transparent 40%, rgba(255, 139, 199, 0.08));
+    }
+    .hero-card > * { position: relative; z-index: 1; }
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .row.between { justify-content: space-between; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 209, 102, 0.28);
+      background: rgba(255, 209, 102, 0.1);
+      color: #fff2bf;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero-stats,
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .hero-stat,
+    .insight-card {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(121, 216, 255, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .hero-stat strong,
+    .insight-card strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .hero-stat span,
+    .insight-card span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .builder-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 12px;
+    }
+    input, textarea, button, select {
       width: 100%;
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 12px;
       background: #0a1a2f;
       color: var(--text);
-      padding: 9px 10px;
+      padding: 10px 12px;
       font: inherit;
     }
-    textarea { min-height: 90px; resize: vertical; }
+    textarea { min-height: 150px; resize: vertical; line-height: 1.55; }
     button { cursor: pointer; font-weight: 700; }
     .btn-main { background: linear-gradient(135deg, #79d8ff, #62dfb1); color: #042333; border: none; }
+    .btn-accent { background: linear-gradient(135deg, #ff8bc7, #ffd166); color: #421f2d; border: none; }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .toolbar button { width: auto; padding-inline: 14px; }
+    .capsule-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
     .capsule {
       border: 1px solid rgba(121, 175, 235, 0.35);
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 10px;
+      border-radius: 16px;
+      padding: 12px;
       background: rgba(7, 19, 34, 0.72);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .meta { color: var(--muted); font-size: .88rem; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      background: rgba(121, 216, 255, 0.1);
+      border: 1px solid rgba(121, 216, 255, 0.22);
+      color: #d8f5ff;
+      text-transform: uppercase;
+    }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+    .empty-note { color: var(--muted); margin: 0; }
+    .mood-board {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px dashed rgba(121, 216, 255, 0.24);
+      background: rgba(5, 16, 29, 0.52);
+    }
+    .mood-board ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .mood-board li + li { margin-top: 6px; }
+    @media (max-width: 940px) {
+      .builder-grid,
+      .hero-stats,
+      .insight-grid,
+      .capsule-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
   <style id="codex-shared-fonts">
     body, button, input, select, textarea {
       font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
     }
-
     h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
       font-family: "Orbitron", "Space Grotesk", sans-serif !important;
     }
-
     code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
       font-family: "JetBrains Mono", monospace !important;
     }
@@ -75,70 +194,212 @@
 </head>
 <body>
   <main class="wrap">
-    <section class="card">
+    <section class="card hero-card">
+      <div class="row between">
+        <div class="hero-badge">Future mail mode</div>
+        <a href="index.html#app-verse">Back to Apps Galaxy</a>
+      </div>
       <h1>Time Capsule Lab</h1>
-      <p class="meta">Write future messages and unlock them on selected dates.</p>
+      <p class="meta">Write messages for future-you, lock them by date, track countdowns, and sort your capsule vault like a real app instead of a tiny demo.</p>
       <p class="meta">Created by Krishiv PB</p>
-      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>v9.1</strong><span>standalone app upgrade</span></div>
+        <div class="hero-stat"><strong>Locked + Open</strong><span>smart reveal states</span></div>
+        <div class="hero-stat"><strong>Filters</strong><span>future vault sorting</span></div>
+        <div class="hero-stat"><strong>Kid-made</strong><span>message-to-tomorrow energy</span></div>
+      </div>
     </section>
 
-    <section class="card grid">
-      <article>
-        <h2>Create Capsule</h2>
-        <input id="titleInput" placeholder="Capsule title" style="margin-bottom:8px;" />
-        <textarea id="msgInput" placeholder="Message for your future self..."></textarea>
-        <input id="dateInput" type="date" style="margin:8px 0;" />
-        <button id="saveBtn" class="btn-main" type="button">Save Capsule</button>
-      </article>
-      <article>
-        <h2>Capsules</h2>
-        <div id="capsules"></div>
-      </article>
+    <section class="card">
+      <h2>Create Capsule</h2>
+      <div class="builder-grid">
+        <article>
+          <input id="titleInput" placeholder="Capsule title" style="margin-bottom:8px;" />
+          <textarea id="msgInput" placeholder="Message for your future self..."></textarea>
+          <div class="row" style="margin-top:8px;">
+            <input id="dateInput" type="date" />
+            <select id="moodSelect">
+              <option value="hype">Hype</option>
+              <option value="calm">Calm</option>
+              <option value="focus">Focus</option>
+              <option value="dream">Dream</option>
+            </select>
+          </div>
+          <div class="toolbar">
+            <button id="saveBtn" class="btn-main" type="button">Save Capsule</button>
+            <button id="seedExamBtn" type="button">Exam capsule</button>
+            <button id="seedBuilderBtn" type="button">Builder capsule</button>
+            <button id="seedBirthdayBtn" type="button">Birthday capsule</button>
+          </div>
+        </article>
+        <article class="mood-board">
+          <h3>Future Dock</h3>
+          <p class="meta">This app is supposed to feel personal. You can write something serious, funny, emotional, or just a note to remind future-you that you kept building.</p>
+          <ul>
+            <li>Use a mood tag so your vault feels more alive.</li>
+            <li>Open capsules reveal automatically after the unlock day.</li>
+            <li>Favorites stay easy to find when your future vault gets bigger.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row between">
+        <div>
+          <h2>Capsule Vault</h2>
+          <p class="meta">Track what is locked, what is open, and what matters most.</p>
+        </div>
+        <div class="row">
+          <select id="filterSelect" style="max-width:180px;">
+            <option value="all">All capsules</option>
+            <option value="locked">Locked only</option>
+            <option value="open">Open only</option>
+            <option value="favorites">Favorites only</option>
+          </select>
+          <select id="sortSelect" style="max-width:180px;">
+            <option value="soonest">Unlock soonest</option>
+            <option value="latest">Newest saved</option>
+            <option value="oldest">Oldest saved</option>
+          </select>
+        </div>
+      </div>
+      <div class="insight-grid">
+        <div class="insight-card"><strong id="totalCapsules">0</strong><span>capsules saved</span></div>
+        <div class="insight-card"><strong id="lockedCount">0</strong><span>still locked</span></div>
+        <div class="insight-card"><strong id="openCount">0</strong><span>ready to open</span></div>
+        <div class="insight-card"><strong id="nextUnlock">none</strong><span>next unlock</span></div>
+      </div>
+      <div id="capsules" class="capsule-grid" style="margin-top:12px;"></div>
     </section>
   </main>
 
   <script>
     (() => {
-      const KEY = "krishiv_time_capsule_v1";
+      const KEY = "krishiv_time_capsule_v2";
       const titleInput = document.getElementById("titleInput");
       const msgInput = document.getElementById("msgInput");
       const dateInput = document.getElementById("dateInput");
+      const moodSelect = document.getElementById("moodSelect");
       const saveBtn = document.getElementById("saveBtn");
+      const filterSelect = document.getElementById("filterSelect");
+      const sortSelect = document.getElementById("sortSelect");
       const capsulesEl = document.getElementById("capsules");
+      const totalCapsulesEl = document.getElementById("totalCapsules");
+      const lockedCountEl = document.getElementById("lockedCount");
+      const openCountEl = document.getElementById("openCount");
+      const nextUnlockEl = document.getElementById("nextUnlock");
+      const seedExamBtn = document.getElementById("seedExamBtn");
+      const seedBuilderBtn = document.getElementById("seedBuilderBtn");
+      const seedBirthdayBtn = document.getElementById("seedBirthdayBtn");
       let capsules = [];
 
       function load() {
         try {
           capsules = JSON.parse(localStorage.getItem(KEY) || "[]");
           if (!Array.isArray(capsules)) capsules = [];
-        } catch { capsules = []; }
+        } catch {
+          capsules = [];
+        }
       }
-      function save() { localStorage.setItem(KEY, JSON.stringify(capsules)); }
-      function esc(s) {
-        return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+      function save() {
+        localStorage.setItem(KEY, JSON.stringify(capsules));
       }
+
+      function esc(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
       function startOfDay(dateStr) {
         return new Date(dateStr + "T00:00:00").getTime();
       }
 
+      function capsuleState(capsule) {
+        return startOfDay(capsule.unlockDate) <= Date.now() ? "open" : "locked";
+      }
+
+      function setTemplate(kind) {
+        const now = new Date();
+        const futureDate = (days) => {
+          const date = new Date(now.getTime() + days * 86400000);
+          return date.toISOString().slice(0, 10);
+        };
+        if (kind === "exam") {
+          titleInput.value = "Exam Week Message";
+          msgInput.value = "Future me, stay calm, do your best, and remember you already worked hard for this.";
+          dateInput.value = futureDate(14);
+          moodSelect.value = "focus";
+        }
+        if (kind === "builder") {
+          titleInput.value = "Builder Note";
+          msgInput.value = "Future me, I hope the website is even cooler now and you kept shipping ideas every week.";
+          dateInput.value = futureDate(30);
+          moodSelect.value = "hype";
+        }
+        if (kind === "birthday") {
+          titleInput.value = "Birthday Capsule";
+          msgInput.value = "Future me, notice how much changed this year and remember to be proud of your growth.";
+          dateInput.value = futureDate(90);
+          moodSelect.value = "dream";
+        }
+      }
+
+      function updateStats() {
+        const locked = capsules.filter((capsule) => capsuleState(capsule) === "locked");
+        const open = capsules.filter((capsule) => capsuleState(capsule) === "open");
+        const next = locked.slice().sort((a, b) => startOfDay(a.unlockDate) - startOfDay(b.unlockDate))[0];
+        totalCapsulesEl.textContent = String(capsules.length);
+        lockedCountEl.textContent = String(locked.length);
+        openCountEl.textContent = String(open.length);
+        nextUnlockEl.textContent = next ? new Date(next.unlockDate + "T00:00:00").toLocaleDateString() : "none";
+      }
+
       function render() {
-        const now = Date.now();
-        capsulesEl.innerHTML = capsules.map((c) => {
-          const unlock = startOfDay(c.unlockDate);
-          const open = unlock <= now;
-          const days = Math.ceil((unlock - now) / 86400000);
+        const filter = filterSelect.value;
+        const sort = sortSelect.value;
+        const visible = capsules
+          .filter((capsule) => {
+            if (filter === "all") return true;
+            if (filter === "favorites") return Boolean(capsule.favorite);
+            return capsuleState(capsule) === filter;
+          })
+          .sort((a, b) => {
+            if (sort === "soonest") return startOfDay(a.unlockDate) - startOfDay(b.unlockDate);
+            if (sort === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+
+        capsulesEl.innerHTML = visible.map((capsule) => {
+          const state = capsuleState(capsule);
+          const unlock = startOfDay(capsule.unlockDate);
+          const daysLeft = Math.max(0, Math.ceil((unlock - Date.now()) / 86400000));
           return `
             <article class="capsule">
-              <h3>${esc(c.title)}</h3>
-              <p class="meta">Unlock: ${new Date(c.unlockDate + "T00:00:00").toLocaleDateString("en-IN")}</p>
-              ${open ? `<p>${esc(c.message)}</p>` : `<p class="meta">Locked (${Math.max(0, days)} day${Math.abs(days) === 1 ? "" : "s"} left)</p>`}
-              <div style="display:flex; gap:8px; margin-top:8px;">
-                ${open ? `<button type="button" data-copy="${c.id}">Copy</button>` : `<button type="button" disabled>Locked</button>`}
-                <button type="button" data-del="${c.id}">Delete</button>
+              <div class="chip-row">
+                <span class="chip">${state}</span>
+                <span class="chip">${esc(capsule.mood)}</span>
+                ${capsule.favorite ? `<span class="chip">favorite</span>` : ""}
+              </div>
+              <h3>${esc(capsule.title)}</h3>
+              <p class="meta">Unlock: ${new Date(capsule.unlockDate + "T00:00:00").toLocaleDateString()}</p>
+              ${state === "open"
+                ? `<p>${esc(capsule.message)}</p>`
+                : `<p class="meta">Locked for ${daysLeft} more day${daysLeft === 1 ? "" : "s"}.</p>`
+              }
+              <div class="toolbar">
+                ${state === "open" ? `<button type="button" data-copy="${capsule.id}">Copy</button>` : `<button type="button" disabled>Locked</button>`}
+                <button type="button" data-fav="${capsule.id}">${capsule.favorite ? "Unfavorite" : "Favorite"}</button>
+                <button type="button" data-del="${capsule.id}">Delete</button>
               </div>
             </article>
           `;
-        }).join("") || `<p class="meta">No capsules yet.</p>`;
+        }).join("") || `<p class="empty-note">No capsules in this view yet.</p>`;
+
+        updateStats();
       }
 
       saveBtn.addEventListener("click", () => {
@@ -149,31 +410,55 @@
           alert("Add title, message, and unlock date.");
           return;
         }
-        capsules.unshift({ id: "C" + Date.now().toString(36), title, message, unlockDate });
+        capsules.unshift({
+          id: "C" + Date.now().toString(36),
+          title,
+          message,
+          unlockDate,
+          mood: moodSelect.value,
+          favorite: false,
+          createdAt: new Date().toISOString()
+        });
         titleInput.value = "";
         msgInput.value = "";
         dateInput.value = "";
+        moodSelect.value = "hype";
         save();
         render();
       });
 
-      capsulesEl.addEventListener("click", async (e) => {
-        const t = e.target;
-        if (!(t instanceof HTMLButtonElement)) return;
-        const delId = t.dataset.del;
-        const copyId = t.dataset.copy;
+      capsulesEl.addEventListener("click", async (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) return;
+        const delId = target.dataset.del;
+        const copyId = target.dataset.copy;
+        const favId = target.dataset.fav;
         if (delId) {
-          capsules = capsules.filter((c) => c.id !== delId);
+          capsules = capsules.filter((capsule) => capsule.id !== delId);
+          save();
+          render();
+          return;
+        }
+        if (favId) {
+          capsules = capsules.map((capsule) => capsule.id === favId ? { ...capsule, favorite: !capsule.favorite } : capsule);
           save();
           render();
           return;
         }
         if (copyId) {
-          const cap = capsules.find((c) => c.id === copyId);
-          if (!cap) return;
-          try { await navigator.clipboard.writeText(cap.message); } catch {}
+          const capsule = capsules.find((item) => item.id === copyId);
+          if (!capsule) return;
+          try {
+            await navigator.clipboard.writeText(capsule.message);
+          } catch {}
         }
       });
+
+      filterSelect.addEventListener("change", render);
+      sortSelect.addEventListener("change", render);
+      seedExamBtn.addEventListener("click", () => setTemplate("exam"));
+      seedBuilderBtn.addEventListener("click", () => setTemplate("builder"));
+      seedBirthdayBtn.addEventListener("click", () => setTemplate("birthday"));
 
       load();
       render();
@@ -182,7 +467,3 @@
   <script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-
-

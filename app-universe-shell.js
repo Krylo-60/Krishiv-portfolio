@@ -223,6 +223,9 @@
   const FAV_KEY = "krishiv_app_favorites_v1";
   const RECENT_KEY = "krishiv_app_recents_v1";
   const STATS_KEY = "krishiv_app_launch_stats_v1";
+  const APP_NOTE_PREFIX = "krishiv_app_note_";
+  const PROFILE_KEY = "krishiv_app_profiles_v1";
+  const DAILY_KEY = "krishiv_app_daily_v1";
   const THEMES = [
     { key: "default", label: "Aurora" },
     { key: "neon", label: "Neon" },
@@ -241,6 +244,8 @@
   let favorites = [];
   let recents = [];
   let stats = {};
+  let appProfiles = {};
+  let appDaily = {};
   try {
     favorites = JSON.parse(safeGet(FAV_KEY, "[]"));
     if (!Array.isArray(favorites)) favorites = [];
@@ -259,11 +264,186 @@
   } catch {
     stats = {};
   }
+  try {
+    appProfiles = JSON.parse(safeGet(PROFILE_KEY, "{}"));
+    if (!appProfiles || typeof appProfiles !== "object") appProfiles = {};
+  } catch {
+    appProfiles = {};
+  }
+  try {
+    appDaily = JSON.parse(safeGet(DAILY_KEY, "{}"));
+    if (!appDaily || typeof appDaily !== "object") appDaily = {};
+  } catch {
+    appDaily = {};
+  }
 
   applyTheme(activeTheme);
   document.body.setAttribute("data-mode", "dark");
   document.documentElement.setAttribute("data-mode", "dark");
   document.body.classList.add("app-theme-root");
+
+  function installPowerPanel() {
+    const mainHost = document.querySelector("main");
+    if (!mainHost || path === "all-links.html" || path === "release-notes.html") return;
+
+    const pageTitle = document.title.replace(/\s*\|\s*Krishiv PB.*$/, "").trim();
+    const noteKey = APP_NOTE_PREFIX + path;
+    const savedNote = String(safeGet(noteKey, ""));
+    const launchCount = Number(stats[path] || 0);
+    const isFav = favorites.includes(path);
+    const profile = appProfiles[path] || { stage: "Building", progress: 35, lastOpened: "" };
+    const daily = appDaily[path] || { streak: 1, totalDays: 1, lastDate: "" };
+
+    const panel = document.createElement("section");
+    panel.className = "app-power-panel";
+    panel.innerHTML = `
+      <div class="app-power-head">
+        <div>
+          <p class="app-power-kicker">App Power Panel</p>
+          <h2>${pageTitle}</h2>
+        </div>
+        <div class="app-power-pills">
+          <span class="app-power-pill">${launchCount} launches</span>
+          <span class="app-power-pill" id="appPowerStagePill">${profile.stage}</span>
+          <span class="app-power-pill" id="appPowerProgressPill">${profile.progress}% ready</span>
+          <span class="app-power-pill">${daily.streak} day streak</span>
+          <span class="app-power-pill">${isFav ? "favorite app" : "tap fav in apps dock"}</span>
+        </div>
+      </div>
+      <div class="app-power-grid">
+        <article class="app-power-card">
+          <strong>Quick note</strong>
+          <textarea id="appPowerNote" placeholder="Write a quick idea or reminder for this app...">${savedNote}</textarea>
+          <div class="app-power-actions">
+            <button type="button" class="app-shell-btn" id="appPowerSaveBtn">Save Note</button>
+            <button type="button" class="app-shell-btn" id="appPowerClearBtn">Clear</button>
+          </div>
+        </article>
+        <article class="app-power-card">
+          <strong>Build mission</strong>
+          <label class="app-power-label" for="appPowerStage">Current stage</label>
+          <select id="appPowerStage">
+            <option value="Idea"${profile.stage === "Idea" ? " selected" : ""}>Idea</option>
+            <option value="Building"${profile.stage === "Building" ? " selected" : ""}>Building</option>
+            <option value="Testing"${profile.stage === "Testing" ? " selected" : ""}>Testing</option>
+            <option value="Live"${profile.stage === "Live" ? " selected" : ""}>Live</option>
+          </select>
+          <label class="app-power-label" for="appPowerProgress">Progress <span id="appPowerProgressValue">${profile.progress}%</span></label>
+          <input id="appPowerProgress" type="range" min="0" max="100" step="5" value="${profile.progress}" />
+          <p class="app-power-copy">Opened on ${daily.totalDays} different day${daily.totalDays === 1 ? "" : "s"}. Last open: ${profile.lastOpened ? new Date(profile.lastOpened).toLocaleString() : "today"}.</p>
+          <div class="app-power-actions">
+            <button type="button" class="app-shell-btn" id="appPowerMissionBtn">Save Mission</button>
+            <button type="button" class="app-shell-btn" id="appPowerFavBtn">${isFav ? "Unfavorite" : "Favorite"}</button>
+          </div>
+        </article>
+        <article class="app-power-card">
+          <strong>Fast actions</strong>
+          <div class="app-power-actions">
+            <button type="button" class="app-shell-btn" id="appPowerCopyBtn">Copy Link</button>
+            <button type="button" class="app-shell-btn" id="appPowerReleaseBtn">Release Notes</button>
+            <button type="button" class="app-shell-btn" id="appPowerLatestBtn">Continue Latest</button>
+            <button type="button" class="app-shell-btn" id="appPowerRandomBtn">Random App</button>
+          </div>
+          <p class="app-power-copy">This shared panel upgrades a huge part of the app galaxy at once, so even smaller builds feel more alive and more useful.</p>
+        </article>
+      </div>
+    `;
+
+    if (mainHost.firstElementChild) {
+      mainHost.insertBefore(panel, mainHost.firstElementChild.nextSibling || null);
+    } else {
+      mainHost.appendChild(panel);
+    }
+
+    const noteInput = panel.querySelector("#appPowerNote");
+    const saveBtn = panel.querySelector("#appPowerSaveBtn");
+    const clearBtn = panel.querySelector("#appPowerClearBtn");
+    const stageInput = panel.querySelector("#appPowerStage");
+    const progressInput = panel.querySelector("#appPowerProgress");
+    const progressValue = panel.querySelector("#appPowerProgressValue");
+    const missionBtn = panel.querySelector("#appPowerMissionBtn");
+    const favBtn = panel.querySelector("#appPowerFavBtn");
+    const copyBtn = panel.querySelector("#appPowerCopyBtn");
+    const releaseBtn = panel.querySelector("#appPowerReleaseBtn");
+    const latestBtn = panel.querySelector("#appPowerLatestBtn");
+    const randomBtn = panel.querySelector("#appPowerRandomBtn");
+    const stagePill = panel.querySelector("#appPowerStagePill");
+    const progressPill = panel.querySelector("#appPowerProgressPill");
+
+    saveBtn?.addEventListener("click", () => {
+      safeSet(noteKey, String(noteInput?.value || ""));
+      if (window.safeNotify) window.safeNotify("Saved app note.");
+    });
+
+    clearBtn?.addEventListener("click", () => {
+      if (noteInput) noteInput.value = "";
+      safeSet(noteKey, "");
+      if (window.safeNotify) window.safeNotify("Cleared app note.");
+    });
+
+    copyBtn?.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        if (window.safeNotify) window.safeNotify("Copied app link.");
+      } catch {
+        window.prompt("Copy this app link:", window.location.href);
+      }
+    });
+
+    releaseBtn?.addEventListener("click", () => {
+      window.location.href = "release-notes.html";
+    });
+
+    progressInput?.addEventListener("input", () => {
+      if (progressValue) progressValue.textContent = String(progressInput.value) + "%";
+    });
+
+    missionBtn?.addEventListener("click", () => {
+      appProfiles[path] = {
+        stage: String(stageInput?.value || "Building"),
+        progress: Number(progressInput?.value || 0),
+        lastOpened: (appProfiles[path] && appProfiles[path].lastOpened) || new Date().toISOString()
+      };
+      safeSet(PROFILE_KEY, JSON.stringify(appProfiles));
+      if (stagePill) stagePill.textContent = appProfiles[path].stage;
+      if (progressPill) progressPill.textContent = appProfiles[path].progress + "% ready";
+      if (window.safeNotify) window.safeNotify("Saved app mission.");
+    });
+
+    favBtn?.addEventListener("click", () => {
+      if (favorites.includes(path)) {
+        favorites = favorites.filter((item) => item !== path);
+      } else {
+        favorites.unshift(path);
+      }
+      saveFavs();
+      favBtn.textContent = favorites.includes(path) ? "Unfavorite" : "Favorite";
+      if (window.safeNotify) window.safeNotify(favorites.includes(path) ? "Added to favorites." : "Removed from favorites.");
+    });
+
+    latestBtn?.addEventListener("click", () => {
+      const nextRecent = recents.find((href) => href && href !== path);
+      window.location.href = nextRecent || "index.html";
+    });
+
+    randomBtn?.addEventListener("click", () => {
+      const choices = APPS.filter((item) => item.href !== path);
+      if (!choices.length) return;
+      const pick = choices[Math.floor(Math.random() * choices.length)];
+      window.location.href = pick.href;
+    });
+  }
+
+  function getDayStamp(date = new Date()) {
+    return date.toLocaleDateString("en-CA");
+  }
+
+  function getPreviousDayStamp(dayStamp) {
+    if (!dayStamp) return "";
+    const date = new Date(dayStamp + "T00:00:00");
+    date.setDate(date.getDate() - 1);
+    return getDayStamp(date);
+  }
 
   function trackCurrentAppLaunch() {
     if (!path || path === "index.html" || path === "admin.private.html") return;
@@ -271,10 +451,28 @@
     safeSet(STATS_KEY, JSON.stringify(stats));
     recents = [path, ...recents.filter((item) => item !== path)].slice(0, 8);
     safeSet(RECENT_KEY, JSON.stringify(recents));
+    const today = getDayStamp();
+    const existingDaily = appDaily[path] || { streak: 0, totalDays: 0, lastDate: "" };
+    if (existingDaily.lastDate !== today) {
+      const wasYesterday = existingDaily.lastDate === getPreviousDayStamp(today);
+      existingDaily.streak = wasYesterday ? Number(existingDaily.streak || 0) + 1 : 1;
+      existingDaily.totalDays = Number(existingDaily.totalDays || 0) + 1;
+      existingDaily.lastDate = today;
+      appDaily[path] = existingDaily;
+      safeSet(DAILY_KEY, JSON.stringify(appDaily));
+    }
+    const existingProfile = appProfiles[path] || { stage: "Building", progress: 35 };
+    appProfiles[path] = {
+      stage: existingProfile.stage || "Building",
+      progress: Number(existingProfile.progress || 35),
+      lastOpened: new Date().toISOString()
+    };
+    safeSet(PROFILE_KEY, JSON.stringify(appProfiles));
     postUsage("page_view", path);
     postUsage("app_open", path);
   }
   trackCurrentAppLaunch();
+  installPowerPanel();
 
   const dock = document.createElement("div");
   dock.className = "app-shell-dock";
@@ -295,12 +493,22 @@
           <p class="app-shell-subtitle">Your fastest route to favorites, AI tools, and live builds.</p>
         </div>
         <input class="app-shell-search" id="shellSearchInput" type="search" placeholder="Search app..." />
+        <select class="app-shell-search app-shell-filter" id="shellCategoryFilter">
+          <option value="all">All categories</option>
+        </select>
+        <select class="app-shell-search app-shell-filter" id="shellSortSelect">
+          <option value="smart">Smart sort</option>
+          <option value="launches">Most launches</option>
+          <option value="az">A-Z</option>
+        </select>
         <button type="button" class="app-shell-btn" id="shellCloseBtn">Close</button>
       </header>
       <div class="app-shell-insights" id="shellInsights"></div>
       <div class="app-shell-actions">
         <button type="button" class="app-shell-quick" data-action="featured">Open Random Featured</button>
         <button type="button" class="app-shell-quick" data-action="top">Open Most Used</button>
+        <button type="button" class="app-shell-quick" data-action="latest">Continue Latest</button>
+        <button type="button" class="app-shell-quick" data-action="surprise">Surprise Me</button>
         <button type="button" class="app-shell-quick" data-action="ai">Open AI Zone</button>
       </div>
       <div class="app-shell-grid" id="shellGrid"></div>
@@ -316,7 +524,16 @@
   const closeBtn = document.getElementById("shellCloseBtn");
   const grid = document.getElementById("shellGrid");
   const searchInput = document.getElementById("shellSearchInput");
+  const categoryFilter = document.getElementById("shellCategoryFilter");
+  const sortSelect = document.getElementById("shellSortSelect");
   const insights = document.getElementById("shellInsights");
+
+  if (categoryFilter) {
+    const categories = Array.from(new Set(APPS.map((item) => item.tag))).sort((left, right) => left.localeCompare(right));
+    categoryFilter.innerHTML = [`<option value="all">All categories</option>`]
+      .concat(categories.map((category) => `<option value="${category}">${category}</option>`))
+      .join("");
+  }
 
   function saveFavs() {
     safeSet(FAV_KEY, JSON.stringify(favorites));
@@ -343,6 +560,7 @@
 
   function renderInsightStrip() {
     const totalLaunches = Object.values(stats).reduce((sum, value) => sum + Number(value || 0), 0);
+    const totalStreak = Object.values(appDaily).reduce((sum, value) => sum + Number((value && value.streak) || 0), 0);
     if (!insights) return;
     insights.innerHTML = `
       <article class="app-shell-insight"><strong>${APPS.length}</strong><span>apps indexed</span></article>
@@ -350,6 +568,7 @@
       <article class="app-shell-insight"><strong>${favorites.length}</strong><span>favorites</span></article>
       <article class="app-shell-insight"><strong>${recents.length}</strong><span>recents</span></article>
       <article class="app-shell-insight"><strong>${totalLaunches}</strong><span>launches</span></article>
+      <article class="app-shell-insight"><strong>${totalStreak}</strong><span>total streak</span></article>
     `;
   }
 
@@ -408,10 +627,31 @@
     launchHref(path === "aether-core-v110.html" ? "idea-lab-ai.html" : "aether-core-v110.html");
   }
 
+  function continueLatest() {
+    const nextRecent = recents.find((href) => href && href !== path);
+    launchHref(nextRecent || "index.html");
+  }
+
+  function openSurprise() {
+    const pool = APPS.filter((item) => item.href !== path);
+    if (!pool.length) return;
+    launchHref(pool[Math.floor(Math.random() * pool.length)].href);
+  }
+
   function renderGrid(term) {
     const q = String(term || "").toLowerCase().trim();
-    const filtered = APPS.filter((item) => !q || item.name.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q) || item.href.toLowerCase().includes(q));
+    const category = String(categoryFilter?.value || "all");
+    const sortMode = String(sortSelect?.value || "smart");
+    const filtered = APPS.filter((item) => {
+      if (category !== "all" && item.tag !== category) return false;
+      return !q || item.name.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q) || item.href.toLowerCase().includes(q);
+    });
     const ordered = resolveOrder(filtered);
+    if (sortMode === "az") {
+      ordered.sort((left, right) => left.item.name.localeCompare(right.item.name));
+    } else if (sortMode === "launches") {
+      ordered.sort((left, right) => right.launches - left.launches || left.item.name.localeCompare(right.item.name));
+    }
     renderInsightStrip();
 
     if (q) {
@@ -474,12 +714,16 @@
       const action = String(quickAction.dataset.action || "");
       if (action === "featured") openRandomFeatured();
       if (action === "top") openMostUsed();
+      if (action === "latest") continueLatest();
+      if (action === "surprise") openSurprise();
       if (action === "ai") openAiZone();
     });
   }
   if (searchInput) {
     searchInput.addEventListener("input", () => renderGrid(searchInput.value));
   }
+  categoryFilter?.addEventListener("change", () => renderGrid(searchInput ? searchInput.value : ""));
+  sortSelect?.addEventListener("change", () => renderGrid(searchInput ? searchInput.value : ""));
   if (grid) {
     grid.addEventListener("click", (event) => {
       const target = event.target;
@@ -530,6 +774,25 @@
         if (!Array.isArray(recents)) recents = [];
       } catch {
         recents = [];
+      }
+      renderGrid(searchInput ? searchInput.value : "");
+      return;
+    }
+    if (event.key === PROFILE_KEY) {
+      try {
+        appProfiles = JSON.parse(safeGet(PROFILE_KEY, "{}"));
+        if (!appProfiles || typeof appProfiles !== "object") appProfiles = {};
+      } catch {
+        appProfiles = {};
+      }
+      return;
+    }
+    if (event.key === DAILY_KEY) {
+      try {
+        appDaily = JSON.parse(safeGet(DAILY_KEY, "{}"));
+        if (!appDaily || typeof appDaily !== "object") appDaily = {};
+      } catch {
+        appDaily = {};
       }
       renderGrid(searchInput ? searchInput.value : "");
       return;

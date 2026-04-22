@@ -1,0 +1,25 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="16" y1="12" x2="112" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B2036"/>
+      <stop offset="1" stop-color="#07111C"/>
+    </linearGradient>
+    <linearGradient id="line" x1="24" y1="18" x2="102" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6CE8FF"/>
+      <stop offset="1" stop-color="#2D7DFF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(64 44) rotate(90) scale(54)">
+      <stop stop-color="#67FFB0" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#67FFB0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#bg)"/>
+  <rect x="8.75" y="8.75" width="110.5" height="110.5" rx="27.25" stroke="#173048" stroke-width="1.5"/>
+  <circle cx="64" cy="44" r="54" fill="url(#glow)"/>
+  <path d="M64 22L94 39V74L64 91L34 74V39L64 22Z" stroke="url(#line)" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64 35L81 45V64L64 74L47 64V45L64 35Z" stroke="#CFF8FF" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M64 22V35M94 39L81 45M94 74L81 64M64 91V74M34 74L47 64M34 39L47 45" stroke="#67FFB0" stroke-width="3" stroke-linecap="round"/>
+  <path d="M50 103H78" stroke="#6CE8FF" stroke-width="5" stroke-linecap="round"/>
+  <path d="M56 95H72" stroke="#CFF8FF" stroke-width="4" stroke-linecap="round"/>
+  <text x="64" y="110" text-anchor="middle" fill="#EAFBFF" font-size="16" font-family="JetBrains Mono, monospace" font-weight="700">v110</text>
+</svg>

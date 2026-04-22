@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">Clash of Clans logo</title>
+  <desc id="desc">Clash of Clans wordmark with glossy shield and war arrow accent.</desc>
+  <defs>
+    <linearGradient id="cocBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#314d14"/>
+      <stop offset="100%" stop-color="#192b11"/>
+    </linearGradient>
+    <linearGradient id="cocGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff0b8"/>
+      <stop offset="52%" stop-color="#e7b049"/>
+      <stop offset="100%" stop-color="#8e5a16"/>
+    </linearGradient>
+    <linearGradient id="cocRed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff8a7c"/>
+      <stop offset="100%" stop-color="#9f2716"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="140" rx="24" fill="url(#cocBg)"/>
+  <circle cx="246" cy="36" r="42" fill="#c9ff6a" opacity=".14"/>
+  <g font-family="Impact, Arial Black, Arial, sans-serif" paint-order="stroke fill">
+    <text x="12" y="56" font-size="42" fill="url(#cocGold)" stroke="#4b2b10" stroke-width="3" letter-spacing="1.4">CLASH</text>
+    <text x="12" y="108" font-size="48" fill="url(#cocGold)" stroke="#4b2b10" stroke-width="3" letter-spacing="1">OF CLANS</text>
+  </g>
+  <g transform="translate(220 20)">
+    <path d="M26 0l34 12v31c0 23-17 39-34 49C9 82-8 66-8 43V12z" fill="url(#cocGold)" stroke="#4b2b10" stroke-width="3"/>
+    <path d="M26 10l23 8v23c0 16-9 28-23 36C12 69 3 57 3 41V18z" fill="url(#cocRed)"/>
+    <path d="M61 34 93 22 72 49l20 15-33 8z" fill="#f4f6fb" stroke="#4b2b10" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M70 36 86 57" stroke="#7a4d15" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

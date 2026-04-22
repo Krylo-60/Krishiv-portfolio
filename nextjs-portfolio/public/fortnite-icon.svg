@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">Fortnite logo</title>
+  <desc id="desc">Fortnite wordmark over a stylized island skyline with electric blue lighting.</desc>
+  <defs>
+    <linearGradient id="fnBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5f7cff"/>
+      <stop offset="100%" stop-color="#1d3fb4"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="140" rx="24" fill="url(#fnBg)"/>
+  <path d="M34 102h232" stroke="rgba(255,255,255,.18)" stroke-width="2"/>
+  <path d="M38 102h18V78h10v24h12V70h10v32h16V82h11v20h18V62h12v40h17V72h10v30h14V84h9v18h18" fill="rgba(255,255,255,.18)"/>
+  <text x="150" y="72" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="44" fill="#ffffff" letter-spacing="2">FORTNITE</text>
+  <text x="150" y="118" text-anchor="middle" font-family="Orbitron, Arial Black, Arial, sans-serif" font-size="14" letter-spacing="8" fill="#dbeafe">LIVE EVENT ENERGY</text>
+</svg>

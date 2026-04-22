@@ -1,0 +1,9 @@
+export default function Page() {
+  return (
+    <div 
+      className="legacy-html-wrapper" 
+      dangerouslySetInnerHTML={{ __html: "\n  <main class=\"wrap\">\n    <section class=\"card\">\n      <h1>Focus Sprint Timer</h1>\n      <p>Pomodoro style timer for study sessions.</p>\n      <p>Created by Krishiv PB</p>\n      <a href=\"index.html#projects\">Back to portfolio</a>\n    </section>\n\n    <section class=\"card\">\n      <h2 id=\"modeLabel\">Focus Mode</h2>\n      <div id=\"clock\" class=\"clock\">25:00</div>\n      <div class=\"row\">\n        <input id=\"focusMinutes\" type=\"number\" min=\"5\" max=\"120\" value=\"25\" style=\"max-width:140px;\" />\n        <input id=\"breakMinutes\" type=\"number\" min=\"1\" max=\"60\" value=\"5\" style=\"max-width:140px;\" />\n        <label style=\"display:flex;align-items:center;gap:6px;color:var(--muted);\"><input id=\"autoStartNext\" type=\"checkbox\" style=\"width:auto;\" /> Auto-start next mode</label>\n        <button id=\"applyDurationsBtn\" class=\"btn\" type=\"button\">Apply Durations</button>\n      </div>\n      <div class=\"row\">\n        <button id=\"startBtn\" class=\"btn primary\" type=\"button\">Start</button>\n        <button id=\"pauseBtn\" class=\"btn\" type=\"button\">Pause</button>\n        <button id=\"resetBtn\" class=\"btn\" type=\"button\">Reset</button>\n        <button id=\"skipBtn\" class=\"btn\" type=\"button\">Skip Mode</button>\n      </div>\n      <p id=\"statusText\" style=\"margin-top:10px;\">Ready to focus.</p>\n    </section>\n\n    <section class=\"card\">\n      <div class=\"row\">\n        <div class=\"stat\"><strong id=\"sessionCount\">0</strong><div>Focus sessions completed</div></div>\n        <div class=\"stat\"><strong id=\"currentMode\">Focus</strong><div>Current mode</div></div>\n      </div>\n    </section>\n  </main>\n\n  \n\r\n  \r\n" }} 
+      suppressHydrationWarning 
+    />
+  );
+}

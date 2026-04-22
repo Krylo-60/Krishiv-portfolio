@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Reading Tracker icon">
+  <defs>
+    <linearGradient id="rtBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#rtBg)"/>
+  <path d="M18 18h12c5 0 8 2 8 6v24H26c-4 0-8-2-8-6z" fill="#141d34" opacity=".94"/>
+  <path d="M46 18H34c-5 0-8 2-8 6v24h12c4 0 8-2 8-6z" fill="#1d2b4b" opacity=".94"/>
+  <path d="M32 20v26" stroke="#dbeafe" stroke-width="2.2"/>
+  <path d="M38 18v10l4-2 4 2V18" fill="#fef3c7"/>
+</svg>

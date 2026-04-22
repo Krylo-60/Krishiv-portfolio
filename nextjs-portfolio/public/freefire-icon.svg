@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">Free Fire logo</title>
+  <desc id="desc">High-contrast Free Fire wordmark with ember glow and blade accent.</desc>
+  <defs>
+    <linearGradient id="ffBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#241300"/>
+      <stop offset="50%" stop-color="#121212"/>
+      <stop offset="100%" stop-color="#331500"/>
+    </linearGradient>
+    <linearGradient id="ffBlade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd56d"/>
+      <stop offset="100%" stop-color="#ff7a00"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="140" rx="24" fill="url(#ffBg)"/>
+  <circle cx="226" cy="34" r="44" fill="#ff8a00" opacity=".12"/>
+  <text x="150" y="82" text-anchor="middle" font-family="Impact, Arial Black, Arial, sans-serif" font-size="46" letter-spacing="3" fill="#ffffff">FREE FIRE</text>
+  <path d="M157 37h12l-9 65h-12z" fill="url(#ffBlade)"/>
+  <path d="M153 37h20l-3 12h-14z" fill="#ffe18b"/>
+  <text x="150" y="118" text-anchor="middle" font-family="Orbitron, Arial Black, Arial, sans-serif" font-size="14" letter-spacing="7" fill="#ffcb7e">BATTLE ROYALE</text>
+</svg>

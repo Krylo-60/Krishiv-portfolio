@@ -14,6 +14,8 @@
       --muted: #a8c4e8;
       --good: #5ee0b0;
       --accent: #79d8ff;
+      --hot: #ff8dcf;
+      --gold: #ffd166;
     }
     * { box-sizing: border-box; }
     body {
@@ -26,10 +28,11 @@
     .wrap { width: min(1120px, 94%); margin: 20px auto 90px; }
     .card {
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 18px;
       padding: 14px;
       background: linear-gradient(160deg, rgba(20, 46, 77, 0.95), rgba(10, 26, 46, 0.95));
       margin-bottom: 12px;
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.22);
     }
     h1, h2, h3 { margin: 0 0 10px; }
     p { color: var(--muted); margin: 0 0 10px; }
@@ -43,18 +46,142 @@
     }
     button { cursor: pointer; font-weight: 700; }
     .btn-main { background: linear-gradient(135deg, #79d8ff, #5ee0b0); color: #062333; border: none; }
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      padding: 18px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 141, 207, 0.15), transparent 24%),
+        radial-gradient(circle at left center, rgba(255, 209, 102, 0.14), transparent 24%),
+        linear-gradient(155deg, rgba(15, 40, 66, 0.98), rgba(7, 19, 34, 0.98));
+    }
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(121, 216, 255, 0.1), transparent 40%, rgba(94, 224, 176, 0.08));
+    }
+    .hero-card > * { position: relative; z-index: 1; }
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 209, 102, 0.28);
+      background: rgba(255, 209, 102, 0.1);
+      color: #fff2bf;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero-card .lead-copy {
+      max-width: 52rem;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .hero-stat {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(121, 216, 255, 0.16);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .hero-stat strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.2rem;
+    }
+    .hero-stat span {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
     .grid-head { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; }
     .layout { display: grid; grid-template-columns: 1.6fr .8fr; gap: 12px; }
     .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
     .product {
       border: 1px solid rgba(130, 176, 228, 0.35);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 12px;
       background: rgba(7, 20, 36, 0.72);
     }
-    .emoji { font-size: 1.5rem; }
+    .emoji {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.8rem;
+      height: 2.8rem;
+      border-radius: 14px;
+      font-size: 1.4rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(121, 216, 255, 0.14);
+    }
+    .product-top {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .product-kicker {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
+    }
+    .product-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #8ec4ff;
+      border: 1px solid rgba(121, 216, 255, 0.18);
+      background: rgba(121, 216, 255, 0.08);
+    }
+    .product-badge {
+      font-size: 0.72rem;
+      color: #fff2bf;
+    }
     .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
     .price { color: var(--good); font-weight: 800; }
+    .stock {
+      color: #bfe8ff;
+      font-size: 0.78rem;
+    }
+    .product-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .wishlist-btn {
+      min-width: 44px;
+      padding-inline: 0;
+    }
+    .wishlist-btn.is-on {
+      color: #062333;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--gold), var(--hot));
+    }
     .cart-item {
       border-bottom: 1px solid rgba(130, 176, 228, 0.25);
       padding: 8px 0;
@@ -73,9 +200,61 @@
       margin-top: 8px;
       background: rgba(7, 20, 36, 0.65);
     }
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .tip-box, .wishlist-box {
+      border-radius: 16px;
+      border: 1px solid rgba(121, 216, 255, 0.18);
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .tip-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .tip-list li { margin: 6px 0; }
+    .wishlist-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .promo-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .promo-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(121, 216, 255, 0.18);
+      color: #eef6ff;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
     @media (max-width: 920px) {
+      .hero-stats,
+      .lab-grid {
+        grid-template-columns: 1fr 1fr;
+      }
       .grid-head { grid-template-columns: 1fr; }
       .layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .hero-stats,
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+      .product-actions {
+        flex-wrap: wrap;
+      }
     }
   </style>
   <link rel="stylesheet" href="app-universe-shell.css" />
@@ -99,11 +278,25 @@
 </head>
 <body>
   <main class="wrap">
-    <section class="card">
+    <section class="card hero-card">
+      <div class="hero-top">
+        <div class="hero-badge">Kid Mall Mode Online</div>
+        <a href="index.html#app-verse">Back to Apps Galaxy</a>
+      </div>
       <h1>BazaarBlitz Prime</h1>
-      <p>Interactive shopping app inspired by marketplace flow. Search, filter, cart, coupon, and simulated checkout.</p>
-      <p>Created by Krishiv PB</p>
-      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+      <p class="lead-copy">This is my kid-made shopping app where tech gear, creator stuff, school tools, and gaming energy all live in one glowing shop. I wanted it to feel like a mini marketplace, but more fun and more like something I would actually build for my own internet world.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>8</strong><span>featured products in this drop</span></div>
+        <div class="hero-stat"><strong>10%</strong><span>coupon if you use KRISHIVPB</span></div>
+        <div class="hero-stat"><strong>Free</strong><span>shipping above Rs 1,500</span></div>
+        <div class="hero-stat"><strong>v8</strong><span>major update energy</span></div>
+      </div>
+      <div class="promo-strip" aria-label="Shop moods">
+        <span class="promo-pill">school setup</span>
+        <span class="promo-pill">creator desk</span>
+        <span class="promo-pill">gaming glow</span>
+        <span class="promo-pill">kid-made storefront</span>
+      </div>
     </section>
 
     <section class="card grid-head">
@@ -148,6 +341,24 @@
     </section>
 
     <section class="card">
+      <h2>Builder Extras</h2>
+      <div class="lab-grid">
+        <article class="tip-box">
+          <h3>Krishiv's shop tips</h3>
+          <ul class="tip-list">
+            <li>Use coupon <strong>KRISHIVPB</strong> for 10% off.</li>
+            <li>Stack your cart above Rs 1,500 for free shipping.</li>
+            <li>Mix school, gaming, and creator gear like a real kid setup.</li>
+          </ul>
+        </article>
+        <article class="wishlist-box">
+          <h3>Wishlist Radar</h3>
+          <ul id="wishlistList" class="wishlist-list"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="card">
       <h2>Order History</h2>
       <p class="small">Recent simulated orders stored in your browser.</p>
       <div id="orderHistory"></div>
@@ -158,15 +369,16 @@
     (() => {
       const STORE_KEY = "krishiv_bazaar_blitz_v1";
       const ORDER_KEY = "krishiv_bazaar_orders_v1";
+      const WISHLIST_KEY = "krishiv_bazaar_wishlist_v1";
       const products = [
-        { id: "p1", name: "Creator RGB Keyboard", category: "tech", price: 2499, rating: 4.7, icon: "âŒ¨ï¸" },
-        { id: "p2", name: "Roblox Battle Mouse", category: "gaming", price: 1299, rating: 4.5, icon: "ðŸ–±ï¸" },
-        { id: "p3", name: "Study Sprint Notebook", category: "school", price: 399, rating: 4.4, icon: "ðŸ“˜" },
-        { id: "p4", name: "Streamer Desk Light", category: "creator", price: 1599, rating: 4.6, icon: "ðŸ’¡" },
-        { id: "p5", name: "Gaming Headset Pro", category: "gaming", price: 3199, rating: 4.8, icon: "ðŸŽ§" },
-        { id: "p6", name: "Smart Pen Pack", category: "school", price: 249, rating: 4.2, icon: "ðŸ–Šï¸" },
-        { id: "p7", name: "Mini Action Cam", category: "creator", price: 4599, rating: 4.3, icon: "ðŸ“·" },
-        { id: "p8", name: "Turbo USB Hub", category: "tech", price: 899, rating: 4.1, icon: "ðŸ”Œ" }
+        { id: "p1", name: "Creator RGB Keyboard", category: "tech", price: 2499, rating: 4.7, icon: "\u2328\uFE0F", badge: "Desk Hero", stock: 7 },
+        { id: "p2", name: "Roblox Battle Mouse", category: "gaming", price: 1299, rating: 4.5, icon: "\u{1F5B1}\uFE0F", badge: "Fast Pick", stock: 11 },
+        { id: "p3", name: "Study Sprint Notebook", category: "school", price: 399, rating: 4.4, icon: "\u{1F4D8}", badge: "School Core", stock: 16 },
+        { id: "p4", name: "Streamer Desk Light", category: "creator", price: 1599, rating: 4.6, icon: "\u{1F4A1}", badge: "Glow Mode", stock: 8 },
+        { id: "p5", name: "Gaming Headset Pro", category: "gaming", price: 3199, rating: 4.8, icon: "\u{1F3A7}", badge: "Top Rated", stock: 5 },
+        { id: "p6", name: "Smart Pen Pack", category: "school", price: 249, rating: 4.2, icon: "\u{1F58A}\uFE0F", badge: "Budget Win", stock: 20 },
+        { id: "p7", name: "Mini Action Cam", category: "creator", price: 4599, rating: 4.3, icon: "\u{1F4F7}", badge: "Creator Pro", stock: 4 },
+        { id: "p8", name: "Turbo USB Hub", category: "tech", price: 899, rating: 4.1, icon: "\u{1F50C}", badge: "Plug Boost", stock: 13 }
       ];
 
       const searchInput = document.getElementById("searchInput");
@@ -183,18 +395,22 @@
       const applyCouponBtn = document.getElementById("applyCouponBtn");
       const checkoutBtn = document.getElementById("checkoutBtn");
       const orderHistoryEl = document.getElementById("orderHistory");
+      const wishlistListEl = document.getElementById("wishlistList");
 
       let cart = {};
       let orders = [];
       let coupon = "";
+      let wishlist = [];
 
       function loadState() {
         try { cart = JSON.parse(localStorage.getItem(STORE_KEY) || "{}") || {}; } catch { cart = {}; }
         try { orders = JSON.parse(localStorage.getItem(ORDER_KEY) || "[]") || []; } catch { orders = []; }
+        try { wishlist = JSON.parse(localStorage.getItem(WISHLIST_KEY) || "[]") || []; } catch { wishlist = []; }
       }
       function saveState() {
         localStorage.setItem(STORE_KEY, JSON.stringify(cart));
         localStorage.setItem(ORDER_KEY, JSON.stringify(orders.slice(0, 12)));
+        localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist.slice(0, 12)));
       }
 
       function money(v) { return "Rs " + Number(v || 0).toLocaleString("en-IN"); }
@@ -217,18 +433,34 @@
         const list = currentList();
         productsEl.innerHTML = list.map((p) => `
           <article class="product">
-            <div class="row">
+            <div class="product-top">
               <span class="emoji">${p.icon}</span>
-              <span class="badge">${p.category.toUpperCase()}</span>
+              <div class="product-kicker">
+                <span class="product-chip">${p.category.toUpperCase()}</span>
+                <span class="product-badge">${p.badge}</span>
+              </div>
             </div>
             <h3>${p.name}</h3>
             <p class="small">Rating ${p.rating.toFixed(1)} / 5</p>
             <div class="row">
               <span class="price">${money(p.price)}</span>
-              <button type="button" data-add="${p.id}" class="btn-main">Add</button>
+              <span class="stock">${p.stock} left</span>
+            </div>
+            <div class="product-actions">
+              <button type="button" data-add="${p.id}" class="btn-main" style="flex:1;">Add</button>
+              <button type="button" data-wish="${p.id}" class="wishlist-btn ${wishlist.includes(p.id) ? "is-on" : ""}">${wishlist.includes(p.id) ? "Fav" : "+"}</button>
             </div>
           </article>
         `).join("") || `<p class="small">No products found for this filter.</p>`;
+      }
+
+      function renderWishlist() {
+        const items = wishlist
+          .map((id) => products.find((p) => p.id === id))
+          .filter(Boolean);
+        wishlistListEl.innerHTML = items.length
+          ? items.map((item) => `<li>${item.name} - ${item.badge}</li>`).join("")
+          : `<li>No wishlist picks yet. Tap + on a product you like.</li>`;
       }
 
       function getSummary() {
@@ -280,6 +512,16 @@
         const t = e.target;
         if (!(t instanceof HTMLButtonElement)) return;
         const id = t.dataset.add;
+        const wishId = t.dataset.wish;
+        if (wishId) {
+          wishlist = wishlist.includes(wishId)
+            ? wishlist.filter((entry) => entry !== wishId)
+            : wishlist.concat(wishId);
+          saveState();
+          renderProducts();
+          renderWishlist();
+          return;
+        }
         if (!id) return;
         cart[id] = Number(cart[id] || 0) + 1;
         saveState();
@@ -329,6 +571,7 @@
         saveState();
         renderCart();
         renderOrders();
+        renderWishlist();
         alert("Order placed in BazaarBlitz Prime: " + order.id);
       });
 
@@ -336,6 +579,7 @@
       renderProducts();
       renderCart();
       renderOrders();
+      renderWishlist();
     })();
   </script>
   <script src="app-universe-shell.js" defer></script>

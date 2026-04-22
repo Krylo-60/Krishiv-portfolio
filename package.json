@@ -7,6 +7,11 @@
     "pg": "^8.13.1"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "audit:prod": "node scripts/audit-production.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.59.1"
   }
 }

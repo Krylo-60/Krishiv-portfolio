@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Goal Planner icon">
+  <defs>
+    <linearGradient id="gpBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#gpBg)"/>
+  <circle cx="32" cy="32" r="16" fill="#0b1d2d" opacity=".94"/>
+  <circle cx="32" cy="32" r="10" fill="none" stroke="#c3f9ff" stroke-width="3"/>
+  <circle cx="32" cy="32" r="4" fill="#86efac"/>
+  <path d="M32 14v10" stroke="#c3f9ff" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M45 19l-6 6" stroke="#c3f9ff" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

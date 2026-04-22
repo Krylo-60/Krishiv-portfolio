@@ -62,9 +62,30 @@
     return score + "/100";
   }
 
+  function getLocalClockLabel(now) {
+    try {
+      const parts = new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+        timeZoneName: "short"
+      }).formatToParts(now);
+      const timeText = parts
+        .filter((part) => part.type !== "timeZoneName")
+        .map((part) => part.value)
+        .join("")
+        .trim();
+      const zoneText = (parts.find((part) => part.type === "timeZoneName") || {}).value || "Local";
+      return `${zoneText} ${timeText}`;
+    } catch {
+      return now.toLocaleTimeString();
+    }
+  }
+
   function syncFuturePanel() {
     const now = new Date();
-    if (futureClock) futureClock.textContent = "IST " + now.toLocaleTimeString("en-IN");
+    if (futureClock) futureClock.textContent = getLocalClockLabel(now);
     if (futurePulse) {
       const phase = now.getSeconds() % 3;
       futurePulse.textContent = phase === 0 ? "surging" : phase === 1 ? "stable" : "charging";

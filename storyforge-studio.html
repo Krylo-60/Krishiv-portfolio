@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -6,6 +6,10 @@
   <meta name="author" content="Krishiv PB" />
   <title>StoryForge Studio | Krishiv PB</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="stylesheet" href="app-universe-shell.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #061223;
@@ -13,59 +17,209 @@
       --line: #355a82;
       --text: #ecf6ff;
       --muted: #a9c6e5;
+      --accent: #78d7ff;
+      --good: #65dfb4;
+      --hot: #ff95cc;
+      --gold: #ffd166;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
       color: var(--text);
-      background: linear-gradient(165deg, #040f1d, #0b2744 52%, #11375d);
+      background:
+        radial-gradient(circle at top right, rgba(255, 149, 204, 0.14), transparent 24%),
+        radial-gradient(circle at left center, rgba(101, 223, 180, 0.12), transparent 24%),
+        linear-gradient(165deg, #040f1d, #0b2744 52%, #11375d);
       min-height: 100vh;
     }
-    .wrap { width: min(960px, 94%); margin: 22px auto 90px; }
+    .wrap { width: min(1100px, 94%); margin: 24px auto 90px; }
     .card {
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 18px;
+      padding: 16px;
       background: linear-gradient(160deg, rgba(18, 41, 67, 0.96), rgba(9, 23, 41, 0.96));
       margin-bottom: 12px;
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.22);
+    }
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(255, 209, 102, 0.12), transparent 24%),
+        linear-gradient(160deg, rgba(18, 41, 67, 0.98), rgba(8, 21, 38, 0.98));
+    }
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(121, 216, 255, 0.08), transparent 40%, rgba(255, 149, 204, 0.08));
+    }
+    .hero-card > * { position: relative; z-index: 1; }
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .row.between { justify-content: space-between; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 209, 102, 0.28);
+      background: rgba(255, 209, 102, 0.1);
+      color: #fff2bf;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero-stats,
+    .insight-grid,
+    .saved-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .hero-stat,
+    .insight-card {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(121, 216, 255, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .hero-stat strong,
+    .insight-card strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .hero-stat span,
+    .insight-card span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .builder-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 12px;
+    }
+    .quick-bank {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
     }
     input, select, textarea, button {
       width: 100%;
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 12px;
       background: #0a1b2f;
       color: var(--text);
-      padding: 9px 10px;
+      padding: 10px 12px;
       font: inherit;
     }
-    textarea { min-height: 90px; resize: vertical; }
-    button { cursor: pointer; font-weight: 700; }
-    .btn-main { border: none; background: linear-gradient(135deg, #79d8ff, #5ad6a7); color: #042333; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .story {
-      border: 1px solid rgba(120, 174, 235, 0.35);
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 9px;
-      background: rgba(7, 19, 34, 0.72);
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      line-height: 1.6;
     }
-    .meta { color: var(--muted); font-size: .88rem; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    button {
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .btn-main {
+      border: none;
+      background: linear-gradient(135deg, #79d8ff, #5ad6a7);
+      color: #042333;
+    }
+    .btn-accent {
+      border: none;
+      background: linear-gradient(135deg, #ff95cc, #ffd166);
+      color: #3d1b2b;
+    }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .toolbar button {
+      width: auto;
+      padding-inline: 14px;
+    }
+    .prompt-board {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px dashed rgba(121, 216, 255, 0.24);
+      background: rgba(5, 16, 29, 0.52);
+    }
+    .prompt-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .prompt-list li + li { margin-top: 6px; }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+    .story-card {
+      border: 1px solid rgba(120, 174, 235, 0.35);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(7, 19, 34, 0.72);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .story-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .story-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      background: rgba(121, 216, 255, 0.1);
+      border: 1px solid rgba(121, 216, 255, 0.22);
+      color: #d8f5ff;
+      text-transform: uppercase;
+    }
+    .story-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .story-actions button {
+      width: auto;
+      min-width: 112px;
+    }
+    .empty-note {
+      color: var(--muted);
+      margin: 0;
+    }
+    @media (max-width: 940px) {
+      .builder-grid,
+      .hero-stats,
+      .insight-grid,
+      .saved-grid,
+      .quick-bank {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
   <style id="codex-shared-fonts">
     body, button, input, select, textarea {
       font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
     }
-
     h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
       font-family: "Orbitron", "Space Grotesk", sans-serif !important;
     }
-
     code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
       font-family: "JetBrains Mono", monospace !important;
     }
@@ -73,135 +227,389 @@
 </head>
 <body>
   <main class="wrap">
-    <section class="card">
+    <section class="card hero-card">
+      <div class="row between">
+        <div class="hero-badge">Story lab mode</div>
+        <a href="index.html#app-verse">Back to Apps Galaxy</a>
+      </div>
       <h1>StoryForge Studio</h1>
-      <p class="meta">Build creative mini stories with genre templates, twists, and endings.</p>
+      <p class="meta">Build wild mini stories with genre packs, twist buttons, remix mode, and a saved library that feels more like a real creative tool.</p>
       <p class="meta">Created by Krishiv PB</p>
-      <a href="index.html#app-verse">Back to Apps Galaxy</a>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>v9.1</strong><span>standalone app upgrade</span></div>
+        <div class="hero-stat"><strong>4</strong><span>story lengths</span></div>
+        <div class="hero-stat"><strong>3</strong><span>quick starter templates</span></div>
+        <div class="hero-stat"><strong>Kid-made</strong><span>creative chaos energy</span></div>
+      </div>
     </section>
 
-    <section class="card grid">
-      <article>
-        <h2>Create Story</h2>
-        <input id="heroInput" placeholder="Main hero name" style="margin-bottom:8px;" />
-        <input id="placeInput" placeholder="Place (city, planet, forest...)" style="margin-bottom:8px;" />
-        <select id="genreSelect" style="margin-bottom:8px;">
+    <section class="card">
+      <h2>Forge Controls</h2>
+      <div class="builder-grid">
+        <article>
+          <input id="heroInput" placeholder="Main hero name" style="margin-bottom:8px;" />
+          <input id="placeInput" placeholder="Place (city, planet, forest...)" style="margin-bottom:8px;" />
+          <div class="row" style="margin-bottom:8px;">
+            <select id="genreSelect">
+              <option value="adventure">Adventure</option>
+              <option value="mystery">Mystery</option>
+              <option value="future">Future Tech</option>
+              <option value="fantasy">Fantasy</option>
+            </select>
+            <select id="twistSelect">
+              <option value="hidden-map">Hidden map appears</option>
+              <option value="secret-friend">A secret friend helps</option>
+              <option value="time-loop">Time loop starts</option>
+              <option value="final-clue">Final clue is in plain sight</option>
+            </select>
+          </div>
+          <div class="row">
+            <select id="lengthSelect">
+              <option value="short">Quick spark</option>
+              <option value="medium" selected>Story mode</option>
+              <option value="long">Big adventure</option>
+              <option value="epic">Epic mission</option>
+            </select>
+            <input id="goalInput" placeholder="Big goal or mission" />
+          </div>
+          <div class="quick-bank">
+            <button id="seedAdventureBtn" type="button">Adventure starter</button>
+            <button id="seedMysteryBtn" type="button">Mystery starter</button>
+            <button id="seedCreatorBtn" type="button">Creator starter</button>
+          </div>
+          <div class="toolbar">
+            <button id="generateBtn" class="btn-main" type="button">Generate Story</button>
+            <button id="remixBtn" class="btn-accent" type="button">Remix Story</button>
+            <button id="clearBtn" type="button">Clear Builder</button>
+          </div>
+        </article>
+        <article class="prompt-board">
+          <h3>Prompt Board</h3>
+          <p class="meta">This app should feel like a real story toy, not just one textbox. Use the builder to change the hero, place, genre, twist, and mission until the story feels like yours.</p>
+          <ul class="prompt-list">
+            <li>Try a Roblox-style world, a secret school hallway, or a floating tech city.</li>
+            <li>Use remix after the first result if you want the same idea but with more surprise.</li>
+            <li>Save your best stories and pin your favorite idea to the top of the library.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row between">
+        <div>
+          <h2>Output</h2>
+          <p class="meta">Write, remix, copy, and save the best version.</p>
+        </div>
+        <div class="story-chip-row">
+          <span class="story-chip" id="wordCountChip">0 words</span>
+          <span class="story-chip" id="moodChip">No mood yet</span>
+        </div>
+      </div>
+      <textarea id="result" placeholder="Your story will appear here..."></textarea>
+      <div class="toolbar">
+        <button id="copyBtn" type="button">Copy</button>
+        <button id="saveBtn" type="button">Save Story</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Studio Stats</h2>
+      <div class="insight-grid">
+        <div class="insight-card"><strong id="storyCount">0</strong><span>stories saved</span></div>
+        <div class="insight-card"><strong id="favoriteCount">0</strong><span>favorites pinned</span></div>
+        <div class="insight-card"><strong id="longestStory">0</strong><span>longest word count</span></div>
+        <div class="insight-card"><strong id="latestGenre">none</strong><span>latest saved genre</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row between">
+        <div>
+          <h2>Saved Stories</h2>
+          <p class="meta">Your best builds live here.</p>
+        </div>
+        <select id="libraryFilter" style="max-width:220px;">
+          <option value="all">Show all</option>
+          <option value="favorites">Favorites only</option>
           <option value="adventure">Adventure</option>
           <option value="mystery">Mystery</option>
           <option value="future">Future Tech</option>
           <option value="fantasy">Fantasy</option>
         </select>
-        <select id="twistSelect" style="margin-bottom:8px;">
-          <option value="hidden-map">Hidden map appears</option>
-          <option value="secret-friend">A secret friend helps</option>
-          <option value="time-loop">Time loop starts</option>
-          <option value="final-clue">Final clue is in plain sight</option>
-        </select>
-        <button id="generateBtn" class="btn-main" type="button">Generate Story</button>
-      </article>
-      <article>
-        <h2>Output</h2>
-        <textarea id="result"></textarea>
-        <div style="display:flex; gap:8px; margin-top:8px;">
-          <button id="copyBtn" type="button">Copy</button>
-          <button id="saveBtn" type="button">Save Story</button>
-        </div>
-      </article>
-    </section>
-
-    <section class="card">
-      <h2>Saved Stories</h2>
-      <div id="stories"></div>
+      </div>
+      <div id="stories" class="saved-grid"></div>
     </section>
   </main>
 
   <script>
     (() => {
-      const KEY = "krishiv_storyforge_v1";
+      const KEY = "krishiv_storyforge_v2";
       const heroInput = document.getElementById("heroInput");
       const placeInput = document.getElementById("placeInput");
       const genreSelect = document.getElementById("genreSelect");
       const twistSelect = document.getElementById("twistSelect");
+      const lengthSelect = document.getElementById("lengthSelect");
+      const goalInput = document.getElementById("goalInput");
       const result = document.getElementById("result");
       const storiesEl = document.getElementById("stories");
       const generateBtn = document.getElementById("generateBtn");
+      const remixBtn = document.getElementById("remixBtn");
+      const clearBtn = document.getElementById("clearBtn");
       const copyBtn = document.getElementById("copyBtn");
       const saveBtn = document.getElementById("saveBtn");
+      const libraryFilter = document.getElementById("libraryFilter");
+      const seedAdventureBtn = document.getElementById("seedAdventureBtn");
+      const seedMysteryBtn = document.getElementById("seedMysteryBtn");
+      const seedCreatorBtn = document.getElementById("seedCreatorBtn");
+      const wordCountChip = document.getElementById("wordCountChip");
+      const moodChip = document.getElementById("moodChip");
+      const storyCountEl = document.getElementById("storyCount");
+      const favoriteCountEl = document.getElementById("favoriteCount");
+      const longestStoryEl = document.getElementById("longestStory");
+      const latestGenreEl = document.getElementById("latestGenre");
       let stories = [];
 
       function load() {
-        try { stories = JSON.parse(localStorage.getItem(KEY) || "[]"); if (!Array.isArray(stories)) stories = []; }
-        catch { stories = []; }
+        try {
+          stories = JSON.parse(localStorage.getItem(KEY) || "[]");
+          if (!Array.isArray(stories)) stories = [];
+        } catch {
+          stories = [];
+        }
       }
-      function save() { localStorage.setItem(KEY, JSON.stringify(stories)); }
-      function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
-      function buildStory(hero, place, genre, twist) {
+      function save() {
+        localStorage.setItem(KEY, JSON.stringify(stories));
+      }
+
+      function esc(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function wordCount(text) {
+        return text.trim() ? text.trim().split(/\s+/).length : 0;
+      }
+
+      function updateOutputBadges(text) {
+        const count = wordCount(text);
+        wordCountChip.textContent = count + " words";
+        const moodMap = {
+          adventure: "Adventure energy",
+          mystery: "Mystery mode",
+          future: "Future-tech glow",
+          fantasy: "Fantasy world"
+        };
+        moodChip.textContent = moodMap[genreSelect.value] || "Story mood";
+      }
+
+      function buildStory(hero, place, genre, twist, length, goal, remixLevel) {
         const lead = hero || "Nova";
         const zone = place || "Aster City";
-        const hooks = {
-          adventure: `${lead} raced across ${zone} chasing a signal no one else could decode.`,
-          mystery: `${lead} arrived in ${zone} to solve a puzzle locked for 100 years.`,
-          future: `${lead} activated a prototype in ${zone} and everything changed in one second.`,
-          fantasy: `${lead} discovered an ancient gate hidden under ${zone}.`
+        const mission = goal || "find the thing nobody else believed was real";
+        const intros = {
+          adventure: lead + " sprinted through " + zone + " because today was the day to " + mission + ".",
+          mystery: lead + " stepped into " + zone + " with one clue, one notebook, and one mission: " + mission + ".",
+          future: lead + " switched on a strange device in " + zone + " and instantly got a mission to " + mission + ".",
+          fantasy: lead + " discovered that under " + zone + " there was a hidden path built for heroes who wanted to " + mission + "."
         };
-        const turns = {
-          "hidden-map": "A glowing map appeared on the wall and pointed to a place outside every known map.",
-          "secret-friend": "An unknown friend sent clues at exactly the right time.",
-          "time-loop": "The same 10 minutes repeated until the right choice was made.",
-          "final-clue": "The final clue was hidden in the very first message."
+        const twists = {
+          "hidden-map": "Then a glowing map appeared where no map should have existed.",
+          "secret-friend": "Then a secret helper started leaving perfect clues at exactly the right time.",
+          "time-loop": "Then time bent and the same moments repeated until the smartest choice was made.",
+          "final-clue": "Then the final clue turned out to be hiding inside the very first clue."
         };
-        return `${hooks[genre] || hooks.adventure}\n\n${turns[twist] || turns["hidden-map"]}\n\nIn the final moment, ${lead} trusted their courage, solved the challenge, and unlocked a new mission for tomorrow.`;
+        const extraBeats = {
+          short: [
+            lead + " made one fast choice instead of waiting too long.",
+            "That choice changed the whole mission instantly."
+          ],
+          medium: [
+            lead + " nearly gave up, but the world around them kept dropping strange hints.",
+            "Each new clue made the mission feel more real and way bigger than it looked at the start.",
+            "At the biggest moment, " + lead + " trusted instinct, speed, and a tiny bit of chaos."
+          ],
+          long: [
+            lead + " followed the signs through hidden corners, weird messages, and places most people would never even notice.",
+            "The mission kept getting bigger, and every answer opened an even stranger question.",
+            "Right before the end, it looked impossible, but " + lead + " saw a pattern nobody else had noticed.",
+            "That was the move that changed the whole story."
+          ],
+          epic: [
+            "The mission turned into a giant chain of mini-battles, surprise clues, and secret doors.",
+            lead + " had to outthink the problem, outrun the timer, and stay brave when everything felt too huge.",
+            "Every chapter of the adventure made the goal feel more important, more personal, and way more legendary.",
+            "Then the truth finally appeared, and it was bigger than the mission itself.",
+            lead + " solved it with imagination, courage, and the kind of energy only a real builder could bring."
+          ]
+        };
+        const remixer = remixLevel > 0
+          ? " A remix spark cracked through the story and made the whole world feel even stranger and cooler."
+          : "";
+        const ending = "In the end, " + lead + " completed the mission, unlocked a new path for tomorrow, and proved that even the weirdest idea can turn into a real story.";
+        const parts = [
+          intros[genre] || intros.adventure,
+          twists[twist] || twists["hidden-map"],
+          ...(extraBeats[length] || extraBeats.medium),
+          ending + remixer
+        ];
+        return parts.join("\n\n");
+      }
+
+      function setTemplate(kind) {
+        if (kind === "adventure") {
+          heroInput.value = "Krylo";
+          placeInput.value = "Pixel Canyon";
+          genreSelect.value = "adventure";
+          twistSelect.value = "hidden-map";
+          lengthSelect.value = "medium";
+          goalInput.value = "unlock the last portal before sunset";
+        }
+        if (kind === "mystery") {
+          heroInput.value = "Mira";
+          placeInput.value = "Neon Library";
+          genreSelect.value = "mystery";
+          twistSelect.value = "final-clue";
+          lengthSelect.value = "long";
+          goalInput.value = "solve the coded message inside an old game cartridge";
+        }
+        if (kind === "creator") {
+          heroInput.value = "Krishiv";
+          placeInput.value = "Creator Tower";
+          genreSelect.value = "future";
+          twistSelect.value = "secret-friend";
+          lengthSelect.value = "epic";
+          goalInput.value = "build the craziest app idea before midnight";
+        }
+      }
+
+      function updateStats() {
+        storyCountEl.textContent = String(stories.length);
+        favoriteCountEl.textContent = String(stories.filter((story) => story.favorite).length);
+        longestStoryEl.textContent = String(stories.reduce((max, story) => Math.max(max, story.words || 0), 0));
+        latestGenreEl.textContent = stories[0] ? stories[0].genre : "none";
       }
 
       function renderStories() {
-        storiesEl.innerHTML = stories.map((s) => `
-          <article class="story">
-            <strong>${esc(s.title)}</strong>
-            <p>${esc(s.text)}</p>
-            <p class="meta">${new Date(s.time).toLocaleString("en-IN")}</p>
-            <button type="button" data-del="${s.id}">Delete</button>
+        const filter = libraryFilter.value;
+        const visibleStories = stories.filter((story) => {
+          if (filter === "all") return true;
+          if (filter === "favorites") return Boolean(story.favorite);
+          return story.genre === filter;
+        });
+        storiesEl.innerHTML = visibleStories.map((story) => `
+          <article class="story-card">
+            <div class="story-chip-row">
+              <span class="story-chip">${esc(story.genre)}</span>
+              <span class="story-chip">${esc(story.length)}</span>
+              <span class="story-chip">${story.words} words</span>
+              ${story.favorite ? `<span class="story-chip">favorite</span>` : ""}
+            </div>
+            <strong>${esc(story.title)}</strong>
+            <p class="meta">${new Date(story.time).toLocaleString()}</p>
+            <p>${esc(story.text)}</p>
+            <div class="story-actions">
+              <button type="button" data-load="${story.id}">Load</button>
+              <button type="button" data-fav="${story.id}">${story.favorite ? "Unfavorite" : "Favorite"}</button>
+              <button type="button" data-del="${story.id}">Delete</button>
+            </div>
           </article>
-        `).join("") || `<p class="meta">No stories saved yet.</p>`;
+        `).join("") || `<p class="empty-note">No stories saved in this view yet.</p>`;
+        updateStats();
       }
 
-      generateBtn.addEventListener("click", () => {
-        result.value = buildStory(
+      function generate(remixLevel) {
+        const text = buildStory(
           heroInput.value.trim(),
           placeInput.value.trim(),
           genreSelect.value,
-          twistSelect.value
+          twistSelect.value,
+          lengthSelect.value,
+          goalInput.value.trim(),
+          remixLevel
         );
+        result.value = text;
+        updateOutputBadges(text);
+      }
+
+      generateBtn.addEventListener("click", () => generate(0));
+      remixBtn.addEventListener("click", () => generate(1));
+      clearBtn.addEventListener("click", () => {
+        heroInput.value = "";
+        placeInput.value = "";
+        goalInput.value = "";
+        genreSelect.value = "adventure";
+        twistSelect.value = "hidden-map";
+        lengthSelect.value = "medium";
+        result.value = "";
+        updateOutputBadges("");
       });
+      seedAdventureBtn.addEventListener("click", () => setTemplate("adventure"));
+      seedMysteryBtn.addEventListener("click", () => setTemplate("mystery"));
+      seedCreatorBtn.addEventListener("click", () => setTemplate("creator"));
       copyBtn.addEventListener("click", async () => {
         const text = result.value.trim();
         if (!text) return;
-        try { await navigator.clipboard.writeText(text); } catch {}
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {}
       });
       saveBtn.addEventListener("click", () => {
         const text = result.value.trim();
         if (!text) return;
-        const title = (heroInput.value.trim() || "Story") + " - " + (genreSelect.value || "adventure");
-        stories.unshift({ id: "S" + Date.now().toString(36), title, text, time: new Date().toISOString() });
+        const title = (heroInput.value.trim() || "Story") + " - " + genreSelect.value;
+        stories.unshift({
+          id: "S" + Date.now().toString(36),
+          title,
+          text,
+          genre: genreSelect.value,
+          length: lengthSelect.value,
+          words: wordCount(text),
+          favorite: false,
+          time: new Date().toISOString()
+        });
         save();
         renderStories();
       });
-      storiesEl.addEventListener("click", (e) => {
-        const t = e.target;
-        if (!(t instanceof HTMLButtonElement)) return;
-        const id = t.dataset.del;
-        if (!id) return;
-        stories = stories.filter((x) => x.id !== id);
-        save();
-        renderStories();
+      libraryFilter.addEventListener("change", renderStories);
+      result.addEventListener("input", () => updateOutputBadges(result.value));
+      storiesEl.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) return;
+        const loadId = target.dataset.load;
+        const favId = target.dataset.fav;
+        const delId = target.dataset.del;
+        if (loadId) {
+          const story = stories.find((item) => item.id === loadId);
+          if (!story) return;
+          result.value = story.text;
+          genreSelect.value = story.genre;
+          lengthSelect.value = story.length;
+          updateOutputBadges(story.text);
+          return;
+        }
+        if (favId) {
+          stories = stories.map((story) => story.id === favId ? { ...story, favorite: !story.favorite } : story);
+          stories.sort((a, b) => Number(b.favorite) - Number(a.favorite) || new Date(b.time) - new Date(a.time));
+          save();
+          renderStories();
+          return;
+        }
+        if (delId) {
+          stories = stories.filter((story) => story.id !== delId);
+          save();
+          renderStories();
+        }
       });
 
       load();
+      updateOutputBadges("");
       renderStories();
     })();
   </script>
   <script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-

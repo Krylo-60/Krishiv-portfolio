@@ -698,6 +698,60 @@ main > section::after {
   box-shadow: 0 10px 20px rgba(0, 10, 20, 0.24);
 }
 
+.header-shortcuts {
+  display: flex;
+  gap: 0.55rem;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.header-shortcut-btn {
+  border: 1px solid rgba(99, 245, 210, 0.26);
+  background: linear-gradient(155deg, rgba(11, 25, 41, 0.92), rgba(8, 18, 33, 0.9));
+  color: var(--text);
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 0.46rem 0.9rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.22s var(--ease-out), border-color 0.22s var(--ease-out), box-shadow 0.22s var(--ease-out);
+}
+
+#headerTopBtn {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    visibility 0.22s ease,
+    border-color 0.22s var(--ease-out),
+    box-shadow 0.22s var(--ease-out);
+}
+
+#headerTopBtn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.header-shortcut-btn:hover,
+.header-shortcut-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(99, 245, 210, 0.5);
+  box-shadow: 0 10px 20px rgba(0, 10, 20, 0.24);
+}
+
+.header-shortcut-btn-primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent-hot), var(--accent));
+  color: #03111f;
+}
+
 .hero {
   min-height: calc(100vh - 80px);
   min-height: calc(100svh - 80px);
@@ -944,6 +998,243 @@ h1 {
 .mega-mini-stats span {
   color: var(--muted);
   font-size: 0.84rem;
+}
+
+.kid-lab-shell {
+  position: relative;
+}
+
+.kid-lab-shell::before {
+  content: "";
+  position: absolute;
+  inset: 8% 0 auto;
+  height: 72%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 14% 28%, rgba(255, 209, 102, 0.12), transparent 24%),
+    radial-gradient(circle at 78% 20%, rgba(255, 118, 194, 0.14), transparent 26%),
+    radial-gradient(circle at 68% 76%, rgba(99, 245, 210, 0.1), transparent 24%);
+  filter: blur(18px);
+  opacity: 0.95;
+}
+
+.kid-lab-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.kid-lab-main,
+.kid-lab-side {
+  border: 1px solid rgba(121, 216, 255, 0.18);
+  border-radius: 30px;
+  background: linear-gradient(160deg, rgba(12, 27, 47, 0.92), rgba(7, 19, 35, 0.95));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+.kid-lab-main {
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+}
+
+.kid-lab-side {
+  padding: 1.2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.kid-lab-sticky-grid {
+  margin-top: var(--space-4);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.kid-sticky {
+  min-height: 180px;
+  padding: 1rem 1rem 1.1rem;
+  border-radius: 22px;
+  color: #062033;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.16);
+}
+
+.kid-sticky h3 {
+  color: #082036;
+  margin-bottom: 0.45rem;
+}
+
+.kid-sticky p,
+.kid-sticky .card-kicker {
+  color: rgba(8, 32, 54, 0.86);
+}
+
+.kid-sticky-blue {
+  transform: rotate(-2deg);
+  background: linear-gradient(180deg, #82e8ff, #73b8ff);
+}
+
+.kid-sticky-yellow {
+  transform: rotate(1.7deg);
+  background: linear-gradient(180deg, #ffe88a, #ffc86a);
+}
+
+.kid-sticky-mint {
+  transform: rotate(-1deg);
+  background: linear-gradient(180deg, #a2ffd8, #75f1d0);
+}
+
+.kid-doodle-card {
+  border-radius: 24px;
+  border: 2px dashed rgba(255, 209, 102, 0.38);
+  padding: 1rem 1rem 1.1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 205, 0.14), rgba(255, 248, 205, 0.05)),
+    rgba(7, 19, 35, 0.6);
+}
+
+.kid-doodle-label {
+  display: inline-flex;
+  margin-bottom: 0.7rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff2c5;
+  font: 700 1rem/1.1 "Patrick Hand", "Comic Sans MS", cursive;
+}
+
+.kid-doodle-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: rgba(239, 247, 255, 0.92);
+  font: 700 1.05rem/1.55 "Patrick Hand", "Comic Sans MS", cursive;
+}
+
+.kid-lab-score {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.kid-lab-score div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(121, 216, 255, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.kid-lab-score strong {
+  color: #ecf7ff;
+  font-size: 1.2rem;
+}
+
+.kid-lab-score span {
+  color: rgba(207, 226, 245, 0.88);
+  text-align: right;
+}
+
+.playground-shell,
+.dream-map-shell {
+  position: relative;
+}
+
+.playground-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr 0.75fr;
+  gap: 1rem;
+}
+
+.playground-panel,
+.dream-node {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(121, 216, 255, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 20%),
+    linear-gradient(160deg, rgba(10, 24, 43, 0.95), rgba(7, 18, 33, 0.96));
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.22);
+}
+
+.playground-panel {
+  padding: 1.3rem;
+}
+
+.playground-panel::before,
+.dream-node::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(99, 245, 210, 0.1), transparent 42%, rgba(255, 118, 194, 0.08));
+}
+
+.playground-panel > *,
+.dream-node > * {
+  position: relative;
+  z-index: 1;
+}
+
+.playground-panel-big {
+  background:
+    radial-gradient(circle at top right, rgba(255, 209, 102, 0.14), transparent 24%),
+    linear-gradient(160deg, rgba(14, 31, 54, 0.98), rgba(8, 18, 34, 0.96));
+}
+
+.brain-burst {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.brain-burst span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.58rem 0.88rem;
+  border-radius: 999px;
+  color: #f4fbff;
+  background: linear-gradient(135deg, rgba(123, 216, 255, 0.18), rgba(255, 118, 194, 0.14));
+  border: 1px solid rgba(121, 216, 255, 0.2);
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.playground-list {
+  margin: 0.9rem 0 0;
+  padding-left: 1.15rem;
+  color: rgba(239, 247, 255, 0.92);
+}
+
+.playground-list li {
+  margin: 0.48rem 0;
+}
+
+.dream-map-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.dream-node {
+  padding: 1.25rem;
+}
+
+.dream-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  margin-bottom: 0.8rem;
+  border-radius: 999px;
+  color: #061420;
+  background: linear-gradient(135deg, var(--accent), var(--accent-alt), var(--accent-hot));
+  font: 900 0.9rem/1 "Orbitron", "Space Grotesk", sans-serif;
 }
 
 h2 {
@@ -3562,6 +3853,7 @@ h3 {
 }
 
 .quick-top-btn {
+  display: none;
   position: fixed;
   right: 1rem;
   bottom: 1rem;
@@ -3581,9 +3873,11 @@ h3 {
 }
 
 .games-hub-btn {
+  display: none;
   position: fixed;
   right: 1rem;
-  bottom: 8.6rem;
+  top: 6.4rem;
+  bottom: auto;
   z-index: 120;
   border: 1px solid rgba(99, 245, 210, 0.35);
   background: linear-gradient(155deg, rgba(10, 24, 42, 0.95), rgba(7, 17, 32, 0.95));
@@ -3616,9 +3910,11 @@ h3 {
 }
 
 .launcher-btn {
+  display: none;
   position: fixed;
   right: 1rem;
-  bottom: 4.8rem;
+  top: 10.2rem;
+  bottom: auto;
   z-index: 90;
   border: 1px solid rgba(99, 245, 210, 0.42);
   border-radius: 999px;
@@ -4146,6 +4442,11 @@ body.future-mode .creator-panel {
     justify-content: stretch;
   }
 
+  .header-shortcuts {
+    justify-content: center;
+    width: 100%;
+  }
+
   .nav-search-form {
     width: 100%;
     padding-right: 0.3rem;
@@ -4245,21 +4546,6 @@ body.future-mode .creator-panel {
 
   .command-actions .btn {
     width: 100%;
-  }
-
-  .quick-top-btn {
-    right: 0.75rem;
-    bottom: 0.75rem;
-  }
-
-  .games-hub-btn {
-    right: 0.75rem;
-    bottom: 7.7rem;
-  }
-
-  .launcher-btn {
-    right: 0.75rem;
-    bottom: 4.25rem;
   }
 
   .future-toggle-btn {
@@ -4389,6 +4675,33 @@ body.future-mode .creator-panel {
   .studio-launch-grid,
   .game-wall-grid {
     grid-template-columns: 1fr;
+  }
+
+  .mega-grid,
+  .kid-lab-grid,
+  .kid-lab-sticky-grid,
+  .playground-grid,
+  .dream-map-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kid-lab-side {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .kid-sticky-blue,
+  .kid-sticky-yellow,
+  .kid-sticky-mint,
+  .mega-card-note,
+  .kid-note {
+    transform: none;
+  }
+
+  .kid-lab-main,
+  .kid-lab-side {
+    border-radius: 22px;
   }
 }
 

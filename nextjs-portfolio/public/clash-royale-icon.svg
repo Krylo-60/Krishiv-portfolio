@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">Clash Royale logo</title>
+  <desc id="desc">Clash Royale wordmark with polished crown shield badge.</desc>
+  <defs>
+    <linearGradient id="crBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#12264d"/>
+      <stop offset="100%" stop-color="#251047"/>
+    </linearGradient>
+    <linearGradient id="crGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff2a9"/>
+      <stop offset="45%" stop-color="#e8be5c"/>
+      <stop offset="100%" stop-color="#9b6313"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="140" rx="24" fill="url(#crBg)"/>
+  <circle cx="64" cy="40" r="46" fill="#5ea7ff" opacity=".16"/>
+  <g font-family="Impact, Arial Black, Arial, sans-serif" paint-order="stroke fill">
+    <text x="18" y="56" font-size="36" fill="#eef6ff" stroke="#35230d" stroke-width="2.2">CLASH</text>
+    <text x="16" y="100" font-size="52" fill="url(#crGold)" stroke="#35230d" stroke-width="2.6">ROYALE</text>
+  </g>
+  <g transform="translate(220 24)">
+    <path d="M26 0 58 12v30c0 23-16 39-32 48C10 81-6 65-6 42V12z" fill="url(#crGold)" stroke="#513310" stroke-width="3"/>
+    <path d="M26 10 48 18v22c0 15-9 27-22 35C13 67 4 55 4 40V18z" fill="#3b82f6"/>
+    <path d="M26 24 18 34h16l-8-10zm-14 14h28v12H12z" fill="#f8fafc"/>
+  </g>
+</svg>

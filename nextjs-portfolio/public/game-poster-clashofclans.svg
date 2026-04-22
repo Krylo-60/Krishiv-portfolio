@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+  <title id="title">Clash of Clans inspired poster</title>
+  <desc id="desc">Stylized village battle poster inspired by Clash of Clans.</desc>
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1b2f16"/><stop offset="100%" stop-color="#84cc16"/></linearGradient></defs>
+  <rect width="960" height="640" fill="url(#bg)"/>
+  <circle cx="764" cy="128" r="88" fill="#fff4bf" opacity=".26"/>
+  <path d="M0 520 154 450 310 492 482 366 658 424 808 346 960 398V640H0Z" fill="#466322"/>
+  <path d="M0 572 142 512 316 554 496 444 666 500 822 412 960 468V640H0Z" fill="#31451a"/>
+  <rect x="226" y="276" width="122" height="118" rx="16" fill="#d2a679"/>
+  <polygon points="214,284 288,226 360,284" fill="#8b5a2b"/>
+  <rect x="560" y="250" width="128" height="140" rx="18" fill="#deb887"/>
+  <polygon points="542,260 624,194 706,260" fill="#8b5a2b"/>
+  <circle cx="452" cy="344" r="52" fill="#fff4e6" opacity=".94"/>
+  <circle cx="438" cy="332" r="8" fill="#0f172a"/>
+  <circle cx="470" cy="332" r="8" fill="#0f172a"/>
+  <path d="M432 366c10 8 22 12 38 12 16 0 28-4 38-12" stroke="#b45309" stroke-width="8" stroke-linecap="round"/>
+  <path d="M434 296l-18-24M486 292l18-22" stroke="#fef3c7" stroke-width="8" stroke-linecap="round"/>
+  <rect x="82" y="82" width="378" height="58" rx="29" fill="rgba(5,16,27,.42)" stroke="rgba(255,255,255,.22)"/>
+  <text x="112" y="121" font-family="Space Grotesk, Arial, sans-serif" font-size="32" font-weight="700" fill="#fbfff0">CLASH OF CLANS</text>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BMI Health icon">
+  <defs>
+    <linearGradient id="bmiBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#bmiBg)"/>
+  <rect x="14" y="16" width="36" height="32" rx="10" fill="#0b1b2d" opacity=".94"/>
+  <path d="M24 22c2.6 0 4.7 2 4.7 4.5 0 3.7-4.7 6.9-4.7 6.9s-4.7-3.2-4.7-6.9c0-2.5 2.1-4.5 4.7-4.5 1.5 0 2.8.7 3.6 1.8.8-1.1 2.1-1.8 3.6-1.8z" fill="#86efac"/>
+  <path d="M32 27h10" stroke="#7dd3fc" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M32 33h8" stroke="#c4b5fd" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

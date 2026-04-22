@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+  <title id="title">BGMI inspired poster</title>
+  <desc id="desc">Stylized battle royale poster inspired by BGMI.</desc>
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0d1c33"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs>
+  <rect width="960" height="640" fill="url(#bg)"/>
+  <path d="M0 522 164 440 332 492 482 354 634 426 810 322 960 388V640H0Z" fill="#0c1527"/>
+  <path d="M0 570 148 500 324 548 492 432 650 492 818 390 960 460V640H0Z" fill="#172948"/>
+  <path d="M480 176 580 150 666 244 638 408 532 462 420 436 368 300Z" fill="#f7fafc" opacity=".9"/>
+  <path d="M500 208 562 196 600 242 582 332 518 354 458 320 444 252Z" fill="#4b5563"/>
+  <path d="M584 198 658 242 646 314 600 344 564 290Z" fill="#111827"/>
+  <rect x="82" y="82" width="258" height="58" rx="29" fill="rgba(5,16,27,.44)" stroke="rgba(255,255,255,.22)"/>
+  <text x="112" y="121" font-family="Space Grotesk, Arial, sans-serif" font-size="32" font-weight="700" fill="#fef7ef">BGMI</text>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 140" role="img" aria-labelledby="title desc">
+  <title id="title">Rocket League logo</title>
+  <desc id="desc">Rocket League wordmark with stylized ball trail and modern arena glow.</desc>
+  <defs>
+    <linearGradient id="rlBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#052a4d"/>
+      <stop offset="100%" stop-color="#123ca6"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="140" rx="24" fill="url(#rlBg)"/>
+  <circle cx="76" cy="74" r="18" fill="#f8fafc"/>
+  <circle cx="76" cy="74" r="8" fill="#60a5fa"/>
+  <path d="M38 94c28-4 45-19 60-46" fill="none" stroke="#7dd3fc" stroke-width="8" stroke-linecap="round"/>
+  <path d="M32 106h236" stroke="rgba(255,255,255,.12)" stroke-width="2"/>
+  <text x="182" y="60" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="26" fill="#ffffff" letter-spacing="2">ROCKET</text>
+  <text x="182" y="92" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="26" fill="#ffffff" letter-spacing="2">LEAGUE</text>
+</svg>
