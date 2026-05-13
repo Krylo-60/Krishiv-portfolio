@@ -1,65 +1,193 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Goal Planner | Krishiv PB</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Goal Planner Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css"/>
+  <link rel="icon" type="image/svg+xml" href="logo.svg"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
   <style>
-    :root{--bg:#061223;--panel:#0f243d;--line:#34597e;--text:#eef7ff;--muted:#a7c4e4;--accent:#79d8ff;--ok:#57d9ab}
-    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#040d18,#0a2139 50%,#15365d)}
-    .wrap{width:min(940px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(8,20,38,.95));margin-bottom:12px}
-    h1,h2{margin:0 0 8px}p{margin:0 0 10px;color:var(--muted)}.row{display:grid;gap:10px;grid-template-columns:1fr 200px 140px}
-    input,select,button{width:100%;border-radius:10px;border:1px solid var(--line);background:#08192d;color:var(--text);padding:10px;font:inherit}
-    .btn-primary{font-weight:700;border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#042132}
-    .goal{border:1px solid rgba(111,164,216,.25);border-radius:12px;padding:10px;background:rgba(6,18,32,.7);margin-bottom:8px}.goal.done{border-color:rgba(87,217,171,.6)}
-    .meta{font-size:.86rem;color:#9ebfe0}.credit{font-weight:700;color:#d9ecff}a{color:#9fd9ff}
-    @media(max-width:780px){.row{grid-template-columns:1fr}}
-  </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+    :root{--bg:#071223;--line:#365f88;--text:#eef7ff;--muted:#a9c6e7;--ok:#56d5a6;--acc:#79d8ff;--warn:#ffd166;--danger:#ff6b6b;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
+    .wrap{width:min(1020px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:14px;padding:20px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:14px;}
+    h1,h2,h3{margin:0 0 10px;}p{color:var(--muted);margin:0 0 8px;}
+    input,textarea,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit;transition:border-color .2s;}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);}
+    .btn{cursor:pointer;font-weight:700;padding:10px 18px;border-radius:10px;border:none;transition:all .2s;}
+    .btn.primary{background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn.sm{padding:6px 12px;font-size:.82rem;}
+    .btn.danger{background:rgba(255,107,107,.15);border:1px solid rgba(255,107,107,.4);color:#ff9999;}
+    .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+    .stat{border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;background:rgba(5,16,30,.6);}
+    .stat strong{display:block;font-size:1.5rem;font-family:"JetBrains Mono",monospace;color:var(--acc);}
+    .stat span{font-size:.75rem;color:var(--muted);}
+    /* CATEGORY PILLS */
+    .cat-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+    .cat-pill{padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:#0a1b31;cursor:pointer;font-size:.8rem;transition:all .2s;}
+    .cat-pill.active,.cat-pill:hover{border-color:var(--acc);background:rgba(121,216,255,.1);color:var(--acc);}
+    /* GOAL CARD */
+    .goal{border:1px solid rgba(84,126,171,.35);border-radius:12px;padding:14px;margin-bottom:10px;background:rgba(5,16,30,.72);transition:border-color .2s;}
+    .goal:hover{border-color:rgba(121,216,255,.3);}
+    .goal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
+    .goal-title{font-family:"Orbitron",sans-serif;font-size:.92rem;margin:0;}
+    .goal-cat{font-size:.72rem;padding:2px 8px;border-radius:999px;background:rgba(121,216,255,.08);border:1px solid rgba(121,216,255,.2);color:var(--acc);font-family:"JetBrains Mono",monospace;}
+    .goal-desc{font-size:.86rem;color:rgba(238,247,255,.75);margin:0 0 10px;}
+    /* PROGRESS BAR */
+    .prog-wrap{margin-bottom:8px;}
+    .prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:4px;font-family:"JetBrains Mono",monospace;}
+    .prog-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;}
+    .prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--acc),var(--ok));transition:width .5s;}
+    .prog-fill.done{background:linear-gradient(90deg,#56d5a6,#47d3a5);}
+    .goal-deadline{font-size:.76rem;font-family:"JetBrains Mono",monospace;color:var(--muted);}
+    .goal-deadline.overdue{color:var(--danger);}
+    .goal-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center;}
+    .prog-input{max-width:80px;padding:5px 8px;font-size:.82rem;}
+    .empty{color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:20px;text-align:center;}
+    .milestone{font-size:.8rem;color:var(--muted);margin-top:6px;}
+    .milestone span{display:inline-flex;align-items:center;gap:4px;margin-right:8px;cursor:pointer;}
+    .milestone span.done{color:var(--ok);text-decoration:line-through;}
+    @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}}
   </style>
 </head>
-<body data-theme="default" data-mode="dark">
-  <main class="wrap">
-    <section class="card"><h1>Goal Planner</h1><p>Set weekly and monthly goals with clear status tracking.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
-    <section class="card">
-      <h2>Add Goal</h2>
-      <div class="row"><input id="goalText" maxlength="100" placeholder="Goal (Upload 2 videos this week)" /><select id="goalType"><option>Weekly</option><option>Monthly</option><option>Project</option></select><button id="addGoal" class="btn-primary" type="button">Add Goal</button></div>
-      <p>Details: break big ambitions into trackable goals to build momentum.</p>
-    </section>
-    <section class="card"><h2>Goals Board</h2><div id="goalList"></div></section>
-  </main>
-  <script>
-    (() => {
-      const key="krishiv_goal_planner_v1", input=document.getElementById("goalText"), type=document.getElementById("goalType"), add=document.getElementById("addGoal"), list=document.getElementById("goalList");
-      let goals=[]; try{goals=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(goals)) goals=[];}catch{goals=[];}
-      const save=()=>localStorage.setItem(key,JSON.stringify(goals));
-      const render=()=>{list.innerHTML=goals.length?goals.map(g=>`<article class="goal ${g.done?'done':''}"><strong>${g.text}</strong><div class="meta">${g.type} | ${new Date(g.ts).toLocaleDateString()}</div><button data-a="toggle" data-id="${g.id}">${g.done?'Mark Open':'Mark Done'}</button> <button data-a="delete" data-id="${g.id}">Delete</button></article>`).join(""):'<p class="meta">No goals yet.</p>';};
-      add.addEventListener("click",()=>{const t=input.value.trim(); if(t.length<3){alert("Goal must be at least 3 characters.");return;} goals.unshift({id:Date.now().toString(36),text:t,type:type.value,done:false,ts:Date.now()}); input.value=""; save(); render();});
-      list.addEventListener("click",(e)=>{const b=e.target; if(!(b instanceof HTMLButtonElement)) return; const id=b.dataset.id; if(!id) return; if(b.dataset.a==="toggle"){goals=goals.map(g=>g.id===id?({...g,done:!g.done}):g);} if(b.dataset.a==="delete"){goals=goals.filter(g=>g.id!==id);} save(); render();});
-      render();
-    })();
-  </script>
-  <script src="app-catalog.js"></script>
-  <script src="app-universe-shell.js" defer></script>
-</body>
-</html>
+<body>
+<main class="wrap">
+  <section class="card">
+    <h1>🎯 Goal Planner Pro</h1>
+    <p>Set goals, track progress, hit milestones. All saved locally.</p>
+    <a href="index.html#projects" style="color:#9edcff;">← Back to portfolio</a>
+  </section>
 
+  <div class="stats">
+    <div class="stat"><strong id="sTotal">0</strong><span>Goals</span></div>
+    <div class="stat"><strong id="sDone">0</strong><span>Completed ✅</span></div>
+    <div class="stat"><strong id="sInProg">0</strong><span>In Progress</span></div>
+    <div class="stat"><strong id="sOverdue">0</strong><span>Overdue ⚠️</span></div>
+  </div>
 
+  <section class="card">
+    <h2>➕ New Goal</h2>
+    <div class="grid2" style="margin-bottom:10px;">
+      <div><label style="font-size:.82rem;color:var(--muted);">Goal title</label><input id="gTitle" placeholder="e.g. Learn CSS Grid"/></div>
+      <div><label style="font-size:.82rem;color:var(--muted);">Category</label>
+        <select id="gCat"><option>School</option><option>Coding</option><option>Health</option><option>Creator</option><option>Personal</option><option>Gaming</option><option>Other</option></select>
+      </div>
+      <div><label style="font-size:.82rem;color:var(--muted);">Deadline</label><input type="date" id="gDeadline"/></div>
+      <div><label style="font-size:.82rem;color:var(--muted);">Start % (0-100)</label><input type="number" id="gStart" min="0" max="100" value="0" placeholder="0"/></div>
+      <div class="grid2" style="grid-column:1/-1;">
+        <div><label style="font-size:.82rem;color:var(--muted);">Description</label><input id="gDesc" placeholder="What does success look like?"/></div>
+        <div><label style="font-size:.82rem;color:var(--muted);">Milestones (comma separated)</label><input id="gMiles" placeholder="Plan, Build, Test, Launch"/></div>
+      </div>
+    </div>
+    <button class="btn primary" id="addGoalBtn">🎯 Add Goal</button>
+  </section>
 
+  <section class="card">
+    <div class="row" style="margin-bottom:10px;">
+      <input id="searchGoal" placeholder="Search goals..." style="flex:1;"/>
+      <select id="filterCat" style="max-width:140px;"><option value="">All categories</option><option>School</option><option>Coding</option><option>Health</option><option>Creator</option><option>Personal</option><option>Gaming</option><option>Other</option></select>
+      <select id="filterStatus" style="max-width:140px;">
+        <option value="">All status</option>
+        <option value="active">In Progress</option>
+        <option value="done">Completed</option>
+        <option value="overdue">Overdue</option>
+      </select>
+    </div>
+    <div id="goalList"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const LSK = 'krishiv_gp_v2';
+  let goals = [];
+  function load(){try{goals=JSON.parse(localStorage.getItem(LSK)||'[]');if(!Array.isArray(goals))goals=[];}catch{goals=[];}}
+  function save(){localStorage.setItem(LSK,JSON.stringify(goals));}
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function today(){return new Date().toLocaleDateString('en-CA');}
+
+  document.getElementById('addGoalBtn').addEventListener('click',()=>{
+    const title=document.getElementById('gTitle').value.trim();
+    if(!title){alert('Enter a goal title!');return;}
+    const milestones=(document.getElementById('gMiles').value).split(',').map(m=>m.trim()).filter(Boolean).map(m=>({text:m,done:false}));
+    goals.unshift({
+      id:Date.now().toString(36),title,
+      cat:document.getElementById('gCat').value,
+      desc:document.getElementById('gDesc').value.trim(),
+      deadline:document.getElementById('gDeadline').value,
+      progress:Math.min(100,Math.max(0,Number(document.getElementById('gStart').value)||0)),
+      milestones,ts:Date.now()
+    });
+    save();render();
+    document.getElementById('gTitle').value='';document.getElementById('gDesc').value='';document.getElementById('gMiles').value='';document.getElementById('gDeadline').value='';document.getElementById('gStart').value='0';
+  });
+
+  ['searchGoal','filterCat','filterStatus'].forEach(id=>document.getElementById(id).addEventListener('change',render));
+  document.getElementById('searchGoal').addEventListener('input',render);
+
+  function isOverdue(g){return g.deadline&&g.progress<100&&g.deadline<today();}
+  function renderStats(){
+    document.getElementById('sTotal').textContent=goals.length;
+    document.getElementById('sDone').textContent=goals.filter(g=>g.progress>=100).length;
+    document.getElementById('sInProg').textContent=goals.filter(g=>g.progress>0&&g.progress<100).length;
+    document.getElementById('sOverdue').textContent=goals.filter(isOverdue).length;
+  }
+
+  function render(){
+    const q=document.getElementById('searchGoal').value.toLowerCase();
+    const cat=document.getElementById('filterCat').value;
+    const status=document.getElementById('filterStatus').value;
+    let vis=goals.filter(g=>{
+      if(cat&&g.cat!==cat)return false;
+      if(status==='done'&&g.progress<100)return false;
+      if(status==='active'&&(g.progress>=100||isOverdue(g)))return false;
+      if(status==='overdue'&&!isOverdue(g))return false;
+      if(q&&!(g.title+g.cat+g.desc).toLowerCase().includes(q))return false;
+      return true;
+    });
+    const list=document.getElementById('goalList');
+    if(!vis.length){list.innerHTML='<div class="empty">No goals found. Add your first goal above!</div>';renderStats();return;}
+    list.innerHTML=vis.map(g=>{
+      const overdue=isOverdue(g);
+      const done=g.progress>=100;
+      const daysLeft=g.deadline?Math.ceil((new Date(g.deadline)-new Date())/864e5):null;
+      const milesHTML=(g.milestones||[]).map((m,i)=>`<span class="${m.done?'done':''}" onclick="toggleMile('${g.id}',${i})">${m.done?'✅':'⬜'} ${esc(m.text)}</span>`).join('');
+      return `<div class="goal">
+        <div class="goal-head">
+          <div>
+            <h3 class="goal-title">${esc(g.title)}${done?' ✅':''}</h3>
+            <span class="goal-cat">${esc(g.cat)}</span>
+          </div>
+          <button class="btn danger sm" onclick="deleteGoal('${g.id}')">🗑</button>
+        </div>
+        ${g.desc?`<p class="goal-desc">${esc(g.desc)}</p>`:''}
+        <div class="prog-wrap">
+          <div class="prog-label"><span>Progress</span><span>${g.progress}%</span></div>
+          <div class="prog-bar"><div class="prog-fill${done?' done':''}" style="width:${g.progress}%"></div></div>
+        </div>
+        ${g.milestones&&g.milestones.length?`<div class="milestone">${milesHTML}</div>`:''}
+        <div class="goal-actions">
+          <input class="prog-input" type="number" min="0" max="100" value="${g.progress}" placeholder="%"/>
+          <button class="btn sm" onclick="updateProgress('${g.id}',this.closest('.goal-actions').querySelector('input').value)">Update %</button>
+          ${g.deadline?`<span class="goal-deadline${overdue?' overdue':''}">${overdue?'⚠️ Overdue: ':daysLeft===0?'📅 Due today':daysLeft>0?`📅 ${daysLeft}d left`:''}${g.deadline}</span>`:''}
+        </div>
+      </div>`;
+    }).join('');
+    renderStats();
+  }
+
+  window.deleteGoal=id=>{if(!confirm('Delete?'))return;goals=goals.filter(g=>g.id!==id);save();render();};
+  window.updateProgress=(id,val)=>{const g=goals.find(x=>x.id===id);if(!g)return;g.progress=Math.min(100,Math.max(0,Number(val)||0));save();render();};
+  window.toggleMile=(id,i)=>{const g=goals.find(x=>x.id===id);if(!g||!g.milestones[i])return;g.milestones[i].done=!g.milestones[i].done;save();render();};
+
+  load();render();
+})();
+</script>
+<script src="app-catalog.js"></script><script src="app-universe-shell.js" defer></script>
+</body></html>
