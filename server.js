@@ -1683,7 +1683,20 @@ async function serveStatic(req, res) {
     });
     res.end(content);
   } catch {
-    sendText(res, 404, "Not Found");
+    try {
+      const notFoundPath = path.join(ROOT_DIR, "404.html");
+      const notFoundContent = await fs.readFile(notFoundPath);
+      res.writeHead(404, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store, max-age=0",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN"
+      });
+      res.end(notFoundContent);
+    } catch {
+      sendText(res, 404, "Not Found");
+    }
   }
 }
 

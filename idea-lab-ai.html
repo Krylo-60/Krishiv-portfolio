@@ -1,319 +1,299 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Idea Lab AI | Krishiv PB</title>
-  <style>
-    :root { --bg:#071223; --panel:#122844; --line:#365f88; --text:#eef7ff; --muted:#a9c6e7; --ok:#56d5a6; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family:Segoe UI,Arial,sans-serif; color:var(--text); background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860); }
-    .wrap { width:min(980px,94%); margin:24px auto; }
-    .card { border:1px solid var(--line); border-radius:14px; padding:14px; background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96)); margin-bottom:12px; }
-    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    input, textarea, button, select { width:100%; padding:10px; border-radius:10px; border:1px solid var(--line); background:#0a1b31; color:var(--text); font:inherit; }
-    textarea { min-height:90px; resize:vertical; }
-    .row { display:flex; gap:8px; flex-wrap:wrap; }
-    .btn { cursor:pointer; font-weight:700; }
-    .btn.primary { border:none; background:linear-gradient(135deg,#79d8ff,#58d4a8); color:#032333; }
-    .meta { color:var(--muted); }
-    .idea { border:1px solid rgba(84,126,171,.45); border-radius:12px; padding:10px; background:rgba(5,16,30,.72); margin-bottom:8px; }
-    #ideasGenerated { margin-top: 10px; }
-    a { color:#9edcff; }
-    @media (max-width: 900px) { .grid { grid-template-columns:1fr; } }
-  </style>
-
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Idea Lab AI Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#071223;--line:#365f88;--text:#eef7ff;--muted:#a9c6e7;--ok:#56d5a6;--acc:#79d8ff;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
+    .wrap{width:min(1020px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:12px;}
+    h1,h2,h3{margin:0 0 10px;}p{color:var(--muted);margin:0 0 8px;}
+    input,textarea,button,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit;transition:border-color .2s;}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);}
+    textarea{min-height:130px;resize:vertical;}
+    .btn{cursor:pointer;font-weight:700;transition:all .2s;}.btn:hover{opacity:.85;}
+    .btn.primary{border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn.sm{width:auto;padding:7px 12px;font-size:.85rem;}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .grid{display:grid;gap:14px;grid-template-columns:1fr 1fr;}
+    /* TEMPLATE TABS */
+    .template-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;}
+    .tmpl-tab{padding:9px 8px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--muted);cursor:pointer;text-align:center;font-size:.82rem;font-weight:600;transition:all .2s;}
+    .tmpl-tab:hover,.tmpl-tab.active{background:rgba(121,216,255,.1);border-color:var(--acc);color:var(--acc);}
+    /* RESULT AREA */
+    .result-area{position:relative;}
+    .result-area textarea{min-height:200px;font-family:"Space Grotesk",sans-serif;font-size:.95rem;}
+    .wc-badge{font-size:.75rem;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-top:4px;}
+    /* MODE INDICATOR */
+    .mode-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:rgba(121,216,255,.1);border:1px solid rgba(121,216,255,.2);font-size:.78rem;color:var(--acc);margin-top:8px;}
+    /* IDEA LIST */
+    .idea{border:1px solid rgba(84,126,171,.4);border-radius:12px;padding:12px;background:rgba(5,16,30,.72);margin-bottom:8px;transition:border-color .2s;}
+    .idea:hover{border-color:rgba(121,216,255,.3);}
+    .idea h3{font-size:.95rem;margin:0 0 5px;font-family:"Orbitron",sans-serif;}
+    .idea p{font-size:.86rem;color:rgba(238,247,255,.8);white-space:pre-wrap;max-height:80px;overflow:hidden;}
+    .idea p.expanded{max-height:none;}
+    .idea-meta{font-size:.75rem;color:var(--muted);margin-top:5px;display:flex;gap:10px;flex-wrap:wrap;}
+    .idea-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+    .idea-actions button{padding:4px 10px;font-size:.78rem;border-radius:8px;}
+    /* SUGGESTION BLOCKS */
+    .suggestion-block{background:rgba(121,216,255,.05);border:1px solid rgba(121,216,255,.15);border-radius:12px;padding:12px;margin-bottom:8px;}
+    .suggestion-block h4{font-family:"Orbitron",sans-serif;font-size:.85rem;margin:0 0 6px;color:var(--acc);}
+    .suggestion-block p{font-size:.88rem;color:rgba(238,247,255,.85);margin:0;}
+    .empty{color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:14px;text-align:center;}
+    a{color:#9edcff;}
+    @media(max-width:760px){.grid{grid-template-columns:1fr;}.template-tabs{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card">
-      <h1>Idea Lab AI</h1>
-      <p class="meta">Created by Krishiv PB | AI idea generation + backend idea database</p>
-      <a href="index.html#projects">Back to portfolio</a>
-    </section>
+<main class="wrap">
+  <section class="card">
+    <h1>🧠 Idea Lab AI Pro</h1>
+    <p>Generate app ideas, story starters, YouTube concepts, and project plans. All saved locally.</p>
+    <a href="index.html#projects">← Back to portfolio</a>
+  </section>
 
-    <section class="grid">
-      <article class="card">
-        <h2>Generate With AI</h2>
-        <div class="meta">Describe what kind of app you want to build.</div>
-        <p><input id="goal" placeholder="Goal (example: app to help students revise fast)" maxlength="140" /></p>
-        <p><input id="audience" placeholder="Audience (example: grade 6-10 students)" maxlength="80" /></p>
-        <p><input id="constraints" placeholder="Constraints (example: mobile first, no login)" maxlength="120" /></p>
-        <p>
-          <label for="ideaCount" class="meta">How many ideas</label>
-          <select id="ideaCount">
-            <option value="1">1 idea</option>
-            <option value="2">2 ideas</option>
-            <option value="3" selected>3 ideas</option>
-            <option value="4">4 ideas</option>
-            <option value="5">5 ideas</option>
-            <option value="6">6 ideas</option>
-          </select>
-        </p>
-        <div class="row">
-          <button id="generateBtn" class="btn primary" type="button">Generate Idea</button>
-          <button id="saveBtn" class="btn" type="button">Save To Database</button>
-          <button id="copyBtn" class="btn" type="button">Copy Result</button>
+  <section class="card grid">
+    <!-- Left: Generator -->
+    <article>
+      <h2>Generate Ideas</h2>
+
+      <!-- Template tabs -->
+      <div class="template-tabs">
+        <div class="tmpl-tab active" data-tmpl="app" id="tmplApp">📱 App Idea</div>
+        <div class="tmpl-tab" data-tmpl="youtube" id="tmplYT">🎬 YouTube</div>
+        <div class="tmpl-tab" data-tmpl="project" id="tmplProj">🔨 Project</div>
+        <div class="tmpl-tab" data-tmpl="story" id="tmplStory">📖 Story</div>
+      </div>
+
+      <!-- Fields (change based on template) -->
+      <div id="fieldsWrap">
+        <div style="margin-bottom:8px;"><label style="font-size:.83rem;color:var(--muted);" id="field1Label">Goal / Topic</label><input id="field1" maxlength="140" placeholder="e.g. app to help students revise fast" /></div>
+        <div style="margin-bottom:8px;"><label style="font-size:.83rem;color:var(--muted);" id="field2Label">Target Audience</label><input id="field2" maxlength="80" placeholder="e.g. grade 6-10 students" /></div>
+        <div style="margin-bottom:8px;"><label style="font-size:.83rem;color:var(--muted);" id="field3Label">Constraints / Style</label><input id="field3" maxlength="120" placeholder="e.g. mobile-first, no login needed" /></div>
+      </div>
+
+      <div class="row" style="margin-bottom:10px;">
+        <select id="ideaCount" style="max-width:120px;flex:none;"><option value="1">1 idea</option><option value="3" selected>3 ideas</option><option value="5">5 ideas</option></select>
+        <button id="generateBtn" class="btn primary">✨ Generate</button>
+        <button id="copyBtn" class="btn sm">📋 Copy</button>
+        <button id="saveIdeaBtn" class="btn sm">💾 Save</button>
+      </div>
+
+      <!-- Result -->
+      <div class="result-area">
+        <textarea id="resultArea" placeholder="Generated ideas will appear here..."></textarea>
+        <div class="wc-badge" id="resultWC">0 words</div>
+        <div id="modeChip" class="mode-chip" style="display:none;"></div>
+      </div>
+
+      <!-- Parsed suggestion blocks -->
+      <div id="suggBlocks" style="margin-top:10px;"></div>
+    </article>
+
+    <!-- Right: Saved ideas -->
+    <article>
+      <h2>Saved Ideas</h2>
+      <div class="row" style="margin-bottom:10px;">
+        <input id="ideasSearch" placeholder="Search saved ideas..." />
+        <select id="ideasFilterType" style="max-width:140px;flex:none;">
+          <option value="">All types</option>
+          <option value="app">App Idea</option>
+          <option value="youtube">YouTube</option>
+          <option value="project">Project</option>
+          <option value="story">Story</option>
+        </select>
+      </div>
+      <div id="ideaList"></div>
+    </article>
+  </section>
+</main>
+
+<script>
+(() => {
+  const LSK="krishiv_il_local_v2", PHK="krishiv_il_hist_v1";
+  const TEMPLATES={
+    app:{l1:"App Goal",l2:"Target Audience",l3:"Constraints",p1:"e.g. app to help students revise fast",p2:"e.g. grade 6-10 students",p3:"e.g. mobile-first, no login"},
+    youtube:{l1:"Video Topic",l2:"Target Viewers",l3:"Style / Format",p1:"e.g. how to build a quiz app",p2:"e.g. teen coders on YouTube",p3:"e.g. 10 min tutorial, beginner friendly"},
+    project:{l1:"Project Goal",l2:"Stack / Tools",l3:"Deadline / Scope",p1:"e.g. personal portfolio website",p2:"e.g. HTML CSS JS, no frameworks",p3:"e.g. finish in 2 weekends"},
+    story:{l1:"Story Premise",l2:"Main Character",l3:"Genre / Tone",p1:"e.g. a kid discovers their school is run by AI",p2:"e.g. 12-year-old coder",p3:"e.g. sci-fi adventure, fun and light"},
+  };
+
+  const APP_IDEA_BANKS=[
+    ["a habit tracker app with streak animations and category tags","school students","simple UI, works offline"],
+    ["a random name picker with a spinning wheel","classrooms","fun, colourful, fast"],
+    ["a typing speed test with live WPM counter","coding learners","minimal, dark mode"],
+    ["a flashcard trainer with spaced repetition","exam preppers","mobile first"],
+    ["a budget tracker with category charts","teens learning money management","simple, no ads"],
+    ["a quiz app with difficulty levels and explanations","students","timed rounds, instant feedback"],
+    ["a focus timer with a Pomodoro ring animation","students and workers","clean, distraction-free"],
+    ["a notes app with markdown preview and tagging","writers and students","fast, autosave, searchable"],
+    ["a kanban board with drag-and-drop","project planners","dark mode, offline"],
+    ["a grade calculator with GPA and letter grade modes","students","fast input, instant results"],
+  ];
+  const YT_BANKS=[
+    ["Building a Pomodoro Timer in 30 Minutes","beginner coders","tutorial, live coding"],
+    ["10 Web Dev Projects That Will Get You a Job","aspiring developers","list video, fast paced"],
+    ["I Built a Full App in 24 Hours as an 11-Year-Old","general YouTube viewers","vlog style, inspirational"],
+    ["Why Every Kid Should Learn to Code","parents and students","explainer, 8 minutes"],
+  ];
+  const PROJ_BANKS=[
+    ["build a personal portfolio with dark mode","HTML CSS JS","2 weekends"],
+    ["create a quiz game for my class","vanilla JS","1 week, school project"],
+    ["make a weather app using a free API","JS + fetch","3 days, learning project"],
+    ["build a chrome extension that blocks distracting sites","JS + Chrome APIs","1 week"],
+  ];
+  const STORY_BANKS=[
+    ["a kid hacks their school's AI grading system by accident","12-year-old coder named Zain","sci-fi comedy"],
+    ["a robot that can only speak in code comments becomes sentient","old programmer robot","funny sci-fi"],
+    ["a group of students must debug the world before midnight","5 mixed-skill coders","thriller adventure"],
+    ["a kid discovers their game console is actually a portal to a virtual world","10-year-old gamer","fantasy adventure"],
+  ];
+
+  let template="app", localIdeas=[], promptHistory=[];
+  const $=id=>document.getElementById(id);
+  const tmplBanks={app:APP_IDEA_BANKS,youtube:YT_BANKS,project:PROJ_BANKS,story:STORY_BANKS};
+
+  function load(){
+    try{localIdeas=JSON.parse(localStorage.getItem(LSK)||"[]");if(!Array.isArray(localIdeas))localIdeas=[];}catch{localIdeas=[];}
+    try{promptHistory=JSON.parse(localStorage.getItem(PHK)||"[]");}catch{promptHistory=[];}
+  }
+  function saveLocal(){localStorage.setItem(LSK,JSON.stringify(localIdeas));}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  function setTemplate(t){
+    template=t;
+    const cfg=TEMPLATES[t];
+    document.querySelectorAll(".tmpl-tab").forEach(el=>el.classList.toggle("active",el.dataset.tmpl===t));
+    $("field1Label").textContent=cfg.l1;$("field1").placeholder=cfg.p1;
+    $("field2Label").textContent=cfg.l2;$("field2").placeholder=cfg.p2;
+    $("field3Label").textContent=cfg.l3;$("field3").placeholder=cfg.p3;
+    $("field1").value="";$("field2").value="";$("field3").value="";
+    $("resultArea").value="";$("suggBlocks").innerHTML="";updateWC();
+  }
+
+  function updateWC(){
+    const v=$("resultArea").value.trim();
+    const words=v?v.split(/\s+/).length:0;
+    $("resultWC").textContent=`${words} words · ${v.length} characters`;
+  }
+
+  function generateLocal(count){
+    const bank=tmplBanks[template]||APP_IDEA_BANKS;
+    const results=[];
+    const used=new Set();
+    for(let i=0;i<count;i++){
+      let idx;
+      do{idx=Math.floor(Math.random()*bank.length);}while(used.has(idx)&&used.size<bank.length);
+      used.add(idx);
+      const[goal,audience,constraint]=bank[idx];
+      const f1=$("field1").value.trim()||goal;
+      const f2=$("field2").value.trim()||audience;
+      const f3=$("field3").value.trim()||constraint;
+      if(template==="app"){
+        results.push(`Idea ${i+1}: ${f1.charAt(0).toUpperCase()+f1.slice(1)}\nAudience: ${f2}\nConstraints: ${f3}\nKey features: search & filter, offline storage, streak tracking, share button\nMonetisation: free with optional Pro tier`);
+      } else if(template==="youtube"){
+        results.push(`Video ${i+1}: "${f1.charAt(0).toUpperCase()+f1.slice(1)}"\nTarget: ${f2}\nFormat: ${f3}\nHook: Start with a shocking stat or live demo\nCTA: Like if you want a follow-up video`);
+      } else if(template==="project"){
+        results.push(`Project ${i+1}: ${f1.charAt(0).toUpperCase()+f1.slice(1)}\nTools: ${f2}\nScope: ${f3}\nMilestones: wireframe → core features → polish → deploy\nBonus: add dark mode and keyboard shortcuts`);
+      } else {
+        results.push(`Story ${i+1}: ${f1.charAt(0).toUpperCase()+f1.slice(1)}\nProtagonist: ${f2}\nGenre: ${f3}\nInciting incident: Something goes catastrophically wrong in the first 3 pages\nTheme: problem-solving, resilience, teamwork`);
+      }
+    }
+    return results;
+  }
+
+  function renderSuggBlocks(ideas){
+    $("suggBlocks").innerHTML=ideas.map((idea,i)=>`
+      <div class="suggestion-block">
+        <h4>Idea ${i+1}</h4>
+        <p>${esc(idea)}</p>
+      </div>`).join("");
+  }
+
+  function renderIdeaList(){
+    const q=$("ideasSearch").value.toLowerCase().trim();
+    const tf=$("ideasFilterType").value;
+    let vis=[...localIdeas];
+    if(q)vis=vis.filter(i=>(i.title+" "+i.content).toLowerCase().includes(q));
+    if(tf)vis=vis.filter(i=>i.type===tf);
+    if(!vis.length){$("ideaList").innerHTML='<div class="empty">No saved ideas yet. Generate and save some above!</div>';return;}
+    $("ideaList").innerHTML=vis.map(idea=>`
+      <article class="idea">
+        <h3>${esc(idea.title)}</h3>
+        <p id="ip-${idea.id}">${esc(idea.content)}</p>
+        ${idea.content.length>200?`<button onclick="toggleIdeaExpand('${idea.id}')" style="font-size:.75rem;background:none;border:none;color:var(--acc);cursor:pointer;padding:2px 0 4px;">Show more</button>`:""}
+        <div class="idea-meta">
+          <span>📁 ${esc(idea.type||"app")}</span>
+          <span>${new Date(idea.ts).toLocaleDateString("en-IN")}</span>
+          <span style="font-family:'JetBrains Mono',monospace;">${idea.content.trim()?idea.content.trim().split(/\s+/).length:0} words</span>
         </div>
-        <div class="row">
-          <button type="button" class="btn templateBtn" data-template="quiz app for kids">Quiz App</button>
-          <button type="button" class="btn templateBtn" data-template="habit and focus coach">Habit Coach</button>
-          <button type="button" class="btn templateBtn" data-template="study planner with rewards">Study Rewards</button>
+        <div class="idea-actions">
+          <button onclick="loadIdea('${idea.id}')">📥 Load</button>
+          <button onclick="copyIdea('${idea.id}')">📋 Copy</button>
+          <button onclick="deleteIdea('${idea.id}')">🗑 Delete</button>
         </div>
-        <p id="genMode" class="meta"></p>
-        <textarea id="result" placeholder="AI suggestion appears here..."></textarea>
-        <div id="ideasGenerated"></div>
-      </article>
+      </article>`).join("");
+  }
 
-      <article class="card">
-        <h2>Saved Ideas</h2>
-        <p><input id="ideasSearch" placeholder="Search saved ideas..." /></p>
-        <div id="ideasList"></div>
-      </article>
-    </section>
-  </main>
+  window.toggleIdeaExpand=(id)=>{const el=document.getElementById("ip-"+id);if(el)el.classList.toggle("expanded");};
+  window.loadIdea=(id)=>{const i=localIdeas.find(x=>x.id===id);if(!i)return;$("resultArea").value=i.content;updateWC();$("resultArea").scrollIntoView({behavior:"smooth"});};
+  window.copyIdea=(id)=>{const i=localIdeas.find(x=>x.id===id);if(!i)return;navigator.clipboard.writeText(i.content).catch(()=>{});};
+  window.deleteIdea=(id)=>{localIdeas=localIdeas.filter(x=>x.id!==id);saveLocal();renderIdeaList();};
 
-  <script>
-    (() => {
-      const goal = document.getElementById("goal");
-      const audience = document.getElementById("audience");
-      const constraints = document.getElementById("constraints");
-      const result = document.getElementById("result");
-      const genMode = document.getElementById("genMode");
-      const ideaCount = document.getElementById("ideaCount");
-      const ideasGenerated = document.getElementById("ideasGenerated");
-      const ideasList = document.getElementById("ideasList");
-      const generateBtn = document.getElementById("generateBtn");
-      const saveBtn = document.getElementById("saveBtn");
-      const copyBtn = document.getElementById("copyBtn");
-      const ideasSearch = document.getElementById("ideasSearch");
-      const templateButtons = Array.from(document.querySelectorAll(".templateBtn"));
-      let allIdeas = [];
-      const PROMPT_HISTORY_KEY = "idea_lab_prompt_history_v1";
-      let promptHistory = [];
-      let historyIndex = -1;
+  $("generateBtn").addEventListener("click",()=>{
+    const count=Math.min(6,Math.max(1,Number($("ideaCount").value)||3));
+    const ideas=generateLocal(count);
+    $("resultArea").value=ideas.join("\n\n---\n\n");
+    renderSuggBlocks(ideas);updateWC();
+    $("modeChip").style.display="flex";$("modeChip").textContent="✨ Smart local generator";
+    // Save to prompt history
+    const entry={f1:$("field1").value.trim(),f2:$("field2").value.trim(),f3:$("field3").value.trim(),type:template};
+    promptHistory=[entry,...promptHistory.filter(x=>JSON.stringify(x)!==JSON.stringify(entry))].slice(0,20);
+    localStorage.setItem(PHK,JSON.stringify(promptHistory));
+  });
 
-      async function api(path, options = {}) {
-        const response = await fetch(path, {
-          headers: { "Content-Type": "application/json", ...(options.headers || {}) },
-          ...options
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(data.error || "Request failed");
-        return data;
-      }
+  $("copyBtn").addEventListener("click",async()=>{
+    const t=$("resultArea").value.trim();if(!t)return;
+    try{await navigator.clipboard.writeText(t);$("modeChip").style.display="flex";$("modeChip").textContent="✅ Copied to clipboard!";}
+    catch{$("modeChip").textContent="❌ Copy blocked by browser.";}
+  });
 
-      function escapeHtml(text) {
-        return String(text)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
+  $("saveIdeaBtn").addEventListener("click",()=>{
+    const content=$("resultArea").value.trim();
+    if(content.length<10){alert("Generate an idea first.");return;}
+    const title=$("field1").value.trim()||("Idea — "+new Date().toLocaleDateString("en-IN"));
+    localIdeas.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),title:title.slice(0,80),content,type:template,ts:Date.now()});
+    saveLocal();renderIdeaList();
+    $("modeChip").style.display="flex";$("modeChip").textContent="💾 Saved to local vault!";
+  });
 
-      try {
-        promptHistory = JSON.parse(localStorage.getItem(PROMPT_HISTORY_KEY) || "[]");
-        if (!Array.isArray(promptHistory)) promptHistory = [];
-      } catch {
-        promptHistory = [];
-      }
+  $("resultArea").addEventListener("input",updateWC);
+  $("ideasSearch").addEventListener("input",renderIdeaList);
+  $("ideasFilterType").addEventListener("change",renderIdeaList);
+  document.querySelectorAll(".tmpl-tab").forEach(t=>t.addEventListener("click",()=>setTemplate(t.dataset.tmpl)));
 
-      function savePromptHistory(entry) {
-        const signature = JSON.stringify(entry);
-        promptHistory = [entry, ...promptHistory.filter((item) => JSON.stringify(item) !== signature)].slice(0, 25);
-        localStorage.setItem(PROMPT_HISTORY_KEY, JSON.stringify(promptHistory));
-        historyIndex = -1;
-      }
+  // Also keep API call working if server is running
+  const origGen=$("generateBtn");
+  origGen.addEventListener("click",async()=>{
+    const goal=$("field1").value.trim();if(goal.length<5)return;
+    try{
+      const res=await fetch("/api/ai/idea-suggest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({goal,audience:$("field2").value.trim(),constraints:$("field3").value.trim(),count:Number($("ideaCount").value)||3})});
+      if(!res.ok)return;
+      const data=await res.json();
+      if(data.suggestion){$("resultArea").value=data.suggestion;updateWC();}
+      if(Array.isArray(data.suggestions)&&data.suggestions.length){renderSuggBlocks(data.suggestions);}
+      $("modeChip").style.display="flex";$("modeChip").textContent="🤖 AI: "+(data.mode==="google"?"Google Gemini":"Smart fallback");
+    }catch{}
+  },true);
 
-      function applyPromptHistory(step) {
-        if (!promptHistory.length) return;
-        if (historyIndex < 0) historyIndex = 0;
-        else historyIndex = Math.min(promptHistory.length - 1, Math.max(0, historyIndex + step));
-        const entry = promptHistory[historyIndex] || {};
-        goal.value = String(entry.goal || "");
-        audience.value = String(entry.audience || "");
-        constraints.value = String(entry.constraints || "");
-        goal.focus();
-        goal.setSelectionRange(goal.value.length, goal.value.length);
-      }
-
-      async function loadIdeas() {
-        try {
-          const data = await api("/api/ideas");
-          allIdeas = Array.isArray(data.ideas) ? data.ideas : [];
-          renderIdeas();
-        } catch (error) {
-          ideasList.innerHTML = `<p class="meta">Could not load ideas: ${escapeHtml(error.message)}</p>`;
-        }
-      }
-
-      function renderIdeas() {
-        const term = String((ideasSearch && ideasSearch.value) || "").trim().toLowerCase();
-        const ideas = allIdeas.filter((idea) => {
-          if (!term) return true;
-          return String(idea.title + " " + idea.content).toLowerCase().includes(term);
-        });
-        ideasList.innerHTML = ideas.map((idea) => `
-            <article class="idea">
-              <h3>${escapeHtml(idea.title)}</h3>
-              <p>${escapeHtml(idea.content)}</p>
-              <p class="meta">Source: ${escapeHtml(idea.source || "manual")} | ${new Date(idea.createdAt).toLocaleString("en-IN")}</p>
-              <button type="button" data-id="${idea.id}">Delete</button>
-            </article>
-          `).join("") || `<p class="meta">No saved ideas yet.</p>`;
-      }
-
-      generateBtn.addEventListener("click", async () => {
-        const payload = {
-          goal: goal.value.trim(),
-          audience: audience.value.trim(),
-          constraints: constraints.value.trim(),
-          count: Number((ideaCount && ideaCount.value) || 3)
-        };
-        if (payload.goal.length < 5) {
-          alert("Goal must be at least 5 characters.");
-          return;
-        }
-
-        savePromptHistory({
-          goal: payload.goal,
-          audience: payload.audience,
-          constraints: payload.constraints
-        });
-
-        result.value = "Generating idea...";
-        genMode.textContent = "";
-        try {
-          const data = await api("/api/ai/idea-suggest", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-          result.value = data.suggestion || "";
-          const blocks = Array.isArray(data.suggestions) ? data.suggestions : [];
-          if (ideasGenerated) {
-            ideasGenerated.innerHTML = blocks.map((block, index) => `
-              <article class="idea">
-                <h3>Idea ${index + 1}</h3>
-                <p>${escapeHtml(block).replace(/\n/g, "<br>")}</p>
-              </article>
-            `).join("");
-          }
-          genMode.textContent = data.mode === "google"
-            ? "AI mode: Google backend"
-            : "AI mode: fallback generator";
-        } catch (error) {
-          result.value = "Generation failed: " + error.message;
-          if (ideasGenerated) ideasGenerated.innerHTML = "";
-        }
-      });
-
-      saveBtn.addEventListener("click", async () => {
-        const generated = result.value.trim();
-        if (generated.length < 8) {
-          alert("Generate (or write) an idea first.");
-          return;
-        }
-        const titleText = goal.value.trim() || "AI App Idea";
-        try {
-          await api("/api/ideas", {
-            method: "POST",
-            body: JSON.stringify({
-              title: titleText.slice(0, 80),
-              content: generated,
-              source: genMode.textContent.toLowerCase().includes("google") ? "ai-google" : "manual-or-fallback"
-            })
-          });
-          await loadIdeas();
-        } catch (error) {
-          alert("Save failed: " + error.message);
-        }
-      });
-
-      ideasList.addEventListener("click", async (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLButtonElement)) return;
-        const id = target.dataset.id;
-        if (!id) return;
-        try {
-          await api("/api/ideas/" + encodeURIComponent(id), { method: "DELETE" });
-          await loadIdeas();
-        } catch (error) {
-          alert("Delete failed: " + error.message);
-        }
-      });
-      
-      copyBtn.addEventListener("click", async () => {
-        const text = result.value.trim();
-        if (!text) return;
-        try {
-          await navigator.clipboard.writeText(text);
-          genMode.textContent = "Copied result to clipboard.";
-        } catch {
-          genMode.textContent = "Copy blocked by browser permissions.";
-        }
-      });
-
-      templateButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          goal.value = btn.dataset.template || "";
-        });
-      });
-
-      [goal, audience, constraints].forEach((field) => {
-        field.addEventListener("keydown", (event) => {
-          if (event.key === "ArrowUp") {
-            event.preventDefault();
-            applyPromptHistory(1);
-            return;
-          }
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            if (historyIndex <= 0) {
-              historyIndex = -1;
-              return;
-            }
-            applyPromptHistory(-1);
-            return;
-          }
-          if (event.key === "Tab" && !event.shiftKey) {
-            event.preventDefault();
-            applyPromptHistory(historyIndex < 0 ? 0 : 1);
-            return;
-          }
-          historyIndex = -1;
-        });
-      });
-
-      ideasSearch.addEventListener("input", renderIdeas);
-
-      loadIdeas();
-    })();
-  </script>
-
-  <script src="app-universe-shell.js" defer></script>
+  load();setTemplate("app");renderIdeaList();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-
-

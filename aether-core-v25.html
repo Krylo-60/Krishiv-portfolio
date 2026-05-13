@@ -1,18 +1,36 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Krishiv PB">
-    <title>AETHER CORE | OMNI-SYNTH v2.5</title>
+    <title>Aether Core v2.5 | OMNI-SYNTH â€” Krishiv PB</title>
+    <meta name="description" content="Aether Core v2.5 â€” OMNI-SYNTH. The original Aether AI interface built by Krishiv PB. Where the Aether suite began." />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://krishiv-new-portfoilo.vercel.app/aether-core-v25.html" />
+    <meta property="og:site_name" content="Krishiv Velocity" />
+    <meta property="og:url" content="https://krishiv-new-portfoilo.vercel.app/aether-core-v25.html" />
+    <meta property="og:title" content="Aether Core v2.5 | OMNI-SYNTH â€” Krishiv PB" />
+    <meta property="og:description" content="The original Aether AI interface â€” where the Aether suite began. Built by Krishiv PB as his first AI command interface." />
+    <meta property="og:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
+    <meta property="og:image:alt" content="Aether Core v2.5 â€” Krishiv PB" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Aether Core v2.5 | OMNI-SYNTH â€” Krishiv PB" />
+    <meta name="twitter:description" content="The original Aether AI interface. Where the Aether suite began. Built by Krishiv PB." />
+    <meta name="twitter:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;500;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --accent: #00f2ff; --ethereal: #7000ff; --bg: #030306;
-            --panel: rgba(10, 10, 18, 0.75); --border: rgba(255, 255, 255, 0.08);
-            --text: #ffffff; --glow: 0 0 20px rgba(0, 242, 255, 0.3);
+            --accent: #00f2ff;
+            --ethereal: #7000ff;
+            --bg: #030306;
+            --panel: rgba(10, 10, 18, 0.75);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
+            --glow: 0 0 20px rgba(0, 242, 255, 0.3);
         }
 
         * { box-sizing: border-box; cursor: crosshair; scrollbar-width: none; }
@@ -217,9 +235,9 @@
         input.value = '';
         const loader = render('bot', 'Processing...');
 
-        if (/^[0-9+\-*/().^\%√\s]+$/.test(val) && /[0-9]/.test(val) && val.replace(/\s/g, '').length >= 3) {
+        if (/^[0-9+\-*/().^\%âˆš\s]+$/.test(val) && /[0-9]/.test(val) && val.replace(/\s/g, '').length >= 3) {
             try {
-                const safeExpr = val.replace(/\s/g, '').replace(/\^/g, '**').replace(/√/g, 'Math.sqrt');
+                const safeExpr = val.replace(/\s/g, '').replace(/\^/g, '**').replace(/âˆš/g, 'Math.sqrt');
                 const result = eval(safeExpr);
                 if (result !== null && result !== undefined && !isNaN(result) && result !== Infinity) {
                     setTimeout(() => {
@@ -340,7 +358,8 @@
     }
     animate();
 </script>
-<script src="app-universe-shell.js" defer></script>
+    <script src="app-catalog.js"></script>
+  <script src="app-universe-shell.js" defer></script>
 </body>
 </html>
 

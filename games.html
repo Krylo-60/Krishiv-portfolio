@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1027,6 +1027,15 @@
   </footer>
 
   <script>
+    // CRITICAL: dismiss loader immediately
+    (function() {
+      var l = document.getElementById('pageLoader');
+      if (l) { l.style.transition = 'opacity 0.5s ease'; l.style.opacity = '0'; setTimeout(function() { l.parentNode && l.parentNode.removeChild(l); }, 500); }
+      document.body.classList.add('page-ready');
+      document.body.classList.remove('preboot');
+      window._loaderHandled = true;
+    })();
+
     const pageLoader = document.getElementById('pageLoader');
     const pageSearchInput = document.getElementById('gamesSearchInput');
     const searchStatus = document.getElementById('searchStatus');
@@ -1388,12 +1397,34 @@
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') closeGamesMenu();
     });
+
+    const hideLoader = () => {
+      if (window._loaderHandled) return;
+      window._loaderHandled = true;
+      const loader = document.getElementById('pageLoader');
+      if (loader) {
+        loader.style.opacity = '0';
+        loader.style.transition = 'opacity 0.6s ease';
+        setTimeout(() => {
+          loader.remove();
+          document.body.classList.remove('preboot');
+        }, 600);
+      } else {
+        document.body.classList.remove('preboot');
+      }
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', hideLoader);
+    } else {
+      hideLoader();
+    }
+    setTimeout(hideLoader, 3000);
   </script>
 
   <script src="usage-tracker.js" defer></script>
   <script src="future-upgrade.js" defer></script>
+  <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js" defer></script>
-  <script src="premium-ui-injector.js" defer></script>
 </body>
 </html>
 

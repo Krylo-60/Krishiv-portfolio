@@ -233,16 +233,18 @@
           </p>
           <div class="links-actions">
             <a class="btn primary" href="https://krishiv-new-portfoilo.vercel.app">Open Base Site</a>
+            <a class="btn secondary" href="https://vercel.com/krylos-projects/krishiv-new-portfoilo" target="_blank" rel="noopener noreferrer">Open Vercel</a>
+            <a class="btn secondary" href="https://github.com/Krylo-60/Krishiv-portfolio" target="_blank" rel="noopener noreferrer">Open GitHub</a>
             <button class="btn secondary" type="button" id="copyAllLinksBtn">Copy All URLs</button>
           </div>
           <div class="links-stats">
             <div class="links-stat">
-              <strong>67+</strong>
-              <span>links on this page</span>
+              <strong id="totalLinksCount">0</strong>
+              <span>live links on this page</span>
             </div>
             <div class="links-stat">
-              <strong>5</strong>
-              <span>groups</span>
+              <strong id="groupCount">0</strong>
+              <span>link groups</span>
             </div>
             <div class="links-stat">
               <strong>Forever</strong>
@@ -257,9 +259,10 @@
           <p>This is the shortcut version.</p>
           <div class="links-actions">
             <a class="btn secondary" href="index.html">Home</a>
-            <a class="btn secondary" href="all-links.html">Directory</a>
             <a class="btn secondary" href="release-notes.html">Release Notes</a>
-            <a class="btn secondary" href="aether-core-v110.html">Aether v110</a>
+            <a class="btn secondary" href="all-links.html">Directory</a>
+            <a class="btn secondary" href="contact.html">Contact</a>
+            <a class="btn secondary" href="https://vercel.com/krylos-projects/krishiv-new-portfoilo" target="_blank" rel="noopener noreferrer">Vercel</a>
           </div>
           <p class="links-note" id="copyStatus">Everything here should open the real live site.</p>
         </aside>
@@ -271,6 +274,7 @@
     </section>
   </main>
 
+  <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js"></script>
   <script>
     const PROD_BASE_URL = "https://krishiv-new-portfoilo.vercel.app";
@@ -283,70 +287,106 @@
         tag: "Core",
         links: [
           "index.html",
-          "projects.html",
+          "all-links.html",
+          "release-notes.html",
           "contact.html",
+          "projects.html",
           "games.html",
-          "release-notes.html"
-        ]
-      },
-      {
-        title: "AI Pages",
-        tag: "AI",
-        links: [
+          "404.html",
           "aether-core-v110.html",
           "aether-core-v104.html",
           "aether-core-v55.html",
           "aether-core-v25.html",
           "idea-lab-ai.html",
-          "review-app.html"
+          "review-app.html",
+          "ai-prompt-lab.html"
         ]
       },
       {
         title: "Tools and Apps",
         tag: "Apps",
         links: [
+          "achievement-wall.html",
           "attendance-tracker.html",
+          "badge-maker-studio.html",
           "bmi-health.html",
+          "break-generator.html",
           "budget-battle.html",
+          "bug-tracker.html",
+          "challenge-log.html",
+          "class-notes-organizer.html",
           "code-snippets-vault.html",
+          "collab-tracker.html",
           "color-palette-lab.html",
+          "component-gallery.html",
+          "creator-brand-kit.html",
+          "creator-checklist.html",
+          "daily-checkpoint.html",
           "daily-journal.html",
+          "daily-standup.html",
+          "devlog-journal.html",
+          "event-countdown-board.html",
           "exam-countdown.html",
           "expense-tracker.html",
+          "feedback-board.html",
           "flashcards.html",
           "focus-music-deck.html",
+          "focus-room-builder.html",
+          "focus-stats.html",
           "focus-timer.html",
           "goal-planner.html",
           "grade-calculator.html",
           "habit-heatmap.html",
           "habit-tracker.html",
           "homework-hub.html",
+          "homework-timer.html",
+          "inspiration-vault.html",
+          "keyboard-shortcut-coach.html",
           "link-locker.html",
+          "link-tree-pro.html",
           "meal-planner.html",
           "mind-map-board.html",
+          "mini-habit-quest.html",
+          "mood-color-diary.html",
           "notes-vault.html",
+          "pack-list-planner.html",
           "password-lab.html",
+          "pitch-deck-maker.html",
           "portfolio-asset-vault.html",
           "presentation-planner.html",
+          "project-pitch-lab.html",
+          "project-roadmap.html",
           "qr-generator-pro.html",
           "quiz-zone.html",
+          "quote-capsule.html",
           "random-picker.html",
           "reading-tracker.html",
           "resume-studio.html",
           "scholarship-finder.html",
           "screenshot-annotator.html",
           "script-planner.html",
+          "site-stats-view.html",
+          "skill-tracker.html",
+          "social-planner.html",
           "storyforge-studio.html",
+          "streak-saver.html",
           "stream-overlay-kit.html",
+          "stream-scene-planner.html",
+          "study-buddy-board.html",
           "study-planner.html",
+          "syntax-library.html",
           "task-kanban.html",
           "team-splitter.html",
+          "thumbnail-builder.html",
           "thumbnail-idea-board.html",
           "time-capsule-lab.html",
           "typing-test.html",
           "unit-converter.html",
           "upload-calendar.html",
-          "water-reminder.html"
+          "victory-wall.html",
+          "video-idea-vault.html",
+          "water-reminder.html",
+          "weekend-challenge-generator.html"
         ]
       },
       {
@@ -364,13 +404,24 @@
           "revision-race.html",
           "votestorm-arena.html"
         ]
-      },
-      {
-        title: "Base Site",
-        tag: "Root",
-        links: [""]
       }
     ];
+
+    const bonusApps = Array.isArray(window.KRISHIV_BONUS_APPS) ? window.KRISHIV_BONUS_APPS : [];
+    const appGroup = DIRECTORY.find((group) => group.title === "Tools and Apps");
+    if (appGroup) {
+      const known = new Set(appGroup.links);
+      bonusApps.forEach((item) => {
+        const href = String((item && item.href) || "").trim();
+        if (href && !known.has(href)) {
+          appGroup.links.push(href);
+          known.add(href);
+        }
+      });
+      appGroup.links.sort((left, right) => left.localeCompare(right));
+    }
+
+    let searchTerm = "";
 
     function fullUrl(path) {
       return path ? BASE_URL + "/" + path : BASE_URL;
@@ -385,9 +436,49 @@
         .join(" ");
     }
 
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
     function renderDirectory() {
       const host = document.getElementById("linksDirectory");
-      host.innerHTML = DIRECTORY.map((group) => `
+      const filteredGroups = DIRECTORY.map((group) => ({
+        ...group,
+        links: group.links.filter((path) => {
+          if (!searchTerm) return true;
+          const label = labelFromPath(path).toLowerCase();
+          const url = fullUrl(path).toLowerCase();
+          return label.includes(searchTerm) || url.includes(searchTerm) || String(group.title).toLowerCase().includes(searchTerm);
+        })
+      })).filter((group) => group.links.length);
+
+      const totalLinks = filteredGroups.reduce((sum, group) => sum + group.links.length, 0);
+      host.innerHTML = `
+        <section class="links-group">
+          <div class="links-group-head">
+            <div>
+              <p class="eyebrow">Navigator</p>
+              <h2>Search the live site map</h2>
+            </div>
+            <span class="links-chip">${totalLinks} links visible</span>
+          </div>
+          <div class="links-actions" style="margin-top:0.8rem;">
+            <input
+              id="directorySearch"
+              type="search"
+              value="${escapeHtml(searchTerm)}"
+              placeholder="Search pages, apps, or URLs..."
+              style="flex:1;min-width:220px;padding:0.82rem 0.95rem;border-radius:14px;border:1px solid rgba(99,245,210,0.22);background:rgba(7,18,32,0.9);color:#eef8ff;font:inherit;"
+            />
+            <button type="button" class="btn secondary" id="clearDirectorySearch">Clear Search</button>
+          </div>
+        </section>
+        ${filteredGroups.length ? filteredGroups.map((group) => `
         <section class="links-group">
           <div class="links-group-head">
             <div>
@@ -405,7 +496,34 @@
             `).join("")}
           </div>
         </section>
-      `).join("");
+      `).join("") : `
+        <section class="links-group">
+          <div class="links-group-head">
+            <div>
+              <p class="eyebrow">Search</p>
+              <h2>No matching links</h2>
+            </div>
+            <span class="links-chip">0 results</span>
+          </div>
+          <p>Try a shorter keyword, or clear the search to see the full live directory again.</p>
+        </section>
+      `}
+      `;
+
+      const directorySearch = document.getElementById("directorySearch");
+      const clearDirectorySearch = document.getElementById("clearDirectorySearch");
+      if (directorySearch) {
+        directorySearch.addEventListener("input", () => {
+          searchTerm = String(directorySearch.value || "").trim().toLowerCase();
+          renderDirectory();
+        });
+      }
+      if (clearDirectorySearch) {
+        clearDirectorySearch.addEventListener("click", () => {
+          searchTerm = "";
+          renderDirectory();
+        });
+      }
     }
 
     async function copyAllLinks() {
@@ -419,7 +537,17 @@
       }
     }
 
+    function updateStats() {
+      const totalLinks = DIRECTORY.reduce((sum, group) => sum + group.links.length, 0);
+      const groupCount = DIRECTORY.length;
+      const totalLinksCount = document.getElementById("totalLinksCount");
+      const groupCountElement = document.getElementById("groupCount");
+      if (totalLinksCount) totalLinksCount.textContent = String(totalLinks);
+      if (groupCountElement) groupCountElement.textContent = String(groupCount);
+    }
+
     renderDirectory();
+    updateStats();
     document.getElementById("copyAllLinksBtn").addEventListener("click", copyAllLinks);
   </script>
 </body>

@@ -1,86 +1,191 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Flashcards Trainer | Krishiv PB</title>
-  <style>
-    :root{--bg:#071324;--panel:#112842;--line:#37608a;--text:#eff7ff;--muted:#a8c5e6}
-    *{box-sizing:border-box} body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(160deg,#030a14,#0b223c 48%,#133a61);color:var(--text)}
-    .wrap{width:min(900px,94%);margin:24px auto}.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(17,40,66,.96),rgba(8,22,40,.96));margin-bottom:12px}
-    input,button,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0b1b31;color:var(--text);font:inherit}
-    .row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.btn{cursor:pointer;font-weight:700}.btn.primary{border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333}
-    .flash{min-height:180px;display:grid;place-items:center;text-align:center;border:1px dashed var(--line);border-radius:12px;padding:16px;cursor:pointer}
-    .meta{color:var(--muted)} a{color:#9edcff}
-  </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcards Trainer Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#071324;--line:#37608a;--text:#eff7ff;--muted:#a8c5e6;--ok:#58d4a8;--bad:#ff7f7f;--acc:#79d8ff;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(160deg,#030a14,#0b223c 48%,#133a61);min-height:100vh;}
+    .wrap{width:min(900px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:linear-gradient(160deg,rgba(17,40,66,.96),rgba(8,22,40,.96));margin-bottom:12px;}
+    h1,h2,p{margin:0 0 10px;}p{color:var(--muted);}
+    input,button,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0b1b31;color:var(--text);font:inherit;}
+    .row{display:flex;gap:8px;flex-wrap:wrap;}.row>*{flex:1;}
+    .btn{cursor:pointer;font-weight:700;transition:all .2s;}.btn:hover{opacity:.85;}
+    .btn.primary{border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn.sm{width:auto;padding:7px 12px;font-size:.85rem;}
+    .btn.good{border:none;background:linear-gradient(135deg,#58d4a8,#3bc99c);color:#032333;}
+    .btn.hard{border:none;background:rgba(255,127,127,.2);border:1px solid rgba(255,127,127,.4);color:#ff9f9f;}
+    /* 3D FLIP CARD */
+    .flip-scene{perspective:1000px;height:220px;margin:16px 0;cursor:pointer;}
+    .flip-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s ease;}
+    .flip-card.flipped{transform:rotateY(180deg);}
+    .flip-face{position:absolute;inset:0;backface-visibility:hidden;border:1px dashed var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+    .flip-front{background:linear-gradient(160deg,rgba(11,27,49,.9),rgba(7,18,34,.9));}
+    .flip-back{background:linear-gradient(160deg,rgba(8,34,22,.9),rgba(5,20,35,.9));border-color:rgba(88,212,168,.3);transform:rotateY(180deg);}
+    .flip-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-family:"JetBrains Mono",monospace;}
+    .flip-text{font-size:1.15rem;font-weight:600;color:var(--text);}
+    .flip-hint{font-size:.8rem;color:var(--muted);margin-top:10px;}
+    /* Stats */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+    .stat{padding:10px;border-radius:10px;border:1px solid var(--line);background:rgba(5,15,28,.75);text-align:center;}
+    .stat strong{display:block;font-family:"Orbitron",sans-serif;font-size:1.1rem;}
+    .stat span{font-size:.74rem;color:var(--muted);}
+    /* Deck tags */
+    .deck-tag{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;border:1px solid rgba(121,216,255,.3);border-radius:999px;padding:3px 9px;color:var(--acc);}
+    /* Rating buttons */
+    .rating-row{display:flex;gap:10px;margin-top:12px;}
+    .rating-row button{flex:1;}
+    a{color:#9edcff;}
+    @media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card"><h1>Flashcards Trainer</h1><p class="meta">Created by Krishiv PB</p><a href="index.html#projects">Back to portfolio</a></section>
-    <section class="card">
-      <div class="row"><input id="q" placeholder="Question" maxlength="120"><input id="a" placeholder="Answer" maxlength="120"></div>
-      <div class="row" style="margin-top:8px"><input id="deck" placeholder="Deck name (example: Science)"><button class="btn primary" id="addBtn">Add Card</button></div>
-      <div class="row" style="margin-top:8px"><select id="deckFilter"></select><button class="btn" id="shuffleBtn">Shuffle</button><button class="btn" id="nextBtn">Next</button><button class="btn" id="delBtn">Delete</button></div>
-    </section>
-    <section class="card"><div id="flash" class="flash">No cards yet. Add one.</div><p id="pos" class="meta"></p><p id="stats" class="meta"></p></section>
-  </main>
-  <script>
-    (() => {
-      const key="krishiv_pb_flashcards_v2";
-      const q=document.getElementById("q"), a=document.getElementById("a"), deck=document.getElementById("deck"), deckFilter=document.getElementById("deckFilter"), flash=document.getElementById("flash"), pos=document.getElementById("pos"), stats=document.getElementById("stats");
-      const addBtn=document.getElementById("addBtn"), nextBtn=document.getElementById("nextBtn"), delBtn=document.getElementById("delBtn"), shuffleBtn=document.getElementById("shuffleBtn");
-      let cards=[], i=0, showAns=false, flips=0;
-      function load(){ try{cards=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(cards)) cards=[];}catch{cards=[];} }
-      function save(){ localStorage.setItem(key, JSON.stringify(cards)); }
-      function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-      function activeDeck(){ return deckFilter.value || "all"; }
-      function visible(){ const d=activeDeck(); return d==="all" ? cards : cards.filter((c)=>c.deck===d); }
-      function renderDecks(){
-        const decks = Array.from(new Set(cards.map((c)=>c.deck || "General")));
-        const current = deckFilter.value || "all";
-        deckFilter.innerHTML = `<option value="all">All Decks</option>` + decks.map((d)=>`<option value="${esc(d)}">${esc(d)}</option>`).join("");
-        if (decks.includes(current)) deckFilter.value = current;
-      }
-      function render(){
-        const list = visible();
-        renderDecks();
-        if(!list.length){ flash.innerHTML="No cards in this deck yet."; pos.textContent=""; stats.textContent=`Total cards: ${cards.length}`; return; }
-        if(i>=list.length) i=0;
-        const c=list[i]; flash.innerHTML = showAns ? `<strong>Answer</strong><p>${esc(c.a)}</p>` : `<strong>Question</strong><p>${esc(c.q)}</p>`;
-        pos.textContent=`Card ${i+1} of ${list.length} | Deck: ${esc(c.deck || "General")} | click card to flip`;
-        stats.textContent=`Total cards: ${cards.length} | Flips this session: ${flips}`;
-      }
-      addBtn.addEventListener("click",()=>{ const qv=q.value.trim(), av=a.value.trim(); if(qv.length<2||av.length<1){alert("Enter question and answer.");return;} cards.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),q:qv,a:av,deck:(deck.value.trim()||"General").slice(0,40)}); q.value=""; a.value=""; save(); i=visible().length-1; showAns=false; render(); });
-      nextBtn.addEventListener("click",()=>{ const list=visible(); if(!list.length) return; i=(i+1)%list.length; showAns=false; render(); });
-      delBtn.addEventListener("click",()=>{ const list=visible(); if(!list.length) return; const current=list[i]; cards=cards.filter((c)=>c.id!==current.id); if(i>=visible().length) i=Math.max(0,visible().length-1); showAns=false; save(); render(); });
-      shuffleBtn.addEventListener("click",()=>{ cards=[...cards].sort(()=>Math.random()-0.5); i=0; showAns=false; save(); render(); });
-      deckFilter.addEventListener("change",()=>{ i=0; showAns=false; render(); });
-      flash.addEventListener("click",()=>{ if(!visible().length) return; showAns=!showAns; flips+=1; render(); });
-      load(); render();
-    })();
-  </script>
-  <script src="app-universe-shell.js" defer></script>
+<main class="wrap">
+  <section class="card">
+    <h1>🃏 Flashcards Trainer Pro</h1>
+    <p>Study smarter with 3D flip cards, deck filtering, spaced repetition ratings, and session scores.</p>
+    <a href="index.html#projects">← Back to portfolio</a>
+  </section>
+
+  <section class="card">
+    <h2>Add Card</h2>
+    <div class="row"><input id="fcQ" placeholder="Question" maxlength="200" /><input id="fcA" placeholder="Answer" maxlength="200" /></div>
+    <div class="row" style="margin-top:8px;">
+      <input id="fcDeck" placeholder="Deck name (e.g. Science, Math)" />
+      <button class="btn primary" id="fcAddBtn" style="flex:none;width:auto;padding:10px 20px;">Add Card</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="row" style="margin-bottom:12px;align-items:center;">
+      <select id="fcDeckFilter" style="flex:2;"></select>
+      <button class="btn sm" id="fcShuffle" style="flex:none;">🔀 Shuffle</button>
+      <button class="btn sm" id="fcSpacedBtn" style="flex:none;">⚡ Hard First</button>
+      <button class="btn sm" id="fcDelBtn" style="flex:none;">🗑 Delete Card</button>
+    </div>
+
+    <!-- 3D Flip Card -->
+    <div class="flip-scene" id="flipScene">
+      <div class="flip-card" id="flipCard">
+        <div class="flip-face flip-front" id="flipFront">
+          <div class="flip-label">Question</div>
+          <div class="flip-text" id="flipFrontText">Add your first card above</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="flip-face flip-back" id="flipBack">
+          <div class="flip-label">Answer</div>
+          <div class="flip-text" id="flipBackText">—</div>
+          <div class="flip-hint">← Click to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Position & deck info -->
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin:8px 0;">
+      <span class="meta" id="fcPos">No cards</span>
+      <span class="deck-tag" id="fcDeckTag">All Decks</span>
+    </div>
+
+    <!-- Rating buttons (spaced repetition) -->
+    <div class="rating-row" id="ratingRow" style="display:none;">
+      <button class="btn hard" data-rating="hard">😓 Hard</button>
+      <button class="btn" data-rating="ok">😐 OK</button>
+      <button class="btn good" data-rating="easy">😎 Easy</button>
+    </div>
+
+    <!-- Navigation -->
+    <div class="row" style="margin-top:10px;">
+      <button class="btn" id="fcPrev">← Prev</button>
+      <button class="btn" id="fcNext">Next →</button>
+    </div>
+
+    <!-- Session stats -->
+    <div class="stats-row" style="margin-top:14px;">
+      <div class="stat"><strong id="stTotal">0</strong><span>Total Cards</span></div>
+      <div class="stat"><strong id="stFlips">0</strong><span>Flips</span></div>
+      <div class="stat"><strong id="stEasy">0</strong><span>Easy</span></div>
+      <div class="stat"><strong id="stHard">0</strong><span>Hard</span></div>
+    </div>
+  </section>
+</main>
+<script>
+(() => {
+  const SK="krishiv_fc_v3";
+  let cards=[], i=0, showAns=false, flips=0, sessionEasy=0, sessionHard=0, hardFirst=false;
+  const $=id=>document.getElementById(id);
+  function load(){try{cards=JSON.parse(localStorage.getItem(SK)||"[]");if(!Array.isArray(cards))cards=[];}catch{cards=[];}}
+  function save(){localStorage.setItem(SK,JSON.stringify(cards));}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function visible(){
+    const d=$("fcDeckFilter").value;
+    let list=d==="all"?[...cards]:cards.filter(c=>c.deck===d);
+    if(hardFirst)list.sort((a,b)=>(b.hardCount||0)-(a.hardCount||0));
+    return list;
+  }
+  function renderDecks(){
+    const decks=[...new Set(cards.map(c=>c.deck||"General"))];
+    const cur=$("fcDeckFilter").value||"all";
+    $("fcDeckFilter").innerHTML=`<option value="all">All Decks (${cards.length})</option>`+decks.map(d=>`<option value="${esc(d)}">${esc(d)} (${cards.filter(c=>(c.deck||"General")===d).length})</option>`).join("");
+    if(decks.includes(cur))$("fcDeckFilter").value=cur;
+  }
+  function renderCard(){
+    const list=visible();
+    renderDecks();
+    $("stTotal").textContent=String(list.length);
+    $("stFlips").textContent=String(flips);
+    $("stEasy").textContent=String(sessionEasy);
+    $("stHard").textContent=String(sessionHard);
+    if(!list.length){
+      $("flipFrontText").textContent="No cards in this deck.";$("flipBackText").textContent="—";
+      $("fcPos").textContent="0 / 0";$("fcDeckTag").textContent="Empty";$("ratingRow").style.display="none";
+      return;
+    }
+    if(i>=list.length)i=0;
+    const c=list[i];
+    // Reset flip
+    $("flipCard").classList.remove("flipped");showAns=false;
+    $("flipFrontText").textContent=c.q;$("flipBackText").textContent=c.a;
+    $("fcPos").textContent=`Card ${i+1} of ${list.length}`;
+    $("fcDeckTag").textContent=c.deck||"General";
+    $("ratingRow").style.display="none";
+  }
+  $("flipScene").addEventListener("click",()=>{
+    if(!visible().length)return;
+    showAns=!showAns;flips++;
+    $("flipCard").classList.toggle("flipped",showAns);
+    $("ratingRow").style.display=showAns?"flex":"none";
+    renderCard();
+  });
+  // Prevent rating click from flipping
+  $("ratingRow").addEventListener("click",e=>{
+    e.stopPropagation();
+    const btn=e.target.closest("[data-rating]");if(!btn)return;
+    const r=btn.dataset.rating;const list=visible();const c=list[i];
+    if(r==="easy"){sessionEasy++;c.hardCount=Math.max(0,(c.hardCount||0)-1);}
+    else if(r==="hard"){sessionHard++;c.hardCount=(c.hardCount||0)+1;}
+    const orig=cards.find(x=>x.id===c.id);if(orig)orig.hardCount=c.hardCount;
+    save();i=(i+1)%list.length;renderCard();
+  });
+  $("fcAddBtn").addEventListener("click",()=>{
+    const q=$("fcQ").value.trim(),a=$("fcA").value.trim();
+    if(q.length<2||a.length<1){alert("Enter question and answer.");return;}
+    cards.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),q,a,deck:($("fcDeck").value.trim()||"General").slice(0,40),hardCount:0});
+    $("fcQ").value="";$("fcA").value="";save();i=visible().length-1;renderCard();
+  });
+  $("fcNext").addEventListener("click",()=>{const l=visible();if(!l.length)return;i=(i+1)%l.length;renderCard();});
+  $("fcPrev").addEventListener("click",()=>{const l=visible();if(!l.length)return;i=(i-1+l.length)%l.length;renderCard();});
+  $("fcDelBtn").addEventListener("click",()=>{const l=visible();if(!l.length)return;const c=l[i];cards=cards.filter(x=>x.id!==c.id);if(i>=visible().length)i=Math.max(0,visible().length-1);save();renderCard();});
+  $("fcShuffle").addEventListener("click",()=>{cards=[...cards].sort(()=>Math.random()-.5);i=0;save();renderCard();});
+  $("fcSpacedBtn").addEventListener("click",()=>{hardFirst=!hardFirst;$("fcSpacedBtn").textContent=hardFirst?"⚡ Hard First ✓":"⚡ Hard First";i=0;renderCard();});
+  $("fcDeckFilter").addEventListener("change",()=>{i=0;renderCard();});
+  load();renderCard();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-

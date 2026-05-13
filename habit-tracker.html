@@ -1,308 +1,278 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Habit Streak Tracker</title>
-  <style>
-    :root { --bg:#06101f; --panel:#112640; --line:#365b83; --text:#f0f7ff; --muted:#acc6e6; --ok:#55d7a8; --acc:#7ad7ff; --warn:#ffd67e; }
-    *{box-sizing:border-box;}
-    body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:linear-gradient(160deg,#020912,#0b213a 48%,#13365c);color:var(--text);}
-    .wrap{width:min(980px,94%);margin:24px auto;}
-    .card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(155deg,rgba(17,38,64,.95),rgba(8,20,37,.95));box-shadow:0 20px 40px rgba(0,0,0,.28);margin-bottom:12px;}
-    h1,h2,p{margin:0 0 10px;} p{color:var(--muted);}
-    .row{display:flex;gap:8px;flex-wrap:wrap;}
-    input,select,button{border-radius:10px;border:1px solid var(--line);background:#0a1a2f;color:var(--text);padding:10px;font:inherit;}
-    input{flex:1;min-width:220px;}
-    .btn{cursor:pointer;font-weight:700;}
-    .btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#032032;}
-    .btn.soft{background:#102544;}
-    .habit{border:1px solid var(--line);border-radius:12px;padding:10px;background:rgba(5,16,30,.75);margin-bottom:8px;}
-    .habit-top{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;}
-    .pill{font-size:.78rem;border:1px solid rgba(85,215,168,.55);padding:3px 8px;border-radius:999px;color:#c9ffe9;}
-    .pill.warn{border-color:rgba(255,214,126,.6);color:#ffe9b4;}
-    .meta{color:var(--muted);font-size:.9rem;}
-    .stats{display:grid;grid-template-columns:repeat(3,minmax(110px,1fr));gap:8px;}
-    .stat{border:1px solid rgba(73,113,157,.45);border-radius:12px;padding:10px;background:rgba(6,18,35,.7);}
-    .stat strong{display:block;font-size:1.25rem;}
-    .empty{border:1px dashed var(--line);border-radius:12px;padding:14px;text-align:center;color:var(--muted);}
-    a{color:#9ad9ff;}
-    @media (max-width:720px){.stats{grid-template-columns:1fr;}}
-  </style>
-
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habit Streak Tracker Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#06101f;--line:#365b83;--text:#f0f7ff;--muted:#acc6e6;--ok:#55d7a8;--acc:#7ad7ff;--warn:#ffd67e;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(160deg,#020912,#0b213a 48%,#13365c);min-height:100vh;}
+    .wrap{width:min(1000px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(155deg,rgba(17,38,64,.95),rgba(8,20,37,.95));box-shadow:0 20px 40px rgba(0,0,0,.28);margin-bottom:12px;}
+    h1,h2,p{margin:0 0 10px;}p{color:var(--muted);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    input,select,button{border-radius:10px;border:1px solid var(--line);background:#0a1a2f;color:var(--text);padding:10px;font:inherit;transition:border-color .2s;}
+    input:focus,select:focus{outline:none;border-color:var(--acc);}
+    .btn{cursor:pointer;font-weight:700;transition:all .2s;}.btn:hover{opacity:.85;}
+    .btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#032032;}
+    .btn.soft{background:#102544;border-color:var(--line);}
+    .btn.sm{width:auto;padding:7px 12px;font-size:.85rem;}
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+    .stat{border:1px solid rgba(73,113,157,.45);border-radius:12px;padding:12px;background:rgba(6,18,35,.7);text-align:center;}
+    .stat strong{display:block;font-family:"Orbitron",sans-serif;font-size:1.2rem;}
+    .stat span{font-size:.75rem;color:var(--muted);}
+    /* HABIT CARD */
+    .habit{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(5,16,30,.75);margin-bottom:10px;transition:border-color .2s;}
+    .habit.done-today{border-color:rgba(85,215,168,.4);background:rgba(5,30,20,.75);}
+    .habit-top{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;}
+    .habit-name{font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px;}
+    .streak-badge{font-size:.85rem;display:inline-flex;align-items:center;gap:4px;}
+    .cat-pill{font-size:.72rem;border-radius:999px;padding:3px 9px;border:1px solid;}
+    .cat-Study{border-color:rgba(121,216,255,.4);color:#b0e8ff;}
+    .cat-Health{border-color:rgba(85,215,168,.4);color:#b0ffe0;}
+    .cat-Fitness{border-color:rgba(255,166,47,.4);color:#ffe4b0;}
+    .cat-Focus{border-color:rgba(181,127,245,.4);color:#e8d0ff;}
+    .cat-Custom{border-color:rgba(255,214,126,.4);color:#fff5d0;}
+    /* HEATMAP */
+    .heatmap{display:flex;gap:3px;flex-wrap:wrap;margin:10px 0 6px;}
+    .hm-day{width:14px;height:14px;border-radius:3px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.04);transition:background .2s;cursor:default;}
+    .hm-day.done{background:rgba(85,215,168,.65);border-color:rgba(85,215,168,.3);}
+    .hm-day.today{outline:1px solid rgba(121,216,255,.8);outline-offset:1px;}
+    /* Weekly bar */
+    .week-row{display:flex;gap:5px;margin:8px 0 6px;}
+    .week-dot{width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--muted);}
+    .week-dot.done{background:rgba(85,215,168,.5);border-color:rgba(85,215,168,.3);color:#fff;}
+    .week-dot.today{outline:2px solid rgba(121,216,255,.6);outline-offset:1px;}
+    /* Confetti */
+    .confetti-piece{position:fixed;top:-10px;border-radius:2px;animation:confettiFall 2.5s ease-in forwards;pointer-events:none;z-index:9999;}
+    @keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+    .empty{border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center;color:var(--muted);}
+    a{color:#9ad9ff;}
+    @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card">
-      <h1>Habit Streak Tracker</h1>
-      <p>Create habits, track streaks, filter by category, and export/import your progress.</p>
-      <p>Created by Krishiv PB</p>
-      <a href="index.html#projects">Back to portfolio</a>
-    </section>
+<main class="wrap">
+  <section class="card">
+    <h1>🔥 Habit Streak Tracker Pro</h1>
+    <p>Build daily streaks, track your 7-day heatmap, and celebrate your wins.</p>
+    <a href="index.html#projects">← Back to portfolio</a>
+    <div class="stats" style="margin-top:14px;">
+      <div class="stat"><strong id="stTotal">0</strong><span>Total Habits</span></div>
+      <div class="stat"><strong id="stDoneToday">0</strong><span>Done Today</span></div>
+      <div class="stat"><strong id="stBestStreak">0</strong><span>Best Streak 🔥</span></div>
+      <div class="stat"><strong id="stTotalDays">0</strong><span>Total Check-ins</span></div>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>Add Habit</h2>
-      <div class="row">
-        <input id="habitInput" maxlength="60" placeholder="Example: 30 min coding practice" />
-        <select id="habitCategory">
-          <option value="Study">Study</option>
-          <option value="Health">Health</option>
-          <option value="Fitness">Fitness</option>
-          <option value="Focus">Focus</option>
-          <option value="Custom">Custom</option>
-        </select>
-        <button id="addHabitBtn" class="btn primary" type="button">Add Habit</button>
-      </div>
-      <div class="row" style="margin-top:8px;">
-        <input id="searchInput" placeholder="Search habits..." />
-        <select id="categoryFilter">
-          <option value="all">All Categories</option>
-          <option value="Study">Study</option>
-          <option value="Health">Health</option>
-          <option value="Fitness">Fitness</option>
-          <option value="Focus">Focus</option>
-          <option value="Custom">Custom</option>
-        </select>
-        <button id="exportBtn" class="btn soft" type="button">Export</button>
-        <button id="importBtn" class="btn soft" type="button">Import</button>
-        <input id="importFile" type="file" accept="application/json" hidden />
-      </div>
-    </section>
+  <section class="card">
+    <h2>Add Habit</h2>
+    <div class="row">
+      <input id="habitInput" maxlength="60" placeholder="e.g. 30 min coding practice" style="flex:2;" />
+      <select id="habitCat" style="flex:1;min-width:120px;">
+        <option value="Study">📚 Study</option>
+        <option value="Health">💚 Health</option>
+        <option value="Fitness">💪 Fitness</option>
+        <option value="Focus">🧠 Focus</option>
+        <option value="Custom">⭐ Custom</option>
+      </select>
+      <button id="addHabitBtn" class="btn primary" style="flex:none;">Add Habit</button>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <input id="searchInput" placeholder="Search habits..." style="max-width:220px;" />
+      <select id="catFilter" style="max-width:160px;">
+        <option value="all">All Categories</option>
+        <option value="Study">Study</option><option value="Health">Health</option>
+        <option value="Fitness">Fitness</option><option value="Focus">Focus</option><option value="Custom">Custom</option>
+      </select>
+      <button id="exportBtn" class="btn soft btn-sm">Export</button>
+      <button id="importBtn" class="btn soft btn-sm">Import</button>
+      <input id="importFile" type="file" accept="application/json" hidden />
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>Stats</h2>
-      <div class="stats">
-        <article class="stat"><strong id="totalHabits">0</strong><span class="meta">Total Habits</span></article>
-        <article class="stat"><strong id="bestStreak">0</strong><span class="meta">Best Streak</span></article>
-        <article class="stat"><strong id="doneToday">0</strong><span class="meta">Done Today</span></article>
-      </div>
-    </section>
+  <section class="card">
+    <h2>Your Habits</h2>
+    <div id="habitList"></div>
+  </section>
+</main>
 
-    <section class="card">
-      <h2>Your Habits</h2>
-      <div id="habitList"></div>
-    </section>
-  </main>
+<!-- Confetti container -->
+<div id="confettiContainer"></div>
 
-  <script>
-    (() => {
-      const STORAGE_KEY = "krishiv_habit_tracker_v2";
-      const habitInput = document.getElementById("habitInput");
-      const habitCategory = document.getElementById("habitCategory");
-      const addHabitBtn = document.getElementById("addHabitBtn");
-      const searchInput = document.getElementById("searchInput");
-      const categoryFilter = document.getElementById("categoryFilter");
-      const exportBtn = document.getElementById("exportBtn");
-      const importBtn = document.getElementById("importBtn");
-      const importFile = document.getElementById("importFile");
-      const habitList = document.getElementById("habitList");
-      const totalHabits = document.getElementById("totalHabits");
-      const bestStreak = document.getElementById("bestStreak");
-      const doneToday = document.getElementById("doneToday");
-      const today = new Date().toISOString().slice(0, 10);
+<script>
+(() => {
+  const SK="krishiv_ht_v3";
+  const DAYS=["Su","Mo","Tu","We","Th","Fr","Sa"];
+  const CAT_EMOJI={Study:"📚",Health:"💚",Fitness:"💪",Focus:"🧠",Custom:"⭐"};
+  const CONFETTI_COLORS=["#55d7a8","#7ad7ff","#ffd67e","#ff94c9","#b57ff5","#ff7f7f"];
+  let habits=[];
+  const today=new Date().toISOString().slice(0,10);
+  const $=id=>document.getElementById(id);
 
-      let habits = [];
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+  function load(){try{habits=JSON.parse(localStorage.getItem(SK)||"[]");if(!Array.isArray(habits))habits=[];}catch{habits=[];}}
+  function save(){localStorage.setItem(SK,JSON.stringify(habits));}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
-      function uid() {
-        return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  function calcStreak(dates){
+    if(!dates||!dates.length)return 0;
+    const s=new Set(dates);let streak=0;
+    const cur=new Date();
+    for(;;){const k=cur.toISOString().slice(0,10);if(!s.has(k))break;streak++;cur.setDate(cur.getDate()-1);}
+    return streak;
+  }
+
+  function getLast28(dates){
+    const s=new Set(dates);const result=[];
+    const cur=new Date();cur.setDate(cur.getDate()-27);
+    for(let i=0;i<28;i++){result.push(cur.toISOString().slice(0,10));cur.setDate(cur.getDate()+1);}
+    return result.map(d=>({date:d,done:s.has(d),isToday:d===today}));
+  }
+
+  function getLast7(dates){
+    const s=new Set(dates);const result=[];
+    const cur=new Date();cur.setDate(cur.getDate()-6);
+    for(let i=0;i<7;i++){const d=cur.toISOString().slice(0,10);result.push({date:d,done:s.has(d),isToday:d===today,day:DAYS[cur.getDay()]});cur.setDate(cur.getDate()+1);}
+    return result;
+  }
+
+  function flameEmoji(streak){
+    if(streak>=30)return"🌟";if(streak>=14)return"🔥🔥";if(streak>=7)return"🔥";if(streak>=3)return"✨";return"";
+  }
+
+  function confetti(){
+    const container=$("confettiContainer");
+    for(let i=0;i<40;i++){
+      const el=document.createElement("div");
+      el.className="confetti-piece";
+      el.style.cssText=`left:${Math.random()*100}vw;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)]};animation-delay:${Math.random()*0.5}s;animation-duration:${2+Math.random()}s;transform:rotate(${Math.random()*360}deg);`;
+      container.appendChild(el);
+      setTimeout(()=>el.remove(),(3000+Math.random()*500));
+    }
+  }
+
+  function updateStats(){
+    const total=habits.length;
+    const doneToday=habits.filter(h=>h.doneDates&&h.doneDates.includes(today)).length;
+    const bestStreak=habits.reduce((m,h)=>Math.max(m,calcStreak(h.doneDates||[])),0);
+    const totalDays=habits.reduce((s,h)=>(h.doneDates||[]).length+s,0);
+    $("stTotal").textContent=total;
+    $("stDoneToday").textContent=doneToday;
+    $("stBestStreak").textContent=bestStreak;
+    $("stTotalDays").textContent=totalDays;
+    // Check if all done today → confetti
+    if(total>0&&doneToday===total){
+      const lastCelebKey="krishiv_ht_lastcelebrate";
+      if(localStorage.getItem(lastCelebKey)!==today){
+        localStorage.setItem(lastCelebKey,today);
+        confetti();
       }
+    }
+  }
 
-      function load() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          habits = raw ? JSON.parse(raw) : [];
-          if (!Array.isArray(habits)) habits = [];
-        } catch {
-          habits = [];
-        }
-      }
+  function getVisible(){
+    const q=$("searchInput").value.toLowerCase().trim();
+    const cat=$("catFilter").value;
+    return habits.filter(h=>
+      (!q||(h.name+" "+(h.category||"")).toLowerCase().includes(q))&&
+      (cat==="all"||h.category===cat)
+    );
+  }
 
-      function save() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
-      }
+  function render(){
+    updateStats();
+    const vis=getVisible();
+    if(!vis.length){$("habitList").innerHTML='<div class="empty">No habits yet. Add your first one above!</div>';return;}
+    $("habitList").innerHTML=vis.map(h=>{
+      const dates=h.doneDates||[];
+      const streak=calcStreak(dates);
+      const doneToday=dates.includes(today);
+      const week=getLast7(dates);
+      const heatmap=getLast28(dates);
+      const cat=h.category||"Custom";
+      return`
+        <article class="habit${doneToday?" done-today":""}">
+          <div class="habit-top">
+            <div class="habit-name">
+              <span>${CAT_EMOJI[cat]||"⭐"}</span>
+              <strong>${esc(h.name)}</strong>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <span class="cat-pill cat-${esc(cat)}">${esc(cat)}</span>
+              <span class="streak-badge">${flameEmoji(streak)} ${streak} day streak</span>
+            </div>
+          </div>
 
-      function escapeHtml(text) {
-        return String(text)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
+          <!-- 7-day dots -->
+          <div class="week-row" title="Last 7 days">
+            ${week.map(d=>`<div class="week-dot${d.done?" done":""}${d.isToday?" today":""}" title="${d.date}">${d.day}</div>`).join("")}
+          </div>
 
-      function calcStreak(doneDates) {
-        if (!Array.isArray(doneDates) || !doneDates.length) return 0;
-        let streak = 0;
-        const set = new Set(doneDates);
-        const cursor = new Date();
-        for (;;) {
-          const key = cursor.toISOString().slice(0, 10);
-          if (!set.has(key)) break;
-          streak += 1;
-          cursor.setDate(cursor.getDate() - 1);
-        }
-        return streak;
-      }
+          <!-- 28-day heatmap -->
+          <div class="heatmap" title="Last 28 days">
+            ${heatmap.map(d=>`<div class="hm-day${d.done?" done":""}${d.isToday?" today":""}" title="${d.date}"></div>`).join("")}
+          </div>
 
-      function getVisibleHabits() {
-        const term = searchInput.value.trim().toLowerCase();
-        const cat = categoryFilter.value;
-        return habits.filter((habit) => {
-          const bySearch = !term || (habit.name + " " + habit.category).toLowerCase().includes(term);
-          const byCategory = cat === "all" || habit.category === cat;
-          return bySearch && byCategory;
-        });
-      }
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:8px;">
+            Total: ${dates.length} check-ins · Last 7: ${week.filter(d=>d.done).length}/7
+          </div>
 
-      function renderStats() {
-        totalHabits.textContent = String(habits.length);
-        doneToday.textContent = String(habits.filter((h) => h.doneDates.includes(today)).length);
-        bestStreak.textContent = String(habits.reduce((max, h) => Math.max(max, calcStreak(h.doneDates)), 0));
-      }
+          <div class="row">
+            <button class="btn${doneToday?" soft":""} sm" data-action="toggle" data-id="${h.id}">
+              ${doneToday?"✅ Done Today — Undo":"Mark Today Done ✓"}
+            </button>
+            <button class="btn soft sm" data-action="reset" data-id="${h.id}">Reset Streak</button>
+            <button class="btn soft sm" data-action="delete" data-id="${h.id}">🗑 Delete</button>
+          </div>
+        </article>`;
+    }).join("");
+  }
 
-      function render() {
-        const visible = getVisibleHabits();
-        renderStats();
-        if (!visible.length) {
-          habitList.innerHTML = '<div class="empty">No matching habits yet.</div>';
-          return;
-        }
+  $("addHabitBtn").addEventListener("click",()=>{
+    const name=$("habitInput").value.trim();
+    if(name.length<2){alert("Habit name must be at least 2 characters.");return;}
+    habits.unshift({id:uid(),name,category:$("habitCat").value,doneDates:[]});
+    $("habitInput").value="";save();render();
+  });
+  $("habitInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("addHabitBtn").click();});
 
-        habitList.innerHTML = visible.map((habit) => {
-          const done = Array.isArray(habit.doneDates) ? habit.doneDates : [];
-          const doneTodayFlag = done.includes(today);
-          const streak = calcStreak(done);
-          const weekly = done.filter((d) => {
-            const diff = (Date.now() - Date.parse(d)) / (1000 * 60 * 60 * 24);
-            return diff >= 0 && diff < 7;
-          }).length;
-          return `
-            <article class="habit">
-              <div class="habit-top">
-                <strong>${escapeHtml(habit.name)}</strong>
-                <div class="row">
-                  <span class="pill">${escapeHtml(habit.category || "Custom")}</span>
-                  <span class="pill ${streak >= 7 ? "" : "warn"}">Streak: ${streak}</span>
-                </div>
-              </div>
-              <p class="meta">Completed days: ${done.length} | Last 7 days: ${weekly}/7</p>
-              <div class="row">
-                <button class="btn" type="button" data-action="toggle" data-id="${habit.id}">
-                  ${doneTodayFlag ? "Undo Today" : "Mark Today Done"}
-                </button>
-                <button class="btn soft" type="button" data-action="reset" data-id="${habit.id}">Reset Streak</button>
-                <button class="btn soft" type="button" data-action="delete" data-id="${habit.id}">Delete</button>
-              </div>
-            </article>
-          `;
-        }).join("");
-      }
-
-      addHabitBtn.addEventListener("click", () => {
-        const name = habitInput.value.trim();
-        if (name.length < 3) {
-          alert("Habit name must be at least 3 characters.");
-          return;
-        }
-        habits.unshift({
-          id: uid(),
-          name,
-          category: habitCategory.value,
-          doneDates: []
-        });
-        habitInput.value = "";
-        save();
-        render();
+  $("habitList").addEventListener("click",e=>{
+    const b=e.target.closest("[data-action]");if(!b)return;
+    const{action,id}=b.dataset;
+    if(action==="delete")habits=habits.filter(h=>h.id!==id);
+    else if(action==="reset")habits=habits.map(h=>h.id===id?{...h,doneDates:[]}:h);
+    else if(action==="toggle"){
+      habits=habits.map(h=>{
+        if(h.id!==id)return h;
+        const s=new Set(h.doneDates||[]);
+        if(s.has(today))s.delete(today); else s.add(today);
+        return{...h,doneDates:Array.from(s).sort()};
       });
+    }
+    save();render();
+  });
 
-      habitList.addEventListener("click", (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLButtonElement)) return;
-        const id = target.dataset.id;
-        const action = target.dataset.action;
-        if (!id || !action) return;
+  $("searchInput").addEventListener("input",render);
+  $("catFilter").addEventListener("change",render);
+  $("exportBtn").addEventListener("click",()=>{
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(habits,null,2)],{type:"application/json"}));
+    a.download="habits-krishiv.json";a.click();URL.revokeObjectURL(a.href);
+  });
+  $("importBtn").addEventListener("click",()=>$("importFile").click());
+  $("importFile").addEventListener("change",async()=>{
+    const f=$("importFile").files[0];if(!f)return;
+    try{const p=JSON.parse(await f.text());if(!Array.isArray(p))throw 0;habits=p;save();render();}catch{alert("Invalid file.");}
+    $("importFile").value="";
+  });
 
-        if (action === "delete") {
-          habits = habits.filter((h) => h.id !== id);
-        } else if (action === "reset") {
-          habits = habits.map((h) => h.id === id ? { ...h, doneDates: [] } : h);
-        } else {
-          habits = habits.map((habit) => {
-            if (habit.id !== id) return habit;
-            const set = new Set(habit.doneDates);
-            if (set.has(today)) set.delete(today);
-            else set.add(today);
-            return { ...habit, doneDates: Array.from(set).sort() };
-          });
-        }
-        save();
-        render();
-      });
-
-      searchInput.addEventListener("input", render);
-      categoryFilter.addEventListener("change", render);
-
-      exportBtn.addEventListener("click", () => {
-        const blob = new Blob([JSON.stringify(habits, null, 2)], { type: "application/json" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "habit-tracker-krishiv-pb.json";
-        a.click();
-        URL.revokeObjectURL(a.href);
-      });
-
-      importBtn.addEventListener("click", () => importFile.click());
-      importFile.addEventListener("change", async () => {
-        const file = importFile.files && importFile.files[0];
-        if (!file) return;
-        try {
-          const raw = await file.text();
-          const parsed = JSON.parse(raw);
-          if (!Array.isArray(parsed)) throw new Error("Invalid file.");
-          habits = parsed
-            .filter((h) => h && typeof h === "object")
-            .map((h) => ({
-              id: String(h.id || uid()),
-              name: String(h.name || "Habit"),
-              category: String(h.category || "Custom"),
-              doneDates: Array.isArray(h.doneDates) ? h.doneDates.filter((d) => typeof d === "string") : []
-            }));
-          save();
-          render();
-        } catch (error) {
-          alert("Import failed: " + (error.message || "Invalid JSON"));
-        } finally {
-          importFile.value = "";
-        }
-      });
-
-      load();
-      render();
-    })();
-  </script>
-
-  <script src="app-universe-shell.js" defer></script>
+  load();render();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-

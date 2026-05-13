@@ -1,104 +1,218 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Notes Vault | Krishiv PB</title>
-  <style>
-    :root{--bg:#071223;--panel:#112742;--line:#366089;--text:#eff7ff;--muted:#a7c5e6;--acc:#79d7ff;--ok:#57d3a7}
-    *{box-sizing:border-box} body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(160deg,#020a14,#0a2139 48%,#123860);color:var(--text)}
-    .wrap{width:min(960px,94%);margin:24px auto}.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(17,39,66,.96),rgba(9,22,41,.96));margin-bottom:12px}
-    input,textarea,button{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit}
-    input,textarea{width:100%} textarea{min-height:90px;resize:vertical}.row{display:flex;gap:8px;flex-wrap:wrap}.btn{cursor:pointer;font-weight:700}.btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#042333}
-    .note{border:1px solid rgba(78,116,159,.45);border-radius:12px;padding:10px;margin-bottom:8px;background:rgba(5,16,30,.7)}
-    .note-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-    .meta{color:var(--muted)} .tag{font-size:.75rem;border:1px solid rgba(121,215,255,.45);border-radius:999px;padding:3px 8px;color:#bde9ff}
-    a{color:#9edcff}
-  </style>
-
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes Vault Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#071223;--line:#366089;--text:#eff7ff;--muted:#a7c5e6;--acc:#79d7ff;--ok:#57d3a7;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(160deg,#020a14,#0a2139 48%,#123860);min-height:100vh;}
+    .wrap{width:min(980px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(160deg,rgba(17,39,66,.96),rgba(9,22,41,.96));margin-bottom:12px;}
+    input,textarea,button,select{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit;transition:border-color .2s;}
+    input:focus,textarea:focus{outline:none;border-color:var(--acc);}
+    input,textarea{width:100%;}textarea{min-height:110px;resize:vertical;}
+    .btn{cursor:pointer;font-weight:700;width:auto;}.btn:hover{opacity:.85;}
+    .btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#042333;}
+    .btn.sm{padding:7px 12px;font-size:.85rem;}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    h1,h2{margin:0 0 10px;}p{color:var(--muted);margin:0 0 8px;}
+    /* PREVIEW TOGGLE */
+    .preview-area{display:none;min-height:80px;padding:12px;border:1px solid var(--line);border-radius:10px;background:rgba(5,15,28,.6);font-size:.95rem;line-height:1.7;}
+    .preview-area.visible{display:block;}
+    .preview-area p{color:var(--text);}
+    .preview-area strong{color:var(--acc);}
+    .preview-area em{color:var(--ok);}
+    .preview-area code{background:rgba(121,215,255,.1);padding:1px 5px;border-radius:4px;font-family:"JetBrains Mono",monospace;}
+    /* NOTES GRID */
+    .notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+    .note{border:1px solid rgba(78,116,159,.45);border-radius:12px;padding:13px;background:rgba(5,16,30,.7);transition:border-color .2s;}
+    .note.pinned{border-color:rgba(255,209,102,.4);background:rgba(255,209,102,.04);}
+    .note:hover{border-color:rgba(121,215,255,.35);}
+    .note-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+    .note-title{font-weight:700;font-size:1rem;}
+    .note-meta{color:var(--muted);font-size:.8rem;margin-top:3px;}
+    .note-body{font-size:.88rem;color:rgba(239,247,255,.85);margin:8px 0;white-space:pre-wrap;max-height:100px;overflow:hidden;}
+    .note-body.expanded{max-height:none;}
+    .tag-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+    .tag{font-size:.73rem;border:1px solid rgba(121,215,255,.35);border-radius:999px;padding:2px 8px;color:#bde9ff;cursor:pointer;}
+    .pin-badge{font-size:.72rem;background:rgba(255,209,102,.15);border:1px solid rgba(255,209,102,.35);border-radius:999px;padding:2px 8px;color:#ffd166;}
+    .note-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+    .note-actions button{padding:5px 9px;font-size:.8rem;border-radius:8px;}
+    /* WORD COUNT */
+    .wc{font-size:.75rem;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-top:4px;}
+    /* FILTER */
+    .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center;}
+    .filter-row input{max-width:240px;flex:1;}
+    .empty{color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;}
+    a{color:#9edcff;}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card"><h1>Notes Vault</h1><p class="meta">Created by Krishiv PB</p><a href="index.html#projects">Back to portfolio</a></section>
-    <section class="card">
-      <input id="title" placeholder="Note title" maxlength="80" />
-      <textarea id="body" placeholder="Write your note..."></textarea>
-      <div class="row">
-        <input id="tag" placeholder="Tag (example: school, ideas, coding)" />
-        <button class="btn primary" id="saveBtn">Save Note</button>
-        <button class="btn" id="clearDraftBtn">Clear Draft</button>
-      </div>
-      <div class="row" style="margin-top:8px;">
-        <input id="search" placeholder="Search notes" />
-        <button id="exportBtn" class="btn">Export</button>
-      </div>
-    </section>
-    <section class="card"><div id="list"></div></section>
-  </main>
-  <script>
-    (() => {
-      const key="krishiv_pb_notes_vault_v2";
-      const draftKey="krishiv_pb_notes_draft_v1";
-      const title=document.getElementById("title"), body=document.getElementById("body"), tag=document.getElementById("tag"), saveBtn=document.getElementById("saveBtn"), search=document.getElementById("search"), list=document.getElementById("list"), exportBtn=document.getElementById("exportBtn"), clearDraftBtn=document.getElementById("clearDraftBtn");
-      let notes=[], q="";
-      function load(){ try{notes=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(notes)) notes=[];}catch{notes=[];} }
-      function save(){ localStorage.setItem(key, JSON.stringify(notes)); }
-      function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-      function sortedNotes(){
-        return [...notes].sort((a,b)=> Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)) || b.ts - a.ts);
-      }
-      function render(){
-        const filtered=sortedNotes().filter(n=>(n.title+" "+n.body+" "+(n.tag||"")).toLowerCase().includes(q));
-        list.innerHTML = filtered.map(n=>`<article class="note"><div class="note-top"><div><strong>${esc(n.title)}</strong><div class="meta">${new Date(n.ts).toLocaleString("en-IN")}</div></div><span class="tag">${esc(n.tag || "general")}</span></div><p>${esc(n.body)}</p><div class="row"><button data-action="pin" data-id="${n.id}">${n.pinned ? "Unpin" : "Pin"}</button><button data-action="edit" data-id="${n.id}">Edit</button><button data-action="delete" data-id="${n.id}">Delete</button></div></article>`).join("") || `<p class="meta">No notes found.</p>`;
-      }
-      function saveDraft(){ localStorage.setItem(draftKey, JSON.stringify({title:title.value, body:body.value, tag:tag.value})); }
-      function loadDraft(){ try{ const d=JSON.parse(localStorage.getItem(draftKey)||"null"); if(d){ title.value=d.title||""; body.value=d.body||""; tag.value=d.tag||""; } }catch{} }
-      [title,body,tag].forEach((n)=>n.addEventListener("input", saveDraft));
-      clearDraftBtn.addEventListener("click", ()=>{ title.value=""; body.value=""; tag.value=""; localStorage.removeItem(draftKey); });
-      saveBtn.addEventListener("click",()=>{ const t=title.value.trim(), b=body.value.trim(); if(t.length<2||b.length<1){alert("Enter title and note."); return;} notes.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6), title:t, body:b, tag:tag.value.trim().slice(0,24), pinned:false, ts:Date.now()}); title.value=""; body.value=""; tag.value=""; localStorage.removeItem(draftKey); save(); render(); });
-      search.addEventListener("input",()=>{ q=search.value.trim().toLowerCase(); render(); });
-      exportBtn.addEventListener("click", ()=>{
-        const blob = new Blob([JSON.stringify(notes, null, 2)], { type:"application/json" });
-        const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "notes-vault-krishiv-pb.json"; a.click(); URL.revokeObjectURL(a.href);
-      });
-      list.addEventListener("click",(e)=>{
-        const b=e.target; if(!(b instanceof HTMLButtonElement)) return; const id=b.dataset.id; const action=b.dataset.action; if(!id||!action) return;
-        if(action==="delete"){ notes=notes.filter(n=>n.id!==id); }
-        else if(action==="pin"){ notes=notes.map(n=>n.id===id?{...n,pinned:!n.pinned}:n); }
-        else {
-          const n = notes.find((x)=>x.id===id); if(!n) return;
-          title.value=n.title; body.value=n.body; tag.value=n.tag||"";
-          notes = notes.filter((x)=>x.id!==id);
-          saveDraft();
-        }
-        save(); render();
-      });
-      load(); loadDraft(); render();
-    })();
-  </script>
+<main class="wrap">
+  <section class="card">
+    <h1>📝 Notes Vault Pro</h1>
+    <p>Write, pin, tag, preview and search your notes. All saved in your browser.</p>
+    <a href="index.html#projects">← Back to portfolio</a>
+  </section>
 
-  <script src="app-universe-shell.js" defer></script>
+  <section class="card">
+    <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <h2 style="margin:0;">Write Note</h2>
+      <button id="previewToggle" class="btn sm">👁 Preview</button>
+    </div>
+    <input id="nvTitle" placeholder="Note title" maxlength="80" style="margin-bottom:8px;" />
+    <textarea id="nvBody" placeholder="Write your note... (supports **bold**, *italic*, `code`)"></textarea>
+    <div class="preview-area" id="previewArea"></div>
+    <div class="wc" id="wordCount">0 words · 0 characters</div>
+    <div class="row" style="margin-top:8px;">
+      <input id="nvTag" placeholder="Tag (e.g. school, ideas, coding)" style="max-width:260px;" />
+      <button class="btn primary" id="nvSave">Save Note</button>
+      <button class="btn sm" id="nvClear">Clear</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="filter-row">
+      <input id="nvSearch" placeholder="Search notes..." />
+      <select id="nvTagFilter" style="max-width:180px;"><option value="">All tags</option></select>
+      <select id="nvSort" style="max-width:180px;">
+        <option value="newest">Sort: Newest</option>
+        <option value="oldest">Sort: Oldest</option>
+        <option value="az">Sort: A–Z</option>
+        <option value="pinned">Sort: Pinned First</option>
+      </select>
+      <button id="nvExport" class="btn sm">Export</button>
+    </div>
+    <div class="notes-grid" id="nvList"></div>
+  </section>
+</main>
+<script>
+(() => {
+  const SK="krishiv_nv_v3", DK="krishiv_nv_draft_v1";
+  let notes=[], previewOn=false, q="";
+  const $=id=>document.getElementById(id);
+
+  function load(){try{notes=JSON.parse(localStorage.getItem(SK)||"[]");if(!Array.isArray(notes))notes=[];}catch{notes=[];}}
+  function save(){localStorage.setItem(SK,JSON.stringify(notes));}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function markdownToHtml(s){
+    return esc(s)
+      .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g,"<em>$1</em>")
+      .replace(/`(.+?)`/g,"<code>$1</code>")
+      .replace(/\n/g,"<br/>");
+  }
+
+  function updateWC(){
+    const body=$("nvBody").value;
+    const words=body.trim()?body.trim().split(/\s+/).length:0;
+    $("wordCount").textContent=`${words} words · ${body.length} characters`;
+  }
+
+  function updatePreview(){
+    if(!previewOn)return;
+    $("previewArea").innerHTML=`<strong>${esc($("nvTitle").value||"Untitled")}</strong><br/><br/>`+markdownToHtml($("nvBody").value);
+  }
+
+  function updateTagFilter(){
+    const tags=[...new Set(notes.flatMap(n=>(n.tag?n.tag.split(","):[]).map(t=>t.trim()).filter(Boolean)))].sort();
+    const cur=$("nvTagFilter").value;
+    $("nvTagFilter").innerHTML='<option value="">All tags</option>'+tags.map(t=>`<option>${esc(t)}</option>`).join("");
+    if(tags.includes(cur))$("nvTagFilter").value=cur;
+  }
+
+  function getVisible(){
+    const q=$("nvSearch").value.toLowerCase().trim();
+    const tagF=$("nvTagFilter").value;
+    const sort=$("nvSort").value;
+    let list=[...notes];
+    if(q)list=list.filter(n=>(n.title+" "+n.body+" "+(n.tag||"")).toLowerCase().includes(q));
+    if(tagF)list=list.filter(n=>(n.tag||"").toLowerCase().includes(tagF.toLowerCase()));
+    if(sort==="oldest")list.sort((a,b)=>a.ts-b.ts);
+    else if(sort==="az")list.sort((a,b)=>a.title.localeCompare(b.title));
+    else if(sort==="pinned")list.sort((a,b)=>Number(b.pinned)-Number(a.pinned)||b.ts-a.ts);
+    else list.sort((a,b)=>b.ts-a.ts);
+    return list;
+  }
+
+  function render(){
+    updateTagFilter();
+    const vis=getVisible();
+    const el=$("nvList");
+    if(!vis.length){el.innerHTML='<div class="empty">No notes found. Write your first note above.</div>';return;}
+    el.innerHTML=vis.map(n=>`
+      <article class="note${n.pinned?" pinned":""}">
+        <div class="note-top">
+          <div>
+            <div class="note-title">${esc(n.title||"Untitled")}</div>
+            <div class="note-meta">${new Date(n.ts).toLocaleDateString("en-IN")}</div>
+          </div>
+          ${n.pinned?'<span class="pin-badge">📌 Pinned</span>':""}
+        </div>
+        <div class="note-body" id="nb-${n.id}">${esc(n.body).replace(/\n/g,"<br/>")}</div>
+        ${n.body.length>180?`<button onclick="toggleExpand('${n.id}')" style="font-size:.78rem;background:none;border:none;color:var(--acc);cursor:pointer;padding:2px 0;">Show more</button>`:""}
+        <div class="tag-row">${(n.tag?n.tag.split(","):[]).map(t=>t.trim()).filter(Boolean).map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>
+        <div class="note-meta" style="margin-top:4px;">${n.body.trim()?n.body.trim().split(/\s+/).length:0} words</div>
+        <div class="note-actions">
+          <button onclick="editNote('${n.id}')">✏ Edit</button>
+          <button onclick="pinNote('${n.id}')">${n.pinned?"Unpin":"📌 Pin"}</button>
+          <button onclick="deleteNote('${n.id}')">🗑 Delete</button>
+        </div>
+      </article>`).join("");
+  }
+
+  window.toggleExpand=(id)=>{
+    const el=document.getElementById("nb-"+id);if(!el)return;
+    el.classList.toggle("expanded");
+  };
+  window.editNote=(id)=>{
+    const n=notes.find(x=>x.id===id);if(!n)return;
+    $("nvTitle").value=n.title;$("nvBody").value=n.body;$("nvTag").value=n.tag||"";
+    notes=notes.filter(x=>x.id!==id);save();render();updateWC();
+    $("nvTitle").scrollIntoView({behavior:"smooth"});
+  };
+  window.pinNote=(id)=>{notes=notes.map(n=>n.id===id?{...n,pinned:!n.pinned}:n);save();render();};
+  window.deleteNote=(id)=>{notes=notes.filter(n=>n.id!==id);save();render();};
+
+  $("nvSave").addEventListener("click",()=>{
+    const title=$("nvTitle").value.trim(),body=$("nvBody").value.trim();
+    if(title.length<1||body.length<1){alert("Enter title and note.");return;}
+    notes.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),title,body,tag:$("nvTag").value.trim().slice(0,60),pinned:false,ts:Date.now()});
+    $("nvTitle").value="";$("nvBody").value="";$("nvTag").value="";
+    localStorage.removeItem(DK);save();render();updateWC();
+  });
+  $("nvClear").addEventListener("click",()=>{$("nvTitle").value="";$("nvBody").value="";$("nvTag").value="";localStorage.removeItem(DK);updateWC();if(previewOn)updatePreview();});
+
+  $("previewToggle").addEventListener("click",()=>{
+    previewOn=!previewOn;
+    $("previewArea").classList.toggle("visible",previewOn);
+    $("nvBody").style.display=previewOn?"none":"block";
+    $("previewToggle").textContent=previewOn?"✍ Edit":"👁 Preview";
+    if(previewOn)updatePreview();
+  });
+
+  $("nvBody").addEventListener("input",()=>{updateWC();updatePreview();});
+  $("nvSearch").addEventListener("input",render);
+  $("nvTagFilter").addEventListener("change",render);
+  $("nvSort").addEventListener("change",render);
+  $("nvExport").addEventListener("click",()=>{
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(notes,null,2)],{type:"application/json"}));
+    a.download="notes-vault.json";a.click();URL.revokeObjectURL(a.href);
+  });
+
+  // Draft save
+  [$("nvTitle"),$("nvBody"),$("nvTag")].forEach(el=>el.addEventListener("input",()=>{
+    localStorage.setItem(DK,JSON.stringify({title:$("nvTitle").value,body:$("nvBody").value,tag:$("nvTag").value}));
+  }));
+  try{const d=JSON.parse(localStorage.getItem(DK)||"null");if(d){$("nvTitle").value=d.title||"";$("nvBody").value=d.body||"";$("nvTag").value=d.tag||"";}}catch{}
+
+  load();render();updateWC();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-

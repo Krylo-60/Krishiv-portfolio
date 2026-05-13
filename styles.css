@@ -37,6 +37,106 @@
   --bg-base-3: #0a2037;
 }
 
+/* ═══════════════════════════════════════════════
+   PREMIUM UPGRADE: Custom Themed Scrollbar
+══════════════════════════════════════════════════ */
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 245, 210, 0.35) rgba(4, 15, 27, 0.6);
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(4, 15, 27, 0.5); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent), var(--accent-alt));
+  border-radius: 999px;
+  box-shadow: 0 0 8px rgba(99, 245, 210, 0.4);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+body[data-theme="neon"] { scrollbar-color: rgba(255, 122, 217, 0.35) rgba(18, 8, 30, 0.6); }
+body[data-theme="neon"]::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff7ad9, #8b5cf6);
+  box-shadow: 0 0 8px rgba(255, 122, 217, 0.4);
+}
+body[data-theme="solar"] { scrollbar-color: rgba(255, 209, 102, 0.35) rgba(22, 18, 10, 0.6); }
+body[data-theme="solar"]::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ffd166, #fb923c);
+  box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
+}
+
+/* ═══════════════════════════════════════════════
+   PREMIUM UPGRADE: Glow Cursor
+══════════════════════════════════════════════════ */
+#kv-glow-cursor {
+  position: fixed;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 245, 210, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9997;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  will-change: transform;
+}
+body[data-theme="neon"] #kv-glow-cursor {
+  background: radial-gradient(circle, rgba(255, 122, 217, 0.07) 0%, transparent 70%);
+}
+body[data-theme="solar"] #kv-glow-cursor {
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.07) 0%, transparent 70%);
+}
+
+/* ═══════════════════════════════════════════════
+   PREMIUM UPGRADE: Card hover lift (global)
+══════════════════════════════════════════════════ */
+.project-card,
+.story-card,
+.milestone-card,
+.growth-card,
+.proof-card,
+.proof-metric-card,
+.signal-card,
+.app-verse-card,
+.game-card,
+.studio-launch-card,
+.kid-sticky,
+.dream-node,
+.mega-card {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.22s ease !important;
+}
+.project-card:hover,
+.story-card:hover,
+.milestone-card:hover,
+.growth-card:hover,
+.proof-card:hover,
+.proof-metric-card:hover,
+.signal-card:hover,
+.app-verse-card:hover,
+.game-card:hover,
+.studio-launch-card:hover,
+.kid-sticky:hover,
+.dream-node:hover,
+.mega-card:hover {
+  transform: translateY(-4px) scale(1.012);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(99, 245, 210, 0.14);
+}
+body[data-theme="neon"] .project-card:hover,
+body[data-theme="neon"] .story-card:hover,
+body[data-theme="neon"] .app-verse-card:hover,
+body[data-theme="neon"] .game-card:hover {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255, 122, 217, 0.18);
+}
+body[data-theme="solar"] .project-card:hover,
+body[data-theme="solar"] .story-card:hover,
+body[data-theme="solar"] .app-verse-card:hover,
+body[data-theme="solar"] .game-card:hover {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255, 209, 102, 0.2);
+}
+
+
+
 body[data-theme="neon"] {
   --bg: #120816;
   --bg-deep: #07020f;
@@ -1311,7 +1411,7 @@ h3 {
 
 .hero-quick-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 0.55rem;
   align-items: center;
 }
@@ -1330,6 +1430,37 @@ h3 {
 .hero-quick-row .btn {
   min-height: 42px;
   padding: 0.62rem 0.95rem;
+}
+
+.hero-dock-hint {
+  margin-top: 0.7rem;
+  display: grid;
+  gap: 0.24rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(99, 245, 210, 0.24);
+  background:
+    radial-gradient(circle at top right, rgba(116, 167, 255, 0.18), transparent 46%),
+    linear-gradient(150deg, rgba(10, 24, 40, 0.92), rgba(6, 17, 32, 0.96));
+  box-shadow: inset 0 0 0 1px rgba(99, 245, 210, 0.06);
+}
+
+.hero-dock-hint strong {
+  font-size: 0.98rem;
+  color: var(--text);
+}
+
+.hero-dock-hint span {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.hero-dock-hint-kicker {
+  color: var(--accent) !important;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .hero-links a {
@@ -2315,6 +2446,19 @@ h3 {
   position: relative;
   isolation: isolate;
   transition: transform 0.24s var(--ease-out), border-color 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out);
+  overflow: hidden;
+}
+
+.app-verse-card::before {
+  content: "";
+  position: absolute;
+  inset: auto -12% -38% auto;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(121, 216, 255, 0.18), transparent 68%);
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 .app-verse-card::after {
@@ -2329,9 +2473,19 @@ h3 {
 }
 
 .app-verse-head {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.7rem;
+}
+
+.app-verse-head .card-kicker {
+  margin-left: auto;
+  padding: 0.36rem 0.62rem;
+  border-radius: 999px;
+  border: 1px solid rgba(121, 216, 255, 0.2);
+  background: rgba(8, 19, 33, 0.76);
+  box-shadow: 0 8px 18px rgba(2, 10, 20, 0.18);
 }
 
 .app-mini-logo {
@@ -2352,18 +2506,19 @@ h3 {
 }
 
 .app-mini-logo-img {
-  width: 2.35rem;
-  height: 2.35rem;
-  padding: 0.12rem;
-  border-radius: 13px;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.28rem;
+  border-radius: 16px;
   display: block;
   object-fit: contain;
   background:
-    radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.2), transparent 44%),
+    radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.24), transparent 44%),
+    radial-gradient(circle at 82% 86%, rgba(99, 245, 210, 0.12), transparent 34%),
     linear-gradient(160deg, rgba(12, 25, 42, 0.92), rgba(7, 16, 28, 0.95));
-  border: 1px solid rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.46);
   box-shadow:
-    0 10px 24px rgba(2, 10, 20, 0.36),
+    0 14px 28px rgba(2, 10, 20, 0.38),
     0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   transition: transform 0.24s var(--ease-out), box-shadow 0.24s var(--ease-out);
 }
@@ -2401,11 +2556,13 @@ h3 {
 
 .app-verse-card h3 {
   margin: 0.45rem 0 0.45rem;
+  font-size: 1.08rem;
 }
 
 .app-verse-card p {
   margin: 0;
   color: var(--muted);
+  min-height: 2.8rem;
 }
 
 .app-verse-card.is-featured-card {
@@ -4290,6 +4447,10 @@ body.future-mode .creator-panel {
   color: #d8f3ff;
 }
 
+.future-panel .lead {
+  margin-bottom: 0.9rem;
+}
+
 .future-dock {
   margin-top: 0.75rem;
   display: flex;
@@ -4485,6 +4646,10 @@ body.future-mode .creator-panel {
     grid-template-columns: 1fr;
   }
 
+  .hero-dock-hint {
+    padding: 0.72rem 0.78rem;
+  }
+
   .live-core-grid {
     grid-template-columns: 1fr;
   }
@@ -4519,6 +4684,29 @@ body.future-mode .creator-panel {
 
   .profile-top h2 {
     max-width: none;
+  }
+
+  .future-portal {
+    padding: 1rem;
+  }
+
+  .future-head {
+    align-items: flex-start;
+  }
+
+  .future-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .future-pulse {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .future-dock a {
+    width: 100%;
+    justify-content: center;
   }
 
   .project-topline,

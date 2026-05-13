@@ -1,17 +1,15 @@
 {
   "name": "Krishiv Velocity",
   "short_name": "Krishiv",
-  "description": "Portfolio and app galaxy by Krishiv PB.",
-  "start_url": "/",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#04111d",
   "theme_color": "#04111d",
   "icons": [
     {
-      "src": "/logo.svg",
+      "src": "logo.svg",
       "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/svg+xml"
     }
   ]
 }

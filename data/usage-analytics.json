@@ -1,15 +1,15 @@
 {
-  "totalEvents": 6,
+  "totalEvents": 20,
   "byEvent": {
-    "page_view": 5,
-    "app_open": 1
+    "page_view": 15,
+    "app_open": 5
   },
   "byPage": {
-    "index.html": 4,
-    "aether-core-v110.html": 2
+    "index.html": 10,
+    "aether-core-v110.html": 10
   },
   "uniqueSessions": {
-    "sess_moa08czv_t7i6svh0": "2026-04-22"
+    "sess_moa08czv_t7i6svh0": "2026-05-13"
   },
   "timeline": [
     {
@@ -53,6 +53,104 @@
       "page": "index.html",
       "sessionId": "sess_moa08czv_t7i6svh0",
       "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-22T15:49:23.956Z",
+      "event": "page_view",
+      "page": "index.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T13:28:29.630Z",
+      "event": "page_view",
+      "page": "index.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T13:28:40.765Z",
+      "event": "page_view",
+      "page": "index.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T13:29:00.371Z",
+      "event": "page_view",
+      "page": "index.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T13:29:03.101Z",
+      "event": "page_view",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T13:29:03.182Z",
+      "event": "app_open",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T14:27:27.241Z",
+      "event": "page_view",
+      "page": "index.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T14:41:59.793Z",
+      "event": "page_view",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T14:41:59.794Z",
+      "event": "app_open",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T14:43:34.904Z",
+      "event": "page_view",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T14:43:34.906Z",
+      "event": "app_open",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T14:46:21.034Z",
+      "event": "page_view",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-04-23T14:46:21.036Z",
+      "event": "app_open",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-05-13T16:03:44.469Z",
+      "event": "page_view",
+      "page": "index.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
     }
   ]
 }

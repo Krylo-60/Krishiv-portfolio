@@ -32,15 +32,41 @@
     return futureMode === "on";
   }
 
-  function applyMode() {
-    document.body.classList.toggle("future-mode", modeOn());
-  }
-  applyMode();
-
   const futureClock = document.getElementById("futureClock");
   const futurePulse = document.getElementById("futurePulse");
   const futureLaunches = document.getElementById("futureLaunches");
   const futureQuality = document.getElementById("futureQuality");
+  const futureBtn = document.getElementById("futureModeToggleBtn");
+
+  function updateBtn() {
+    if (futureBtn) {
+      futureBtn.textContent = "Future: " + (modeOn() ? "ON" : "OFF");
+      futureBtn.style.borderColor = modeOn() ? "#00f2ff" : "";
+      futureBtn.style.color = modeOn() ? "#00f2ff" : "";
+      futureBtn.style.boxShadow = modeOn() ? "0 0 10px rgba(0, 242, 255, 0.4)" : "";
+    }
+  }
+
+  if (futureBtn) {
+    futureBtn.addEventListener("click", () => {
+      futureMode = modeOn() ? "off" : "on";
+      safeSet(MODE_KEY, futureMode);
+      applyMode();
+      updateBtn();
+      
+      // Glitch effect on click
+      document.body.style.filter = "invert(1) hue-rotate(180deg)";
+      setTimeout(() => {
+        document.body.style.filter = "";
+      }, 50);
+    });
+  }
+
+  function applyMode() {
+    document.body.classList.toggle("future-mode", modeOn());
+    updateBtn();
+  }
+  applyMode();
 
   function getLaunchCount() {
     try {
@@ -190,4 +216,11 @@
   draw();
   window.addEventListener("resize", resize);
   window.addEventListener("beforeunload", () => cancelAnimationFrame(raf));
+
+  if (modeOn()) {
+    console.log("%c[SYSTEM] Future Mode Active", "color: #00f2ff; font-weight: bold; font-size: 1.2rem;");
+    console.log("%c[BOOT] Initializing neural mesh...", "color: #00f2ff;");
+    console.log("%c[BOOT] 40 Bonus Apps Loaded", "color: #00f2ff;");
+    console.log("%c[BOOT] System Ready", "color: #00f2ff;");
+  }
 })();

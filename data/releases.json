@@ -1,5 +1,85 @@
 [
   {
+    "date": "2026-05-12",
+    "version": "v12.1.0",
+    "title": "Dual Deployment Launch + Release Notes Upgrade",
+    "summary": "The portfolio is now production-ready on Vercel and GitHub Pages, and the release history has been upgraded with deployment visibility and stronger permanent story tracking.",
+    "tags": ["deployment", "release-notes", "vercel", "github-pages", "live"],
+    "items": [
+      "Added GitHub Pages deployment automation so the whole site can publish from the repository root after every push.",
+      "Confirmed the Vercel configuration and app routing so the site is ready to run live on Vercel with the existing server and static assets.",
+      "Extended the release notes page with direct deploy links to Vercel and GitHub, making the live site story part of the public log.",
+      "Improved release history copy and timeline filters so new deployment events stay part of the permanent version story."
+    ]
+  },
+  {
+    "date": "2026-04-24",
+    "version": "v12.0.0",
+    "title": "Future Galaxy Expansion + 40 Bonus Apps Major Update",
+    "summary": "A massive content and aesthetic expansion introducing 'Future Mode'—a high-end cybernetic UI layer—and 40 new applications to the Krishiv Velocity ecosystem.",
+    "tags": ["major", "future-mode", "app-expansion", "cyber-ui", "bonus-apps"],
+    "items": [
+      "Launched 'Future Mode', a high-impact cybernetic UI experience with scanline overlays, digital glitch effects, neon glowing borders, and particle mesh backgrounds.",
+      "Integrated 40 new 'Bonus Apps' into the global App Galaxy, expanding the portfolio to over 100 working application concepts.",
+      "Developed a dedicated 'Future Mode' toggle in the main navigation for instant switching between classic and cyber aesthetics.",
+      "Updated the homepage 'App Verse' grid with high-fidelity cards for all 40 new bonus applications, including full search and filter support.",
+      "Implemented terminal-style boot logs and system diagnostics in the browser console for an immersive developer vibe.",
+      "Created 20 brand-new application templates including AI Prompt Lab, Creator Checklist, Skill Level Tracker, and Portfolio Analytics."
+    ]
+  },
+  {
+    "date": "2026-04-23",
+    "version": "v11.0.0",
+    "title": "Premium Experience + Aether Evolution Major Update",
+    "summary": "A giant leap for the portfolio's 'wow factor' with a global Premium UI system, smooth mouse-following ambient glows, and a historical Aether Evolution timeline that tells the story of the site's AI development.",
+    "tags": ["major", "premium-ui", "aether", "evolution", "seo", "ux"],
+    "items": [
+      "Implemented a global Premium UI system including a smooth mouse-following ambient glow cursor and interactive hover signals.",
+      "Added a historical 'Aether Core Evolution' timeline to the Projects page, visualizing the journey from v2.5 OMNI-SYNTH to the current v110 Fusion Command.",
+      "Deployed a custom themed scrollbar across all pages that matches the Aurora, Neon, and Solar active modes.",
+      "Fixed critical character encoding bugs in the legacy Aether v55 interface for a cleaner professional look.",
+      "Applied cross-browser CSS fixes (background-clip) across the entire suite for consistent gradient text rendering.",
+      "Added comprehensive OG/SEO meta tags to all Aether Core versions to ensure they look premium when shared on social media."
+    ]
+  },
+  {
+    "title": "Homepage Polish + Utility Power-Up Major Update",
+    "summary": "The homepage app galaxy got a stronger icon-focused polish pass, and another standalone app batch got upgraded so Password Lab, BMI Health, and Random Picker feel much more complete and fun to use.",
+    "tags": ["major", "kid-made", "homepage", "apps", "standalone-upgrade", "release-notes"],
+    "items": [
+      "Polished the homepage app cards so the icons feel stronger, more visible, and more like a real app galaxy showcase.",
+      "Turned Password Lab into a richer security tool with presets, saved builds, better strength signals, and local browser history.",
+      "Expanded BMI Health and Random Picker with fuller result panels, saved history, and more useful controls so they feel less like one-button demos.",
+      "Updated the homepage and release-notes spotlight so v10.2.0 leads while every earlier release still remains in the permanent timeline."
+    ]
+  },
+  {
+    "date": "2026-04-22",
+    "version": "v10.1.0",
+    "title": "Full Icon Galaxy Upgrade",
+    "summary": "The app galaxy got more complete by wiring in the missing app pages, improving icon consistency, and making the shared app systems show each app's identity more clearly across the site.",
+    "tags": ["major", "kid-made", "apps", "icons", "launcher", "release-notes"],
+    "items": [
+      "Added the missing app pages into the shared galaxy index so Password Lab, BMI Health, and Random Picker now show up properly with icons too.",
+      "Improved the universal app power panel so indexed app pages now show their own app icon inside the shared system instead of only inside the launcher.",
+      "Kept the broader v10 shared-system upgrades in place so the app galaxy stays smarter, richer, and easier to scan.",
+      "Updated the homepage and release-notes spotlight so v10.1.0 leads while every earlier release still remains in the permanent timeline."
+    ]
+  },
+  {
+    "date": "2026-04-22",
+    "version": "v10.0.0",
+    "title": "All Apps Upgrade Galaxy Major Update",
+    "summary": "A huge cross-app update improved the shared launcher, the universal app power panel, and the concept-app engine so a much bigger part of the site now feels smarter, fuller, and more like a real kid-built product galaxy.",
+    "tags": ["major", "kid-made", "apps", "launcher", "shared-system", "release-notes"],
+    "items": [
+      "Upgraded the shared app launcher with category filters, stronger sorting, more quick actions, and richer insight stats across the app galaxy.",
+      "Expanded the universal app power panel with mission tracking, progress saving, streak data, favorites, and faster app-to-app actions.",
+      "Improved the shared concept-app system with draft restore, archive mode, imports, stronger progress stats, and fuller board controls across many smaller apps.",
+      "Updated the homepage and release-notes spotlight so v10.0.0 leads while every earlier release still remains in the permanent timeline."
+    ]
+  },
+  {
     "date": "2026-04-22",
     "version": "v9.1.0",
     "title": "Standalone App Power-Up Major Update",

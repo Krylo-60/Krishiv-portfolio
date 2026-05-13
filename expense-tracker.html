@@ -1,176 +1,240 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Expense Tracker | Krishiv PB</title>
-  <style>
-    :root { --bg:#081323; --panel:#112844; --line:#355a84; --text:#eff7ff; --muted:#a8c5e7; --ok:#56d5a6; --bad:#ff7d7d; --acc:#7bd7ff; }
-    * { box-sizing: border-box; } body { margin:0; font-family:Segoe UI,Arial,sans-serif; background:linear-gradient(160deg,#030a14,#0a223a 48%,#13375c); color:var(--text); }
-    .wrap{width:min(980px,94%);margin:24px auto;} .card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(17,40,68,.96),rgba(9,24,43,.96));margin-bottom:12px;}
-    input,select,button{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1a30;color:var(--text);font:inherit;} .row{display:flex;gap:8px;flex-wrap:wrap;}
-    .btn{cursor:pointer;font-weight:700;} .btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#042232;}
-    table{width:100%;border-collapse:collapse;} th,td{padding:8px;border-bottom:1px solid rgba(84,126,171,.35);text-align:left;} .income{color:var(--ok);} .expense{color:var(--bad);}
-    .meta{color:var(--muted);} a{color:#9ddcff;}
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(90px,1fr));gap:8px;}
-    .stat{border:1px solid rgba(84,126,171,.45);border-radius:10px;padding:10px;background:rgba(5,16,30,.68);}
-    .stat strong{display:block;font-size:1.1rem;}
-    @media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(90px,1fr));}}
-  </style>
-
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#081323;--line:#355a84;--text:#eff7ff;--muted:#a8c5e7;--ok:#56d5a6;--bad:#ff7d7d;--acc:#7bd7ff;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(160deg,#030a14,#0a223a 48%,#13375c);min-height:100vh;}
+    .wrap{width:min(1000px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:linear-gradient(160deg,rgba(17,40,68,.96),rgba(9,24,43,.96));margin-bottom:12px;}
+    input,select,button{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1a30;color:var(--text);font:inherit;transition:border-color .2s;}
+    input:focus,select:focus{outline:none;border-color:var(--acc);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .btn{cursor:pointer;font-weight:700;transition:all .2s;}.btn:hover{opacity:.85;}
+    .btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#042232;}
+    .btn.sm{width:auto;padding:7px 12px;font-size:.85rem;}
+    h1,h2,p{margin:0 0 10px;}p{color:var(--muted);}
+    /* Stats */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+    .stat{border:1px solid rgba(84,126,171,.45);border-radius:12px;padding:12px;background:rgba(5,16,30,.68);text-align:center;}
+    .stat strong{display:block;font-family:"Orbitron",sans-serif;font-size:1.2rem;}
+    .stat span{font-size:.76rem;color:var(--muted);}
+    /* Budget warning */
+    .budget-bar-wrap{margin:10px 0 4px;}
+    .budget-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.08);}
+    .budget-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#56d5a6,#7bd7ff);transition:width .4s;}
+    .budget-fill.warn{background:linear-gradient(90deg,#ffd166,#ff9a3c);}
+    .budget-fill.danger{background:linear-gradient(90deg,#ff7d7d,#ff4444);}
+    .budget-row{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-top:3px;}
+    /* Category pie (CSS-based) */
+    .pie-section{margin-top:14px;}
+    .pie-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+    .pie-item{display:flex;align-items:center;gap:6px;font-size:.82rem;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);}
+    .pie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .cat-bar-wrap{margin-top:10px;}
+    .cat-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.84rem;}
+    .cat-bar-row span{min-width:90px;color:var(--muted);}
+    .cat-bar{flex:1;height:6px;border-radius:999px;background:rgba(255,255,255,.08);}
+    .cat-fill{height:100%;border-radius:999px;}
+    .cat-amount{min-width:55px;text-align:right;font-family:"JetBrains Mono",monospace;font-size:.8rem;}
+    /* Table */
+    table{width:100%;border-collapse:collapse;}
+    th,td{padding:9px 8px;border-bottom:1px solid rgba(84,126,171,.25);text-align:left;font-size:.9rem;}
+    th{color:var(--muted);font-size:.8rem;font-family:"JetBrains Mono",monospace;letter-spacing:.06em;}
+    .income{color:var(--ok);}.expense{color:var(--bad);}
+    a{color:#9ddcff;}
+    @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card">
-      <h1>Expense Tracker</h1>
-      <p class="meta">Created by Krishiv PB</p>
-      <a href="index.html#projects">Back to portfolio</a>
-    </section>
+<main class="wrap">
+  <section class="card">
+    <h1>💰 Expense Tracker Pro</h1>
+    <p>Track income and expenses with category breakdown, budget warnings, and CSV export.</p>
+    <a href="index.html#projects">← Back to portfolio</a>
+  </section>
 
-    <section class="card">
-      <div class="row">
-        <input id="title" placeholder="Entry title" maxlength="60" />
-        <input id="amount" type="number" step="0.01" placeholder="Amount" />
-        <select id="type"><option value="expense">Expense</option><option value="income">Income</option></select>
-        <select id="category">
-          <option>General</option><option>Food</option><option>Study</option><option>Travel</option><option>Entertainment</option><option>Savings</option>
-        </select>
-        <input id="entryDate" type="date" />
-        <button class="btn primary" id="addBtn">Add</button>
+  <!-- Add entry -->
+  <section class="card">
+    <h2>Add Entry</h2>
+    <div class="row">
+      <input id="etTitle" placeholder="Entry title" maxlength="60" style="flex:2;" />
+      <input id="etAmount" type="number" step="0.01" min="0" placeholder="Amount ₹" style="flex:1;min-width:100px;" />
+      <select id="etType" style="flex:1;min-width:110px;"><option value="expense">Expense</option><option value="income">Income</option></select>
+      <select id="etCat" style="flex:1;min-width:130px;">
+        <option>General</option><option>Food</option><option>Study</option>
+        <option>Travel</option><option>Entertainment</option><option>Savings</option><option>Gaming</option><option>Health</option>
+      </select>
+      <input id="etDate" type="date" style="flex:1;min-width:130px;" />
+      <button class="btn primary" id="etAdd" style="flex:none;">Add</button>
+    </div>
+    <!-- Budget limit -->
+    <div class="row" style="margin-top:12px;gap:12px;">
+      <label style="font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        Monthly budget limit ₹:
+        <input id="etBudget" type="number" min="0" step="100" placeholder="5000" style="max-width:120px;" />
+        <button id="etSetBudget" class="btn sm">Set</button>
+      </label>
+    </div>
+  </section>
+
+  <!-- Stats + category breakdown -->
+  <section class="card">
+    <div class="stats">
+      <div class="stat"><strong id="etBal">₹0</strong><span>Balance</span></div>
+      <div class="stat"><strong id="etInc" style="color:var(--ok);">₹0</strong><span>Total Income</span></div>
+      <div class="stat"><strong id="etExp" style="color:var(--bad);">₹0</strong><span>Total Expenses</span></div>
+      <div class="stat"><strong id="etMonth">₹0</strong><span>This Month</span></div>
+    </div>
+
+    <!-- Budget progress -->
+    <div id="budgetSection" style="display:none;">
+      <div class="budget-bar-wrap">
+        <div class="budget-bar"><div class="budget-fill" id="budgetFill" style="width:0%"></div></div>
+        <div class="budget-row"><span id="budgetLabel">₹0 / ₹0 budget</span><span id="budgetPct">0%</span></div>
       </div>
-    </section>
+    </div>
 
-    <section class="card">
-      <div class="stats">
-        <article class="stat"><strong id="bal">0.00</strong><span class="meta">Balance</span></article>
-        <article class="stat"><strong id="inc">0.00</strong><span class="meta">Income</span></article>
-        <article class="stat"><strong id="exp">0.00</strong><span class="meta">Expense</span></article>
-        <article class="stat"><strong id="monthSpend">0.00</strong><span class="meta">This Month Spend</span></article>
-      </div>
-      <div class="row" style="margin-top:10px;">
-        <input id="search" placeholder="Search title/category..." />
-        <select id="filterType"><option value="all">All Types</option><option value="income">Income</option><option value="expense">Expense</option></select>
-        <button id="exportBtn" class="btn">Export CSV</button>
-      </div>
-    </section>
+    <!-- Category breakdown bars -->
+    <div class="pie-section">
+      <div style="font-size:.85rem;color:var(--muted);margin-bottom:8px;font-weight:600;">Expense by Category</div>
+      <div id="catBars"></div>
+    </div>
+  </section>
 
-    <section class="card">
-      <table>
-        <thead><tr><th>Title</th><th>Category</th><th>Type</th><th>Date</th><th>Amount</th><th></th></tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </section>
-  </main>
-  <script>
-    (() => {
-      const key = "krishiv_pb_expense_tracker_v2";
-      const title = document.getElementById("title");
-      const amount = document.getElementById("amount");
-      const type = document.getElementById("type");
-      const category = document.getElementById("category");
-      const entryDate = document.getElementById("entryDate");
-      const addBtn = document.getElementById("addBtn");
-      const search = document.getElementById("search");
-      const filterType = document.getElementById("filterType");
-      const exportBtn = document.getElementById("exportBtn");
-      const rows = document.getElementById("rows");
-      const bal = document.getElementById("bal");
-      const inc = document.getElementById("inc");
-      const exp = document.getElementById("exp");
-      const monthSpend = document.getElementById("monthSpend");
-      let items = [];
+  <!-- Filter + table -->
+  <section class="card">
+    <div class="row" style="margin-bottom:12px;">
+      <input id="etSearch" placeholder="Search title/category..." style="max-width:240px;" />
+      <select id="etFilterType" style="max-width:140px;"><option value="all">All Types</option><option value="income">Income</option><option value="expense">Expense</option></select>
+      <select id="etFilterCat" style="max-width:150px;"><option value="">All Categories</option></select>
+      <button id="etExport" class="btn sm">📥 Export CSV</button>
+      <button id="etClearAll" class="btn sm">🗑 Clear All</button>
+    </div>
+    <table>
+      <thead><tr><th>Title</th><th>Category</th><th>Type</th><th>Date</th><th>Amount</th><th></th></tr></thead>
+      <tbody id="etRows"></tbody>
+    </table>
+  </section>
+</main>
+<script>
+(() => {
+  const SK="krishiv_et_v3", BSK="krishiv_et_budget_v1";
+  const CAT_COLORS={"General":"#7bd7ff","Food":"#ffd166","Study":"#58d4a8","Travel":"#ff94c9","Entertainment":"#b57ff5","Savings":"#56d5a6","Gaming":"#ff9a3c","Health":"#5ce1e6"};
+  let items=[], budget=0;
+  const $=id=>document.getElementById(id);
 
-      entryDate.value = new Date().toISOString().slice(0, 10);
+  function load(){
+    try{items=JSON.parse(localStorage.getItem(SK)||"[]");if(!Array.isArray(items))items=[];}catch{items=[];}
+    budget=Number(localStorage.getItem(BSK)||0);
+    if(budget>0){$("etBudget").value=budget;}
+  }
+  function save(){localStorage.setItem(SK,JSON.stringify(items));}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function fmt(n){return"₹"+n.toFixed(2);}
+  function getVisible(){
+    const q=$("etSearch").value.toLowerCase().trim();
+    const ft=$("etFilterType").value;
+    const fc=$("etFilterCat").value;
+    return items.filter(i=>{
+      const byQ=!q||(i.title+" "+i.category).toLowerCase().includes(q);
+      const byT=ft==="all"||i.type===ft;
+      const byC=!fc||i.category===fc;
+      return byQ&&byT&&byC;
+    });
+  }
+  function updateCatFilter(){
+    const cats=[...new Set(items.map(i=>i.category))].sort();
+    const cur=$("etFilterCat").value;
+    $("etFilterCat").innerHTML='<option value="">All Categories</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join("");
+    if(cats.includes(cur))$("etFilterCat").value=cur;
+  }
+  function renderCatBars(){
+    const expenses=items.filter(i=>i.type==="expense");
+    const total=expenses.reduce((a,b)=>a+b.amount,0);
+    const bycat={};
+    expenses.forEach(i=>{bycat[i.category]=(bycat[i.category]||0)+i.amount;});
+    const sorted=Object.entries(bycat).sort((a,b)=>b[1]-a[1]);
+    $("catBars").innerHTML=sorted.map(([cat,amt])=>{
+      const pct=total?Math.round((amt/total)*100):0;
+      const col=CAT_COLORS[cat]||"#7bd7ff";
+      return`<div class="cat-bar-row">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:${col};display:inline-block;"></span>${esc(cat)}</span>
+        <div class="cat-bar"><div class="cat-fill" style="width:${pct}%;background:${col};"></div></div>
+        <span class="cat-amount">${fmt(amt)}</span>
+      </div>`;
+    }).join("")||'<p style="font-size:.82rem;color:var(--muted);">No expenses yet.</p>';
+  }
+  function renderBudget(){
+    const ym=new Date().toISOString().slice(0,7);
+    const monthExp=items.filter(i=>i.type==="expense"&&String(i.date).startsWith(ym)).reduce((a,b)=>a+b.amount,0);
+    $("etMonth").textContent=fmt(monthExp);
+    if(budget>0){
+      const pct=Math.min(100,Math.round((monthExp/budget)*100));
+      $("budgetSection").style.display="block";
+      const fill=$("budgetFill");
+      fill.style.width=pct+"%";
+      fill.className="budget-fill"+(pct>=100?" danger":pct>=80?" warn":"");
+      $("budgetLabel").textContent=`${fmt(monthExp)} / ${fmt(budget)} budget`;
+      $("budgetPct").textContent=pct+"%";
+    } else {$("budgetSection").style.display="none";}
+  }
+  function render(){
+    const inc=items.filter(i=>i.type==="income").reduce((a,b)=>a+b.amount,0);
+    const exp=items.filter(i=>i.type==="expense").reduce((a,b)=>a+b.amount,0);
+    $("etBal").textContent=fmt(inc-exp);
+    $("etInc").textContent=fmt(inc);
+    $("etExp").textContent=fmt(exp);
+    renderBudget();renderCatBars();updateCatFilter();
+    const vis=getVisible();
+    $("etRows").innerHTML=vis.map(i=>`<tr>
+      <td>${esc(i.title)}</td>
+      <td><span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:${CAT_COLORS[i.category]||"#7bd7ff"};display:inline-block;"></span>${esc(i.category)}</span></td>
+      <td class="${i.type}">${i.type}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:.82rem;">${esc(i.date)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-weight:700;">${fmt(i.amount)}</td>
+      <td><button data-del="${i.id}" style="padding:4px 8px;font-size:.8rem;">🗑</button></td>
+    </tr>`).join("")||'<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:16px;">No entries yet.</td></tr>';
+  }
 
-      function load(){ try{ items=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(items)) items=[]; }catch{ items=[]; } }
-      function save(){ localStorage.setItem(key, JSON.stringify(items)); }
-      function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  $("etAdd").addEventListener("click",()=>{
+    const t=$("etTitle").value.trim(),a=Number($("etAmount").value);
+    if(t.length<1||!Number.isFinite(a)||a<=0){alert("Enter valid title and amount.");return;}
+    items.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+      title:t,amount:a,type:$("etType").value,category:$("etCat").value,
+      date:$("etDate").value||new Date().toISOString().slice(0,10)});
+    $("etTitle").value="";$("etAmount").value="";
+    save();render();
+  });
+  $("etSetBudget").addEventListener("click",()=>{
+    const b=Number($("etBudget").value);
+    if(b<0){alert("Enter a valid budget.");return;}
+    budget=b;localStorage.setItem(BSK,String(b));render();
+  });
+  $("etRows").addEventListener("click",e=>{
+    const b=e.target.closest("[data-del]");if(!b)return;
+    items=items.filter(i=>i.id!==b.dataset.del);save();render();
+  });
+  $("etSearch").addEventListener("input",render);
+  $("etFilterType").addEventListener("change",render);
+  $("etFilterCat").addEventListener("change",render);
+  $("etClearAll").addEventListener("click",()=>{if(confirm("Clear all entries?"))items=[];save();render();});
+  $("etExport").addEventListener("click",()=>{
+    const header="title,category,type,date,amount";
+    const lines=items.map(i=>[i.title,i.category,i.type,i.date,i.amount.toFixed(2)].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(","));
+    const csv=[header,...lines].join("\n");
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="expenses-krishiv.csv";a.click();URL.revokeObjectURL(a.href);
+  });
 
-      function visibleItems() {
-        const term = search.value.trim().toLowerCase();
-        const ft = filterType.value;
-        return items.filter((i) => {
-          const bySearch = !term || (i.title + " " + i.category).toLowerCase().includes(term);
-          const byType = ft === "all" || i.type === ft;
-          return bySearch && byType;
-        });
-      }
-
-      function totals(){
-        const income = items.filter(i=>i.type==="income").reduce((a,b)=>a+b.amount,0);
-        const expense = items.filter(i=>i.type==="expense").reduce((a,b)=>a+b.amount,0);
-        const ym = new Date().toISOString().slice(0, 7);
-        const monthExpense = items.filter(i => i.type === "expense" && String(i.date).startsWith(ym)).reduce((a,b)=>a+b.amount,0);
-        inc.textContent = income.toFixed(2);
-        exp.textContent = expense.toFixed(2);
-        bal.textContent = (income-expense).toFixed(2);
-        monthSpend.textContent = monthExpense.toFixed(2);
-      }
-
-      function render(){
-        const list = visibleItems();
-        rows.innerHTML = list.map(i=>`<tr><td>${esc(i.title)}</td><td>${esc(i.category)}</td><td class="${i.type}">${i.type}</td><td>${esc(i.date)}</td><td>${i.amount.toFixed(2)}</td><td><button data-id="${i.id}">Delete</button></td></tr>`).join("") || `<tr><td colspan="6" class="meta">No entries yet.</td></tr>`;
-        totals();
-      }
-
-      addBtn.addEventListener("click", ()=>{
-        const t = title.value.trim();
-        const a = Number(amount.value);
-        if(t.length<2 || !Number.isFinite(a) || a<=0){ alert("Enter valid title and amount."); return; }
-        items.unshift({
-          id: Date.now().toString(36)+Math.random().toString(36).slice(2,6),
-          title:t,
-          amount:a,
-          type:type.value,
-          category:category.value,
-          date: entryDate.value || new Date().toISOString().slice(0, 10)
-        });
-        title.value=""; amount.value=""; type.value="expense"; category.value="General";
-        save(); render();
-      });
-
-      rows.addEventListener("click",(e)=>{ const b=e.target; if(!(b instanceof HTMLButtonElement)) return; const id=b.dataset.id; items=items.filter(i=>i.id!==id); save(); render(); });
-      search.addEventListener("input", render);
-      filterType.addEventListener("change", render);
-
-      exportBtn.addEventListener("click", () => {
-        const header = "title,category,type,date,amount";
-        const lines = items.map((i) => [i.title, i.category, i.type, i.date, i.amount.toFixed(2)].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
-        const csv = [header].concat(lines).join("\n");
-        const blob = new Blob([csv], { type: "text/csv" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "expense-tracker-krishiv-pb.csv";
-        a.click();
-        URL.revokeObjectURL(a.href);
-      });
-
-      load(); render();
-    })();
-  </script>
-
-  <script src="app-universe-shell.js" defer></script>
+  $("etDate").value=new Date().toISOString().slice(0,10);
+  load();render();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-

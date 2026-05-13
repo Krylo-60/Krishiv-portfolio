@@ -1,369 +1,236 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Study Planner App</title>
-  <style>
-    :root {
-      --bg: #061425;
-      --panel: #0e2239;
-      --panel-2: #123052;
-      --line: #2f5277;
-      --text: #f1f7ff;
-      --muted: #a9c4e6;
-      --ok: #47d3a5;
-      --warn: #ffd166;
-      --danger: #ff6b6b;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: var(--text);
-      background: linear-gradient(165deg, #04101d, #0d2440 48%, #0f3055);
-      min-height: 100vh;
-    }
-    .wrap { width: min(980px, 94%); margin: 24px auto; }
-    .card {
-      background: linear-gradient(160deg, rgba(18,48,82,.95), rgba(10,28,49,.95));
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 20px 46px rgba(0,0,0,.28);
-    }
-    h1, h2 { margin: 0 0 10px; }
-    p { color: var(--muted); }
-    .grid { display: grid; gap: 12px; grid-template-columns: 1.1fr .9fr; }
-    .field { margin-bottom: 10px; }
-    label { display: block; font-size: .9rem; color: var(--muted); margin-bottom: 6px; }
-    input, select, textarea, button {
-      width: 100%; border-radius: 10px; border: 1px solid var(--line);
-      background: var(--bg); color: var(--text); padding: 10px; font: inherit;
-    }
-    textarea { min-height: 74px; resize: vertical; }
-    .btn { cursor: pointer; font-weight: 700; }
-    .btn.primary { background: linear-gradient(135deg, #5ce1e6, #47d3a5); color: #032033; border: none; }
-    .btn.row { width: auto; padding: 8px 10px; }
-    .row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .task {
-      border: 1px solid var(--line); border-radius: 12px; padding: 10px;
-      background: rgba(5,20,36,.75); margin-bottom: 8px;
-    }
-    .task-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
-    .task .meta { color: var(--muted); font-size: .87rem; margin-top: 4px; }
-    .task.done { border-color: rgba(71,211,165,.6); opacity: .9; }
-    .pill { font-size: .78rem; border-radius: 999px; padding: 3px 8px; border: 1px solid var(--line); }
-    .priority-high { color: #ffd9d9; border-color: rgba(255,107,107,.5); }
-    .priority-med { color: #fff0c2; border-color: rgba(255,209,102,.5); }
-    .priority-low { color: #c8ffeb; border-color: rgba(71,211,165,.5); }
-    .stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin-top: 8px; }
-    .stat { padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: rgba(5,20,36,.75); }
-    .empty { color: var(--muted); border: 1px dashed var(--line); border-radius: 12px; padding: 14px; text-align: center; }
-    a { color: #93d4ff; }
-    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } .stats { grid-template-columns: 1fr; } }
-  </style>
-
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Planner Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#061425;--line:#2f5277;--text:#f1f7ff;--muted:#a9c4e6;--ok:#47d3a5;--warn:#ffd166;--danger:#ff6b6b;--acc:#5ce1e6;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(165deg,#04101d,#0d2440 48%,#0f3055);min-height:100vh;}
+    .wrap{width:min(1020px,94%);margin:24px auto;}
+    .card{background:linear-gradient(160deg,rgba(18,48,82,.95),rgba(10,28,49,.95));border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 20px 46px rgba(0,0,0,.28);margin-bottom:14px;}
+    h1,h2{margin:0 0 10px;}p{color:var(--muted);margin:0 0 8px;}
+    .grid2{display:grid;gap:14px;grid-template-columns:1.2fr .8fr;}
+    .field{margin-bottom:10px;}label{display:block;font-size:.88rem;color:var(--muted);margin-bottom:5px;}
+    input,select,textarea,button{width:100%;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);padding:10px;font:inherit;}
+    textarea{min-height:70px;resize:vertical;}.btn{cursor:pointer;font-weight:700;transition:all .2s;}
+    .btn.primary{background:linear-gradient(135deg,#5ce1e6,#47d3a5);color:#032033;border:none;}
+    .btn.sm{width:auto;padding:6px 11px;font-size:.85rem;}.row{display:flex;gap:8px;flex-wrap:wrap;}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+    .stat{padding:10px;border-radius:10px;border:1px solid var(--line);background:rgba(5,20,36,.75);text-align:center;}
+    .stat strong{display:block;font-size:1.4rem;font-family:"Orbitron",sans-serif;}.stat span{font-size:.78rem;color:var(--muted);}
+    .streak-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.35);border-radius:999px;padding:5px 12px;font-size:.85rem;color:#ffd166;}
+    .color-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+    .color-swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s;}
+    .color-swatch.selected{border-color:#fff;transform:scale(1.2);}
+    .subject-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0;}
+    .task{border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(5,20,36,.75);margin-bottom:9px;transition:border-color .2s;}
+    .task.done{opacity:.7;border-color:rgba(71,211,165,.5);}
+    .task.overdue:not(.done){border-color:rgba(255,107,107,.55);}
+    .task-top{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;}
+    .task-title{display:flex;align-items:center;gap:8px;font-weight:600;}
+    .task .meta{color:var(--muted);font-size:.84rem;margin-top:4px;}
+    .pill{font-size:.74rem;border-radius:999px;padding:3px 9px;border:1px solid var(--line);}
+    .priority-high{color:#ffd9d9;border-color:rgba(255,107,107,.5);}
+    .priority-med{color:#fff0c2;border-color:rgba(255,209,102,.5);}
+    .priority-low{color:#c8ffeb;border-color:rgba(71,211,165,.5);}
+    .overdue-tag{font-size:.72rem;background:rgba(255,107,107,.18);color:#ff6b6b;border-radius:999px;padding:2px 8px;border:1px solid rgba(255,107,107,.35);}
+    .prog-bar{height:5px;border-radius:999px;background:rgba(255,255,255,.08);margin-top:4px;}
+    .prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#5ce1e6,#47d3a5);transition:width .3s;}
+    .prog-labels{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);}
+    .filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;}
+    .filter-row input,.filter-row select{flex:1;min-width:130px;}
+    .empty{color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center;}
+    a{color:#93d4ff;}
+    @media(max-width:760px){.grid2{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card" style="margin-bottom:12px;">
-      <h1>Study Planner App</h1>
-      <p>Plan homework, exams, and priorities. Data is saved in your browser.</p>
-      <p>Created by Krishiv PB</p>
-      <a href="index.html#projects">Back to portfolio</a>
-    </section>
-    <section class="grid">
-      <article class="card">
-        <h2>Add Study Task</h2>
-        <div class="field">
-          <label for="title">Task title</label>
-          <input id="title" maxlength="80" placeholder="Math revision chapter 4" />
+<main class="wrap">
+  <section class="card">
+    <h1>📚 Study Planner Pro</h1>
+    <p>Plan homework, exams, and priorities. All data saved in your browser.</p>
+    <div class="row" style="align-items:center;gap:14px;flex-wrap:wrap;">
+      <a href="index.html#projects">← Back to portfolio</a>
+      <div class="streak-badge" id="streakBadge">🔥 0-day streak</div>
+    </div>
+  </section>
+  <section class="grid2">
+    <article class="card">
+      <h2>Add Study Task</h2>
+      <div class="field"><label>Task title</label><input id="spTitle" maxlength="80" placeholder="Math revision chapter 4" /></div>
+      <div class="field">
+        <label>Subject</label><input id="spSubject" maxlength="40" placeholder="Mathematics" />
+        <div class="color-row" id="colorRow">
+          <div class="color-swatch selected" data-color="#5ce1e6" style="background:#5ce1e6;" title="Cyan"></div>
+          <div class="color-swatch" data-color="#47d3a5" style="background:#47d3a5;" title="Green"></div>
+          <div class="color-swatch" data-color="#ffd166" style="background:#ffd166;" title="Yellow"></div>
+          <div class="color-swatch" data-color="#ff9a3c" style="background:#ff9a3c;" title="Orange"></div>
+          <div class="color-swatch" data-color="#ff6b6b" style="background:#ff6b6b;" title="Red"></div>
+          <div class="color-swatch" data-color="#b57ff5" style="background:#b57ff5;" title="Purple"></div>
+          <div class="color-swatch" data-color="#ff79c6" style="background:#ff79c6;" title="Pink"></div>
+          <div class="color-swatch" data-color="#c0d8ff" style="background:#c0d8ff;" title="Blue"></div>
         </div>
-        <div class="field">
-          <label for="subject">Subject</label>
-          <input id="subject" maxlength="40" placeholder="Mathematics" />
-        </div>
-        <div class="row">
-          <div class="field" style="flex:1;">
-            <label for="dueDate">Due date</label>
-            <input id="dueDate" type="date" />
-          </div>
-          <div class="field" style="flex:1;">
-            <label for="priority">Priority</label>
-            <select id="priority">
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label for="notes">Notes</label>
-          <textarea id="notes" maxlength="220" placeholder="Main formulas and examples to practice"></textarea>
-        </div>
-        <button id="addBtn" class="btn primary">Add Task</button>
-      </article>
-      <article class="card">
-        <h2>Planner Stats</h2>
-        <div class="stats">
-          <div class="stat"><strong id="totalCount">0</strong><div>Total tasks</div></div>
-          <div class="stat"><strong id="openCount">0</strong><div>Open tasks</div></div>
-          <div class="stat"><strong id="doneCount">0</strong><div>Completed</div></div>
-        </div>
-      </article>
-    </section>
-    <section class="card" style="margin-top:12px;">
-      <div class="row" style="justify-content:space-between;align-items:center;">
-        <h2>Task List</h2>
-        <button id="clearDoneBtn" class="btn row">Clear Completed</button>
       </div>
-      <div class="row" style="margin-bottom:8px;">
-        <input id="taskSearch" placeholder="Search title, subject, notes..." style="max-width:320px;" />
-        <select id="taskSort" style="max-width:220px;">
-          <option value="newest">Sort: Newest</option>
-          <option value="due">Sort: Due Date</option>
-          <option value="priority">Sort: Priority</option>
-          <option value="open-first">Sort: Open First</option>
-        </select>
-        <button id="exportBtn" class="btn row" type="button">Export</button>
-        <button id="importBtn" class="btn row" type="button">Import</button>
-        <input id="importFile" type="file" accept=".json,application/json" style="display:none;" />
+      <div class="row">
+        <div class="field" style="flex:1;"><label>Due date</label><input id="spDue" type="date" /></div>
+        <div class="field" style="flex:1;"><label>Priority</label>
+          <select id="spPriority"><option value="high">🔴 High</option><option value="medium">🟡 Medium</option><option value="low">🟢 Low</option></select>
+        </div>
       </div>
-      <div id="taskList"></div>
-    </section>
-  </main>
-  <script>
-    (() => {
-      const storageKey = "krishiv_study_planner_v1";
-      const titleInput = document.getElementById("title");
-      const subjectInput = document.getElementById("subject");
-      const dueDateInput = document.getElementById("dueDate");
-      const priorityInput = document.getElementById("priority");
-      const notesInput = document.getElementById("notes");
-      const addBtn = document.getElementById("addBtn");
-      const clearDoneBtn = document.getElementById("clearDoneBtn");
-      const taskSearch = document.getElementById("taskSearch");
-      const taskSort = document.getElementById("taskSort");
-      const exportBtn = document.getElementById("exportBtn");
-      const importBtn = document.getElementById("importBtn");
-      const importFile = document.getElementById("importFile");
-      const taskList = document.getElementById("taskList");
-      const totalCount = document.getElementById("totalCount");
-      const openCount = document.getElementById("openCount");
-      const doneCount = document.getElementById("doneCount");
+      <div class="row">
+        <div class="field" style="flex:1;"><label>Est. hours</label><input id="spEst" type="number" min="0" max="24" step="0.5" placeholder="2" /></div>
+        <div class="field" style="flex:1;"><label>Hours spent</label><input id="spSpent" type="number" min="0" max="24" step="0.5" placeholder="0" /></div>
+      </div>
+      <div class="field"><label>Notes</label><textarea id="spNotes" maxlength="300" placeholder="Key formulas, links, reminders..."></textarea></div>
+      <button id="spAddBtn" class="btn primary">Add Task</button>
+    </article>
+    <article class="card">
+      <h2>Planner Stats</h2>
+      <div class="stats">
+        <div class="stat"><strong id="stTotal">0</strong><span>Total</span></div>
+        <div class="stat"><strong id="stOpen">0</strong><span>Open</span></div>
+        <div class="stat"><strong id="stDone">0</strong><span>Done</span></div>
+        <div class="stat"><strong id="stOverdue">0</strong><span>Overdue</span></div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="prog-labels"><span>Overall Progress</span><span id="overallPct">0%</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="overallBar" style="width:0%"></div></div>
+      </div>
+    </article>
+  </section>
+  <section class="card">
+    <div class="filter-row">
+      <input id="spSearch" placeholder="Search tasks..." style="max-width:240px;" />
+      <select id="spFilterSub" style="max-width:180px;"><option value="">All subjects</option></select>
+      <select id="spSort" style="max-width:190px;">
+        <option value="newest">Sort: Newest</option>
+        <option value="due">Sort: Due Date</option>
+        <option value="priority">Sort: Priority</option>
+        <option value="open-first">Sort: Open First</option>
+      </select>
+      <button id="spExport" class="btn sm">Export</button>
+      <button id="spImport" class="btn sm">Import</button>
+      <button id="spClearDone" class="btn sm">Clear Done</button>
+      <input id="spImportFile" type="file" accept=".json" style="display:none;" />
+    </div>
+    <div id="spTaskList"></div>
+  </section>
+</main>
+<script>
+(() => {
+  const SK="krishiv_sp_v3", SSK="krishiv_sp_streak_v1";
+  let tasks=[], selColor="#5ce1e6";
+  const $=id=>document.getElementById(id);
+  function load(){try{tasks=JSON.parse(localStorage.getItem(SK)||"[]");if(!Array.isArray(tasks))tasks=[];}catch{tasks=[];}}
+  function save(){localStorage.setItem(SK,JSON.stringify(tasks));}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function isOverdue(t){return t.dueDate&&!t.done&&new Date(t.dueDate+"T23:59:59")<new Date();}
+  function fmtDate(v){if(!v)return"No due date";const d=new Date(v+"T00:00:00");return isNaN(d)?v:d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});}
+  function prank(p){return p==="high"?0:p==="medium"?1:2;}
+  function updateStreak(){
+    const today=new Date().toDateString();
+    let s=JSON.parse(localStorage.getItem(SSK)||'{"count":0,"last":""}');
+    if(tasks.some(t=>t.done&&t.completedDate&&new Date(t.completedDate).toDateString()===today)&&s.last!==today){
+      s.last=today;s.count++;localStorage.setItem(SSK,JSON.stringify(s));
+    }
+    $("streakBadge").textContent=`🔥 ${s.count}-day streak`;
+  }
+  function updateSubFilter(){
+    const subs=[...new Set(tasks.map(t=>t.subject).filter(Boolean))].sort();
+    const cur=$("spFilterSub").value;
+    $("spFilterSub").innerHTML='<option value="">All subjects</option>'+subs.map(s=>`<option>${esc(s)}</option>`).join("");
+    if(subs.includes(cur))$("spFilterSub").value=cur;
+  }
+  function updateStats(){
+    const total=tasks.length,done=tasks.filter(t=>t.done).length,overdue=tasks.filter(t=>isOverdue(t)).length;
+    $("stTotal").textContent=total;$("stOpen").textContent=total-done;$("stDone").textContent=done;$("stOverdue").textContent=overdue;
+    const pct=total?Math.round((done/total)*100):0;
+    $("overallBar").style.width=pct+"%";$("overallPct").textContent=pct+"%";
+  }
+  function getVisible(){
+    const q=$("spSearch").value.toLowerCase().trim(),sub=$("spFilterSub").value,sort=$("spSort").value;
+    let list=[...tasks];
+    if(q)list=list.filter(t=>[t.title,t.subject,t.notes].join(" ").toLowerCase().includes(q));
+    if(sub)list=list.filter(t=>t.subject===sub);
+    if(sort==="due")list.sort((a,b)=>(a.dueDate||"9999")>(b.dueDate||"9999")?1:-1);
+    else if(sort==="priority")list.sort((a,b)=>prank(a.priority)-prank(b.priority));
+    else if(sort==="open-first")list.sort((a,b)=>Number(a.done)-Number(b.done));
+    return list;
+  }
+  function render(){
+    updateStats();updateSubFilter();updateStreak();
+    const vis=getVisible();
+    if(!vis.length){$("spTaskList").innerHTML='<div class="empty">No tasks yet. Add your first study task above.</div>';return;}
+    $("spTaskList").innerHTML=vis.map(t=>{
+      const ov=isOverdue(t);
+      const pc=t.priority==="high"?"priority-high":t.priority==="medium"?"priority-med":"priority-low";
+      const est=parseFloat(t.estTime)||0,spent=parseFloat(t.spentTime)||0;
+      const pct=est>0?Math.min(100,Math.round((spent/est)*100)):0;
+      return`<article class="task${t.done?" done":""}${ov?" overdue":""}">
+        <div class="task-top">
+          <div class="task-title">
+            <span class="subject-dot" style="background:${esc(t.subjectColor||"#5ce1e6")};"></span>
+            <strong>${esc(t.title)}</strong>
+            ${ov?'<span class="overdue-tag">OVERDUE</span>':""}
+          </div>
+          <span class="pill ${pc}">${esc(t.priority)}</span>
+        </div>
+        <div class="meta">${esc(t.subject||"General")} · Due: ${esc(fmtDate(t.dueDate))}</div>
+        ${t.notes?`<p style="font-size:.85rem;margin-top:4px;color:var(--muted);">${esc(t.notes)}</p>`:""}
+        ${est>0?`<div style="margin-top:8px;"><div class="prog-labels"><span>⏱ ${spent}h / ${est}h</span><span>${pct}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div></div>`:""}
+        <div class="row" style="margin-top:10px;">
+          <button class="btn sm" data-action="toggle" data-id="${t.id}">${t.done?"↩ Re-open":"✅ Mark Done"}</button>
+          <button class="btn sm" data-action="delete" data-id="${t.id}">🗑 Delete</button>
+        </div>
+      </article>`;
+    }).join("");
+  }
 
-      let tasks = [];
+  document.getElementById("colorRow").addEventListener("click",e=>{
+    const sw=e.target.closest(".color-swatch");if(!sw)return;
+    document.querySelectorAll(".color-swatch").forEach(el=>el.classList.remove("selected"));
+    sw.classList.add("selected");selColor=sw.dataset.color;
+  });
 
-      function load() {
-        try {
-          const raw = localStorage.getItem(storageKey);
-          tasks = raw ? JSON.parse(raw) : [];
-          if (!Array.isArray(tasks)) tasks = [];
-        } catch {
-          tasks = [];
-        }
-      }
-
-      function save() {
-        localStorage.setItem(storageKey, JSON.stringify(tasks));
-      }
-
-      function fmtDate(value) {
-        if (!value) return "No due date";
-        const d = new Date(value + "T00:00:00");
-        return isNaN(d.getTime()) ? "No due date" : d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
-      }
-
-      function updateStats() {
-        const total = tasks.length;
-        const done = tasks.filter((t) => t.done).length;
-        totalCount.textContent = String(total);
-        doneCount.textContent = String(done);
-        openCount.textContent = String(total - done);
-      }
-
-      function priorityRank(value) {
-        return value === "high" ? 0 : value === "medium" ? 1 : 2;
-      }
-
-      function getVisibleTasks() {
-        const term = String(taskSearch ? taskSearch.value : "").toLowerCase().trim();
-        const sortMode = String(taskSort ? taskSort.value : "newest");
-        let list = [...tasks];
-        if (term) {
-          list = list.filter((t) => {
-            const hay = [t.title, t.subject, t.notes].join(" ").toLowerCase();
-            return hay.includes(term);
-          });
-        }
-        if (sortMode === "due") {
-          list.sort((a, b) => {
-            const ad = a.dueDate ? new Date(a.dueDate).getTime() : Number.MAX_SAFE_INTEGER;
-            const bd = b.dueDate ? new Date(b.dueDate).getTime() : Number.MAX_SAFE_INTEGER;
-            return ad - bd;
-          });
-        } else if (sortMode === "priority") {
-          list.sort((a, b) => priorityRank(a.priority) - priorityRank(b.priority));
-        } else if (sortMode === "open-first") {
-          list.sort((a, b) => Number(a.done) - Number(b.done));
-        }
-        return list;
-      }
-
-      function render() {
-        const visible = getVisibleTasks();
-        if (!visible.length) {
-          taskList.innerHTML = '<div class="empty">No tasks yet. Add your first study task.</div>';
-          updateStats();
-          return;
-        }
-
-        taskList.innerHTML = visible.map((task) => {
-          const priorityClass = task.priority === "high" ? "priority-high" : (task.priority === "medium" ? "priority-med" : "priority-low");
-          return `
-            <article class="task ${task.done ? "done" : ""}">
-              <div class="task-top">
-                <strong>${escapeHtml(task.title)}</strong>
-                <span class="pill ${priorityClass}">${escapeHtml(task.priority)}</span>
-              </div>
-              <div class="meta">${escapeHtml(task.subject || "General")} | Due: ${escapeHtml(fmtDate(task.dueDate))}</div>
-              ${task.notes ? `<p>${escapeHtml(task.notes)}</p>` : ""}
-              <div class="row">
-                <button class="btn row" data-action="toggle" data-id="${task.id}">${task.done ? "Mark Open" : "Mark Done"}</button>
-                <button class="btn row" data-action="delete" data-id="${task.id}">Delete</button>
-              </div>
-            </article>
-          `;
-        }).join("");
-        updateStats();
-      }
-
-      function escapeHtml(text) {
-        return String(text)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
-
-      addBtn.addEventListener("click", () => {
-        const title = titleInput.value.trim();
-        const subject = subjectInput.value.trim();
-        const dueDate = dueDateInput.value;
-        const priority = priorityInput.value;
-        const notes = notesInput.value.trim();
-
-        if (title.length < 3) {
-          alert("Task title must be at least 3 characters.");
-          return;
-        }
-
-        const task = {
-          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-          title,
-          subject,
-          dueDate,
-          priority,
-          notes,
-          done: false
-        };
-
-        tasks.unshift(task);
-        save();
-        render();
-        titleInput.value = "";
-        subjectInput.value = "";
-        dueDateInput.value = "";
-        priorityInput.value = "high";
-        notesInput.value = "";
-      });
-
-      clearDoneBtn.addEventListener("click", () => {
-        tasks = tasks.filter((t) => !t.done);
-        save();
-        render();
-      });
-
-      if (taskSearch) taskSearch.addEventListener("input", render);
-      if (taskSort) taskSort.addEventListener("change", render);
-
-      exportBtn.addEventListener("click", () => {
-        const payload = JSON.stringify(tasks, null, 2);
-        const blob = new Blob([payload], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "study-planner-tasks.json";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-      });
-
-      importBtn.addEventListener("click", () => importFile.click());
-      importFile.addEventListener("change", async () => {
-        const file = importFile.files && importFile.files[0];
-        if (!file) return;
-        try {
-          const text = await file.text();
-          const parsed = JSON.parse(text);
-          if (!Array.isArray(parsed)) throw new Error("Invalid file");
-          tasks = parsed.filter((t) => t && typeof t === "object" && t.title);
-          save();
-          render();
-        } catch {
-          alert("Invalid JSON file.");
-        } finally {
-          importFile.value = "";
-        }
-      });
-
-      taskList.addEventListener("click", (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLButtonElement)) return;
-        const action = target.dataset.action;
-        const id = target.dataset.id;
-        if (!id) return;
-
-        if (action === "toggle") {
-          tasks = tasks.map((t) => t.id === id ? { ...t, done: !t.done } : t);
-        } else if (action === "delete") {
-          tasks = tasks.filter((t) => t.id !== id);
-        }
-        save();
-        render();
-      });
-
-      load();
-      render();
-    })();
-  </script>
-
-  <script src="app-universe-shell.js" defer></script>
+  $("spAddBtn").addEventListener("click",()=>{
+    const title=$("spTitle").value.trim();if(title.length<2){alert("Title too short.");return;}
+    tasks.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+      title,subject:$("spSubject").value.trim(),dueDate:$("spDue").value,
+      priority:$("spPriority").value,notes:$("spNotes").value.trim(),
+      estTime:$("spEst").value,spentTime:$("spSpent").value,
+      subjectColor:selColor,done:false});
+    save();render();
+    ["spTitle","spSubject","spNotes","spEst","spSpent"].forEach(id=>$(id).value="");
+    $("spDue").value="";$("spPriority").value="high";
+  });
+  $("spClearDone").addEventListener("click",()=>{tasks=tasks.filter(t=>!t.done);save();render();});
+  $("spSearch").addEventListener("input",render);
+  $("spFilterSub").addEventListener("change",render);
+  $("spSort").addEventListener("change",render);
+  $("spExport").addEventListener("click",()=>{
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(tasks,null,2)],{type:"application/json"}));
+    a.download="study-planner.json";a.click();URL.revokeObjectURL(a.href);
+  });
+  $("spImport").addEventListener("click",()=>$("spImportFile").click());
+  $("spImportFile").addEventListener("change",async()=>{
+    const f=$("spImportFile").files[0];if(!f)return;
+    try{const p=JSON.parse(await f.text());if(!Array.isArray(p))throw 0;tasks=p;save();render();}catch{alert("Invalid file.");}
+    $("spImportFile").value="";
+  });
+  $("spTaskList").addEventListener("click",e=>{
+    const b=e.target.closest("[data-action]");if(!b)return;
+    const{action,id}=b.dataset;
+    if(action==="toggle")tasks=tasks.map(t=>t.id===id?{...t,done:!t.done,completedDate:!t.done?Date.now():null}:t);
+    if(action==="delete")tasks=tasks.filter(t=>t.id!==id);
+    save();render();
+  });
+  load();render();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-
-

@@ -1,268 +1,231 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>JavaScript Quiz Zone</title>
-  <style>
-    :root {
-      --bg: #060f1f;
-      --panel: #10253f;
-      --line: #355a82;
-      --text: #eff6ff;
-      --muted: #afc7e7;
-      --ok: #52d6a3;
-      --bad: #ff7f7f;
-      --accent: #7cd4ff;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: var(--text);
-      background: linear-gradient(170deg, #030b16, #0a2038 48%, #13365f);
-      min-height: 100vh;
-    }
-    .wrap { width: min(900px, 94%); margin: 24px auto; }
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: linear-gradient(155deg, rgba(17,37,64,.95), rgba(10,24,43,.95));
-      box-shadow: 0 20px 42px rgba(0,0,0,.28);
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    h1, h2, p { margin: 0 0 10px; }
-    p { color: var(--muted); }
-    .progress {
-      width: 100%; height: 10px; border-radius: 999px;
-      background: rgba(4,14,26,.8); border: 1px solid var(--line); overflow: hidden;
-      margin: 10px 0 12px;
-    }
-    .progress span { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, #7cd4ff, #52d6a3); transition: width .25s ease; }
-    .option {
-      display: block; width: 100%; text-align: left; margin-bottom: 8px; cursor: pointer;
-      border: 1px solid var(--line); border-radius: 10px; background: #0a1a30; color: var(--text); padding: 10px;
-    }
-    .option:hover { border-color: #75c7f0; }
-    .option.correct { border-color: rgba(82,214,163,.8); background: rgba(20,54,47,.85); }
-    .option.wrong { border-color: rgba(255,127,127,.75); background: rgba(62,26,26,.85); }
-    .row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn {
-      border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #0a1a30; color: var(--text);
-      cursor: pointer; font-weight: 700;
-    }
-    .btn.primary { border: none; color: #042132; background: linear-gradient(135deg, var(--accent), var(--ok)); }
-    .meta { color: var(--muted); font-size: .9rem; }
-    a { color: #9ad9ff; }
-  </style>
-
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Zone Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#060f1f;--panel:#10253f;--line:#355a82;--text:#eff6ff;--muted:#afc7e7;--ok:#52d6a3;--bad:#ff7f7f;--acc:#7cd4ff;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(170deg,#030b16,#0a2038 48%,#13365f);min-height:100vh;}
+    .wrap{width:min(900px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:16px;background:linear-gradient(155deg,rgba(17,37,64,.95),rgba(10,24,43,.95));box-shadow:0 20px 42px rgba(0,0,0,.28);padding:18px;margin-bottom:12px;}
+    h1,h2,p{margin:0 0 10px;}p{color:var(--muted);}
+    .btn{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#0a1a30;color:var(--text);cursor:pointer;font-weight:700;transition:all .2s;}
+    .btn.primary{border:none;color:#042132;background:linear-gradient(135deg,var(--acc),var(--ok));}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .btn.sm{width:auto;padding:7px 12px;font-size:.85rem;}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .progress{width:100%;height:10px;border-radius:999px;background:rgba(4,14,26,.8);border:1px solid var(--line);overflow:hidden;margin:10px 0 12px;}
+    .progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,#7cd4ff,#52d6a3);transition:width .3s ease;}
+    .timer-ring{position:relative;display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;}
+    .timer-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg);}
+    .timer-ring .timer-num{font-family:"Orbitron",sans-serif;font-size:1.1rem;font-weight:700;color:var(--acc);z-index:1;}
+    .option{display:block;width:100%;text-align:left;margin-bottom:8px;cursor:pointer;border:1px solid var(--line);border-radius:10px;background:#0a1a30;color:var(--text);padding:12px;transition:all .2s;}
+    .option:hover:not(:disabled){border-color:#75c7f0;background:rgba(124,212,255,.08);}
+    .option.correct{border-color:rgba(82,214,163,.8);background:rgba(20,54,47,.85);}
+    .option.wrong{border-color:rgba(255,127,127,.75);background:rgba(62,26,26,.85);}
+    .meta{color:var(--muted);font-size:.9rem;}
+    .diff-tabs{display:flex;gap:6px;margin-bottom:12px;}
+    .diff-tab{flex:1;padding:8px;border-radius:10px;border:1px solid var(--line);background:#0a1a30;color:var(--muted);cursor:pointer;text-align:center;font-weight:600;transition:all .2s;}
+    .diff-tab.active{background:rgba(124,212,255,.15);border-color:var(--acc);color:var(--acc);}
+    .history-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:10px;}
+    .hist-item{padding:8px;border-radius:10px;border:1px solid var(--line);text-align:center;background:rgba(5,15,28,.75);}
+    .hist-item strong{display:block;font-family:"Orbitron",sans-serif;font-size:1rem;}
+    .hist-item span{font-size:.75rem;color:var(--muted);}
+    .score-bar-wrap{margin-top:8px;}
+    .score-bar{height:6px;border-radius:999px;background:rgba(255,255,255,.08);margin-top:3px;}
+    .score-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#7cd4ff,#52d6a3);}
+    .explanation{background:rgba(124,212,255,.07);border:1px solid rgba(124,212,255,.2);border-radius:10px;padding:10px;margin-top:8px;font-size:.9rem;color:var(--acc);}
+    a{color:#9ad9ff;}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card">
-      <h1>JavaScript Quiz Zone</h1>
-      <p>Practice logic with instant feedback and score tracking.</p>
-      <p>Created by Krishiv PB</p>
-      <a href="index.html#projects">Back to portfolio</a>
-    </section>
+<main class="wrap">
+  <section class="card">
+    <h1>🎯 Quiz Zone Pro</h1>
+    <p>Practice JavaScript, web dev, and logic with timed questions and score history.</p>
+    <a href="index.html#projects">← Back to portfolio</a>
+  </section>
 
-    <section class="card">
-      <div class="row" style="justify-content:space-between;align-items:center;">
-        <h2 id="questionTitle">Question</h2>
-        <strong id="scoreText">Score: 0</strong>
+  <section class="card">
+    <div class="diff-tabs">
+      <div class="diff-tab active" data-diff="easy" id="diffEasy">Easy</div>
+      <div class="diff-tab" data-diff="medium" id="diffMed">Medium</div>
+      <div class="diff-tab" data-diff="hard" id="diffHard">Hard</div>
+    </div>
+    <div class="row" style="justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h2 id="qTitle">Question</h2>
+        <div class="meta" id="qMeta">Question 1 of 5</div>
       </div>
-      <div class="meta" id="questionMeta">Question 1</div>
-      <div class="meta">Time left: <strong id="timerText">20s</strong> | Best score: <strong id="bestScoreText">0</strong></div>
-      <div class="progress"><span id="progressBar"></span></div>
-      <p id="questionText"></p>
-      <div id="optionsNode"></div>
-      <p id="feedback" class="meta"></p>
-      <div class="row">
-        <button id="nextBtn" class="btn primary" disabled>Next</button>
-        <button id="restartBtn" class="btn">Restart Quiz</button>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="timer-ring">
+          <svg width="72" height="72" viewBox="0 0 72 72">
+            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(124,212,255,.15)" stroke-width="5"/>
+            <circle id="timerCircle" cx="36" cy="36" r="30" fill="none" stroke="#7cd4ff" stroke-width="5" stroke-dasharray="188.5" stroke-dashoffset="0" stroke-linecap="round"/>
+          </svg>
+          <span class="timer-num" id="timerNum">20</span>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Orbitron',sans-serif;font-size:1.3rem;" id="scoreDisplay">0</div>
+          <div class="meta">score</div>
+        </div>
       </div>
-    </section>
-  </main>
+    </div>
+    <div class="progress"><span id="progressBar"></span></div>
+    <p id="qText" style="font-size:1.05rem;margin-bottom:14px;color:var(--text);"></p>
+    <div id="optionsNode"></div>
+    <div id="explanation" class="explanation" style="display:none;"></div>
+    <p id="feedback" class="meta" style="margin-top:8px;"></p>
+    <div class="row" style="margin-top:12px;">
+      <button id="nextBtn" class="btn primary" disabled>Next →</button>
+      <button id="restartBtn" class="btn sm">Restart</button>
+      <button id="shuffleBtn" class="btn sm">🔀 Shuffle</button>
+    </div>
+    <div style="margin-top:10px;font-size:.85rem;" id="bestRow">Best: <strong id="bestScore">0</strong></div>
+  </section>
 
-  <script>
-    (() => {
-      const questions = [
-        { q: "Which method adds an item to the end of an array?", options: ["push()", "shift()", "pop()", "slice()"], answer: 0 },
-        { q: "What does '===' check in JavaScript?", options: ["Only value", "Only type", "Value and type", "Neither"], answer: 2 },
-        { q: "Which keyword creates a block-scoped variable?", options: ["var", "const", "both let and const", "function"], answer: 2 },
-        { q: "What does JSON.stringify do?", options: ["Parses JSON to object", "Converts object to JSON string", "Clones array", "Sorts object keys"], answer: 1 },
-        { q: "Which one is asynchronous by default in browsers?", options: ["for loop", "fetch()", "if statement", "Math.random()"], answer: 1 }
-      ];
+  <section class="card">
+    <h2>Score History</h2>
+    <div id="historyGrid" class="history-grid"></div>
+    <button id="clearHistory" class="btn sm" style="margin-top:10px;">Clear History</button>
+  </section>
+</main>
+<script>
+(() => {
+  const BEST_KEY="krishiv_quiz_best_v2", HIST_KEY="krishiv_quiz_hist_v1";
+  const CIRCUMFERENCE=188.5;
+  const QUESTION_SECONDS=20;
 
-      const questionTitle = document.getElementById("questionTitle");
-      const questionMeta = document.getElementById("questionMeta");
-      const questionText = document.getElementById("questionText");
-      const optionsNode = document.getElementById("optionsNode");
-      const feedback = document.getElementById("feedback");
-      const scoreText = document.getElementById("scoreText");
-      const progressBar = document.getElementById("progressBar");
-      const timerText = document.getElementById("timerText");
-      const bestScoreText = document.getElementById("bestScoreText");
-      const nextBtn = document.getElementById("nextBtn");
-      const restartBtn = document.getElementById("restartBtn");
-      const BEST_KEY = "krishiv_quiz_best_score_v1";
-      const QUESTION_SECONDS = 20;
+  const allQuestions={
+    easy:[
+      {q:"Which method adds to the END of an array?",o:["push()","unshift()","pop()","splice()"],a:0,exp:"push() adds one or more elements to the end of an array."},
+      {q:"What tag creates a hyperlink in HTML?",o:["<link>","<a>","<href>","<nav>"],a:1,exp:"<a href='...'> creates a clickable hyperlink."},
+      {q:"What does CSS stand for?",o:["Computer Style Sheets","Creative Style System","Cascading Style Sheets","Color Style Script"],a:2,exp:"CSS = Cascading Style Sheets — it styles HTML pages."},
+      {q:"Which of these is NOT a JavaScript data type?",o:["String","Boolean","Float","Object"],a:2,exp:"JavaScript has Number (not Float specifically), String, Boolean, Object, etc."},
+      {q:"What does 'console.log()' do?",o:["Saves data","Opens a file","Prints to browser console","Deletes a variable"],a:2,exp:"console.log() outputs values to the browser's DevTools console."},
+    ],
+    medium:[
+      {q:"What does '===' check in JavaScript?",o:["Only value","Only type","Value AND type","Neither"],a:2,exp:"=== is strict equality — it checks both value and type without coercion."},
+      {q:"Which keyword creates a block-scoped variable?",o:["var","function","let","global"],a:2,exp:"let (and const) are block-scoped, unlike var which is function-scoped."},
+      {q:"What does JSON.stringify() do?",o:["Parses JSON","Converts object to JSON string","Clones array","Sorts keys"],a:1,exp:"JSON.stringify() serialises a JavaScript object/array into a JSON string."},
+      {q:"Which CSS property controls flex item direction?",o:["flex-wrap","flex-direction","align-items","justify-self"],a:1,exp:"flex-direction sets whether items go row or column in a flex container."},
+      {q:"What is the output of typeof null?",o:['"null"','"undefined"','"object"','"boolean"'],a:2,exp:"typeof null === 'object' — this is a famous JavaScript bug that was kept for compatibility."},
+    ],
+    hard:[
+      {q:"Which one is asynchronous by default in browsers?",o:["for loop","fetch()","if statement","Math.random()"],a:1,exp:"fetch() returns a Promise and is asynchronous — it doesn't block the call stack."},
+      {q:"What does the 'event loop' do in JS?",o:["Runs CSS animations","Executes synchronous code","Processes queued async callbacks","Handles HTTP requests"],a:2,exp:"The event loop picks callbacks from the task queue and runs them when the call stack is empty."},
+      {q:"What is a closure in JavaScript?",o:["A loop that stops","A function accessing its outer scope variables","A CSS animation","An array method"],a:1,exp:"A closure is a function that retains access to variables from its enclosing scope even after that scope has finished."},
+      {q:"What does 'Array.prototype.reduce()' return?",o:["Always an array","Always a number","A single accumulated value","A boolean"],a:2,exp:"reduce() accumulates array values into a single result of any type — number, object, string, etc."},
+      {q:"Which HTTP method is idempotent but NOT safe?",o:["GET","DELETE","POST","PATCH"],a:1,exp:"DELETE is idempotent (same result if called multiple times) but not safe because it modifies server state."},
+    ]
+  };
 
-      let index = 0;
-      let score = 0;
-      let locked = false;
-      let remaining = QUESTION_SECONDS;
-      let timer = null;
-      let best = Number(localStorage.getItem(BEST_KEY) || "0") || 0;
-      bestScoreText.textContent = String(best);
+  let difficulty="easy", questions=[], index=0, score=0, locked=false, timer=null, remaining=QUESTION_SECONDS, shuffled=false;
+  let best=Number(localStorage.getItem(BEST_KEY)||0)||0;
+  let history=JSON.parse(localStorage.getItem(HIST_KEY)||"[]")||[];
 
-      function stopTimer() {
-        if (timer) {
-          clearInterval(timer);
-          timer = null;
-        }
-      }
+  const $=id=>document.getElementById(id);
 
-      function startTimer() {
-        stopTimer();
-        remaining = QUESTION_SECONDS;
-        timerText.textContent = remaining + "s";
-        timer = setInterval(() => {
-          remaining -= 1;
-          timerText.textContent = Math.max(0, remaining) + "s";
-          if (remaining <= 0) {
-            stopTimer();
-            if (!locked) {
-              locked = true;
-              const current = questions[index];
-              const optionButtons = Array.from(optionsNode.querySelectorAll(".option"));
-              optionButtons.forEach((btn) => btn.disabled = true);
-              const rightBtn = optionButtons[current.answer];
-              if (rightBtn) rightBtn.classList.add("correct");
-              feedback.textContent = "Time up. The correct answer is highlighted.";
-              feedback.style.color = "#ff7f7f";
-              nextBtn.disabled = false;
-            }
-          }
-        }, 1000);
-      }
+  function setDiff(d){
+    difficulty=d;
+    document.querySelectorAll(".diff-tab").forEach(t=>t.classList.toggle("active",t.dataset.diff===d));
+    resetQuiz();
+  }
 
-      function render() {
-        const current = questions[index];
-        const total = questions.length;
-        locked = false;
-        feedback.textContent = "";
-        nextBtn.disabled = true;
-        questionTitle.textContent = "Question " + (index + 1);
-        questionMeta.textContent = "Question " + (index + 1) + " of " + total;
-        questionText.textContent = current.q;
-        scoreText.textContent = "Score: " + score;
-        progressBar.style.width = ((index / total) * 100).toFixed(1) + "%";
+  function resetQuiz(){
+    const pool=[...allQuestions[difficulty]];
+    questions=shuffled?pool.sort(()=>Math.random()-.5):pool;
+    index=0;score=0;locked=false;
+    $("scoreDisplay").textContent="0";
+    $("bestScore").textContent=String(best);
+    renderQ();
+  }
 
-        optionsNode.innerHTML = current.options.map((opt, optIndex) => {
-          return '<button class="option" type="button" data-index="' + optIndex + '">' + escapeHtml(opt) + "</button>";
-        }).join("");
-        startTimer();
-      }
+  function stopTimer(){if(timer){clearInterval(timer);timer=null;}}
+  function startTimer(){
+    stopTimer();remaining=QUESTION_SECONDS;
+    updateTimerUI();
+    timer=setInterval(()=>{
+      remaining--;updateTimerUI();
+      if(remaining<=0){stopTimer();if(!locked)timeOut();}
+    },1000);
+  }
+  function updateTimerUI(){
+    $("timerNum").textContent=Math.max(0,remaining);
+    const pct=remaining/QUESTION_SECONDS;
+    $("timerCircle").style.strokeDashoffset=CIRCUMFERENCE*(1-pct);
+    $("timerCircle").style.stroke=remaining<=5?"#ff7f7f":remaining<=10?"#ffd166":"#7cd4ff";
+  }
+  function timeOut(){
+    locked=true;
+    const opts=document.querySelectorAll(".option");
+    opts.forEach(b=>b.disabled=true);
+    opts[questions[index].a].classList.add("correct");
+    $("feedback").textContent="⏱ Time's up!";$("feedback").style.color="#ff7f7f";
+    showExplanation();$("nextBtn").disabled=false;
+  }
 
-      function escapeHtml(text) {
-        return String(text)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
+  function showExplanation(){
+    const exp=$("explanation");
+    exp.textContent="💡 "+questions[index].exp;exp.style.display="block";
+  }
 
-      function finish() {
-        stopTimer();
-        progressBar.style.width = "100%";
-        questionTitle.textContent = "Quiz Completed";
-        questionMeta.textContent = "Final result";
-        questionText.textContent = "Great effort. You scored " + score + " out of " + questions.length + ".";
-        optionsNode.innerHTML = "";
-        nextBtn.disabled = true;
-        feedback.textContent = "Press Restart Quiz to play again.";
-        if (score > best) {
-          best = score;
-          localStorage.setItem(BEST_KEY, String(best));
-          bestScoreText.textContent = String(best);
-          feedback.textContent += " New best score!";
-        }
-      }
+  function renderQ(){
+    const q=questions[index],total=questions.length;
+    locked=false;$("feedback").textContent="";$("nextBtn").disabled=true;$("explanation").style.display="none";
+    $("qTitle").textContent="Question "+(index+1);
+    $("qMeta").textContent=`Question ${index+1} of ${total} · ${difficulty.charAt(0).toUpperCase()+difficulty.slice(1)}`;
+    $("qText").textContent=q.q;
+    $("progressBar").style.width=((index/total)*100).toFixed(1)+"%";
+    $("optionsNode").innerHTML=q.o.map((opt,i)=>`<button class="option" type="button" data-index="${i}">${esc(opt)}</button>`).join("");
+    startTimer();
+  }
 
-      optionsNode.addEventListener("click", (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLButtonElement)) return;
-        if (locked) return;
-        stopTimer();
-        locked = true;
+  function finish(){
+    stopTimer();
+    $("progressBar").style.width="100%";
+    $("qTitle").textContent="Quiz Complete!";
+    $("qText").textContent=`You scored ${score} out of ${questions.length}. ${score===questions.length?"Perfect! 🎉":score>=questions.length/2?"Good job!":"Keep practising!"}`;
+    $("optionsNode").innerHTML="";$("nextBtn").disabled=true;$("explanation").style.display="none";
+    if(score>best){best=score;localStorage.setItem(BEST_KEY,String(best));}
+    history.unshift({score,total:questions.length,diff:difficulty,date:new Date().toLocaleDateString("en-IN")});
+    if(history.length>10)history=history.slice(0,10);
+    localStorage.setItem(HIST_KEY,JSON.stringify(history));
+    $("bestScore").textContent=String(best);
+    renderHistory();
+  }
 
-        const selected = Number(target.dataset.index);
-        const current = questions[index];
-        const optionButtons = Array.from(optionsNode.querySelectorAll(".option"));
-        optionButtons.forEach((btn) => btn.disabled = true);
+  function renderHistory(){
+    const grid=$("historyGrid");
+    if(!history.length){grid.innerHTML='<p class="meta">No history yet. Complete a quiz to see results.</p>';return;}
+    grid.innerHTML=history.map(h=>`<div class="hist-item"><strong>${h.score}/${h.total}</strong><span>${h.diff}</span><span>${h.date}</span></div>`).join("");
+  }
 
-        if (selected === current.answer) {
-          score += 1;
-          target.classList.add("correct");
-          feedback.textContent = "Correct answer.";
-          feedback.style.color = "#52d6a3";
-        } else {
-          target.classList.add("wrong");
-          const rightBtn = optionButtons[current.answer];
-          if (rightBtn) rightBtn.classList.add("correct");
-          feedback.textContent = "Wrong answer. The correct choice is highlighted.";
-          feedback.style.color = "#ff7f7f";
-        }
-        scoreText.textContent = "Score: " + score;
-        nextBtn.disabled = false;
-      });
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
-      nextBtn.addEventListener("click", () => {
-        if (index >= questions.length - 1) {
-          finish();
-          return;
-        }
-        index += 1;
-        render();
-      });
+  $("optionsNode").addEventListener("click",e=>{
+    const t=e.target.closest(".option");if(!t||locked)return;
+    stopTimer();locked=true;
+    const sel=Number(t.dataset.index),q=questions[index];
+    document.querySelectorAll(".option").forEach(b=>b.disabled=true);
+    if(sel===q.a){score++;$("scoreDisplay").textContent=String(score);t.classList.add("correct");$("feedback").textContent="✅ Correct!";$("feedback").style.color="#52d6a3";}
+    else{t.classList.add("wrong");document.querySelectorAll(".option")[q.a].classList.add("correct");$("feedback").textContent="❌ Wrong answer.";$("feedback").style.color="#ff7f7f";}
+    showExplanation();$("nextBtn").disabled=false;
+  });
 
-      restartBtn.addEventListener("click", () => {
-        stopTimer();
-        index = 0;
-        score = 0;
-        render();
-      });
+  $("nextBtn").addEventListener("click",()=>{if(index>=questions.length-1){finish();}else{index++;renderQ();}});
+  $("restartBtn").addEventListener("click",resetQuiz);
+  $("shuffleBtn").addEventListener("click",()=>{shuffled=!shuffled;$("shuffleBtn").textContent=shuffled?"🔀 Shuffling":"🔀 Shuffle";resetQuiz();});
+  $("clearHistory").addEventListener("click",()=>{history=[];localStorage.setItem(HIST_KEY,"[]");renderHistory();});
+  document.querySelectorAll(".diff-tab").forEach(t=>t.addEventListener("click",()=>setDiff(t.dataset.diff)));
 
-      render();
-    })();
-  </script>
-
-  <script src="app-universe-shell.js" defer></script>
+  resetQuiz();renderHistory();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-
-

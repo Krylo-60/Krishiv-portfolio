@@ -1,6 +1,6 @@
 (() => {
   const path = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
-  const BLOCKED_PATHS = new Set(["index.html", "games.html", "admin.private.html"]);
+  const BLOCKED_PATHS = new Set(["admin.private.html"]);
   if (BLOCKED_PATHS.has(path)) return;
 
   const safeGet = (key, fallback = "") => {
@@ -94,6 +94,12 @@
   installImageGuard();
 
   const APPS = [
+    { name: "Home", href: "index.html", tag: "Navigation", tier: "featured" },
+    { name: "All Links", href: "all-links.html", tag: "Navigation" },
+    { name: "Release Notes", href: "release-notes.html", tag: "Navigation" },
+    { name: "Contact", href: "contact.html", tag: "Navigation" },
+    { name: "Projects", href: "projects.html", tag: "Navigation" },
+    { name: "Games Hub", href: "games.html", tag: "Navigation" },
     { name: "Study Planner", href: "study-planner.html", tag: "Productivity", tier: "featured" },
     { name: "Quiz Zone", href: "quiz-zone.html", tag: "Learning" },
     { name: "Review App", href: "review-app.html", tag: "Feedback", tier: "featured" },
@@ -128,6 +134,9 @@
     { name: "Color Switch Rush", href: "color-switch-rush.html", tag: "Gaming" },
     { name: "Projects", href: "projects.html", tag: "Navigation" },
     { name: "Contact", href: "contact.html", tag: "Navigation" },
+    { name: "Password Lab", href: "password-lab.html", tag: "Security" },
+    { name: "BMI Health", href: "bmi-health.html", tag: "Health" },
+    { name: "Random Picker", href: "random-picker.html", tag: "Utility" },
     { name: "All Links Directory", href: "all-links.html", tag: "Navigation", tier: "featured" },
     { name: "Release Notes", href: "release-notes.html", tag: "Updates", tier: "featured" },
     { name: "Master Nexus", href: "krylo-blox-master-nexus.html", tag: "Core", tier: "featured" },
@@ -156,7 +165,25 @@
     { name: "Screenshot Annotator", href: "screenshot-annotator.html", tag: "App" }
   ];
 
+  const bonusApps = Array.isArray(window.KRISHIV_BONUS_APPS) ? window.KRISHIV_BONUS_APPS : [];
+  bonusApps.forEach((item) => {
+    const href = String((item && item.href) || "").trim();
+    if (!href || APPS.some((existing) => existing.href === href)) return;
+    APPS.push({
+      name: item.name || href,
+      href,
+      tag: item.tag || "App",
+      tier: item.tier || "live"
+    });
+  });
+
   const APP_ICONS = {
+    "index.html": "logo.svg",
+    "all-links.html": "logo.svg",
+    "release-notes.html": "logo.svg",
+    "contact.html": "app-icon-contact-page.svg",
+    "projects.html": "app-icon-projects-page.svg",
+    "games.html": "app-icon-games-hub.svg",
     "study-planner.html": "app-icon-study-planner.svg",
     "quiz-zone.html": "app-icon-quiz-zone.svg",
     "review-app.html": "app-icon-review-app.svg",
@@ -191,6 +218,9 @@
     "color-switch-rush.html": "app-icon-color-switch-rush.svg",
     "projects.html": "app-icon-projects-page.svg",
     "contact.html": "app-icon-contact-page.svg",
+    "password-lab.html": "app-icon-password-lab.svg",
+    "bmi-health.html": "app-icon-bmi-health.svg",
+    "random-picker.html": "app-icon-random-picker.svg",
     "all-links.html": "app-icon-all-links.svg",
     "release-notes.html": "logo.svg",
     "krylo-blox-master-nexus.html": "core-icon-master-nexus.svg",
@@ -219,6 +249,14 @@
     "screenshot-annotator.html": "app-icon-screenshot-annotator.svg"
   };
 
+  bonusApps.forEach((item) => {
+    const href = String((item && item.href) || "").trim();
+    const icon = String((item && item.icon) || "").trim();
+    if (href && icon && !APP_ICONS[href]) {
+      APP_ICONS[href] = icon;
+    }
+  });
+
   const THEME_KEY = "krishiv_theme_mode_v1";
   const FAV_KEY = "krishiv_app_favorites_v1";
   const RECENT_KEY = "krishiv_app_recents_v1";
@@ -241,6 +279,13 @@
   }
 
   let activeTheme = safeGet(THEME_KEY, "default");
+  window.addEventListener("storage", (event) => {
+    if (event.key === THEME_KEY && event.newValue) {
+      activeTheme = event.newValue;
+      applyTheme(activeTheme);
+      refreshButtons();
+    }
+  });
   let favorites = [];
   let recents = [];
   let stats = {};
@@ -282,157 +327,6 @@
   document.documentElement.setAttribute("data-mode", "dark");
   document.body.classList.add("app-theme-root");
 
-  function installPowerPanel() {
-    const mainHost = document.querySelector("main");
-    if (!mainHost || path === "all-links.html" || path === "release-notes.html") return;
-
-    const pageTitle = document.title.replace(/\s*\|\s*Krishiv PB.*$/, "").trim();
-    const noteKey = APP_NOTE_PREFIX + path;
-    const savedNote = String(safeGet(noteKey, ""));
-    const launchCount = Number(stats[path] || 0);
-    const isFav = favorites.includes(path);
-    const profile = appProfiles[path] || { stage: "Building", progress: 35, lastOpened: "" };
-    const daily = appDaily[path] || { streak: 1, totalDays: 1, lastDate: "" };
-
-    const panel = document.createElement("section");
-    panel.className = "app-power-panel";
-    panel.innerHTML = `
-      <div class="app-power-head">
-        <div>
-          <p class="app-power-kicker">App Power Panel</p>
-          <h2>${pageTitle}</h2>
-        </div>
-        <div class="app-power-pills">
-          <span class="app-power-pill">${launchCount} launches</span>
-          <span class="app-power-pill" id="appPowerStagePill">${profile.stage}</span>
-          <span class="app-power-pill" id="appPowerProgressPill">${profile.progress}% ready</span>
-          <span class="app-power-pill">${daily.streak} day streak</span>
-          <span class="app-power-pill">${isFav ? "favorite app" : "tap fav in apps dock"}</span>
-        </div>
-      </div>
-      <div class="app-power-grid">
-        <article class="app-power-card">
-          <strong>Quick note</strong>
-          <textarea id="appPowerNote" placeholder="Write a quick idea or reminder for this app...">${savedNote}</textarea>
-          <div class="app-power-actions">
-            <button type="button" class="app-shell-btn" id="appPowerSaveBtn">Save Note</button>
-            <button type="button" class="app-shell-btn" id="appPowerClearBtn">Clear</button>
-          </div>
-        </article>
-        <article class="app-power-card">
-          <strong>Build mission</strong>
-          <label class="app-power-label" for="appPowerStage">Current stage</label>
-          <select id="appPowerStage">
-            <option value="Idea"${profile.stage === "Idea" ? " selected" : ""}>Idea</option>
-            <option value="Building"${profile.stage === "Building" ? " selected" : ""}>Building</option>
-            <option value="Testing"${profile.stage === "Testing" ? " selected" : ""}>Testing</option>
-            <option value="Live"${profile.stage === "Live" ? " selected" : ""}>Live</option>
-          </select>
-          <label class="app-power-label" for="appPowerProgress">Progress <span id="appPowerProgressValue">${profile.progress}%</span></label>
-          <input id="appPowerProgress" type="range" min="0" max="100" step="5" value="${profile.progress}" />
-          <p class="app-power-copy">Opened on ${daily.totalDays} different day${daily.totalDays === 1 ? "" : "s"}. Last open: ${profile.lastOpened ? new Date(profile.lastOpened).toLocaleString() : "today"}.</p>
-          <div class="app-power-actions">
-            <button type="button" class="app-shell-btn" id="appPowerMissionBtn">Save Mission</button>
-            <button type="button" class="app-shell-btn" id="appPowerFavBtn">${isFav ? "Unfavorite" : "Favorite"}</button>
-          </div>
-        </article>
-        <article class="app-power-card">
-          <strong>Fast actions</strong>
-          <div class="app-power-actions">
-            <button type="button" class="app-shell-btn" id="appPowerCopyBtn">Copy Link</button>
-            <button type="button" class="app-shell-btn" id="appPowerReleaseBtn">Release Notes</button>
-            <button type="button" class="app-shell-btn" id="appPowerLatestBtn">Continue Latest</button>
-            <button type="button" class="app-shell-btn" id="appPowerRandomBtn">Random App</button>
-          </div>
-          <p class="app-power-copy">This shared panel upgrades a huge part of the app galaxy at once, so even smaller builds feel more alive and more useful.</p>
-        </article>
-      </div>
-    `;
-
-    if (mainHost.firstElementChild) {
-      mainHost.insertBefore(panel, mainHost.firstElementChild.nextSibling || null);
-    } else {
-      mainHost.appendChild(panel);
-    }
-
-    const noteInput = panel.querySelector("#appPowerNote");
-    const saveBtn = panel.querySelector("#appPowerSaveBtn");
-    const clearBtn = panel.querySelector("#appPowerClearBtn");
-    const stageInput = panel.querySelector("#appPowerStage");
-    const progressInput = panel.querySelector("#appPowerProgress");
-    const progressValue = panel.querySelector("#appPowerProgressValue");
-    const missionBtn = panel.querySelector("#appPowerMissionBtn");
-    const favBtn = panel.querySelector("#appPowerFavBtn");
-    const copyBtn = panel.querySelector("#appPowerCopyBtn");
-    const releaseBtn = panel.querySelector("#appPowerReleaseBtn");
-    const latestBtn = panel.querySelector("#appPowerLatestBtn");
-    const randomBtn = panel.querySelector("#appPowerRandomBtn");
-    const stagePill = panel.querySelector("#appPowerStagePill");
-    const progressPill = panel.querySelector("#appPowerProgressPill");
-
-    saveBtn?.addEventListener("click", () => {
-      safeSet(noteKey, String(noteInput?.value || ""));
-      if (window.safeNotify) window.safeNotify("Saved app note.");
-    });
-
-    clearBtn?.addEventListener("click", () => {
-      if (noteInput) noteInput.value = "";
-      safeSet(noteKey, "");
-      if (window.safeNotify) window.safeNotify("Cleared app note.");
-    });
-
-    copyBtn?.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        if (window.safeNotify) window.safeNotify("Copied app link.");
-      } catch {
-        window.prompt("Copy this app link:", window.location.href);
-      }
-    });
-
-    releaseBtn?.addEventListener("click", () => {
-      window.location.href = "release-notes.html";
-    });
-
-    progressInput?.addEventListener("input", () => {
-      if (progressValue) progressValue.textContent = String(progressInput.value) + "%";
-    });
-
-    missionBtn?.addEventListener("click", () => {
-      appProfiles[path] = {
-        stage: String(stageInput?.value || "Building"),
-        progress: Number(progressInput?.value || 0),
-        lastOpened: (appProfiles[path] && appProfiles[path].lastOpened) || new Date().toISOString()
-      };
-      safeSet(PROFILE_KEY, JSON.stringify(appProfiles));
-      if (stagePill) stagePill.textContent = appProfiles[path].stage;
-      if (progressPill) progressPill.textContent = appProfiles[path].progress + "% ready";
-      if (window.safeNotify) window.safeNotify("Saved app mission.");
-    });
-
-    favBtn?.addEventListener("click", () => {
-      if (favorites.includes(path)) {
-        favorites = favorites.filter((item) => item !== path);
-      } else {
-        favorites.unshift(path);
-      }
-      saveFavs();
-      favBtn.textContent = favorites.includes(path) ? "Unfavorite" : "Favorite";
-      if (window.safeNotify) window.safeNotify(favorites.includes(path) ? "Added to favorites." : "Removed from favorites.");
-    });
-
-    latestBtn?.addEventListener("click", () => {
-      const nextRecent = recents.find((href) => href && href !== path);
-      window.location.href = nextRecent || "index.html";
-    });
-
-    randomBtn?.addEventListener("click", () => {
-      const choices = APPS.filter((item) => item.href !== path);
-      if (!choices.length) return;
-      const pick = choices[Math.floor(Math.random() * choices.length)];
-      window.location.href = pick.href;
-    });
-  }
 
   function getDayStamp(date = new Date()) {
     return date.toLocaleDateString("en-CA");
@@ -472,11 +366,11 @@
     postUsage("app_open", path);
   }
   trackCurrentAppLaunch();
-  installPowerPanel();
 
   const dock = document.createElement("div");
   dock.className = "app-shell-dock";
   dock.innerHTML = `
+    <button type="button" class="app-shell-btn" id="shellTopBtn">Top</button>
     <button type="button" class="app-shell-btn" id="shellHomeBtn">Home</button>
     <button type="button" class="app-shell-btn" id="shellAppsBtn">Apps</button>
     <button type="button" class="app-shell-btn" id="shellThemeBtn">Theme</button>
@@ -485,14 +379,16 @@
 
   const overlay = document.createElement("div");
   overlay.className = "app-shell-overlay";
+  overlay.setAttribute("aria-hidden", "true");
+  overlay.tabIndex = -1;
   overlay.innerHTML = `
     <section class="app-shell-panel" role="dialog" aria-modal="true" aria-label="Apps Galaxy">
       <header class="app-shell-head">
         <div class="app-shell-head-copy">
           <h2 class="app-shell-title">Apps Galaxy</h2>
-          <p class="app-shell-subtitle">Your fastest route to favorites, AI tools, and live builds.</p>
+          <p class="app-shell-subtitle">Your fastest route to favorites, AI tools, live builds, and every site page.</p>
         </div>
-        <input class="app-shell-search" id="shellSearchInput" type="search" placeholder="Search app..." />
+        <input class="app-shell-search" id="shellSearchInput" type="search" placeholder="Search page, app, or link..." aria-label="Search apps and pages" />
         <select class="app-shell-search app-shell-filter" id="shellCategoryFilter">
           <option value="all">All categories</option>
         </select>
@@ -508,19 +404,52 @@
         <button type="button" class="app-shell-quick" data-action="featured">Open Random Featured</button>
         <button type="button" class="app-shell-quick" data-action="top">Open Most Used</button>
         <button type="button" class="app-shell-quick" data-action="latest">Continue Latest</button>
-        <button type="button" class="app-shell-quick" data-action="surprise">Surprise Me</button>
+        <button type="button" class="app-shell-quick" data-action="directory">Open Links Directory</button>
+        <button type="button" class="app-shell-quick" data-action="copy">Copy Page URL</button>
         <button type="button" class="app-shell-quick" data-action="ai">Open AI Zone</button>
+      </div>
+      <div class="app-shell-system-feed" id="shellSystemFeed">
+        <span class="feed-blink"></span> <span id="feedText">Initializing Krylo-Nexus Protocol...</span>
       </div>
       <div class="app-shell-grid" id="shellGrid"></div>
     </section>
   `;
 
+  const progressWrap = document.createElement("div");
+  progressWrap.className = "app-shell-progress";
+  const progressBar = document.createElement("div");
+  progressBar.className = "app-shell-progress-bar";
+  progressWrap.appendChild(progressBar);
+  document.body.appendChild(progressWrap);
+
   document.body.appendChild(dock);
   document.body.appendChild(overlay);
 
+  // Animate progress bar
+  setTimeout(() => {
+    progressBar.style.width = "40%";
+    setTimeout(() => {
+      progressBar.style.width = "85%";
+      setTimeout(() => {
+        progressBar.style.width = "100%";
+        setTimeout(() => {
+          progressWrap.style.opacity = "0";
+          setTimeout(() => progressWrap.remove(), 200);
+        }, 100);
+      }, 150);
+    }, 100);
+  }, 40);
+
+  const topBtn = document.getElementById("shellTopBtn");
   const homeBtn = document.getElementById("shellHomeBtn");
   const appsBtn = document.getElementById("shellAppsBtn");
   const themeBtn = document.getElementById("shellThemeBtn");
+
+  if (topBtn) {
+    topBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
   const closeBtn = document.getElementById("shellCloseBtn");
   const grid = document.getElementById("shellGrid");
   const searchInput = document.getElementById("shellSearchInput");
@@ -575,15 +504,17 @@
   function renderCard({ item, isFav, launches }) {
     const icon = APP_ICONS[item.href] || "logo.svg";
     const tierLabel = item.tier === "featured" ? "Featured build" : item.tag;
+    const isCurrent = item.href === path;
     return `
-      <article class="app-shell-link" data-href="${item.href}">
+      <article class="app-shell-link${isCurrent ? " is-current" : ""}" data-href="${item.href}">
         <div class="app-shell-link-row">
           <a href="${item.href}" style="color:inherit;text-decoration:none;display:block;flex:1;">
             <span style="display:flex;align-items:center;gap:0.7rem;">
-              <img src="${icon}" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:10px;flex:0 0 auto;" />
+              <img src="${icon}" onerror="this.src='logo.svg'" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:10px;flex:0 0 auto;" />
               <strong>${item.name}</strong>
             </span>
             <span>${tierLabel}</span>
+            ${isCurrent ? `<span class="app-shell-current">Current page</span>` : ""}
             <span class="app-shell-meta">${item.href} | launches: ${launches}</span>
           </a>
           <button type="button" class="app-shell-fav ${isFav ? "is-on" : ""}" data-fav="${item.href}" aria-label="Toggle favorite">${isFav ? "Fav" : "+"}</button>
@@ -627,6 +558,24 @@
     launchHref(path === "aether-core-v110.html" ? "idea-lab-ai.html" : "aether-core-v110.html");
   }
 
+  function openLinksDirectory() {
+    launchHref("all-links.html");
+  }
+
+  function copyCurrentPageLink() {
+    const pageUrl = window.location.href;
+    if (!pageUrl) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(pageUrl).then(() => {
+        window.safeNotify("Copied current page URL.");
+      }).catch(() => {
+        window.safeNotify("Could not copy the URL automatically.");
+      });
+    } else {
+      window.safeNotify("Copy is not supported in this browser.");
+    }
+  }
+
   function continueLatest() {
     const nextRecent = recents.find((href) => href && href !== path);
     launchHref(nextRecent || "index.html");
@@ -644,7 +593,11 @@
     const sortMode = String(sortSelect?.value || "smart");
     const filtered = APPS.filter((item) => {
       if (category !== "all" && item.tag !== category) return false;
-      return !q || item.name.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q) || item.href.toLowerCase().includes(q);
+      const searchText = [item.name, item.tag, item.href, item.description, item.searchTags]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return !q || searchText.includes(q);
     });
     const ordered = resolveOrder(filtered);
     if (sortMode === "az") {
@@ -665,28 +618,18 @@
     const recentItems = ordered.filter(({ item }) => recentSet.has(item.href)).slice(0, 6);
     const featuredItems = ordered.filter(({ item }) => item.tier === "featured").slice(0, 8);
     const trendingItems = ordered.filter(({ launches }) => launches > 0).sort((a, b) => b.launches - a.launches).slice(0, 6);
+    const quickPageItems = ordered.filter(({ item }) => item.tag === "Navigation" || item.href === "index.html").slice(0, 8);
     const directoryItems = ordered.slice(0, 18);
     grid.innerHTML = [
       renderSection("Favorites", favoriteItems, "Star an app to pin it here."),
       renderSection("Recent Launches", recentItems, "Open a few apps and they will show up here."),
       renderSection("Featured Builds", featuredItems, "Featured builds are warming up."),
+      renderSection("Top Site Links", quickPageItems, "Browse the main pages and hub links quickly."),
       renderSection("Trending in This Browser", trendingItems, "This appears after you launch apps."),
       renderSection("Directory Snapshot", directoryItems, "Directory unavailable.")
     ].join("");
   }
 
-  function openOverlay() {
-    overlay.classList.add("is-open");
-    renderGrid("");
-    if (searchInput) {
-      searchInput.value = "";
-      searchInput.focus();
-    }
-  }
-
-  function closeOverlay() {
-    overlay.classList.remove("is-open");
-  }
 
   function refreshButtons() {
     const themeLabel = "Theme: " + applyTheme(activeTheme).label;
@@ -712,15 +655,57 @@
       const quickAction = target.closest("[data-action]");
       if (!(quickAction instanceof HTMLButtonElement)) return;
       const action = String(quickAction.dataset.action || "");
-      if (action === "featured") openRandomFeatured();
+        if (action === "featured") openRandomFeatured();
       if (action === "top") openMostUsed();
       if (action === "latest") continueLatest();
+      if (action === "directory") openLinksDirectory();
+      if (action === "copy") copyCurrentPageLink();
       if (action === "surprise") openSurprise();
       if (action === "ai") openAiZone();
     });
   }
   if (searchInput) {
-    searchInput.addEventListener("input", () => renderGrid(searchInput.value));
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      if (query === "matrix") {
+        activateMatrixMode();
+        return;
+      }
+      renderGrid(query);
+    });
+  }
+
+  function activateMatrixMode() {
+    closeOverlay();
+    if (document.getElementById("kv-matrix-canvas")) return;
+    const canvas = document.createElement("canvas");
+    canvas.id = "kv-matrix-canvas";
+    canvas.style.cssText = "position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0.6;";
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const drops = Array(Math.floor(w / 20)).fill(1);
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#0f0";
+      ctx.font = "15px monospace";
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * 20, drops[i] * 20);
+        if (drops[i] * 20 > h && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    const interval = setInterval(draw, 33);
+    setTimeout(() => {
+      clearInterval(interval);
+      canvas.style.transition = "opacity 2s ease";
+      canvas.style.opacity = "0";
+      setTimeout(() => canvas.remove(), 2000);
+    }, 10000);
   }
   categoryFilter?.addEventListener("change", () => renderGrid(searchInput ? searchInput.value : ""));
   sortSelect?.addEventListener("change", () => renderGrid(searchInput ? searchInput.value : ""));
@@ -814,6 +799,11 @@
       openOverlay();
       return;
     }
+    if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === "l") {
+      event.preventDefault();
+      openLinksDirectory();
+      return;
+    }
     if (event.key === "Escape" && overlay.classList.contains("is-open")) {
       closeOverlay();
     }
@@ -825,6 +815,106 @@
     pScript.defer = true;
     document.head.appendChild(pScript);
   }
+  const AudioEngine = (() => {
+    let ctx = null;
+    const ensureContext = () => {
+      try {
+        if (!ctx && (window.AudioContext || window.webkitAudioContext)) {
+          ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+      } catch {
+        ctx = null;
+      }
+      return ctx;
+    };
+    const play = (freq, type, duration, vol) => {
+      const context = ensureContext();
+      if (!context) return;
+      if (context.state === "suspended") context.resume();
+      const osc = context.createOscillator();
+      const gain = context.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, context.currentTime);
+      gain.gain.setValueAtTime(vol, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(context.destination);
+      osc.start();
+      osc.stop(context.currentTime + duration);
+    };
+    return {
+      click: () => play(800, "sine", 0.1, 0.05),
+      whoosh: () => play(150, "sine", 0.5, 0.05),
+      success: () => {
+        play(600, "sine", 0.1, 0.05);
+        setTimeout(() => play(900, "sine", 0.2, 0.05), 50);
+      }
+    };
+  })();
+
+  function openOverlay() {
+    AudioEngine.whoosh();
+    overlay.classList.add("is-open");
+    overlay.setAttribute("aria-hidden", "false");
+    renderGrid("");
+    if (searchInput) {
+      searchInput.value = "";
+      searchInput.focus();
+    } else {
+      overlay.focus();
+    }
+  }
+
+  function closeOverlay() {
+    AudioEngine.click();
+    overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      renderInsightStrip();
+      if (typeof installPowerPanel === "function") installPowerPanel();
+    });
+  } else {
+    renderInsightStrip();
+  }
+
+  function startFeed() {
+    const feedText = document.getElementById("feedText");
+    if (!feedText) return;
+    const messages = [
+      "Krylo-Nexus Protocol: Online",
+      "Aether Mesh Stability: 99.8%",
+      "Synchronizing Aurora Flux...",
+      "AI Reasoning Engine: Optimized",
+      "Scanning App Galaxy for updates...",
+      "Neural Node Routing: Active",
+      "Solar Flare Protection: Enabled",
+      "Neon Grid Density: Nominal",
+      "Welcome back, Commander.",
+      "Vercel Deployment: Verified",
+      "Historical Archives: Synced",
+      "Premium UI Layer: Active"
+    ];
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % messages.length;
+      feedText.style.opacity = 0;
+      setTimeout(() => {
+        feedText.textContent = messages[i];
+        feedText.style.opacity = 1;
+      }, 300);
+    }, 5000);
+  }
+  startFeed();
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target instanceof HTMLElement && target.closest("button, .app-shell-btn, .app-shell-link")) {
+      AudioEngine.click();
+    }
+  }, { passive: true });
 })();
 
 

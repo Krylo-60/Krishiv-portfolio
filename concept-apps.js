@@ -56,11 +56,17 @@
   const pinnedEl = byId("pinnedCount");
   const doneEl = byId("doneCount");
   let currentEditId = "";
+  const DRAFT_KEY = config.storageKey + "_draft_v1";
 
   const toolBar = document.createElement("div");
   toolBar.className = "concept-tools";
   toolBar.innerHTML = `
     <select id="statusFilter"></select>
+    <select id="viewFilter">
+      <option value="live">Live board</option>
+      <option value="all">All entries</option>
+      <option value="archived">Archived only</option>
+    </select>
     <select id="sortFilter">
       <option value="newest">Sort: Newest</option>
       <option value="oldest">Sort: Oldest</option>
@@ -68,6 +74,8 @@
       <option value="state">Sort: Status</option>
     </select>
     <button type="button" class="concept-btn-secondary" id="exportBtn">Export</button>
+    <button type="button" class="concept-btn-secondary" id="importBtn">Import</button>
+    <button type="button" class="concept-btn-secondary" id="restoreDraftBtn">Restore Draft</button>
     <button type="button" class="concept-btn-secondary" id="clearDoneBtn">Clear Done</button>
   `;
   const boardHead = document.querySelector(".concept-board-head");
@@ -92,6 +100,14 @@
         <strong id="lastEditStamp">none yet</strong>
         <span>last update</span>
       </article>
+      <article class="concept-upgrade-card">
+        <strong id="archivedCount">0</strong>
+        <span>archived items</span>
+      </article>
+      <article class="concept-upgrade-card">
+        <strong id="completionPercent">0%</strong>
+        <span>completion score</span>
+      </article>
     </div>
   `;
   if (hero && hero.parentNode) {
@@ -99,12 +115,17 @@
   }
 
   const statusFilter = byId("statusFilter");
+  const viewFilter = byId("viewFilter");
   const sortFilter = byId("sortFilter");
   const exportBtn = byId("exportBtn");
+  const importBtn = byId("importBtn");
+  const restoreDraftBtn = byId("restoreDraftBtn");
   const clearDoneBtn = byId("clearDoneBtn");
   const activeCountEl = byId("activeCount");
   const todayCountEl = byId("todayCount");
   const lastEditStampEl = byId("lastEditStamp");
+  const archivedCountEl = byId("archivedCount");
+  const completionPercentEl = byId("completionPercent");
 
   document.title = `${config.title} | Krishiv PB`;
   titleEl.textContent = config.title;
@@ -137,16 +158,52 @@
   } catch {
     items = [];
   }
+  items = items.map((item) => ({
+    ...item,
+    archived: Boolean(item.archived),
+    createdAt: item.createdAt || new Date().toISOString(),
+    updatedAt: item.updatedAt || item.createdAt || new Date().toISOString()
+  }));
 
   function save() {
     localStorage.setItem(config.storageKey, JSON.stringify(items));
+  }
+
+  function saveDraft() {
+    const payload = {
+      title: titleInput.value,
+      meta: metaInput.value,
+      notes: notesInput.value,
+      state: stateInput.value
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+    if (restoreDraftBtn) {
+      const hasDraft = Boolean(payload.title || payload.meta || payload.notes);
+      restoreDraftBtn.disabled = !hasDraft;
+    }
+  }
+
+  function clearDraft() {
+    localStorage.removeItem(DRAFT_KEY);
+    if (restoreDraftBtn) restoreDraftBtn.disabled = true;
+  }
+
+  function restoreDraft() {
+    try {
+      const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "{}");
+      titleInput.value = draft.title || "";
+      metaInput.value = draft.meta || "";
+      notesInput.value = draft.notes || "";
+      stateInput.value = draft.state || config.statuses[0];
+      if (window.safeNotify) window.safeNotify("Draft restored.");
+    } catch {}
   }
 
   function updateStats() {
     totalEl.textContent = String(items.length);
     pinnedEl.textContent = String(items.filter((item) => item.pinned).length);
     doneEl.textContent = String(items.filter((item) => item.done).length);
-    if (activeCountEl) activeCountEl.textContent = String(items.filter((item) => !item.done).length);
+    if (activeCountEl) activeCountEl.textContent = String(items.filter((item) => !item.done && !item.archived).length);
     if (todayCountEl) {
       const today = new Date().toISOString().slice(0, 10);
       todayCountEl.textContent = String(items.filter((item) => String(item.createdAt || "").slice(0, 10) === today).length);
@@ -158,6 +215,13 @@
         .sort()
         .pop();
       lastEditStampEl.textContent = latest ? new Date(latest).toLocaleDateString() : "none yet";
+    }
+    if (archivedCountEl) archivedCountEl.textContent = String(items.filter((item) => item.archived).length);
+    if (completionPercentEl) {
+      const liveItems = items.filter((item) => !item.archived);
+      const doneCount = liveItems.filter((item) => item.done).length;
+      const percent = liveItems.length ? Math.round((doneCount / liveItems.length) * 100) : 0;
+      completionPercentEl.textContent = `${percent}%`;
     }
   }
 
@@ -171,10 +235,13 @@
   function renderList() {
     const q = String(searchInput.value || "").trim().toLowerCase();
     const statusValue = String(statusFilter?.value || "all");
+    const viewValue = String(viewFilter?.value || "live");
     const sortValue = String(sortFilter?.value || "newest");
     let filtered = items.filter((item) => {
       const hay = `${item.title} ${item.meta} ${item.notes} ${item.state}`.toLowerCase();
       if (statusValue !== "all" && item.state !== statusValue) return false;
+      if (viewValue === "live" && item.archived) return false;
+      if (viewValue === "archived" && !item.archived) return false;
       return !q || hay.includes(q);
     });
 
@@ -203,6 +270,7 @@
             <span class="concept-mini-pill">${item.state}</span>
             ${item.pinned ? '<span class="concept-mini-pill">Pinned</span>' : ""}
             ${item.done ? '<span class="concept-mini-pill is-done">Done</span>' : ""}
+            ${item.archived ? '<span class="concept-mini-pill">Archived</span>' : ""}
           </div>
         </div>
         <p>${item.notes || "No notes added yet."}</p>
@@ -212,6 +280,7 @@
           <button type="button" data-action="duplicate">Duplicate</button>
           <button type="button" data-action="pin">${item.pinned ? "Unpin" : "Pin"}</button>
           <button type="button" data-action="done">${item.done ? "Mark active" : "Mark done"}</button>
+          <button type="button" data-action="archive">${item.archived ? "Unarchive" : "Archive"}</button>
           <button type="button" data-action="delete">Delete</button>
         </div>
       </article>
@@ -252,6 +321,7 @@
         state,
         pinned: false,
         done: false,
+        archived: false,
         createdAt: now,
         updatedAt: now
       });
@@ -260,6 +330,7 @@
     metaInput.value = "";
     notesInput.value = "";
     stateInput.value = config.statuses[0];
+    clearDraft();
     save();
     renderList();
     if (window.safeNotify) window.safeNotify(`${config.title} entry saved.`);
@@ -306,20 +377,23 @@
         ...item,
         id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`,
         title: `${item.title} copy`,
+        archived: false,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       });
     }
     if (action === "pin") item.pinned = !item.pinned;
     if (action === "done") item.done = !item.done;
+    if (action === "archive") item.archived = !item.archived;
     if (action === "delete") items = items.filter((entry) => entry.id !== id);
-    if (action === "pin" || action === "done") item.updatedAt = new Date().toISOString();
+    if (action === "pin" || action === "done" || action === "archive") item.updatedAt = new Date().toISOString();
     save();
     renderList();
   });
 
   searchInput.addEventListener("input", renderList);
   statusFilter?.addEventListener("change", renderList);
+  viewFilter?.addEventListener("change", renderList);
   sortFilter?.addEventListener("change", renderList);
   exportBtn?.addEventListener("click", () => {
     const payload = JSON.stringify(items, null, 2);
@@ -329,13 +403,45 @@
       alert(payload);
     });
   });
+  importBtn?.addEventListener("click", () => {
+    const raw = window.prompt("Paste exported JSON for this app:");
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) throw new Error("bad import");
+      items = parsed.map((item, index) => ({
+        id: item.id || `${Date.now().toString(36)}_${index}`,
+        title: String(item.title || "Imported entry"),
+        meta: String(item.meta || ""),
+        notes: String(item.notes || ""),
+        state: String(item.state || config.statuses[0]),
+        pinned: Boolean(item.pinned),
+        done: Boolean(item.done),
+        archived: Boolean(item.archived),
+        createdAt: item.createdAt || new Date().toISOString(),
+        updatedAt: item.updatedAt || item.createdAt || new Date().toISOString()
+      }));
+      save();
+      renderList();
+      if (window.safeNotify) window.safeNotify(`${config.title} imported.`);
+    } catch {
+      alert("That import was not valid JSON.");
+    }
+  });
+  restoreDraftBtn?.addEventListener("click", restoreDraft);
   clearDoneBtn?.addEventListener("click", () => {
     items = items.filter((entry) => !entry.done);
     save();
     renderList();
   });
 
+  [titleInput, metaInput, notesInput, stateInput].forEach((input) => {
+    input?.addEventListener("input", saveDraft);
+    input?.addEventListener("change", saveDraft);
+  });
+
   renderSeeds();
+  if (!localStorage.getItem(DRAFT_KEY) && restoreDraftBtn) restoreDraftBtn.disabled = true;
   renderList();
 
   if (!document.querySelector('script[src="premium-ui-injector.js"]')) {

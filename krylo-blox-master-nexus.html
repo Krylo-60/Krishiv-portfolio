@@ -19,7 +19,7 @@
         nav a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
 
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 12vw, 7rem); margin-bottom: 10px; background: linear-gradient(#fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 12vw, 7rem); margin-bottom: 10px; background: linear-gradient(#fff, var(--primary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         
         /* SUBSCRIBE BUTTON RESTORED */
         .btn-main {
@@ -252,7 +252,8 @@
     function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); pArray.forEach(p => p.draw()); requestAnimationFrame(animate); }
     animate();
 </script>
-<script src="app-universe-shell.js" defer></script>
+<script src="app-catalog.js"></script>
+  <script src="app-universe-shell.js" defer></script>
 </body>
 </html>
 

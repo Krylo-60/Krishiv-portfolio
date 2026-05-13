@@ -1,63 +1,293 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Random Picker | Krishiv PB</title>
-  <style>
-    :root{--bg:#071223;--panel:#122844;--line:#35608a;--text:#eef7ff;--muted:#abc6e6}
-    *{box-sizing:border-box} body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);color:var(--text)}
-    .wrap{width:min(760px,94%);margin:24px auto}.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:12px}
-    textarea,button{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit} textarea{min-height:120px}
-    .btn{cursor:pointer;font-weight:700;border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333}.meta{color:var(--muted)} a{color:#9edcff}
-  </style>
-
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Picker Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#071223;--line:#35608a;--text:#eef7ff;--muted:#abc6e6;--acc:#79d8ff;--good:#58d4a8;--hot:#ff94c9;--gold:#ffd166;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:radial-gradient(circle at top right,rgba(255,148,201,.1),transparent 24%),linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
+    .wrap{width:min(1060px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:18px;padding:18px;background:linear-gradient(160deg,rgba(18,40,68,.97),rgba(9,22,41,.97));margin-bottom:12px;box-shadow:0 22px 48px rgba(0,0,0,.22);}
+    h1,h2,p{margin:0 0 10px;}p{color:var(--muted);}
+    textarea,button,select,input{padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit;transition:border-color .2s;}
+    textarea:focus,input:focus,select:focus{outline:none;border-color:var(--acc);}
+    textarea{width:100%;min-height:140px;resize:vertical;}button{cursor:pointer;font-weight:700;transition:all .2s;}button:hover{opacity:.85;}
+    .btn-primary{border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn-hot{border:none;background:linear-gradient(135deg,#ff94c9,#ffd166);color:#3b1f2d;}
+    .btn-sm{width:auto;padding:7px 12px;font-size:.85rem;}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .grid{display:grid;gap:14px;grid-template-columns:1fr 1fr;}
+    .stats{display:grid;gap:10px;grid-template-columns:repeat(4,1fr);margin-top:12px;}
+    .stat{border:1px solid rgba(121,216,255,.18);border-radius:14px;padding:12px;background:rgba(255,255,255,.04);text-align:center;}
+    .stat strong{display:block;font-family:"Orbitron",sans-serif;font-size:1.2rem;}
+    .stat span{color:var(--muted);font-size:.78rem;}
+    /* WHEEL */
+    .wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
+    #wheelCanvas{border-radius:50%;box-shadow:0 0 40px rgba(121,216,255,.2);cursor:pointer;transition:box-shadow .3s;}
+    #wheelCanvas:hover{box-shadow:0 0 60px rgba(121,216,255,.35);}
+    .wheel-pointer{font-size:2rem;line-height:1;margin-bottom:-8px;}
+    .winner-box{text-align:center;padding:16px;border-radius:14px;border:1px solid rgba(255,209,102,.3);background:rgba(255,209,102,.06);min-height:60px;}
+    .winner-box strong{font-family:"Orbitron",sans-serif;font-size:1.3rem;color:#ffd166;}
+    .winner-box.picked strong{animation:winPop .4s cubic-bezier(.36,.07,.19,.97);}
+    @keyframes winPop{0%{transform:scale(.8);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
+    /* SAVED LISTS */
+    .list-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid rgba(121,216,255,.15);border-radius:10px;background:rgba(5,15,28,.6);margin-bottom:7px;}
+    .list-item button{padding:4px 10px;font-size:.8rem;border-radius:8px;}
+    /* HISTORY */
+    .hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+    .hist-item{border:1px solid rgba(121,216,255,.18);border-radius:12px;padding:10px;background:rgba(255,255,255,.04);}
+    .hist-item strong{display:block;color:var(--acc);}
+    .hist-item span{font-size:.78rem;color:var(--muted);}
+    .preset-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;}
+    .chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;border:1px solid rgba(121,216,255,.22);background:rgba(121,216,255,.1);font-size:.74rem;color:#def7ff;}
+    a{color:#9edcff;}
+    @media(max-width:700px){.grid{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card"><h1>Random Picker</h1><p class="meta">Created by Krishiv PB</p><a href="index.html#projects">Back to portfolio</a></section>
-    <section class="card">
-      <textarea id="items" placeholder="Enter one item per line"></textarea>
-      <button id="pick" class="btn">Pick Random Item</button>
-      <h2 id="out">Winner: -</h2>
-      <p id="count" class="meta">Items: 0</p>
-    </section>
-  </main>
-  <script>
-    (() => {
-      const items=document.getElementById("items"), out=document.getElementById("out"), count=document.getElementById("count");
-      function list(){ return items.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean); }
-      items.addEventListener("input",()=>{ count.textContent="Items: "+list().length; });
-      document.getElementById("pick").addEventListener("click",()=>{
-        const arr=list(); if(!arr.length){ out.textContent="Winner: add items first"; return; }
-        const w=arr[Math.floor(Math.random()*arr.length)]; out.textContent="Winner: "+w;
-      });
-    })();
-  </script>
+<main class="wrap">
+  <section class="card">
+    <h1>🎯 Random Picker Pro</h1>
+    <p>Spin the wheel, pick winners, save lists, and track your history.</p>
+    <a href="index.html#app-verse">← Back to Apps Galaxy</a>
+    <div class="stats">
+      <div class="stat"><strong id="statPicks">0</strong><span>Picks made</span></div>
+      <div class="stat"><strong id="statItems">0</strong><span>Items loaded</span></div>
+      <div class="stat"><strong id="statLists">0</strong><span>Saved lists</span></div>
+      <div class="stat"><strong id="statHist">0</strong><span>History saved</span></div>
+    </div>
+  </section>
 
-  <script src="app-universe-shell.js" defer></script>
+  <section class="card grid">
+    <!-- Input panel -->
+    <article>
+      <h2>Items</h2>
+      <textarea id="items" placeholder="Enter one item per line&#10;&#10;Alice&#10;Bob&#10;Charlie"></textarea>
+      <div class="preset-row">
+        <button class="btn-sm" data-preset="games">🎮 Game Teams</button>
+        <button class="btn-sm" data-preset="lunch">🍕 Lunch Picker</button>
+        <button class="btn-sm" data-preset="study">📚 Study Topics</button>
+        <button class="btn-sm" data-preset="numbers">🔢 1–10</button>
+      </div>
+      <div class="row" style="margin-top:8px;">
+        <select id="pickMode" style="flex:1;">
+          <option value="single">Pick one winner</option>
+          <option value="remove">Pick and remove</option>
+          <option value="shuffle">Shuffle list</option>
+        </select>
+        <input id="listName" placeholder="List name (to save)" style="flex:1;" />
+      </div>
+      <div class="row" style="margin-top:10px;">
+        <button id="spinBtn" class="btn-primary">🎡 Spin Wheel</button>
+        <button id="quickPickBtn" class="btn-hot">⚡ Quick Pick</button>
+        <button id="saveListBtn" class="btn-sm">💾 Save List</button>
+        <button id="resetBtn" class="btn-sm">↩ Reset</button>
+      </div>
+    </article>
+
+    <!-- Wheel panel -->
+    <article class="wheel-wrap">
+      <div class="wheel-pointer">▼</div>
+      <canvas id="wheelCanvas" width="260" height="260"></canvas>
+      <div class="winner-box" id="winnerBox">
+        <strong id="winnerText">Spin to pick a winner!</strong>
+        <div id="winnerMeta" style="font-size:.82rem;color:var(--muted);margin-top:4px;"></div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Saved Lists -->
+  <section class="card">
+    <h2>Saved Lists</h2>
+    <div id="savedLists"><p style="color:var(--muted);">No saved lists yet.</p></div>
+  </section>
+
+  <!-- History -->
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <h2>Pick History</h2>
+      <button id="clearHistBtn" class="btn-sm">Clear</button>
+    </div>
+    <div class="hist-grid" id="histGrid"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const SK="krishiv_rp_v3", LSK="krishiv_rp_lists_v1", HSK="krishiv_rp_hist_v1";
+  const PRESETS={
+    games:"Blue Team\nRed Team\nGreen Team\nYellow Team\nPurple Team",
+    lunch:"Pizza\nNoodles\nBurger\nRice Bowl\nSandwich\nTacos",
+    study:"Math revision\nScience quiz\nEnglish writing\nHistory notes\nCoding practice",
+    numbers:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
+  };
+  const COLORS=["#79d8ff","#58d4a8","#ffd166","#ff94c9","#b57ff5","#ff7f7f","#5ce1e6","#ff9a3c","#a8e6cf","#ffaaa5"];
+
+  let stats={picks:0}, savedLists=[], history=[];
+  const $=id=>document.getElementById(id);
+  const canvas=$("wheelCanvas"), ctx=canvas.getContext("2d");
+  let spinning=false, angle=0, animFrame=null;
+
+  function load(){
+    try{stats=JSON.parse(localStorage.getItem(SK)||'{"picks":0}');}catch{stats={picks:0};}
+    try{savedLists=JSON.parse(localStorage.getItem(LSK)||"[]");if(!Array.isArray(savedLists))savedLists=[];}catch{savedLists=[];}
+    try{history=JSON.parse(localStorage.getItem(HSK)||"[]");if(!Array.isArray(history))history=[];}catch{history=[];}
+  }
+  function saveAll(){
+    localStorage.setItem(SK,JSON.stringify(stats));
+    localStorage.setItem(LSK,JSON.stringify(savedLists));
+    localStorage.setItem(HSK,JSON.stringify(history.slice(0,20)));
+  }
+  function getList(){return $("items").value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);}
+  function updateStats(){
+    $("statPicks").textContent=String(stats.picks||0);
+    $("statItems").textContent=String(getList().length);
+    $("statLists").textContent=String(savedLists.length);
+    $("statHist").textContent=String(history.length);
+  }
+
+  /* ---- WHEEL DRAWING ---- */
+  function drawWheel(items, rot){
+    const cx=130, cy=130, r=120;
+    ctx.clearRect(0,0,260,260);
+    if(!items.length){
+      ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.fillStyle="rgba(10,27,49,.9)";ctx.fill();
+      ctx.strokeStyle="rgba(121,216,255,.3)";ctx.lineWidth=3;ctx.stroke();
+      ctx.fillStyle="rgba(170,200,230,.5)";ctx.font="14px Orbitron,sans-serif";ctx.textAlign="center";
+      ctx.fillText("Add items",cx,cy);return;
+    }
+    const slice=(Math.PI*2)/items.length;
+    items.forEach((item,i)=>{
+      const start=rot+i*slice, end=start+slice;
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
+      ctx.fillStyle=COLORS[i%COLORS.length];ctx.fill();
+      ctx.strokeStyle="rgba(0,0,0,.3)";ctx.lineWidth=1.5;ctx.stroke();
+      // Label
+      ctx.save();ctx.translate(cx,cy);ctx.rotate(start+slice/2);
+      ctx.textAlign="right";ctx.fillStyle="#032333";
+      ctx.font=`bold ${Math.min(13,200/items.length+4)}px Space Grotesk,sans-serif`;
+      const label=item.length>14?item.slice(0,13)+"…":item;
+      ctx.fillText(label,r-8,5);ctx.restore();
+    });
+    // Centre circle
+    ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);
+    ctx.fillStyle="#071223";ctx.fill();
+    ctx.strokeStyle="rgba(121,216,255,.5)";ctx.lineWidth=2;ctx.stroke();
+  }
+
+  function getWinner(items, rot){
+    if(!items.length)return null;
+    const slice=(Math.PI*2)/items.length;
+    // pointer is at top (3π/2), normalize
+    let a=((Math.PI*1.5)-rot)%(Math.PI*2);
+    if(a<0)a+=Math.PI*2;
+    return items[Math.floor(a/slice)%items.length];
+  }
+
+  function spinWheel(){
+    if(spinning)return;
+    const items=getList();
+    if(!items.length){alert("Add items first!");return;}
+    spinning=true;
+    const extraSpins=(5+Math.random()*5)*Math.PI*2;
+    const targetAngle=angle+extraSpins;
+    const duration=3000+Math.random()*1500;
+    const start=performance.now();
+    const startAngle=angle;
+    function frame(now){
+      const t=Math.min((now-start)/duration,1);
+      const ease=1-Math.pow(1-t,4);
+      angle=startAngle+extraSpins*ease;
+      drawWheel(items,angle);
+      if(t<1){animFrame=requestAnimationFrame(frame);}
+      else{
+        spinning=false;
+        const winner=getWinner(items,angle);
+        showWinner(winner,"🎡 Wheel");
+        if($("pickMode").value==="remove"){
+          $("items").value=items.filter(x=>x!==winner).join("\n");
+          updateStats();drawWheel(getList(),angle);
+        }
+      }
+    }
+    animFrame=requestAnimationFrame(frame);
+  }
+
+  function showWinner(winner, method){
+    const box=$("winnerBox");
+    $("winnerText").textContent=winner||"No winner";
+    $("winnerMeta").textContent=`via ${method} · ${new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}`;
+    box.classList.remove("picked");void box.offsetWidth;box.classList.add("picked");
+    stats.picks=(stats.picks||0)+1;
+    history.unshift({winner,method,time:Date.now()});
+    saveAll();updateStats();renderHistory();
+  }
+
+  function quickPick(){
+    const items=getList();if(!items.length){alert("Add items first!");return;}
+    const mode=$("pickMode").value;
+    if(mode==="shuffle"){
+      const shuffled=[...items].sort(()=>Math.random()-.5);
+      $("items").value=shuffled.join("\n");
+      showWinner(shuffled[0],"⚡ Shuffle");
+    } else {
+      const winner=items[Math.floor(Math.random()*items.length)];
+      if(mode==="remove")$("items").value=items.filter(x=>x!==winner).join("\n");
+      showWinner(winner,"⚡ Quick");
+    }
+    updateStats();drawWheel(getList(),angle);
+  }
+
+  function renderSavedLists(){
+    const el=$("savedLists");
+    if(!savedLists.length){el.innerHTML='<p style="color:var(--muted);">No saved lists yet.</p>';return;}
+    el.innerHTML=savedLists.map((l,i)=>`
+      <div class="list-item">
+        <div><strong>${l.name}</strong><span style="font-size:.8rem;color:var(--muted);margin-left:8px;">${l.items.length} items</span></div>
+        <div style="display:flex;gap:6px;">
+          <button onclick="loadList(${i})">Load</button>
+          <button onclick="delList(${i})">🗑</button>
+        </div>
+      </div>`).join("");
+  }
+
+  function renderHistory(){
+    const el=$("histGrid");
+    if(!history.length){el.innerHTML='<p style="color:var(--muted);font-size:.85rem;">No picks yet.</p>';return;}
+    el.innerHTML=history.slice(0,20).map(h=>`
+      <div class="hist-item">
+        <strong>${h.winner}</strong>
+        <span>${h.method}</span>
+        <span>${new Date(h.time).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}</span>
+      </div>`).join("");
+  }
+
+  window.loadList=(i)=>{$("items").value=savedLists[i].items.join("\n");updateStats();drawWheel(getList(),angle);};
+  window.delList=(i)=>{savedLists.splice(i,1);saveAll();renderSavedLists();updateStats();};
+
+  $("spinBtn").addEventListener("click",spinWheel);
+  canvas.addEventListener("click",spinWheel);
+  $("quickPickBtn").addEventListener("click",quickPick);
+  $("saveListBtn").addEventListener("click",()=>{
+    const items=getList();if(!items.length){alert("Add items first!");return;}
+    const name=$("listName").value.trim()||("List "+(savedLists.length+1));
+    savedLists.push({name,items});saveAll();renderSavedLists();updateStats();$("listName").value="";
+  });
+  $("resetBtn").addEventListener("click",()=>{$("items").value="";$("listName").value="";updateStats();drawWheel([],0);angle=0;});
+  $("clearHistBtn").addEventListener("click",()=>{history=[];saveAll();renderHistory();updateStats();});
+  $("items").addEventListener("input",()=>{updateStats();drawWheel(getList(),angle);});
+  document.querySelectorAll("[data-preset]").forEach(b=>b.addEventListener("click",()=>{
+    $("items").value=PRESETS[b.dataset.preset]||"";updateStats();drawWheel(getList(),angle);
+  }));
+
+  load();updateStats();drawWheel(getList(),angle);renderSavedLists();renderHistory();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-
-

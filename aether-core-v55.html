@@ -1,18 +1,38 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Krishiv PB">
-    <title>AETHER-TITAN v55.0 </title>
+    <title>Aether Core v55 | Titan KR â€” Krishiv PB</title>
+    <meta name="description" content="Aether Core v55 â€” Titan KR. A 25-node AI command system with God Mode, neural map, Matrix rain, and live node routing. Built by Krishiv PB." />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://krishiv-new-portfoilo.vercel.app/aether-core-v55.html" />
+    <meta property="og:site_name" content="Krishiv Velocity" />
+    <meta property="og:url" content="https://krishiv-new-portfoilo.vercel.app/aether-core-v55.html" />
+    <meta property="og:title" content="Aether Core v55 | Titan KR â€” Krishiv PB" />
+    <meta property="og:description" content="A 25-node AI command interface with God Mode, neural map animation, and Matrix rain. One of Krishiv PB's milestone AI builds." />
+    <meta property="og:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
+    <meta property="og:image:alt" content="Aether Core v55 â€” Krishiv PB" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Aether Core v55 | Titan KR â€” Krishiv PB" />
+    <meta name="twitter:description" content="A 25-node AI command interface with God Mode, neural map animation, and Matrix rain." />
+    <meta name="twitter:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --o: #ff4d00; --g: rgba(255, 77, 0, 0.3);
-            --bg: #030303; --panel: #0a0a0a; --border: rgba(255, 77, 0, 0.2);
-            --t: #ffffff; --s: #64748b; --f: rgba(255, 255, 255, 0.05);
-            --red: #ff4444; --green: #00ff88;
+            --bg: #030303;
+            --panel: #0a0a0a;
+            --border: rgba(255, 77, 0, 0.2);
+            --t: #ffffff;
+            --s: #64748b;
+            --f: rgba(255, 255, 255, 0.05);
+            --red: #ff4444;
+            --green: #00ff88;
+            --o: #ff7a18;
+            --g: rgba(255, 122, 24, 0.3);
         }
         [data-theme="light"] {
             --bg: #f8fafc; --panel: #ffffff; --border: #e2e8f0;
@@ -68,7 +88,7 @@
         input#userInput { flex: 1; background: transparent; border: 1px solid #222; border-radius: 4px; color: var(--t); padding: 12px; outline: none; }
         .ignite-btn { background: var(--o); color: #fff; border: none; padding: 12px 25px; font-size: 11px; font-weight: 900; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
         
-        .rainbow-text { background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow 5s linear infinite; font-weight: 900; background-size: 200% auto; }
+        .rainbow-text { background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff); background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; animation: rainbow 5s linear infinite; font-weight: 900; background-size: 200% auto; }
         @keyframes rainbow { to { background-position: 200% center; } }
     </style>
     <link rel="stylesheet" href="app-universe-shell.css" />
@@ -97,7 +117,7 @@
 
 <div id="gate">
     <div style="font-size: 10px; letter-spacing: 5px; color: #444; margin-bottom: 20px;">CRYPTO_GATE_ACTIVE</div>
-    <input type="password" id="pinCode" oninput="unlockSystem()" placeholder="â€¢â€¢â€¢â€¢â€¢">
+    <input type="password" id="pinCode" oninput="unlockSystem()" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;">
 </div>
 
 <div class="sidebar-l">
@@ -113,10 +133,10 @@
     
     <div class="core-label">Rank Achievements</div>
     <div class="badge-grid" id="badgeShelf">
-        <div class="badge" title="The Founder">👑</div><div class="badge" title="Quantum Architect">⚛️</div>
-        <div class="badge" title="Security Alpha">🛡️</div><div class="badge" title="Neural Sage">🧠</div>
-        <div class="badge" title="Void Runner">🌌</div><div class="badge" title="Titan Overlord">🔱</div>
-        <div class="badge" title="Singularity Point">🌀</div><div class="badge" title="Code Harbinger">⚡</div>
+        <div class="badge" title="The Founder">ðŸ‘‘</div><div class="badge" title="Quantum Architect">âš›ï¸</div>
+        <div class="badge" title="Security Alpha">ðŸ›¡ï¸</div><div class="badge" title="Neural Sage">ðŸ§ </div>
+        <div class="badge" title="Void Runner">ðŸŒŒ</div><div class="badge" title="Titan Overlord">ðŸ”±</div>
+        <div class="badge" title="Singularity Point">ðŸŒ€</div><div class="badge" title="Code Harbinger">âš¡</div>
     </div>
 
     <div class="quick-pack">
@@ -280,9 +300,9 @@
         addMsg(val, "user");
         const loader = addMsg("<i>SYNTHESIZING_NEURAL_LOGIC...</i>", "bot");
 
-        if (/^[0-9+\-*/().^\%√\s]+$/.test(val) && /[0-9]/.test(val) && val.replace(/\s/g, '').length >= 3) {
+        if (/^[0-9+\-*/().^\%âˆš\s]+$/.test(val) && /[0-9]/.test(val) && val.replace(/\s/g, '').length >= 3) {
             try {
-                const safeExpr = val.replace(/\s/g, '').replace(/\^/g, '**').replace(/√/g, 'Math.sqrt');
+                const safeExpr = val.replace(/\s/g, '').replace(/\^/g, '**').replace(/âˆš/g, 'Math.sqrt');
                 const result = eval(safeExpr);
                 if (result !== null && result !== undefined && !isNaN(result) && result !== Infinity) {
                     setTimeout(() => {
@@ -398,12 +418,13 @@
         const today = new Date();
         const dateKey = `${today.getMonth() + 1}-${today.getDate()}`;
         setTimeout(() => {
-            if (FESTIVALS[dateKey]) addMsg(`<span class="rainbow-text">âœ¨ [FESTIVAL_ACTIVE]: Happy ${FESTIVALS[dateKey]}! âœ¨</span>`, "bot");
+            if (FESTIVALS[dateKey]) addMsg(`<span class="rainbow-text">Ã¢Å“Â¨ [FESTIVAL_ACTIVE]: Happy ${FESTIVALS[dateKey]}! Ã¢Å“Â¨</span>`, "bot");
             pushLog("SYSTEM_BOOT_SUCCESS: v55.0_STABLE");
         }, 1000);
     };
 </script>
-<script src="app-universe-shell.js" defer></script>
+<script src="app-catalog.js"></script>
+  <script src="app-universe-shell.js" defer></script>
 </body>
 </html>
 

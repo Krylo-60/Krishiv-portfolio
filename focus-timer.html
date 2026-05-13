@@ -1,209 +1,196 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Focus Sprint Timer</title>
-  <style>
-    :root { --bg:#071222; --panel:#10243d; --line:#365c84; --text:#eef6ff; --muted:#a8c2e4; --ok:#54d7a6; --acc:#79d8ff; }
-    *{box-sizing:border-box;} body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(170deg,#030a14,#0b223b 50%,#13355a);}
-    .wrap{width:min(840px,94%);margin:24px auto;}
-    .card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,36,61,.95),rgba(9,22,40,.95));box-shadow:0 20px 40px rgba(0,0,0,.3);margin-bottom:12px;}
-    h1,h2,p{margin:0 0 10px;} p{color:var(--muted);}
-    .clock{font-size:clamp(2.2rem,9vw,4rem);font-weight:800;letter-spacing:.04em;margin:8px 0 12px;}
-    .row{display:flex;gap:8px;flex-wrap:wrap;}
-    .btn{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#0a1a30;color:var(--text);font-weight:700;cursor:pointer;}
-    .btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#032032;}
-    .stat{border:1px solid var(--line);border-radius:10px;padding:10px;background:rgba(6,17,31,.75);}
-    a{color:#99daff;}
-  </style>
-
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Focus Sprint Timer Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <style>
+    :root{--bg:#071222;--line:#365c84;--text:#eef6ff;--muted:#a8c2e4;--ok:#54d7a6;--acc:#79d8ff;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(170deg,#030a14,#0b223b 50%,#13355a);min-height:100vh;}
+    .wrap{width:min(860px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:16px;padding:18px;background:linear-gradient(160deg,rgba(17,36,61,.95),rgba(9,22,40,.95));box-shadow:0 20px 40px rgba(0,0,0,.3);margin-bottom:12px;}
+    h1,h2,p{margin:0 0 10px;}p{color:var(--muted);}
+    .btn{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#0a1a30;color:var(--text);font-weight:700;cursor:pointer;transition:all .2s;}
+    .btn.primary{border:none;background:linear-gradient(135deg,var(--acc),var(--ok));color:#032032;}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .btn.sm{width:auto;padding:7px 12px;font-size:.85rem;}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    /* Ring timer */
+    .ring-wrap{display:flex;justify-content:center;margin:14px 0;}
+    .ring-wrap svg{filter:drop-shadow(0 0 18px rgba(121,216,255,.25));}
+    .ring-label{text-anchor:middle;dominant-baseline:middle;fill:#eef6ff;}
+    .ring-clock{font-size:2.8rem;font-family:"Orbitron",sans-serif;font-weight:800;}
+    .ring-mode{font-size:1rem;fill:var(--acc);}
+    /* Input row */
+    input[type=number],select{border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);padding:9px;font:inherit;}
+    /* Stats */
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px;}
+    .stat{padding:12px;border-radius:12px;border:1px solid var(--line);background:rgba(6,17,31,.75);text-align:center;}
+    .stat strong{display:block;font-family:"Orbitron",sans-serif;font-size:1.3rem;}
+    .stat span{font-size:.78rem;color:var(--muted);}
+    /* Session log */
+    .log-item{border:1px solid rgba(54,92,132,.4);border-radius:10px;padding:9px 12px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;background:rgba(5,15,28,.6);}
+    .log-item .li-label{font-weight:600;font-size:.9rem;}
+    .log-item .li-time{font-size:.8rem;color:var(--muted);font-family:"JetBrains Mono",monospace;}
+    .log-item .li-mode{font-size:.75rem;border-radius:999px;padding:2px 8px;border:1px solid;}
+    .focus-mode-badge{color:var(--acc);border-color:rgba(121,216,255,.4);}
+    .break-mode-badge{color:#54d7a6;border-color:rgba(84,215,166,.4);}
+    /* Mode indicator */
+    .mode-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 14px;font-size:.85rem;font-weight:600;border:1px solid;}
+    .mode-focus{background:rgba(121,216,255,.1);border-color:rgba(121,216,255,.35);color:var(--acc);}
+    .mode-break{background:rgba(84,215,166,.1);border-color:rgba(84,215,166,.35);color:var(--ok);}
+    .empty{color:var(--muted);text-align:center;padding:14px;}
+    a{color:#99daff;}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card">
-      <h1>Focus Sprint Timer</h1>
-      <p>Pomodoro style timer for study sessions.</p>
-      <p>Created by Krishiv PB</p>
-      <a href="index.html#projects">Back to portfolio</a>
-    </section>
+<main class="wrap">
+  <section class="card">
+    <h1>⏱ Focus Sprint Timer Pro</h1>
+    <p>Pomodoro-style deep work timer with session log and break alerts.</p>
+    <a href="index.html#projects">← Back to portfolio</a>
+  </section>
 
-    <section class="card">
-      <h2 id="modeLabel">Focus Mode</h2>
-      <div id="clock" class="clock">25:00</div>
-      <div class="row">
-        <input id="focusMinutes" type="number" min="5" max="120" value="25" style="max-width:140px;" />
-        <input id="breakMinutes" type="number" min="1" max="60" value="5" style="max-width:140px;" />
-        <label style="display:flex;align-items:center;gap:6px;color:var(--muted);"><input id="autoStartNext" type="checkbox" style="width:auto;" /> Auto-start next mode</label>
-        <button id="applyDurationsBtn" class="btn" type="button">Apply Durations</button>
-      </div>
-      <div class="row">
-        <button id="startBtn" class="btn primary" type="button">Start</button>
-        <button id="pauseBtn" class="btn" type="button">Pause</button>
-        <button id="resetBtn" class="btn" type="button">Reset</button>
-        <button id="skipBtn" class="btn" type="button">Skip Mode</button>
-      </div>
-      <p id="statusText" style="margin-top:10px;">Ready to focus.</p>
-    </section>
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+      <div class="mode-pill mode-focus" id="modePill">🎯 Focus Mode</div>
+      <div id="sessionCountBadge" style="font-size:.85rem;color:var(--muted);">Sessions: 0</div>
+    </div>
 
-    <section class="card">
-      <div class="row">
-        <div class="stat"><strong id="sessionCount">0</strong><div>Focus sessions completed</div></div>
-        <div class="stat"><strong id="currentMode">Focus</strong><div>Current mode</div></div>
-      </div>
-    </section>
-  </main>
+    <!-- SVG Ring Timer -->
+    <div class="ring-wrap">
+      <svg width="240" height="240" viewBox="0 0 240 240">
+        <circle cx="120" cy="120" r="104" fill="none" stroke="rgba(54,92,132,.3)" stroke-width="12"/>
+        <circle id="ringProgress" cx="120" cy="120" r="104" fill="none" stroke="#79d8ff" stroke-width="12"
+          stroke-dasharray="653.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 120 120)"/>
+        <text x="120" y="108" class="ring-label ring-clock" id="clockText">25:00</text>
+        <text x="120" y="142" class="ring-label ring-mode" id="ringModeText">FOCUS</text>
+      </svg>
+    </div>
 
-  <script>
-    (() => {
-      const STORAGE_KEY = "krishiv_focus_timer_sessions_v1";
-      const FOCUS_SECONDS = 25 * 60;
-      const BREAK_SECONDS = 5 * 60;
+    <!-- Controls -->
+    <div class="row" style="justify-content:center;margin-bottom:14px;">
+      <button id="startBtn" class="btn primary">▶ Start</button>
+      <button id="pauseBtn" class="btn">⏸ Pause</button>
+      <button id="resetBtn" class="btn">↩ Reset</button>
+      <button id="skipBtn" class="btn">⏭ Skip Mode</button>
+    </div>
 
-      const clock = document.getElementById("clock");
-      const modeLabel = document.getElementById("modeLabel");
-      const currentMode = document.getElementById("currentMode");
-      const sessionCountNode = document.getElementById("sessionCount");
-      const statusText = document.getElementById("statusText");
-      const startBtn = document.getElementById("startBtn");
-      const pauseBtn = document.getElementById("pauseBtn");
-      const resetBtn = document.getElementById("resetBtn");
-      const skipBtn = document.getElementById("skipBtn");
-      const focusMinutesInput = document.getElementById("focusMinutes");
-      const breakMinutesInput = document.getElementById("breakMinutes");
-      const autoStartNext = document.getElementById("autoStartNext");
-      const applyDurationsBtn = document.getElementById("applyDurationsBtn");
-      const SETTINGS_KEY = "krishiv_focus_timer_settings_v1";
+    <!-- Duration settings -->
+    <div class="row" style="gap:12px;flex-wrap:wrap;">
+      <label style="color:var(--muted);font-size:.88rem;display:flex;align-items:center;gap:8px;">
+        Focus (min): <input id="focusMin" type="number" min="5" max="120" value="25" style="max-width:70px;" />
+      </label>
+      <label style="color:var(--muted);font-size:.88rem;display:flex;align-items:center;gap:8px;">
+        Break (min): <input id="breakMin" type="number" min="1" max="60" value="5" style="max-width:70px;" />
+      </label>
+      <label style="color:var(--muted);font-size:.88rem;display:flex;align-items:center;gap:8px;">
+        <input id="autoStart" type="checkbox" style="width:auto;" /> Auto-start next
+      </label>
+      <button id="applyBtn" class="btn sm">Apply</button>
+    </div>
 
-      let isFocus = true;
-      let focusSeconds = FOCUS_SECONDS;
-      let breakSeconds = BREAK_SECONDS;
-      let remaining = focusSeconds;
-      let timer = null;
-      let sessions = Number(localStorage.getItem(STORAGE_KEY) || "0") || 0;
-      let settings = { focusMinutes: 25, breakMinutes: 5, autoStart: false };
-      try {
-        const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-        if (raw && typeof raw === "object") settings = { ...settings, ...raw };
-      } catch {}
-      focusSeconds = Math.max(5, Number(settings.focusMinutes || 25)) * 60;
-      breakSeconds = Math.max(1, Number(settings.breakMinutes || 5)) * 60;
-      remaining = focusSeconds;
-      focusMinutesInput.value = String(settings.focusMinutes);
-      breakMinutesInput.value = String(settings.breakMinutes);
-      autoStartNext.checked = Boolean(settings.autoStart);
+    <p id="statusText" style="margin-top:12px;color:var(--muted);">Ready to focus.</p>
+  </section>
 
-      function fmt(seconds) {
-        const m = Math.floor(seconds / 60);
-        const s = seconds % 60;
-        return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
-      }
+  <section class="card">
+    <div class="stats-row">
+      <div class="stat"><strong id="statSessions">0</strong><span>Sessions done</span></div>
+      <div class="stat"><strong id="statFocusTime">0m</strong><span>Total focus time</span></div>
+      <div class="stat"><strong id="statBreaks">0</strong><span>Breaks taken</span></div>
+    </div>
+  </section>
 
-      function render() {
-        clock.textContent = fmt(remaining);
-        modeLabel.textContent = isFocus ? "Focus Mode" : "Break Mode";
-        currentMode.textContent = isFocus ? "Focus" : "Break";
-        sessionCountNode.textContent = String(sessions);
-        document.title = (isFocus ? "Focus " : "Break ") + fmt(remaining);
-      }
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <h2>Session Log</h2>
+      <button id="clearLog" class="btn sm">Clear Log</button>
+    </div>
+    <div id="sessionLog"><p class="empty">No sessions yet. Start focusing!</p></div>
+  </section>
+</main>
+<script>
+(() => {
+  const SK="krishiv_focus_v2", LOGK="krishiv_focus_log_v1";
+  const CIRC=653.5;
+  let isFocus=true, focusSec=25*60, breakSec=5*60, remaining=25*60;
+  let timer=null, sessions=0, breaks=0, totalFocusMin=0;
+  let log=JSON.parse(localStorage.getItem(LOGK)||"[]")||[];
+  const $=id=>document.getElementById(id);
 
-      function stopTimer() {
-        if (timer) {
-          clearInterval(timer);
-          timer = null;
-        }
-      }
+  function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
+  function fmtTime(d){return new Date(d).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});}
 
-      function switchMode() {
-        if (isFocus) {
-          sessions += 1;
-          localStorage.setItem(STORAGE_KEY, String(sessions));
-          statusText.textContent = "Focus complete. Break started.";
-        } else {
-          statusText.textContent = "Break complete. Focus started.";
-        }
-        isFocus = !isFocus;
-        remaining = isFocus ? focusSeconds : breakSeconds;
-        render();
-        if (autoStartNext.checked) {
-          if (!timer) timer = setInterval(tick, 1000);
-          statusText.textContent = isFocus ? "Auto-started focus mode." : "Auto-started break mode.";
-        } else {
-          stopTimer();
-        }
-      }
+  function updateRing(){
+    const total=isFocus?focusSec:breakSec;
+    const pct=remaining/total;
+    $("ringProgress").style.strokeDashoffset=CIRC*(1-pct);
+    $("ringProgress").style.stroke=isFocus?"#79d8ff":"#54d7a6";
+    $("clockText").textContent=fmt(remaining);
+    $("ringModeText").textContent=isFocus?"FOCUS":"BREAK";
+    $("modePill").className="mode-pill "+(isFocus?"mode-focus":"mode-break");
+    $("modePill").textContent=isFocus?"🎯 Focus Mode":"☕ Break Mode";
+    document.title=(isFocus?"Focus ":"Break ")+fmt(remaining)+" | Sprint Timer";
+    $("statSessions").textContent=String(sessions);
+    $("statFocusTime").textContent=Math.round(totalFocusMin)+"m";
+    $("statBreaks").textContent=String(breaks);
+    $("sessionCountBadge").textContent="Sessions: "+sessions;
+  }
 
-      function tick() {
-        remaining -= 1;
-        if (remaining <= 0) {
-          switchMode();
-        }
-        render();
-      }
+  function stopTimer(){if(timer){clearInterval(timer);timer=null;}}
 
-      startBtn.addEventListener("click", () => {
-        if (timer) return;
-        timer = setInterval(tick, 1000);
-        statusText.textContent = "Timer running.";
-      });
+  function addLog(mode, duration){
+    log.unshift({mode,duration,time:Date.now()});
+    if(log.length>30)log=log.slice(0,30);
+    localStorage.setItem(LOGK,JSON.stringify(log));
+    renderLog();
+  }
 
-      pauseBtn.addEventListener("click", () => {
-        stopTimer();
-        statusText.textContent = "Paused.";
-      });
+  function renderLog(){
+    if(!log.length){$("sessionLog").innerHTML='<p class="empty">No sessions yet. Start focusing!</p>';return;}
+    $("sessionLog").innerHTML=log.map(l=>`
+      <div class="log-item">
+        <div>
+          <div class="li-label">${l.mode==="focus"?"🎯 Focus session":"☕ Break"}</div>
+          <div class="li-time">${fmtTime(l.time)}</div>
+        </div>
+        <span class="li-mode ${l.mode==="focus"?"focus-mode-badge":"break-mode-badge"}">${l.duration} min</span>
+      </div>`).join("");
+  }
 
-      resetBtn.addEventListener("click", () => {
-        stopTimer();
-        isFocus = true;
-        remaining = focusSeconds;
-        statusText.textContent = "Reset to focus mode.";
-        render();
-      });
+  function switchMode(){
+    const wasFocus=isFocus;
+    if(wasFocus){sessions++;totalFocusMin+=focusSec/60;addLog("focus",Math.round(focusSec/60));$("statusText").textContent="✅ Focus session done! Time for a break.";}
+    else{breaks++;addLog("break",Math.round(breakSec/60));$("statusText").textContent="⚡ Break done. Back to focus!";}
+    isFocus=!isFocus;remaining=isFocus?focusSec:breakSec;
+    updateRing();
+    if($("autoStart").checked){timer=setInterval(tick,1000);}else{stopTimer();}
+  }
 
-      skipBtn.addEventListener("click", () => {
-        switchMode();
-      });
+  function tick(){remaining--;updateRing();if(remaining<=0){switchMode();}}
 
-      applyDurationsBtn.addEventListener("click", () => {
-        const fm = Math.max(5, Math.min(120, Number(focusMinutesInput.value || 25)));
-        const bm = Math.max(1, Math.min(60, Number(breakMinutesInput.value || 5)));
-        settings = { focusMinutes: fm, breakMinutes: bm, autoStart: Boolean(autoStartNext.checked) };
-        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-        focusSeconds = fm * 60;
-        breakSeconds = bm * 60;
-        if (isFocus) remaining = focusSeconds;
-        else remaining = breakSeconds;
-        statusText.textContent = "Durations updated.";
-        render();
-      });
+  $("startBtn").addEventListener("click",()=>{if(timer)return;timer=setInterval(tick,1000);$("statusText").textContent="🎯 Timer running...";});
+  $("pauseBtn").addEventListener("click",()=>{stopTimer();$("statusText").textContent="⏸ Paused.";});
+  $("resetBtn").addEventListener("click",()=>{stopTimer();isFocus=true;remaining=focusSec;updateRing();$("statusText").textContent="↩ Reset to focus mode.";});
+  $("skipBtn").addEventListener("click",switchMode);
+  $("applyBtn").addEventListener("click",()=>{
+    const fm=Math.max(5,Math.min(120,Number($("focusMin").value)||25));
+    const bm=Math.max(1,Math.min(60,Number($("breakMin").value)||5));
+    focusSec=fm*60;breakSec=bm*60;
+    remaining=isFocus?focusSec:breakSec;
+    $("statusText").textContent="✅ Durations updated.";updateRing();
+  });
+  $("clearLog").addEventListener("click",()=>{log=[];localStorage.setItem(LOGK,"[]");renderLog();});
 
-      render();
-    })();
-  </script>
+  // Load saved settings
+  try{const s=JSON.parse(localStorage.getItem(SK)||"{}");if(s.fm){$("focusMin").value=s.fm;$("breakMin").value=s.bm||5;$("autoStart").checked=s.auto||false;focusSec=s.fm*60;breakSec=(s.bm||5)*60;remaining=focusSec;}}catch{}
 
-  <script src="app-universe-shell.js" defer></script>
+  updateRing();renderLog();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-
-

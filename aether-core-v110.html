@@ -1,10 +1,24 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Krishiv PB" />
-  <title>Aether Core v110 | Fusion Command</title>
+  <title>Aether Core v110 | Fusion Command â€” Krishiv PB</title>
+  <meta name="description" content="Aether Core v110 â€” the most advanced Aether build. Multi-mode AI, file uploads, failover mesh, prompt memory, and a full fusion command interface. Built by Krishiv PB." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://krishiv-new-portfoilo.vercel.app/aether-core-v110.html" />
+  <meta property="og:site_name" content="Krishiv Velocity" />
+  <meta property="og:url" content="https://krishiv-new-portfoilo.vercel.app/aether-core-v110.html" />
+  <meta property="og:title" content="Aether Core v110 | Fusion Command â€” Krishiv PB" />
+  <meta property="og:description" content="The most advanced Aether AI build. Multi-mode reasoning, file uploads, 12-node failover mesh, and a premium fusion command interface." />
+  <meta property="og:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
+  <meta property="og:image:alt" content="Aether Core v110 â€” Krishiv PB" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Aether Core v110 | Fusion Command â€” Krishiv PB" />
+  <meta name="twitter:description" content="The most advanced Aether AI build with multi-mode reasoning, file uploads, and a 12-node failover mesh." />
+  <meta name="twitter:image" content="https://krishiv-new-portfoilo.vercel.app/social-preview.jpg" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.3/purify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -74,6 +88,10 @@
       bottom: -11rem;
       background: radial-gradient(circle, rgba(45, 125, 255, 0.6), transparent 70%);
       animation-duration: 22s;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .orb { animation: none; opacity: 0.12; }
+      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition: none !important; scroll-behavior: auto !important; }
     }
 
     @keyframes drift {
@@ -1265,6 +1283,7 @@
 
     const meshCanvas = document.getElementById("mesh");
     const meshContext = meshCanvas.getContext("2d");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const meshDots = [];
 
     function resizeMesh() {
@@ -1284,24 +1303,41 @@
       }
     }
 
+    let mouseX = -1000;
+    let mouseY = -1000;
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
     function animateMesh() {
       meshContext.clearRect(0, 0, meshCanvas.width, meshCanvas.height);
       for (const dot of meshDots) {
+        // Interaction logic
+        const dx = dot.x - mouseX;
+        const dy = dot.y - mouseY;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 180) {
+          const force = (180 - dist) / 180;
+          dot.x += dx * force * 0.04;
+          dot.y += dy * force * 0.04;
+        }
+
         dot.x += dot.vx;
         dot.y += dot.vy;
         if (dot.x < 0 || dot.x > meshCanvas.width) dot.vx *= -1;
         if (dot.y < 0 || dot.y > meshCanvas.height) dot.vy *= -1;
 
         meshContext.beginPath();
-        meshContext.fillStyle = "rgba(108, 232, 255, 0.35)";
-        meshContext.arc(dot.x, dot.y, 1.7, 0, Math.PI * 2);
+        meshContext.fillStyle = "rgba(108, 232, 255, 0.4)";
+        meshContext.arc(dot.x, dot.y, 1.8, 0, Math.PI * 2);
         meshContext.fill();
 
         for (const other of meshDots) {
           const distance = Math.hypot(dot.x - other.x, dot.y - other.y);
-          if (distance < 150) {
-            meshContext.strokeStyle = `rgba(108, 232, 255, ${0.12 - distance / 1600})`;
-            meshContext.lineWidth = 0.7;
+          if (distance < 160) {
+            meshContext.strokeStyle = `rgba(108, 232, 255, ${0.15 - distance / 1200})`;
+            meshContext.lineWidth = 0.8;
             meshContext.beginPath();
             meshContext.moveTo(dot.x, dot.y);
             meshContext.lineTo(other.x, other.y);
@@ -1309,7 +1345,7 @@
           }
         }
       }
-      requestAnimationFrame(animateMesh);
+      if (!reduceMotion) requestAnimationFrame(animateMesh);
     }
 
     let resizeTimeout;
@@ -1318,8 +1354,13 @@
       resizeTimeout = setTimeout(() => {
         resizeMesh();
         seedMesh();
+        if (reduceMotion) animateMesh();
       }, 150);
     });
+
+    if (reduceMotion) {
+      window.addEventListener("mousemove", () => {});
+    }
 
     window.addEventListener("error", (event) => {
       pushStatus(`UI error (${event.message || "unknown"})`);
@@ -1332,6 +1373,14 @@
 
     resizeMesh();
     seedMesh();
+    if (reduceMotion) {
+      meshDots.forEach((dot, index) => {
+        dot.vx = 0;
+        dot.vy = 0;
+        dot.x = (index % 7) * (meshCanvas.width / 7) + 20;
+        dot.y = Math.floor(index / 7) * (meshCanvas.height / 6) + 20;
+      });
+    }
     animateMesh();
     renderStatus();
     renderHistory();
@@ -1352,6 +1401,7 @@
     window.setMode = setMode;
     window.clearContext = clearContext;
   </script>
+  <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js" defer></script>
 </body>
 </html>

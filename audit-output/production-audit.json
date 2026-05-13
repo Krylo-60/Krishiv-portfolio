@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-22T14:00:58.542Z",
+  "generatedAt": "2026-04-24T17:54:21.077Z",
   "visual": [
     {
       "viewport": "desktop",
@@ -11,7 +11,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "hasPlainButtonCluster": false
+      "hasPlainButtonCluster": true
     },
     {
       "viewport": "desktop",
@@ -126,7 +126,7 @@
       "page": "aether-v110",
       "url": "https://krishiv-new-portfoilo.vercel.app/aether-core-v110.html",
       "status": 200,
-      "title": "Aether Core v110 | Fusion Command",
+      "title": "Aether Core v110 | Fusion Command â€” Krishiv PB",
       "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\desktop-aether-v110.png",
       "consoleErrors": [],
       "pageErrors": [],
@@ -143,7 +143,7 @@
       "consoleErrors": [],
       "pageErrors": [],
       "failedRequests": [],
-      "hasPlainButtonCluster": false
+      "hasPlainButtonCluster": true
     },
     {
       "viewport": "mobile",
@@ -258,7 +258,7 @@
       "page": "aether-v110",
       "url": "https://krishiv-new-portfoilo.vercel.app/aether-core-v110.html",
       "status": 200,
-      "title": "Aether Core v110 | Fusion Command",
+      "title": "Aether Core v110 | Fusion Command â€” Krishiv PB",
       "screenshotPath": "F:\\Krishiv portfolio\\audit-output\\mobile-aether-v110.png",
       "consoleErrors": [],
       "pageErrors": [],
@@ -278,12 +278,12 @@
     {
       "name": "review-app interactive controls exist",
       "ok": true,
-      "detail": "controls=32"
+      "detail": "controls=37"
     },
     {
       "name": "idea-lab-ai interactive controls exist",
       "ok": true,
-      "detail": "controls=14"
+      "detail": "controls=17"
     },
     {
       "name": "aether input auto-grows",
