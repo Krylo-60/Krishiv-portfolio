@@ -1,73 +1,194 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Water Reminder | Krishiv PB</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Water Reminder Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css"/>
+  <link rel="icon" href="logo.svg" type="image/svg+xml"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root{--bg:#061223;--panel:#10243d;--line:#355a80;--text:#eef7ff;--muted:#a7c3e4;--accent:#79d8ff;--ok:#57d9aa}
-    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(170deg,#04101a,#0a2139 50%,#14365d)}
-    .wrap{width:min(900px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(9,22,40,.95));margin-bottom:12px}
-    h1,h2,p{margin:0 0 8px}p{color:var(--muted)} .row{display:flex;gap:8px;flex-wrap:wrap}
-    button,input{border-radius:10px;border:1px solid var(--line);background:#08192d;color:var(--text);padding:10px;font:inherit}
-    .btn-primary{border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#032132;font-weight:700}
-    .meter{height:16px;border-radius:999px;border:1px solid var(--line);background:#08192d;overflow:hidden}.meter span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--ok))}
-    .credit{font-weight:700;color:#d9ecff}a{color:#9fd9ff}
-  </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+    *{box-sizing:border-box;}body{margin:0;font-family:"Space Grotesk",sans-serif;color:#eef7ff;background:linear-gradient(160deg,#030a14,#0a223a 48%,#0d2e4a);min-height:100vh;}
+    h1,h2{font-family:"Orbitron",sans-serif;margin:0 0 8px;}
+    .wrap{width:min(700px,94%);margin:24px auto;}
+    .card{border:1px solid #365f88;border-radius:16px;padding:24px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:16px;text-align:center;}
+    p{color:#a9c6e7;margin:0 0 8px;}
+    .btn{cursor:pointer;font-weight:700;padding:12px 22px;border-radius:12px;border:none;transition:all .2s;font-family:inherit;font-size:1rem;}
+    .btn.primary{background:linear-gradient(135deg,#79d8ff,#47b3ff);color:#032333;}
+    .btn.sm{padding:8px 14px;font-size:.85rem;}
+    .btn.ghost{background:transparent;border:1px solid #365f88;color:#a9c6e7;}
+    .btn:hover{opacity:.85;transform:translateY(-2px);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;}
+    /* BIG GLASS */
+    .glass-wrap{position:relative;width:140px;height:200px;margin:0 auto 20px;border:3px solid rgba(121,216,255,.4);border-radius:10px 10px 20px 20px;overflow:hidden;background:rgba(4,18,36,.8);box-shadow:0 0 30px rgba(121,216,255,.15);}
+    .glass-fill{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,rgba(121,216,255,.7),rgba(71,179,255,.9));transition:height 1s cubic-bezier(.4,0,.2,1);}
+    .glass-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:"Orbitron",sans-serif;font-size:1.1rem;font-weight:800;color:#eef7ff;text-shadow:0 2px 8px rgba(0,0,0,.6);z-index:2;}
+    .glass-lines{position:absolute;inset:0;z-index:1;}
+    /* CUPS GRID */
+    .cups{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:16px 0;}
+    .cup{width:44px;height:44px;border-radius:8px;border:2px solid rgba(121,216,255,.3);background:rgba(4,18,36,.8);cursor:pointer;font-size:1.4rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .cup.filled{background:linear-gradient(135deg,rgba(121,216,255,.3),rgba(71,179,255,.4));border-color:rgba(121,216,255,.8);box-shadow:0 0 10px rgba(121,216,255,.3);}
+    .cup:hover{transform:scale(1.1);}
+    /* STATS ROW */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+    .stat{border:1px solid #365f88;border-radius:12px;padding:12px;text-align:center;background:rgba(5,16,30,.6);}
+    .stat strong{display:block;font-size:1.4rem;font-family:"JetBrains Mono",monospace;color:#79d8ff;}
+    .stat span{font-size:.72rem;color:#a9c6e7;}
+    input[type=number],select{padding:10px;border-radius:10px;border:1px solid #365f88;background:#0a1b31;color:#eef7ff;font:inherit;width:100%;}
+    .history{text-align:left;}
+    .history-item{display:flex;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(121,216,255,.06);border:1px solid rgba(121,216,255,.1);margin-bottom:6px;font-size:.82rem;font-family:"JetBrains Mono",monospace;color:#a9c6e7;}
+    .notif-status{font-size:.8rem;font-family:"JetBrains Mono",monospace;padding:6px 12px;border-radius:999px;border:1px solid rgba(121,216,255,.3);background:rgba(121,216,255,.06);color:#79d8ff;}
   </style>
 </head>
-<body data-theme="default" data-mode="dark">
-  <main class="wrap">
-    <section class="card"><h1>Water Reminder</h1><p>Track daily water intake and keep hydration goals on point.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
-    <section class="card">
-      <h2>Daily Hydration</h2>
-      <p>Goal (ml)</p><input id="goal" type="number" min="500" step="100" value="2000" />
-      <div class="row" style="margin-top:8px;">
-        <button class="btn-primary" data-add="200" type="button">+200 ml</button>
-        <button class="btn-primary" data-add="300" type="button">+300 ml</button>
-        <button class="btn-primary" data-add="500" type="button">+500 ml</button>
-        <button id="reset" type="button">Reset Day</button>
+<body>
+<main class="wrap">
+  <section class="card">
+    <h1>💧 Water Reminder Pro</h1>
+    <p>Stay hydrated! Track daily water intake with reminders.</p>
+    <a href="index.html" style="color:#9edcff;font-size:.85rem;">← Back to portfolio</a>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><strong id="sCups">0</strong><span>Cups today</span></div>
+    <div class="stat"><strong id="sPct">0%</strong><span>of daily goal</span></div>
+    <div class="stat"><strong id="sStreak">0</strong><span>Day streak 🔥</span></div>
+  </div>
+
+  <!-- GLASS VISUAL -->
+  <section class="card">
+    <div class="glass-wrap">
+      <div class="glass-fill" id="glassFill" style="height:0%"></div>
+      <div class="glass-label" id="glassLabel">0 ml</div>
+    </div>
+    <div id="statusMsg" style="font-size:1.1rem;font-weight:700;margin-bottom:12px;color:#79d8ff;">Let's hydrate! 💧</div>
+
+    <!-- CUP CHECKBOXES -->
+    <div class="cups" id="cupsGrid"></div>
+
+    <div class="row" style="margin-bottom:16px;">
+      <button class="btn primary" id="addCupBtn">+ Add Cup (250ml)</button>
+      <button class="btn ghost sm" id="add500Btn">+ 500ml</button>
+      <button class="btn ghost sm" id="resetBtn">↺ Reset</button>
+    </div>
+
+    <div style="max-width:320px;margin:0 auto;text-align:left;">
+      <label style="font-size:.82rem;color:#a9c6e7;">Daily goal (ml)</label>
+      <input type="number" id="goalInput" min="500" max="5000" step="250" value="2000"/>
+      <div class="row" style="margin-top:8px;justify-content:flex-start;">
+        <button class="btn sm" style="background:linear-gradient(135deg,#79d8ff,#47b3ff);color:#032333;" id="saveGoalBtn">Save Goal</button>
+        <button class="btn ghost sm" id="notifBtn">🔔 Enable Reminders</button>
       </div>
-      <p id="summary" style="margin-top:10px;"></p>
-      <div class="meter"><span id="fill" style="width:0%"></span></div>
-      <p>Details: intake auto-resets each day and saves in your browser.</p>
-    </section>
-  </main>
-  <script>
-    (() => {
-      const key="krishiv_water_reminder_v1", goal=document.getElementById("goal"), fill=document.getElementById("fill"), summary=document.getElementById("summary"), reset=document.getElementById("reset");
-      let state={date:new Date().toDateString(),goal:2000,intake:0}; try{const raw=JSON.parse(localStorage.getItem(key)||"null"); if(raw&&typeof raw==="object") state={...state,...raw};}catch{}
-      if(state.date!==new Date().toDateString()){state={date:new Date().toDateString(),goal:Number(goal.value)||2000,intake:0};}
-      function save(){localStorage.setItem(key,JSON.stringify(state));}
-      function render(){const g=Math.max(500,Number(goal.value)||state.goal||2000); state.goal=g; const pct=Math.max(0,Math.min(100,Math.round((state.intake/g)*100))); fill.style.width=pct+"%"; summary.textContent=`${state.intake} ml / ${g} ml (${pct}%)`; save();}
-      goal.addEventListener("input",render);
-      document.querySelectorAll("[data-add]").forEach((b)=>b.addEventListener("click",()=>{state.intake+=Number(b.getAttribute("data-add")||0); render();}));
-      reset.addEventListener("click",()=>{state.intake=0; state.date=new Date().toDateString(); render();});
-      render();
-    })();
-  </script>
-  <script src="app-catalog.js"></script>
-  <script src="app-universe-shell.js" defer></script>
-</body>
-</html>
+      <div id="notifStatus" class="notif-status" style="margin-top:8px;display:none;"></div>
+    </div>
+  </section>
 
+  <section class="card history">
+    <h2>📅 Today's Log</h2>
+    <div id="logList"><p style="color:#a9c6e7;">No entries yet.</p></div>
+  </section>
+</main>
 
+<script>
+(() => {
+  const LSK = 'krishiv_water_v2', GOAL_KEY = 'krishiv_water_goal', STREAK_KEY = 'krishiv_water_streak';
+  let goal = 2000, logs = [], streakData = {streak:0,lastDate:''};
 
+  function today(){return new Date().toLocaleDateString('en-CA');}
+  function load(){
+    try{goal=Number(localStorage.getItem(GOAL_KEY)||2000)||2000;}catch{}
+    try{const raw=JSON.parse(localStorage.getItem(LSK)||'{}');if(raw.date===today()){logs=raw.logs||[];}else{logs=[];}}catch{logs=[];}
+    try{streakData=JSON.parse(localStorage.getItem(STREAK_KEY)||'{}')||{streak:0,lastDate:''};}catch{streakData={streak:0,lastDate:''};}
+    document.getElementById('goalInput').value=goal;
+  }
+  function save(){
+    localStorage.setItem(LSK,JSON.stringify({date:today(),logs}));
+    updateStreak();
+  }
+  function updateStreak(){
+    const t=today();
+    const prev=new Date();prev.setDate(prev.getDate()-1);
+    const prevStr=prev.toLocaleDateString('en-CA');
+    if(streakData.lastDate!==t){
+      if(getTotalMl()>=goal){
+        streakData.streak=streakData.lastDate===prevStr?(streakData.streak||0)+1:1;
+        streakData.lastDate=t;
+        localStorage.setItem(STREAK_KEY,JSON.stringify(streakData));
+      }
+    }
+  }
+  function getTotalMl(){return logs.reduce((a,l)=>a+l.ml,0);}
+
+  function render(){
+    const total=getTotalMl();
+    const pct=Math.min(100,Math.round(total/goal*100));
+    document.getElementById('glassFill').style.height=pct+'%';
+    document.getElementById('glassLabel').textContent=total+' ml';
+    document.getElementById('sCups').textContent=logs.length;
+    document.getElementById('sPct').textContent=pct+'%';
+    document.getElementById('sStreak').textContent=streakData.streak||0;
+
+    const msgs=[
+      [0,'Let\'s hydrate! 💧'],
+      [25,'Good start! Keep going 🌊'],
+      [50,'Halfway there! 💪'],
+      [75,'Almost done! 🔥'],
+      [100,'Goal reached! You\'re hydrated! 🏆']
+    ];
+    const msg=msgs.filter(m=>pct>=m[0]).pop()||msgs[0];
+    document.getElementById('statusMsg').textContent=msg[1];
+
+    // Cups grid (8 cups = goal)
+    const cupsNeeded=Math.max(8,Math.ceil(goal/250));
+    const cupsFilled=Math.floor(total/250);
+    const grid=document.getElementById('cupsGrid');
+    grid.innerHTML=Array.from({length:cupsNeeded},(_,i)=>
+      `<div class="cup${i<cupsFilled?' filled':''}" title="${(i+1)*250}ml">💧</div>`
+    ).join('');
+
+    // Log
+    const logEl=document.getElementById('logList');
+    if(!logs.length){logEl.innerHTML='<p style="color:#a9c6e7;">No entries yet.</p>';return;}
+    logEl.innerHTML=logs.slice().reverse().map(l=>
+      `<div class="history-item"><span>${l.time}</span><span>+${l.ml}ml</span><span style="color:#79d8ff;">${l.label||'Water'}</span></div>`
+    ).join('');
+  }
+
+  function addWater(ml,label){
+    const now=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    logs.push({ml,label:label||'Water',time:now});
+    save();render();
+  }
+
+  document.getElementById('addCupBtn').addEventListener('click',()=>addWater(250,'Cup (250ml)'));
+  document.getElementById('add500Btn').addEventListener('click',()=>addWater(500,'Bottle (500ml)'));
+  document.getElementById('resetBtn').addEventListener('click',()=>{if(!confirm('Reset today?'))return;logs=[];save();render();});
+  document.getElementById('saveGoalBtn').addEventListener('click',()=>{
+    goal=Math.max(500,Number(document.getElementById('goalInput').value)||2000);
+    localStorage.setItem('krishiv_water_goal',goal);render();
+  });
+
+  // Notification reminder
+  let notifInterval=null;
+  document.getElementById('notifBtn').addEventListener('click',async()=>{
+    if(!('Notification' in window)){alert('Notifications not supported.');return;}
+    const perm=await Notification.requestPermission();
+    const statusEl=document.getElementById('notifStatus');
+    statusEl.style.display='block';
+    if(perm==='granted'){
+      statusEl.textContent='🔔 Reminders active! Every 30 min.';
+      if(notifInterval)clearInterval(notifInterval);
+      notifInterval=setInterval(()=>{
+        const total=getTotalMl();
+        if(total<goal){
+          new Notification('💧 Water Reminder',{body:`You've had ${total}ml. Goal: ${goal}ml. Time to hydrate!`,icon:'logo.svg'});
+        }
+      },1800000);
+    } else {
+      statusEl.textContent='❌ Permission denied.';
+    }
+  });
+
+  load();render();
+})();
+</script>
+<script src="app-catalog.js"></script><script src="app-universe-shell.js" defer></script>
+</body></html>

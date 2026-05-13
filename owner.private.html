@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1345,23 +1345,26 @@
         }
       }
 
-      async function loadOverview() {
+      function loadOverview() {
+        // Static mode — populate eco stats from localStorage app data
         try {
-          const response = await fetch("/api/platform/overview", { cache: "no-store" });
-          if (!response.ok) throw new Error("overview unavailable");
-          const data = await response.json();
-          const ai = data.ai || {};
-          ecoAiLoaded.textContent = String(Number(ai.loaded || 0));
-          ecoAiReady.textContent = String(Number(ai.ready || 0));
-          ecoAiCooling.textContent = String(Number(ai.cooling || 0));
-          ecoAiSuccess.textContent = String(Number(ai.successes || 0));
-          ecoPublicApps.textContent = String(Number(data.publicApps || 0));
-          ecoReviews.textContent = String(Number(data.reviewCount || 0));
-          ecoIdeas.textContent = String(Number(data.ideaCount || 0));
-          ecoSessions.textContent = String(Number(data.sessionCount || 0));
-          setStatus(ecoStatus, "Ecosystem radar synced.", "ok");
+          const notes = JSON.parse(localStorage.getItem("krishiv_nv_v2")||"[]");
+          const goals = JSON.parse(localStorage.getItem("krishiv_gp_v2")||"[]");
+          const ideas = JSON.parse(localStorage.getItem("krishiv_ideas_v1")||"[]");
+          const fc = JSON.parse(localStorage.getItem("krishiv_fc_v2")||'{"decks":{}}');
+          const decks = fc && fc.decks ? Object.values(fc.decks) : [];
+          const cards = decks.reduce((a,d)=>a+(d.cards?d.cards.length:0),0);
+          if (ecoAiLoaded) ecoAiLoaded.textContent = String(notes.length||0);
+          if (ecoAiReady) ecoAiReady.textContent = String(goals.filter&&goals.filter(g=>g.progress>=100).length||0);
+          if (ecoAiCooling) ecoAiCooling.textContent = String(goals.filter&&goals.filter(g=>g.progress<100&&g.progress>0).length||0);
+          if (ecoAiSuccess) ecoAiSuccess.textContent = String(cards||0);
+          if (ecoPublicApps) ecoPublicApps.textContent = "40+";
+          if (ecoReviews) ecoReviews.textContent = String(decks.length||0);
+          if (ecoIdeas) ecoIdeas.textContent = String(ideas.length||0);
+          if (ecoSessions) ecoSessions.textContent = String(goals.length||0);
+          setStatus(ecoStatus, "✅ Ecosystem loaded from local data.", "ok");
         } catch {
-          setStatus(ecoStatus, "Ecosystem radar unavailable right now.", "warn");
+          setStatus(ecoStatus, "Could not load ecosystem data.", "warn");
         }
       }
 
@@ -1490,87 +1493,93 @@
         logAction("Opened " + label + ".");
       }
 
-      async function loadHealth() {
-        try {
-          const response = await fetch("/api/health", { cache: "no-store" });
-          if (!response.ok) throw new Error("offline");
-          const data = await response.json();
-          healthState.textContent = data.ok ? "healthy" : "error";
-        } catch {
-          healthState.textContent = "offline";
+      // ── STATIC MODE: no backend APIs, everything reads from localStorage ──
+      function loadHealth() {
+        // Static site — show site as live by fetching the live URL
+        fetch("https://krishiv-new-portfoilo.vercel.app/", { mode: "no-cors", cache: "no-store" })
+          .then(() => { healthState.textContent = "✅ online"; })
+          .catch(() => { healthState.textContent = "⚠️ check network"; });
+      }
+
+      function loadSync() {
+        // Read locally saved YT sync data from localStorage
+        const saved = readJsonStorage("krishiv_yt_sync_v1", null);
+        if (saved) {
+          if (typeof msg !== "undefined" && msg) msg.value = String(saved.message || "");
+          if (typeof subs !== "undefined" && subs) subs.value = String(saved.subs || 0);
+          if (typeof views !== "undefined" && views) views.value = String(saved.views || 0);
+          if (typeof uploads !== "undefined" && uploads) uploads.value = String(saved.uploads || 0);
+          if (typeof syncMeta !== "undefined" && syncMeta) syncMeta.textContent = "Sync source: local | Last sync: " + (saved.savedAt || "unknown");
+          syncSourceStat.textContent = "localStorage";
+        } else {
+          syncSourceStat.textContent = "no sync yet";
+          if (typeof syncMeta !== "undefined" && syncMeta) syncMeta.textContent = "No sync data saved yet. Fill in fields and hit Publish to save.";
         }
       }
 
-      async function loadSync(options = {}) {
-        const fastMode = options.fast !== false;
-        const path = fastMode ? "/api/yt-portfolio-sync?fast=1" : "/api/yt-portfolio-sync";
-        const data = await api(path, { method: "GET" });
-        msg.value = String(data.message || "");
-        subs.value = String(Number(data.subs || 0));
-        views.value = String(Number(data.views || 0));
-        uploads.value = String(Number(data.uploads || 0));
-        setSyncMeta(data);
-        return data;
-      }
-
-      async function publishSync() {
-        if (!token) {
-          setStatus(publishStatus, "Missing token. Open /owner?token=YOUR_TOKEN once.", "err");
-          return;
-        }
-        setStatus(publishStatus, "Publishing sync...", "");
-        try {
-          const payload = {
-            message: String(msg.value || "").trim(),
-            subs: Number(subs.value || 0),
-            views: Number(views.value || 0),
-            uploads: Number(uploads.value || 0)
-          };
-          const data = await api("/api/yt-portfolio-sync", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-          setSyncMeta(data);
-          setStatus(
-            publishStatus,
-            data.firebaseSynced ? "Published and synced to Firebase." : "Published to backend. Firebase sync unavailable right now.",
-            data.firebaseSynced ? "ok" : "warn"
-          );
-        } catch (error) {
-          setStatus(publishStatus, "Publish failed: " + error.message, "err");
-        }
-      }
-
-      async function loadUsage() {
-        const data = await api("/api/usage/stats", { method: "GET" });
-        usageTotalStat.textContent = String(Number(data.totalEvents || 0));
-        usageTodayStat.textContent = String(Number(data.uniqueSessionsToday || 0));
-        renderTables(Array.isArray(data.byPage) ? data.byPage : [], Array.isArray(data.lastEvents) ? data.lastEvents : []);
-        latestUsageSnapshot = {
-          byPage: Array.isArray(data.byPage) ? data.byPage : [],
-          lastEvents: Array.isArray(data.lastEvents) ? data.lastEvents : []
+      function publishSync() {
+        const msgEl = document.getElementById("msg");
+        const subsEl = document.getElementById("subs");
+        const viewsEl = document.getElementById("views");
+        const uploadsEl = document.getElementById("uploads");
+        const ps = document.getElementById("publishStatus");
+        const payload = {
+          message: msgEl ? msgEl.value.trim() : "",
+          subs: subsEl ? Number(subsEl.value) : 0,
+          views: viewsEl ? Number(viewsEl.value) : 0,
+          uploads: uploadsEl ? Number(uploadsEl.value) : 0,
+          savedAt: new Date().toLocaleString()
         };
+        writeJsonStorage("krishiv_yt_sync_v1", payload);
+        if (typeof syncMeta !== "undefined" && syncMeta) syncMeta.textContent = "Sync source: local | Last sync: " + payload.savedAt;
+        syncSourceStat.textContent = "localStorage";
+        setStatus(ps, "✅ Saved locally! Data persisted in browser.", "ok");
+        logAction("Published YT sync data to localStorage.");
+      }
+
+      function loadUsage() {
+        // Aggregate real data from all app localStorage keys
+        const keys = [
+          {key:"krishiv_habit_v3",label:"Habit Tracker"},{key:"krishiv_expenses_v2",label:"Expense Tracker"},
+          {key:"krishiv_journal_v2",label:"Daily Journal"},{key:"krishiv_gp_v2",label:"Goal Planner"},
+          {key:"krishiv_rt_v2",label:"Reading Tracker"},{key:"krishiv_nv_v2",label:"Notes Vault"},
+          {key:"krishiv_fc_v2",label:"Flashcards"},{key:"krishiv_water_v2",label:"Water Reminder"},
+          {key:"krishiv_uc_hist",label:"Unit Converter"}
+        ];
+        let total = 0;
+        const byPage = [];
+        const lastEvents = [];
+        keys.forEach(({key,label}) => {
+          try {
+            const raw = localStorage.getItem(key);
+            if (!raw) return;
+            const d = JSON.parse(raw);
+            const count = Array.isArray(d) ? d.length : (d && d.logs ? d.logs.length : (d && d.cards ? d.cards.length : 1));
+            if (count > 0) { byPage.push({page:label,count}); total += count; }
+            lastEvents.push({event:"data",page:label,at:new Date().toISOString()});
+          } catch {}
+        });
+        byPage.sort((a,b)=>b.count-a.count);
+        usageTotalStat.textContent = String(total);
+        usageTodayStat.textContent = String(byPage.length);
+        renderTables(byPage.slice(0,8), lastEvents.slice(0,8));
+        latestUsageSnapshot = {byPage, lastEvents};
         updateSpotlight();
       }
 
-      async function refreshAll(options = {}) {
-        if (!token) {
-          setStatus(ownerStatus, "Missing token. Open /owner?token=YOUR_TOKEN once.", "err");
-          return;
-        }
-        setStatus(ownerStatus, "Refreshing owner dashboard...", "");
+      function refreshAll(options = {}) {
+        setStatus(ownerStatus, "Refreshing dashboard (static mode)...", "");
         try {
-          await Promise.all([
-            loadHealth(),
-            loadSync({ fast: options.fast !== false }),
-            loadUsage(),
-            loadOverview(),
-            loadReleaseFeed()
-          ]);
-          lastRefreshLine.textContent = "Last refresh: " + new Date().toLocaleString("en-IN");
-          setStatus(ownerStatus, "Owner dashboard updated.", "ok");
+          loadHealth();
+          loadSync();
+          loadUsage();
+          loadOverview();
+          loadReleaseFeed();
+          lastRefreshLine.textContent = "Last refresh: " + new Date().toLocaleString();
+          setStatus(ownerStatus, "✅ Dashboard refreshed — static mode (localStorage data).", "ok");
+          logAction("Refreshed dashboard (static mode).");
         } catch (error) {
-          setStatus(ownerStatus, "Refresh failed: " + error.message, "err");
+          setStatus(ownerStatus, "Refresh error: " + error.message, "err");
         }
       }
 

@@ -1,97 +1,211 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Unit Converter | Krishiv PB</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Unit Converter Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css"/>
+  <link rel="icon" href="logo.svg" type="image/svg+xml"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root{--bg:#071223;--panel:#122844;--line:#35608a;--text:#eef7ff;--muted:#a9c6e7}
-    *{box-sizing:border-box} body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);color:var(--text)}
-    .wrap{width:min(760px,94%);margin:24px auto}.card{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:12px}
-    .row{display:flex;gap:8px;flex-wrap:wrap} input,select,button{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit}
-    .btn{cursor:pointer;font-weight:700;border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333}.meta{color:var(--muted)} a{color:#9edcff}
-    .history{margin:0;padding-left:18px}
-  </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+    *{box-sizing:border-box;}body{margin:0;font-family:"Space Grotesk",sans-serif;color:#eef7ff;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
+    h1,h2{font-family:"Orbitron",sans-serif;margin:0 0 8px;}p{color:#a9c6e7;margin:0 0 8px;}
+    .wrap{width:min(860px,94%);margin:24px auto;}
+    .card{border:1px solid #365f88;border-radius:14px;padding:20px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:14px;}
+    input,select{padding:12px;border-radius:10px;border:1px solid #365f88;background:#0a1b31;color:#eef7ff;font:inherit;transition:border-color .2s;}
+    input:focus,select:focus{outline:none;border-color:#79d8ff;}
+    .btn{cursor:pointer;font-weight:700;padding:10px 18px;border-radius:10px;border:none;transition:all .2s;font-family:inherit;}
+    .btn.primary{background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn.sm{padding:6px 12px;font-size:.82rem;}
+    .btn.ghost{background:transparent;border:1px solid #365f88;color:#a9c6e7;}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    /* CATEGORY TABS */
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+    .tab{padding:8px 16px;border-radius:999px;border:1px solid #365f88;background:#0a1b31;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .2s;}
+    .tab.active,.tab:hover{border-color:#79d8ff;background:rgba(121,216,255,.1);color:#79d8ff;}
+    /* CONVERTER */
+    .conv-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:end;}
+    .conv-label{font-size:.82rem;color:#a9c6e7;margin-bottom:5px;display:block;}
+    .swap-btn{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;background:rgba(121,216,255,.1);border:1px solid rgba(121,216,255,.3);color:#79d8ff;transition:all .2s;align-self:flex-end;padding:0;}
+    .swap-btn:hover{background:rgba(121,216,255,.2);transform:rotate(180deg);}
+    .result-display{font-family:"JetBrains Mono",monospace;font-size:2rem;font-weight:700;color:#79d8ff;text-align:center;padding:16px;border-radius:12px;border:1px solid rgba(121,216,255,.25);background:rgba(121,216,255,.05);margin-top:14px;}
+    .formula-hint{text-align:center;font-size:.78rem;color:#6b8fad;font-family:"JetBrains Mono",monospace;margin-top:8px;}
+    /* QUICK REF TABLE */
+    .ref-table{width:100%;border-collapse:collapse;font-size:.84rem;}
+    .ref-table th{text-align:left;padding:8px 12px;border-bottom:1px solid rgba(84,126,171,.3);color:#79d8ff;font-family:"JetBrains Mono",monospace;font-size:.75rem;text-transform:uppercase;}
+    .ref-table td{padding:8px 12px;border-bottom:1px solid rgba(84,126,171,.1);color:#a9c6e7;}
+    .ref-table tr:hover td{background:rgba(121,216,255,.04);}
+    .history-item{display:flex;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(121,216,255,.06);border:1px solid rgba(121,216,255,.1);margin-bottom:6px;font-size:.82rem;font-family:"JetBrains Mono",monospace;color:#a9c6e7;}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card"><h1>Unit Converter</h1><p class="meta">Created by Krishiv PB</p><a href="index.html#projects">Back to portfolio</a></section>
-    <section class="card">
-      <div class="row">
-        <input id="value" type="number" placeholder="Value" />
-        <select id="kind">
-          <option value="km-miles">KM to Miles</option><option value="miles-km">Miles to KM</option>
-          <option value="c-f">Celsius to Fahrenheit</option><option value="f-c">Fahrenheit to Celsius</option>
-          <option value="kg-lb">KG to LB</option><option value="lb-kg">LB to KG</option>
-          <option value="cm-inch">CM to Inch</option><option value="inch-cm">Inch to CM</option>
-        </select>
-        <button class="btn" id="swap">Swap</button>
-        <button class="btn" id="convert">Convert</button>
+<main class="wrap">
+  <section class="card">
+    <h1>📐 Unit Converter Pro</h1>
+    <p>Convert anything — length, weight, temp, speed, and more. History saved.</p>
+    <a href="index.html" style="color:#9edcff;font-size:.85rem;">← Back to portfolio</a>
+  </section>
+
+  <div class="tabs" id="tabs"></div>
+
+  <section class="card">
+    <div class="conv-grid">
+      <div>
+        <span class="conv-label">From</span>
+        <select id="unitFrom" style="width:100%;margin-bottom:8px;"></select>
+        <input type="number" id="valFrom" placeholder="Enter value" style="width:100%;font-size:1.1rem;" oninput="convert('from')"/>
       </div>
-      <h2 id="out">Result: -</h2>
-      <p id="formula" class="meta"></p>
-      <h3>Recent Conversions</h3>
-      <ul id="history" class="history"></ul>
-    </section>
-  </main>
-  <script>
-    (() => {
-      const key = "krishiv_unit_converter_history_v2";
-      const value=document.getElementById("value"), kind=document.getElementById("kind"), out=document.getElementById("out"), formula=document.getElementById("formula"), history=document.getElementById("history");
-      let items = [];
-      const map = {
-        "km-miles": { fn:(v)=>v*0.621371, unit:"miles", f:"km x 0.621371" },
-        "miles-km": { fn:(v)=>v/0.621371, unit:"km", f:"miles / 0.621371" },
-        "c-f": { fn:(v)=>(v*9/5)+32, unit:"F", f:"(C x 9/5) + 32" },
-        "f-c": { fn:(v)=>(v-32)*5/9, unit:"C", f:"(F - 32) x 5/9" },
-        "kg-lb": { fn:(v)=>v*2.20462, unit:"lb", f:"kg x 2.20462" },
-        "lb-kg": { fn:(v)=>v/2.20462, unit:"kg", f:"lb / 2.20462" },
-        "cm-inch": { fn:(v)=>v/2.54, unit:"inch", f:"cm / 2.54" },
-        "inch-cm": { fn:(v)=>v*2.54, unit:"cm", f:"inch x 2.54" }
-      };
-      function load(){ try{ items=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(items)) items=[]; }catch{ items=[]; } }
-      function save(){ localStorage.setItem(key, JSON.stringify(items.slice(0,8))); }
-      function renderHistory(){ history.innerHTML = items.slice(0,8).map((x)=>`<li>${x}</li>`).join("") || "<li>No conversions yet.</li>"; }
-      function runConvert() {
-        const v=Number(value.value); if(!Number.isFinite(v)){ out.textContent="Result: enter a valid number"; return; }
-        const meta = map[kind.value]; const r = meta.fn(v);
-        const line = `${v} -> ${r.toFixed(2)} ${meta.unit}`;
-        out.textContent="Result: "+r.toFixed(2)+" "+meta.unit;
-        formula.textContent="Formula: " + meta.f;
-        items.unshift(line); save(); renderHistory();
-      }
-      document.getElementById("convert").addEventListener("click", runConvert);
-      document.getElementById("swap").addEventListener("click",()=>{
-        const v = kind.value;
-        const swapMap = {"km-miles":"miles-km","miles-km":"km-miles","c-f":"f-c","f-c":"c-f","kg-lb":"lb-kg","lb-kg":"kg-lb","cm-inch":"inch-cm","inch-cm":"cm-inch"};
-        kind.value = swapMap[v] || v;
-      });
-      load(); renderHistory();
-    })();
-  </script>
-  <script src="app-catalog.js"></script>
-  <script src="app-universe-shell.js" defer></script>
-</body>
-</html>
+      <button class="swap-btn" onclick="swap()">⇄</button>
+      <div>
+        <span class="conv-label">To</span>
+        <select id="unitTo" style="width:100%;margin-bottom:8px;"></select>
+        <input type="number" id="valTo" placeholder="Result" style="width:100%;font-size:1.1rem;" oninput="convert('to')"/>
+      </div>
+    </div>
+    <div class="result-display" id="resultDisplay">—</div>
+    <div class="formula-hint" id="formulaHint"></div>
+    <div class="row" style="justify-content:center;margin-top:12px;">
+      <button class="btn primary" onclick="saveHistory()">💾 Save to History</button>
+      <button class="btn ghost sm" onclick="clearHistory()">Clear History</button>
+    </div>
+  </section>
 
+  <section class="card">
+    <h2>📋 Quick Reference</h2>
+    <div id="quickRef"></div>
+  </section>
 
+  <section class="card" id="histCard" style="display:none;">
+    <h2>🕐 History</h2>
+    <div id="histList"></div>
+  </section>
+</main>
 
+<script>
+const CATEGORIES = {
+  Length:{
+    units:{Meter:1,Kilometer:1000,Centimeter:.01,Millimeter:.001,Mile:1609.344,Yard:.9144,Foot:.3048,Inch:.0254,Nautical_Mile:1852},
+    ref:[['1 km','0.621 miles'],['1 mile','1.609 km'],['1 foot','30.48 cm'],['1 inch','2.54 cm'],['1 yard','0.914 m']]
+  },
+  Weight:{
+    units:{Kilogram:1,Gram:.001,Milligram:0.000001,Pound:.453592,Ounce:.0283495,Tonne:1000,Stone:6.35029},
+    ref:[['1 kg','2.205 lbs'],['1 lb','453.6 g'],['1 ton','1000 kg'],['1 stone','6.35 kg']]
+  },
+  Temperature:{
+    special:true,
+    units:['Celsius','Fahrenheit','Kelvin'],
+    ref:[['Water freezes','0°C / 32°F'],['Body temp','37°C / 98.6°F'],['Water boils','100°C / 212°F'],['Absolute zero','-273.15°C']]
+  },
+  Speed:{
+    units:{kmh:1,'m/s':3.6,mph:1.60934,knots:1.852,'ft/s':1.09728},
+    ref:[['Speed of light','1,079,252,848 km/h'],['Sound speed','343 m/s'],['Olympic sprint','~36 km/h']]
+  },
+  Area:{
+    units:{'m²':1,'km²':1e6,'cm²':.0001,'ft²':.092903,'yd²':.836127,acre:4046.86,hectare:10000,'mile²':2589988},
+    ref:[['1 hectare','10,000 m²'],['1 acre','4,047 m²'],['1 km²','100 hectares']]
+  },
+  Volume:{
+    units:{Liter:1,Milliliter:.001,Gallon:3.78541,Quart:.946353,Pint:.473176,'fl oz':.0295735,'m³':1000,Cup:.236588},
+    ref:[['1 gallon','3.785 liters'],['1 liter','1000 ml'],['1 cup','236.6 ml']]
+  },
+  Time:{
+    units:{Second:1,Minute:60,Hour:3600,Day:86400,Week:604800,Month:2592000,Year:31536000,Millisecond:.001},
+    ref:[['1 day','24 h / 86,400 s'],['1 week','7 days'],['1 year','~365 days']]
+  },
+  Data:{
+    units:{Byte:1,Kilobyte:1024,Megabyte:1048576,Gigabyte:1073741824,Terabyte:1099511627776,Bit:.125},
+    ref:[['1 KB','1024 bytes'],['1 MB','1024 KB'],['1 GB','1024 MB'],['1 TB','1024 GB']]
+  }
+};
+
+let activeCat='Length', history=[];
+try{history=JSON.parse(localStorage.getItem('krishiv_uc_hist')||'[]');}catch{}
+
+function saveHist(){localStorage.setItem('krishiv_uc_hist',JSON.stringify(history.slice(0,30)));}
+
+// Build tabs
+const tabsEl=document.getElementById('tabs');
+Object.keys(CATEGORIES).forEach(cat=>{
+  const t=document.createElement('div');
+  t.className='tab'+(cat===activeCat?' active':'');
+  t.textContent={'Length':'📏 Length','Weight':'⚖️ Weight','Temperature':'🌡️ Temp','Speed':'🚀 Speed','Area':'▪️ Area','Volume':'🫙 Volume','Time':'⏱ Time','Data':'💾 Data'}[cat]||cat;
+  t.onclick=()=>{activeCat=cat;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');loadCategory();};
+  tabsEl.appendChild(t);
+});
+
+function loadCategory(){
+  const cat=CATEGORIES[activeCat];
+  const fromSel=document.getElementById('unitFrom'),toSel=document.getElementById('unitTo');
+  const units=cat.special?cat.units:Object.keys(cat.units);
+  fromSel.innerHTML=units.map(u=>`<option>${u}</option>`).join('');
+  toSel.innerHTML=units.map((u,i)=>`<option${i===1?' selected':''}>${u}</option>`).join('');
+  document.getElementById('valFrom').value='1';
+  document.getElementById('valTo').value='';
+  convert('from');
+  renderRef();
+}
+
+function tempConvert(val,from,to){
+  let c;
+  if(from==='Celsius')c=val;
+  else if(from==='Fahrenheit')c=(val-32)*5/9;
+  else c=val-273.15;
+  if(to==='Celsius')return c;
+  if(to==='Fahrenheit')return c*9/5+32;
+  return c+273.15;
+}
+
+window.convert=dir=>{
+  const cat=CATEGORIES[activeCat];
+  const from=document.getElementById('unitFrom').value;
+  const to=document.getElementById('unitTo').value;
+  let inEl=dir==='from'?document.getElementById('valFrom'):document.getElementById('valTo');
+  let outEl=dir==='from'?document.getElementById('valTo'):document.getElementById('valFrom');
+  const val=parseFloat(inEl.value);
+  if(isNaN(val)){document.getElementById('resultDisplay').textContent='—';return;}
+  let result;
+  if(cat.special){
+    result=tempConvert(val,dir==='from'?from:to,dir==='from'?to:from);
+  } else {
+    const fromFactor=cat.units[from],toFactor=cat.units[to];
+    result=dir==='from'?(val*fromFactor)/toFactor:(val*toFactor)/fromFactor;
+  }
+  const fmt=n=>Math.abs(n)>=0.001&&Math.abs(n)<1e9?parseFloat(n.toFixed(8)).toString():n.toExponential(4);
+  outEl.value=fmt(result);
+  document.getElementById('resultDisplay').textContent=`${val} ${dir==='from'?from:to} = ${fmt(result)} ${dir==='from'?to:from}`;
+  document.getElementById('formulaHint').textContent=`Converting: ${dir==='from'?from:to} → ${dir==='from'?to:from}`;
+};
+
+window.swap=()=>{
+  const f=document.getElementById('unitFrom'),t=document.getElementById('unitTo');
+  const tmp=f.value;f.value=t.value;t.value=tmp;
+  const fv=document.getElementById('valFrom'),tv=document.getElementById('valTo');
+  const tmpV=fv.value;fv.value=tv.value;tv.value=tmpV;
+  convert('from');
+};
+
+window.saveHistory=()=>{
+  const res=document.getElementById('resultDisplay').textContent;
+  if(res==='—')return;
+  history.unshift({text:res,time:new Date().toLocaleTimeString()});
+  saveHist();renderHistory();
+};
+
+window.clearHistory=()=>{history=[];saveHist();renderHistory();};
+
+function renderRef(){
+  const ref=CATEGORIES[activeCat].ref||[];
+  document.getElementById('quickRef').innerHTML=`<table class="ref-table"><thead><tr><th>Unit</th><th>Equals</th></tr></thead><tbody>${ref.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</tbody></table>`;
+}
+
+function renderHistory(){
+  const hc=document.getElementById('histCard'),hl=document.getElementById('histList');
+  if(!history.length){hc.style.display='none';return;}
+  hc.style.display='';
+  hl.innerHTML=history.map(h=>`<div class="history-item"><span>${h.text}</span><span style="color:#6b8fad;">${h.time}</span></div>`).join('');
+}
+
+loadCategory();renderHistory();
+</script>
+<script src="app-catalog.js"></script><script src="app-universe-shell.js" defer></script>
+</body></html>

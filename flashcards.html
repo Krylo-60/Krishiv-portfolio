@@ -1,191 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flashcards Trainer Pro | Krishiv PB</title>
-  <link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Flashcards Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css"/>
+  <link rel="icon" href="logo.svg" type="image/svg+xml"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root{--bg:#071324;--line:#37608a;--text:#eff7ff;--muted:#a8c5e6;--ok:#58d4a8;--bad:#ff7f7f;--acc:#79d8ff;}
-    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(160deg,#030a14,#0b223c 48%,#133a61);min-height:100vh;}
+    *{box-sizing:border-box;}body{margin:0;font-family:"Space Grotesk",sans-serif;color:#eef7ff;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
+    h1,h2{font-family:"Orbitron",sans-serif;margin:0 0 8px;}p{color:#a9c6e7;margin:0 0 8px;}
     .wrap{width:min(900px,94%);margin:24px auto;}
-    .card{border:1px solid var(--line);border-radius:14px;padding:18px;background:linear-gradient(160deg,rgba(17,40,66,.96),rgba(8,22,40,.96));margin-bottom:12px;}
-    h1,h2,p{margin:0 0 10px;}p{color:var(--muted);}
-    input,button,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0b1b31;color:var(--text);font:inherit;}
-    .row{display:flex;gap:8px;flex-wrap:wrap;}.row>*{flex:1;}
-    .btn{cursor:pointer;font-weight:700;transition:all .2s;}.btn:hover{opacity:.85;}
-    .btn.primary{border:none;background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
-    .btn.sm{width:auto;padding:7px 12px;font-size:.85rem;}
-    .btn.good{border:none;background:linear-gradient(135deg,#58d4a8,#3bc99c);color:#032333;}
-    .btn.hard{border:none;background:rgba(255,127,127,.2);border:1px solid rgba(255,127,127,.4);color:#ff9f9f;}
-    /* 3D FLIP CARD */
-    .flip-scene{perspective:1000px;height:220px;margin:16px 0;cursor:pointer;}
-    .flip-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s ease;}
-    .flip-card.flipped{transform:rotateY(180deg);}
-    .flip-face{position:absolute;inset:0;backface-visibility:hidden;border:1px dashed var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
-    .flip-front{background:linear-gradient(160deg,rgba(11,27,49,.9),rgba(7,18,34,.9));}
-    .flip-back{background:linear-gradient(160deg,rgba(8,34,22,.9),rgba(5,20,35,.9));border-color:rgba(88,212,168,.3);transform:rotateY(180deg);}
-    .flip-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-family:"JetBrains Mono",monospace;}
-    .flip-text{font-size:1.15rem;font-weight:600;color:var(--text);}
-    .flip-hint{font-size:.8rem;color:var(--muted);margin-top:10px;}
-    /* Stats */
-    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
-    .stat{padding:10px;border-radius:10px;border:1px solid var(--line);background:rgba(5,15,28,.75);text-align:center;}
-    .stat strong{display:block;font-family:"Orbitron",sans-serif;font-size:1.1rem;}
-    .stat span{font-size:.74rem;color:var(--muted);}
-    /* Deck tags */
-    .deck-tag{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;border:1px solid rgba(121,216,255,.3);border-radius:999px;padding:3px 9px;color:var(--acc);}
-    /* Rating buttons */
-    .rating-row{display:flex;gap:10px;margin-top:12px;}
-    .rating-row button{flex:1;}
-    a{color:#9edcff;}
-    @media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+    .card{border:1px solid #365f88;border-radius:14px;padding:20px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:14px;}
+    input,select,textarea{padding:10px;border-radius:10px;border:1px solid #365f88;background:#0a1b31;color:#eef7ff;font:inherit;transition:border-color .2s;width:100%;}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:#79d8ff;}
+    .btn{cursor:pointer;font-weight:700;padding:10px 18px;border-radius:10px;border:none;transition:all .2s;font-family:inherit;}
+    .btn.primary{background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn.sm{padding:7px 14px;font-size:.83rem;}
+    .btn.ghost{background:transparent;border:1px solid #365f88;color:#a9c6e7;}
+    .btn.danger{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.3);color:#ff9999;}
+    .btn.ok{background:rgba(86,213,166,.15);border:1px solid rgba(86,213,166,.4);color:#56d5a6;}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+    .stat{border:1px solid #365f88;border-radius:12px;padding:12px;text-align:center;background:rgba(5,16,30,.6);}
+    .stat strong{display:block;font-size:1.4rem;font-family:"JetBrains Mono",monospace;color:#79d8ff;}
+    .stat span{font-size:.72rem;color:#a9c6e7;}
+    /* DECK SELECTOR */
+    .deck-row{display:flex;gap:8px;margin-bottom:14px;}
+    /* FLIP CARD */
+    .flashcard-scene{perspective:1000px;width:100%;max-width:520px;height:240px;margin:0 auto 20px;cursor:pointer;}
+    .flashcard{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);}
+    .flashcard.flipped{transform:rotateY(180deg);}
+    .flashcard-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;}
+    .flashcard-front{background:linear-gradient(135deg,rgba(18,52,92,.96),rgba(9,27,51,.98));border:2px solid rgba(121,216,255,.4);}
+    .flashcard-back{background:linear-gradient(135deg,rgba(10,36,22,.96),rgba(6,22,14,.98));border:2px solid rgba(86,213,166,.4);transform:rotateY(180deg);}
+    .card-text{font-size:1.15rem;font-weight:600;line-height:1.5;}
+    .card-hint{font-size:.78rem;font-family:"JetBrains Mono",monospace;position:absolute;bottom:12px;right:14px;color:#6b8fad;}
+    /* CONTROLS */
+    .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;}
+    /* PROGRESS */
+    .prog-bar{height:6px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;margin-bottom:6px;}
+    .prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#79d8ff,#56d5a6);transition:width .4s;}
+    .badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.72rem;font-family:"JetBrains Mono",monospace;}
+    .badge.green{background:rgba(86,213,166,.12);border:1px solid rgba(86,213,166,.3);color:#56d5a6;}
+    .badge.yellow{background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.3);color:#ffd166;}
+    .badge.red{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);color:#ff9999;}
+    /* CARD LIST */
+    .fc-item{border:1px solid rgba(84,126,171,.25);border-radius:10px;padding:12px;margin-bottom:8px;background:rgba(5,16,30,.5);display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;}
+    .fc-q{font-size:.85rem;font-weight:600;}
+    .fc-a{font-size:.82rem;color:#56d5a6;}
+    .empty{color:#a9c6e7;border:1px dashed #365f88;border-radius:12px;padding:24px;text-align:center;}
+    @media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr);}.fc-item{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
 <main class="wrap">
   <section class="card">
-    <h1>🃏 Flashcards Trainer Pro</h1>
-    <p>Study smarter with 3D flip cards, deck filtering, spaced repetition ratings, and session scores.</p>
-    <a href="index.html#projects">← Back to portfolio</a>
+    <h1>🃏 Flashcards Pro</h1>
+    <p>Create decks, flip cards, track what you know. All saved locally.</p>
+    <a href="index.html" style="color:#9edcff;font-size:.85rem;">← Back to portfolio</a>
   </section>
 
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><strong id="sTotal">0</strong><span>Total cards</span></div>
+    <div class="stat"><strong id="sKnow">0</strong><span>Known ✅</span></div>
+    <div class="stat"><strong id="sLearn">0</strong><span>Learning 🔄</span></div>
+    <div class="stat"><strong id="sDecks">0</strong><span>Decks</span></div>
+  </div>
+
+  <!-- DECK MANAGE -->
   <section class="card">
-    <h2>Add Card</h2>
-    <div class="row"><input id="fcQ" placeholder="Question" maxlength="200" /><input id="fcA" placeholder="Answer" maxlength="200" /></div>
-    <div class="row" style="margin-top:8px;">
-      <input id="fcDeck" placeholder="Deck name (e.g. Science, Math)" />
-      <button class="btn primary" id="fcAddBtn" style="flex:none;width:auto;padding:10px 20px;">Add Card</button>
+    <div class="deck-row">
+      <input id="deckName" placeholder="New deck name..." style="flex:1;"/>
+      <button class="btn primary" id="addDeckBtn">+ Deck</button>
+      <select id="deckSelect" style="flex:1;"></select>
+      <button class="btn danger sm" id="deleteDeckBtn">🗑 Deck</button>
     </div>
+    <div class="row" style="margin-bottom:10px;">
+      <textarea id="qInput" placeholder="Question / Front" style="flex:1;min-height:60px;resize:none;"></textarea>
+      <textarea id="aInput" placeholder="Answer / Back" style="flex:1;min-height:60px;resize:none;"></textarea>
+      <button class="btn primary" id="addCardBtn">+ Card</button>
+    </div>
+    <div style="font-size:.8rem;color:#a9c6e7;">💡 Tip: Add multiple cards fast, then study with the flipper above.</div>
   </section>
 
-  <section class="card">
-    <div class="row" style="margin-bottom:12px;align-items:center;">
-      <select id="fcDeckFilter" style="flex:2;"></select>
-      <button class="btn sm" id="fcShuffle" style="flex:none;">🔀 Shuffle</button>
-      <button class="btn sm" id="fcSpacedBtn" style="flex:none;">⚡ Hard First</button>
-      <button class="btn sm" id="fcDelBtn" style="flex:none;">🗑 Delete Card</button>
-    </div>
-
-    <!-- 3D Flip Card -->
-    <div class="flip-scene" id="flipScene">
-      <div class="flip-card" id="flipCard">
-        <div class="flip-face flip-front" id="flipFront">
-          <div class="flip-label">Question</div>
-          <div class="flip-text" id="flipFrontText">Add your first card above</div>
-          <div class="flip-hint">Click to flip →</div>
-        </div>
-        <div class="flip-face flip-back" id="flipBack">
-          <div class="flip-label">Answer</div>
-          <div class="flip-text" id="flipBackText">—</div>
-          <div class="flip-hint">← Click to flip back</div>
-        </div>
+  <!-- STUDY MODE -->
+  <section class="card" id="studySection" style="display:none;">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px;">
+      <h2>📖 Study Mode</h2>
+      <div class="row">
+        <span id="cardCounter" style="font-family:'JetBrains Mono',monospace;font-size:.85rem;color:#a9c6e7;"></span>
+        <button class="btn ghost sm" id="shuffleBtn">🔀 Shuffle</button>
+        <button class="btn ghost sm" id="stopStudyBtn">✕ Stop</button>
       </div>
     </div>
-
-    <!-- Position & deck info -->
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin:8px 0;">
-      <span class="meta" id="fcPos">No cards</span>
-      <span class="deck-tag" id="fcDeckTag">All Decks</span>
+    <div class="prog-bar"><div class="prog-fill" id="studyProg" style="width:0%"></div></div>
+    <div class="flashcard-scene" id="cardScene" onclick="flipCard()">
+      <div class="flashcard" id="flashcard">
+        <div class="flashcard-face flashcard-front"><span class="card-text" id="frontText"></span><span class="card-hint">Click to flip</span></div>
+        <div class="flashcard-face flashcard-back"><span class="card-text" id="backText"></span><span class="card-hint">Rate yourself</span></div>
+      </div>
     </div>
-
-    <!-- Rating buttons (spaced repetition) -->
-    <div class="rating-row" id="ratingRow" style="display:none;">
-      <button class="btn hard" data-rating="hard">😓 Hard</button>
-      <button class="btn" data-rating="ok">😐 OK</button>
-      <button class="btn good" data-rating="easy">😎 Easy</button>
+    <div class="controls">
+      <button class="btn danger" id="hardBtn">😰 Hard</button>
+      <button class="btn ghost" id="flipBtn" onclick="flipCard()">🔄 Flip</button>
+      <button class="btn ok" id="gotBtn">✅ Got It</button>
     </div>
-
-    <!-- Navigation -->
-    <div class="row" style="margin-top:10px;">
-      <button class="btn" id="fcPrev">← Prev</button>
-      <button class="btn" id="fcNext">Next →</button>
-    </div>
-
-    <!-- Session stats -->
-    <div class="stats-row" style="margin-top:14px;">
-      <div class="stat"><strong id="stTotal">0</strong><span>Total Cards</span></div>
-      <div class="stat"><strong id="stFlips">0</strong><span>Flips</span></div>
-      <div class="stat"><strong id="stEasy">0</strong><span>Easy</span></div>
-      <div class="stat"><strong id="stHard">0</strong><span>Hard</span></div>
+    <div id="sessionResult" style="display:none;text-align:center;padding:20px;">
+      <div style="font-size:2rem;margin-bottom:10px;">🎉</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:1.1rem;margin-bottom:8px;">Session Complete!</div>
+      <div id="sessionScore" style="color:#a9c6e7;font-size:.9rem;margin-bottom:12px;"></div>
+      <button class="btn primary" id="restartBtn">↺ Study Again</button>
     </div>
   </section>
+
+  <!-- CARD LIST -->
+  <section class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px;">
+      <h2>📋 Cards in Deck</h2>
+      <button class="btn primary sm" id="startStudyBtn">▶ Study Now</button>
+    </div>
+    <div id="cardList"></div>
+  </section>
 </main>
+
 <script>
 (() => {
-  const SK="krishiv_fc_v3";
-  let cards=[], i=0, showAns=false, flips=0, sessionEasy=0, sessionHard=0, hardFirst=false;
-  const $=id=>document.getElementById(id);
-  function load(){try{cards=JSON.parse(localStorage.getItem(SK)||"[]");if(!Array.isArray(cards))cards=[];}catch{cards=[];}}
-  function save(){localStorage.setItem(SK,JSON.stringify(cards));}
-  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-  function visible(){
-    const d=$("fcDeckFilter").value;
-    let list=d==="all"?[...cards]:cards.filter(c=>c.deck===d);
-    if(hardFirst)list.sort((a,b)=>(b.hardCount||0)-(a.hardCount||0));
-    return list;
-  }
+  const LSK = 'krishiv_fc_v2';
+  let data = {decks:{}}, activeDeck = '', studyQueue = [], studyIdx = 0, isFlipped = false, sessionGot = 0, sessionHard = 0;
+
+  function load(){try{data=JSON.parse(localStorage.getItem(LSK)||'{"decks":{}}');if(!data.decks)data.decks={};}catch{data={decks:{}};}}
+  function save(){localStorage.setItem(LSK,JSON.stringify(data));}
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function getDeck(){return data.decks[activeDeck]||{cards:[]};}
+
   function renderDecks(){
-    const decks=[...new Set(cards.map(c=>c.deck||"General"))];
-    const cur=$("fcDeckFilter").value||"all";
-    $("fcDeckFilter").innerHTML=`<option value="all">All Decks (${cards.length})</option>`+decks.map(d=>`<option value="${esc(d)}">${esc(d)} (${cards.filter(c=>(c.deck||"General")===d).length})</option>`).join("");
-    if(decks.includes(cur))$("fcDeckFilter").value=cur;
+    const sel=document.getElementById('deckSelect');
+    const keys=Object.keys(data.decks);
+    sel.innerHTML=keys.length?keys.map(k=>`<option value="${esc(k)}">${esc(k)} (${data.decks[k].cards.length})</option>`):'<option value="">No decks yet</option>';
+    if(!activeDeck||!data.decks[activeDeck])activeDeck=keys[0]||'';
+    if(activeDeck)sel.value=activeDeck;
   }
-  function renderCard(){
-    const list=visible();
-    renderDecks();
-    $("stTotal").textContent=String(list.length);
-    $("stFlips").textContent=String(flips);
-    $("stEasy").textContent=String(sessionEasy);
-    $("stHard").textContent=String(sessionHard);
-    if(!list.length){
-      $("flipFrontText").textContent="No cards in this deck.";$("flipBackText").textContent="—";
-      $("fcPos").textContent="0 / 0";$("fcDeckTag").textContent="Empty";$("ratingRow").style.display="none";
-      return;
-    }
-    if(i>=list.length)i=0;
-    const c=list[i];
-    // Reset flip
-    $("flipCard").classList.remove("flipped");showAns=false;
-    $("flipFrontText").textContent=c.q;$("flipBackText").textContent=c.a;
-    $("fcPos").textContent=`Card ${i+1} of ${list.length}`;
-    $("fcDeckTag").textContent=c.deck||"General";
-    $("ratingRow").style.display="none";
+
+  function renderStats(){
+    const allCards=Object.values(data.decks).flatMap(d=>d.cards);
+    document.getElementById('sTotal').textContent=allCards.length;
+    document.getElementById('sKnow').textContent=allCards.filter(c=>c.status==='know').length;
+    document.getElementById('sLearn').textContent=allCards.filter(c=>c.status==='learn').length;
+    document.getElementById('sDecks').textContent=Object.keys(data.decks).length;
   }
-  $("flipScene").addEventListener("click",()=>{
-    if(!visible().length)return;
-    showAns=!showAns;flips++;
-    $("flipCard").classList.toggle("flipped",showAns);
-    $("ratingRow").style.display=showAns?"flex":"none";
-    renderCard();
+
+  function renderCards(){
+    const deck=getDeck();
+    const list=document.getElementById('cardList');
+    if(!activeDeck||!deck.cards.length){list.innerHTML='<div class="empty">No cards in this deck. Add some above!</div>';return;}
+    list.innerHTML=deck.cards.map((c,i)=>`
+      <div class="fc-item">
+        <div class="fc-q">Q: ${esc(c.q)}</div>
+        <div class="fc-a">A: ${esc(c.a)}</div>
+        <div class="row">
+          <span class="badge ${c.status==='know'?'green':c.status==='learn'?'yellow':'yellow'}">${c.status==='know'?'✅ Known':c.status==='hard'?'😰 Hard':'🔄 Learning'}</span>
+          <button class="btn danger sm" onclick="deleteCard(${i})">🗑</button>
+        </div>
+      </div>`).join('');
+  }
+
+  function render(){renderDecks();renderStats();renderCards();}
+
+  // Add deck
+  document.getElementById('addDeckBtn').addEventListener('click',()=>{
+    const name=document.getElementById('deckName').value.trim();
+    if(!name){alert('Enter a deck name!');return;}
+    if(!data.decks[name])data.decks[name]={cards:[]};
+    activeDeck=name;save();render();document.getElementById('deckName').value='';
   });
-  // Prevent rating click from flipping
-  $("ratingRow").addEventListener("click",e=>{
-    e.stopPropagation();
-    const btn=e.target.closest("[data-rating]");if(!btn)return;
-    const r=btn.dataset.rating;const list=visible();const c=list[i];
-    if(r==="easy"){sessionEasy++;c.hardCount=Math.max(0,(c.hardCount||0)-1);}
-    else if(r==="hard"){sessionHard++;c.hardCount=(c.hardCount||0)+1;}
-    const orig=cards.find(x=>x.id===c.id);if(orig)orig.hardCount=c.hardCount;
-    save();i=(i+1)%list.length;renderCard();
+
+  document.getElementById('deleteDeckBtn').addEventListener('click',()=>{
+    if(!activeDeck||!confirm(`Delete deck "${activeDeck}"?`))return;
+    delete data.decks[activeDeck];activeDeck=Object.keys(data.decks)[0]||'';save();render();
   });
-  $("fcAddBtn").addEventListener("click",()=>{
-    const q=$("fcQ").value.trim(),a=$("fcA").value.trim();
-    if(q.length<2||a.length<1){alert("Enter question and answer.");return;}
-    cards.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),q,a,deck:($("fcDeck").value.trim()||"General").slice(0,40),hardCount:0});
-    $("fcQ").value="";$("fcA").value="";save();i=visible().length-1;renderCard();
+
+  document.getElementById('deckSelect').addEventListener('change',e=>{activeDeck=e.target.value;render();});
+
+  // Add card
+  document.getElementById('addCardBtn').addEventListener('click',()=>{
+    const q=document.getElementById('qInput').value.trim();
+    const a=document.getElementById('aInput').value.trim();
+    if(!q||!a){alert('Fill in both question and answer!');return;}
+    if(!activeDeck){alert('Select or create a deck first!');return;}
+    getDeck().cards.push({q,a,status:'learn'});
+    save();render();document.getElementById('qInput').value='';document.getElementById('aInput').value='';
   });
-  $("fcNext").addEventListener("click",()=>{const l=visible();if(!l.length)return;i=(i+1)%l.length;renderCard();});
-  $("fcPrev").addEventListener("click",()=>{const l=visible();if(!l.length)return;i=(i-1+l.length)%l.length;renderCard();});
-  $("fcDelBtn").addEventListener("click",()=>{const l=visible();if(!l.length)return;const c=l[i];cards=cards.filter(x=>x.id!==c.id);if(i>=visible().length)i=Math.max(0,visible().length-1);save();renderCard();});
-  $("fcShuffle").addEventListener("click",()=>{cards=[...cards].sort(()=>Math.random()-.5);i=0;save();renderCard();});
-  $("fcSpacedBtn").addEventListener("click",()=>{hardFirst=!hardFirst;$("fcSpacedBtn").textContent=hardFirst?"⚡ Hard First ✓":"⚡ Hard First";i=0;renderCard();});
-  $("fcDeckFilter").addEventListener("change",()=>{i=0;renderCard();});
-  load();renderCard();
+
+  window.deleteCard=i=>{if(!confirm('Delete card?'))return;getDeck().cards.splice(i,1);save();render();};
+
+  // STUDY
+  function startStudy(){
+    const cards=getDeck().cards;
+    if(!cards.length){alert('No cards in this deck!');return;}
+    studyQueue=[...cards];studyIdx=0;sessionGot=0;sessionHard=0;isFlipped=false;
+    document.getElementById('studySection').style.display='';
+    document.getElementById('sessionResult').style.display='none';
+    document.getElementById('cardScene').style.display='';
+    document.querySelectorAll('.controls button').forEach(b=>b.style.display='');
+    showCard();
+  }
+
+  function showCard(){
+    if(studyIdx>=studyQueue.length){endStudy();return;}
+    const c=studyQueue[studyIdx];
+    isFlipped=false;
+    document.getElementById('flashcard').classList.remove('flipped');
+    document.getElementById('frontText').textContent=c.q;
+    document.getElementById('backText').textContent=c.a;
+    document.getElementById('cardCounter').textContent=`${studyIdx+1} / ${studyQueue.length}`;
+    document.getElementById('studyProg').style.width=Math.round(studyIdx/studyQueue.length*100)+'%';
+  }
+
+  window.flipCard=()=>{isFlipped=!isFlipped;document.getElementById('flashcard').classList.toggle('flipped',isFlipped);};
+
+  document.getElementById('shuffleBtn').addEventListener('click',()=>{
+    for(let i=studyQueue.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[studyQueue[i],studyQueue[j]]=[studyQueue[j],studyQueue[i]];}
+    studyIdx=0;showCard();
+  });
+
+  document.getElementById('gotBtn').addEventListener('click',()=>{
+    const c=getDeck().cards.find(x=>x.q===studyQueue[studyIdx]?.q);if(c)c.status='know';
+    sessionGot++;studyIdx++;save();showCard();
+  });
+
+  document.getElementById('hardBtn').addEventListener('click',()=>{
+    const c=getDeck().cards.find(x=>x.q===studyQueue[studyIdx]?.q);if(c)c.status='hard';
+    sessionHard++;studyIdx++;save();showCard();
+  });
+
+  document.getElementById('stopStudyBtn').addEventListener('click',()=>{document.getElementById('studySection').style.display='none';});
+  document.getElementById('startStudyBtn').addEventListener('click',startStudy);
+  document.getElementById('restartBtn').addEventListener('click',startStudy);
+
+  function endStudy(){
+    document.getElementById('cardScene').style.display='none';
+    document.querySelectorAll('.controls button').forEach(b=>b.style.display='none');
+    document.getElementById('sessionResult').style.display='';
+    document.getElementById('sessionScore').textContent=`✅ Got it: ${sessionGot} · 😰 Hard: ${sessionHard} · 📊 ${Math.round(sessionGot/studyQueue.length*100)}% score`;
+    render();
+  }
+
+  load();render();
 })();
 </script>
-<script src="app-catalog.js"></script>
-<script src="app-universe-shell.js" defer></script>
-</body>
-</html>
+<script src="app-catalog.js"></script><script src="app-universe-shell.js" defer></script>
+</body></html>

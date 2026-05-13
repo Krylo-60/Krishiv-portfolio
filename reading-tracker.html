@@ -1,65 +1,206 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Reading Tracker | Krishiv PB</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Reading Tracker Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css"/>
+  <link rel="icon" href="logo.svg" type="image/svg+xml"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root{--bg:#061223;--panel:#10253f;--line:#345a80;--text:#eef7ff;--muted:#a8c3e4;--accent:#79d8ff;--ok:#55d8a8}
-    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(165deg,#040e19,#0b223b 50%,#12355b)}
-    .wrap{width:min(940px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(8,20,38,.95));margin-bottom:12px}
-    h1,h2{margin:0 0 8px}p{margin:0 0 10px;color:var(--muted)}.row{display:grid;gap:10px;grid-template-columns:1fr 140px 140px auto}
-    input,button{border-radius:10px;border:1px solid var(--line);background:#08192e;color:var(--text);padding:10px;font:inherit}
-    .btn-primary{font-weight:700;border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#042132}
-    .book{border:1px solid rgba(110,163,215,.24);border-radius:12px;padding:10px;background:rgba(6,18,32,.72);margin-bottom:8px}.bar{height:8px;background:#091a2f;border:1px solid var(--line);border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--ok))}
-    .credit{font-weight:700;color:#d9ecff}a{color:#9fd9ff}
-    @media(max-width:780px){.row{grid-template-columns:1fr}}
-  </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+    *{box-sizing:border-box;}body{margin:0;font-family:"Space Grotesk",sans-serif;color:#eef7ff;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
+    h1,h2,h3{font-family:"Orbitron",sans-serif;margin:0 0 8px;}
+    .wrap{width:min(1020px,94%);margin:24px auto;}
+    .card{border:1px solid #365f88;border-radius:14px;padding:20px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:14px;}
+    input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #365f88;background:#0a1b31;color:#eef7ff;font:inherit;transition:border-color .2s;}
+    input:focus,select:focus{outline:none;border-color:#79d8ff;}
+    .btn{cursor:pointer;font-weight:700;padding:10px 18px;border-radius:10px;border:none;transition:all .2s;font-family:inherit;}
+    .btn.primary{background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn.sm{padding:6px 12px;font-size:.82rem;}
+    .btn.ghost{background:transparent;border:1px solid #365f88;color:#a9c6e7;}
+    .btn.danger{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.3);color:#ff9999;}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .stat{border:1px solid #365f88;border-radius:12px;padding:14px;text-align:center;background:rgba(5,16,30,.6);}
+    .stat strong{display:block;font-size:1.5rem;font-family:"JetBrains Mono",monospace;color:#79d8ff;}
+    .stat span{font-size:.75rem;color:#a9c6e7;}
+    /* BOOK CARD */
+    .book{border:1px solid rgba(84,126,171,.35);border-radius:12px;padding:14px;margin-bottom:10px;background:rgba(5,16,30,.72);display:flex;gap:14px;transition:border-color .2s;}
+    .book:hover{border-color:rgba(121,216,255,.3);}
+    .book-cover{width:48px;height:68px;border-radius:8px;flex:0 0 48px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:linear-gradient(135deg,#0d2540,#0a1b31);border:1px solid #365f88;}
+    .book-info{flex:1;min-width:0;}
+    .book-title{font-family:"Orbitron",sans-serif;font-size:.9rem;margin:0 0 2px;}
+    .book-author{font-size:.8rem;color:#a9c6e7;margin:0 0 8px;}
+    .book-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px;}
+    .badge{padding:3px 9px;border-radius:999px;font-size:.72rem;font-family:"JetBrains Mono",monospace;border:1px solid;}
+    .badge.reading{background:rgba(121,216,255,.1);border-color:rgba(121,216,255,.3);color:#79d8ff;}
+    .badge.done{background:rgba(86,213,166,.1);border-color:rgba(86,213,166,.3);color:#56d5a6;}
+    .badge.want{background:rgba(255,209,102,.1);border-color:rgba(255,209,102,.3);color:#ffd166;}
+    .badge.paused{background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.3);color:#ff9999;}
+    .prog-bar{height:6px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;margin-bottom:6px;}
+    .prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#79d8ff,#56d5a6);transition:width .5s;}
+    .stars{color:#ffd166;font-size:1rem;cursor:pointer;}
+    .book-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+    .empty{color:#a9c6e7;border:1px dashed #365f88;border-radius:12px;padding:20px;text-align:center;}
+    @media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr);}.book{flex-direction:column;}}
   </style>
 </head>
-<body data-theme="default" data-mode="dark">
-  <main class="wrap">
-    <section class="card"><h1>Reading Tracker</h1><p>Track reading progress and finish books with consistency.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
-    <section class="card">
-      <h2>Add Book</h2>
-      <div class="row"><input id="book" placeholder="Book title" maxlength="80" /><input id="pages" type="number" min="1" placeholder="Total pages" /><input id="read" type="number" min="0" placeholder="Pages read" /><button id="addBook" class="btn-primary" type="button">Add</button></div>
-      <p>Details: update pages-read over time to keep your reading streak visible.</p>
-    </section>
-    <section class="card"><h2>Reading List</h2><div id="books"></div></section>
-  </main>
-  <script>
-    (() => {
-      const key="krishiv_reading_tracker_v1", book=document.getElementById("book"), pages=document.getElementById("pages"), read=document.getElementById("read"), add=document.getElementById("addBook"), books=document.getElementById("books");
-      let data=[]; try{data=JSON.parse(localStorage.getItem(key)||"[]"); if(!Array.isArray(data)) data=[];}catch{data=[];}
-      const save=()=>localStorage.setItem(key,JSON.stringify(data));
-      const render=()=>{books.innerHTML=data.length?data.map(b=>{const pct=Math.max(0,Math.min(100,Math.round((b.read/Math.max(1,b.pages))*100))); return `<article class="book"><strong>${b.title}</strong><p>${b.read}/${b.pages} pages (${pct}%)</p><div class="bar"><span style="width:${pct}%"></span></div><div style="margin-top:8px;"><button data-a="plus" data-id="${b.id}">+10 pages</button> <button data-a="del" data-id="${b.id}">Delete</button></div></article>`;}).join(""):'<p>No books added yet.</p>';};
-      add.addEventListener("click",()=>{const t=book.value.trim(),p=Number(pages.value||0),r=Number(read.value||0); if(t.length<2||p<1||r<0||r>p){alert("Enter valid title and page values.");return;} data.unshift({id:Date.now().toString(36),title:t,pages:p,read:r}); book.value=""; pages.value=""; read.value=""; save(); render();});
-      books.addEventListener("click",(e)=>{const b=e.target; if(!(b instanceof HTMLButtonElement)) return; const id=b.dataset.id; if(!id) return; if(b.dataset.a==="plus"){data=data.map(x=>x.id===id?({...x,read:Math.min(x.pages,x.read+10)}):x);} if(b.dataset.a==="del"){data=data.filter(x=>x.id!==id);} save(); render();});
-      render();
-    })();
-  </script>
-  <script src="app-catalog.js"></script>
-  <script src="app-universe-shell.js" defer></script>
-</body>
-</html>
+<body>
+<main class="wrap">
+  <section class="card">
+    <h1>📚 Reading Tracker Pro</h1>
+    <p style="color:#a9c6e7;">Track every book — progress, ratings, notes. All saved locally.</p>
+    <a href="index.html" style="color:#9edcff;font-size:.85rem;">← Back to portfolio</a>
+  </section>
 
+  <div class="grid" style="margin-bottom:14px;">
+    <div class="stat"><strong id="sTotal">0</strong><span>Books logged</span></div>
+    <div class="stat"><strong id="sDone">0</strong><span>Finished ✅</span></div>
+    <div class="stat"><strong id="sPages">0</strong><span>Pages read</span></div>
+  </div>
 
+  <section class="card">
+    <h2>➕ Add Book</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Title *</label><input id="bTitle" placeholder="Book title"/></div>
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Author</label><input id="bAuthor" placeholder="Author name"/></div>
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Total pages</label><input type="number" id="bTotal" min="1" placeholder="300"/></div>
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Pages read</label><input type="number" id="bRead" min="0" value="0" placeholder="0"/></div>
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Status</label>
+        <select id="bStatus"><option value="reading">📖 Reading</option><option value="done">✅ Finished</option><option value="want">⭐ Want to Read</option><option value="paused">⏸ Paused</option></select>
+      </div>
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Genre</label>
+        <select id="bGenre"><option>Fiction</option><option>Non-Fiction</option><option>Fantasy</option><option>Sci-Fi</option><option>Mystery</option><option>Biography</option><option>Self-Help</option><option>History</option><option>Other</option></select>
+      </div>
+      <div style="grid-column:1/-1;"><label style="font-size:.8rem;color:#a9c6e7;">Notes</label><input id="bNotes" placeholder="What do you think so far?"/></div>
+    </div>
+    <div class="row">
+      <span style="color:#a9c6e7;font-size:.85rem;">Rating:</span>
+      <div id="starPicker" style="font-size:1.4rem;cursor:pointer;">⭐⭐⭐⭐⭐</div>
+      <span id="ratingLabel" style="font-size:.8rem;color:#a9c6e7;font-family:'JetBrains Mono',monospace;">5 stars</span>
+      <button class="btn primary" id="addBtn" style="margin-left:auto;">📚 Add Book</button>
+    </div>
+  </section>
 
+  <section class="card">
+    <div class="row" style="margin-bottom:10px;">
+      <input id="search" placeholder="Search books..." style="flex:1;"/>
+      <select id="filterStatus" style="max-width:150px;">
+        <option value="">All status</option>
+        <option value="reading">Reading</option>
+        <option value="done">Finished</option>
+        <option value="want">Want to Read</option>
+        <option value="paused">Paused</option>
+      </select>
+    </div>
+    <div id="bookList"></div>
+  </section>
+</main>
+<script>
+(() => {
+  const LSK = 'krishiv_rt_v2';
+  let books = [], rating = 5;
+  const EMOJIS = {'Fiction':'📖','Non-Fiction':'📰','Fantasy':'🧙','Sci-Fi':'🚀','Mystery':'🔍','Biography':'👤','Self-Help':'💡','History':'🏛','Other':'📗'};
+  function load(){try{books=JSON.parse(localStorage.getItem(LSK)||'[]');if(!Array.isArray(books))books=[];}catch{books=[];}}
+  function save(){localStorage.setItem(LSK,JSON.stringify(books));}
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+  // Star picker
+  const stars = document.getElementById('starPicker');
+  stars.addEventListener('mouseover', e => {
+    const idx = [...stars.children].indexOf(e.target) + 1;
+    if(idx > 0) stars.innerHTML = '⭐'.repeat(idx) + '☆'.repeat(5-idx);
+  });
+  stars.addEventListener('click', e => {
+    const idx = [...stars.children].indexOf(e.target) + 1;
+    if(idx > 0){ rating = idx; document.getElementById('ratingLabel').textContent = idx + ' star' + (idx>1?'s':''); }
+  });
+  stars.addEventListener('mouseleave', () => { stars.innerHTML = '⭐'.repeat(rating) + '☆'.repeat(5-rating); });
+
+  // Actually make stars clickable as spans
+  function renderStarPicker(r){
+    stars.innerHTML = [...Array(5)].map((_,i)=>`<span data-i="${i+1}" style="cursor:pointer">${i<r?'⭐':'☆'}</span>`).join('');
+  }
+  renderStarPicker(5);
+  stars.addEventListener('click',e=>{
+    const i=Number(e.target.dataset.i);if(!i)return;rating=i;renderStarPicker(i);document.getElementById('ratingLabel').textContent=i+' star'+(i>1?'s':'');
+  });
+
+  document.getElementById('addBtn').addEventListener('click',()=>{
+    const title=document.getElementById('bTitle').value.trim();
+    if(!title){alert('Enter a book title!');return;}
+    books.unshift({
+      id:Date.now().toString(36),title,
+      author:document.getElementById('bAuthor').value.trim(),
+      total:Number(document.getElementById('bTotal').value)||0,
+      read:Number(document.getElementById('bRead').value)||0,
+      status:document.getElementById('bStatus').value,
+      genre:document.getElementById('bGenre').value,
+      notes:document.getElementById('bNotes').value.trim(),
+      rating,ts:Date.now()
+    });
+    save();render();
+    ['bTitle','bAuthor','bNotes'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('bTotal').value='';document.getElementById('bRead').value='0';rating=5;renderStarPicker(5);
+    document.getElementById('ratingLabel').textContent='5 stars';
+  });
+
+  document.getElementById('search').addEventListener('input',render);
+  document.getElementById('filterStatus').addEventListener('change',render);
+
+  function render(){
+    const q=document.getElementById('search').value.toLowerCase();
+    const sf=document.getElementById('filterStatus').value;
+    let vis=books.filter(b=>{
+      if(sf&&b.status!==sf)return false;
+      if(q&&!(b.title+b.author+b.genre+b.notes).toLowerCase().includes(q))return false;
+      return true;
+    });
+    // Stats
+    const totalPages=books.filter(b=>b.status==='done').reduce((a,b)=>a+(b.total||b.read||0),0);
+    document.getElementById('sTotal').textContent=books.length;
+    document.getElementById('sDone').textContent=books.filter(b=>b.status==='done').length;
+    document.getElementById('sPages').textContent=totalPages.toLocaleString();
+
+    const list=document.getElementById('bookList');
+    if(!vis.length){list.innerHTML='<div class="empty">No books yet. Add your first one above!</div>';return;}
+    list.innerHTML=vis.map(b=>{
+      const pct=b.total>0?Math.min(100,Math.round(b.read/b.total*100)):b.status==='done'?100:0;
+      const emoji=EMOJIS[b.genre]||'📗';
+      const starStr='⭐'.repeat(b.rating||0)+'☆'.repeat(5-(b.rating||0));
+      return `<div class="book">
+        <div class="book-cover">${emoji}</div>
+        <div class="book-info">
+          <div class="book-title">${esc(b.title)}</div>
+          <div class="book-author">${b.author?esc(b.author):'Unknown author'} · ${esc(b.genre)}</div>
+          <div class="book-meta">
+            <span class="badge ${b.status}">${{reading:'📖 Reading',done:'✅ Done',want:'⭐ Wishlist',paused:'⏸ Paused'}[b.status]||b.status}</span>
+            <span style="font-size:.78rem;color:#a9c6e7;font-family:'JetBrains Mono',monospace;">${pct}%${b.total?' · '+b.read+'/'+b.total+' pages':''}</span>
+          </div>
+          ${b.total>0||b.status==='done'?`<div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>`:''}
+          <div style="font-size:.95rem;">${starStr}</div>
+          ${b.notes?`<div style="font-size:.82rem;color:#a9c6e7;margin-top:4px;font-style:italic;">"${esc(b.notes)}"</div>`:''}
+          <div class="book-actions">
+            ${b.status==='reading'&&b.total>0?`<input type="number" min="0" max="${b.total}" value="${b.read}" style="width:80px;padding:4px 8px;font-size:.8rem;" onchange="updatePages('${b.id}',this.value)"/> pages`:''}
+            <select style="max-width:130px;padding:4px 6px;font-size:.8rem;" onchange="updateStatus('${b.id}',this.value)">
+              <option value="reading"${b.status==='reading'?' selected':''}>📖 Reading</option>
+              <option value="done"${b.status==='done'?' selected':''}>✅ Done</option>
+              <option value="want"${b.status==='want'?' selected':''}>⭐ Wishlist</option>
+              <option value="paused"${b.status==='paused'?' selected':''}>⏸ Paused</option>
+            </select>
+            <button class="btn danger sm" onclick="deleteBook('${b.id}')">🗑</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  window.deleteBook=id=>{if(!confirm('Remove this book?'))return;books=books.filter(b=>b.id!==id);save();render();};
+  window.updatePages=(id,val)=>{const b=books.find(x=>x.id===id);if(!b)return;b.read=Math.min(b.total,Math.max(0,Number(val)||0));if(b.read===b.total&&b.total>0)b.status='done';save();render();};
+  window.updateStatus=(id,val)=>{const b=books.find(x=>x.id===id);if(!b)return;b.status=val;save();render();};
+
+  load();render();
+})();
+</script>
+<script src="app-catalog.js"></script><script src="app-universe-shell.js" defer></script>
+</body></html>
