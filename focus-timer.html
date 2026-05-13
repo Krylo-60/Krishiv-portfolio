@@ -43,6 +43,19 @@
     .mode-break{background:rgba(84,215,166,.1);border-color:rgba(84,215,166,.35);color:var(--ok);}
     .empty{color:var(--muted);text-align:center;padding:14px;}
     a{color:#99daff;}
+    /* NEW FEATURES */
+    .sound-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+    .sound-btn{padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:#0a1a30;color:var(--muted);cursor:pointer;font-size:.82rem;font-weight:700;transition:all .2s;}
+    .sound-btn.active{border-color:var(--acc);color:var(--acc);background:rgba(121,216,255,.1);}
+    .pomo-dots{display:flex;gap:6px;margin:8px 0;}
+    .pomo-dot{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);transition:background .3s;}
+    .pomo-dot.done{background:var(--acc);border-color:var(--acc);}
+    .score-ring{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(6,17,31,.75);margin-top:10px;}
+    .score-val{font-family:"Orbitron",sans-serif;font-size:2rem;font-weight:800;color:var(--acc);}
+    .chart-bars{display:flex;gap:4px;align-items:flex-end;height:60px;margin-top:8px;}
+    .chart-bar{flex:1;border-radius:4px 4px 0 0;background:rgba(121,216,255,.5);min-width:20px;transition:height .4s;}
+    .chart-lbl{display:flex;gap:4px;justify-content:space-around;margin-top:4px;}
+    .chart-lbl span{flex:1;text-align:center;font-size:.6rem;color:var(--muted);font-family:"JetBrains Mono",monospace;}
   </style>
 </head>
 <body>
@@ -58,10 +71,11 @@
       <div class="mode-pill mode-focus" id="modePill">🎯 Focus Mode</div>
       <div id="sessionCountBadge" style="font-size:.85rem;color:var(--muted);">Sessions: 0</div>
     </div>
-
+    <!-- Pomodoro cycle dots -->
+    <div class="pomo-dots" id="pomoDots"></div>
     <!-- SVG Ring Timer -->
     <div class="ring-wrap">
-      <svg width="240" height="240" viewBox="0 0 240 240">
+      <svg width="220" height="220" viewBox="0 0 240 240">
         <circle cx="120" cy="120" r="104" fill="none" stroke="rgba(54,92,132,.3)" stroke-width="12"/>
         <circle id="ringProgress" cx="120" cy="120" r="104" fill="none" stroke="#79d8ff" stroke-width="12"
           stroke-dasharray="653.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 120 120)"/>
@@ -69,30 +83,36 @@
         <text x="120" y="142" class="ring-label ring-mode" id="ringModeText">FOCUS</text>
       </svg>
     </div>
-
+    <!-- Task label -->
+    <div style="margin:0 auto 10px;max-width:360px;">
+      <input id="taskLabel" placeholder="What are you working on? (optional)" style="text-align:center;background:rgba(10,26,48,.9);border-radius:10px;"/>
+    </div>
     <!-- Controls -->
     <div class="row" style="justify-content:center;margin-bottom:14px;">
       <button id="startBtn" class="btn primary">▶ Start</button>
       <button id="pauseBtn" class="btn">⏸ Pause</button>
       <button id="resetBtn" class="btn">↩ Reset</button>
-      <button id="skipBtn" class="btn">⏭ Skip Mode</button>
+      <button id="skipBtn" class="btn">⏭ Skip</button>
     </div>
-
     <!-- Duration settings -->
-    <div class="row" style="gap:12px;flex-wrap:wrap;">
-      <label style="color:var(--muted);font-size:.88rem;display:flex;align-items:center;gap:8px;">
-        Focus (min): <input id="focusMin" type="number" min="5" max="120" value="25" style="max-width:70px;" />
-      </label>
-      <label style="color:var(--muted);font-size:.88rem;display:flex;align-items:center;gap:8px;">
-        Break (min): <input id="breakMin" type="number" min="1" max="60" value="5" style="max-width:70px;" />
-      </label>
-      <label style="color:var(--muted);font-size:.88rem;display:flex;align-items:center;gap:8px;">
-        <input id="autoStart" type="checkbox" style="width:auto;" /> Auto-start next
-      </label>
+    <div class="row" style="gap:10px;flex-wrap:wrap;justify-content:center;">
+      <label style="color:var(--muted);font-size:.85rem;display:flex;align-items:center;gap:6px;">Focus: <input id="focusMin" type="number" min="5" max="120" value="25" style="max-width:60px;"/></label>
+      <label style="color:var(--muted);font-size:.85rem;display:flex;align-items:center;gap:6px;">Break: <input id="breakMin" type="number" min="1" max="60" value="5" style="max-width:60px;"/></label>
+      <label style="color:var(--muted);font-size:.85rem;display:flex;align-items:center;gap:6px;"><input id="autoStart" type="checkbox" style="width:auto;"/> Auto-start</label>
       <button id="applyBtn" class="btn sm">Apply</button>
     </div>
-
-    <p id="statusText" style="margin-top:12px;color:var(--muted);">Ready to focus.</p>
+    <!-- Ambient Sound -->
+    <div style="margin-top:12px;">
+      <span style="font-size:.82rem;color:var(--muted);">Ambient sound:</span>
+      <div class="sound-row" id="soundRow">
+        <button class="sound-btn active" data-sound="none">🔇 Silent</button>
+        <button class="sound-btn" data-sound="rain">🌧 Rain</button>
+        <button class="sound-btn" data-sound="lofi">🎵 Lofi</button>
+        <button class="sound-btn" data-sound="waves">🌊 Waves</button>
+        <button class="sound-btn" data-sound="white">⬜ White Noise</button>
+      </div>
+    </div>
+    <p id="statusText" style="margin-top:10px;color:var(--muted);">Ready to focus.</p>
   </section>
 
   <section class="card">
@@ -100,6 +120,20 @@
       <div class="stat"><strong id="statSessions">0</strong><span>Sessions done</span></div>
       <div class="stat"><strong id="statFocusTime">0m</strong><span>Total focus time</span></div>
       <div class="stat"><strong id="statBreaks">0</strong><span>Breaks taken</span></div>
+    </div>
+    <!-- Productivity Score -->
+    <div class="score-ring">
+      <div class="score-val" id="scoreVal">0</div>
+      <div>
+        <div style="font-weight:700;margin-bottom:3px;">Productivity Score</div>
+        <div style="font-size:.8rem;color:var(--muted);" id="scoreDesc">Complete focus sessions to build your score.</div>
+      </div>
+    </div>
+    <!-- 7-day chart -->
+    <div style="margin-top:14px;">
+      <div style="font-size:.85rem;font-weight:700;margin-bottom:6px;">📊 Last 7 Days</div>
+      <div class="chart-bars" id="chartBars"></div>
+      <div class="chart-lbl" id="chartLbls"></div>
     </div>
   </section>
 
@@ -113,15 +147,44 @@
 </main>
 <script>
 (() => {
-  const SK="krishiv_focus_v2", LOGK="krishiv_focus_log_v1";
-  const CIRC=653.5;
+  const SK="krishiv_focus_v2", LOGK="krishiv_focus_log_v2";
+  const CIRC=653.5, POMO_CYCLE=4;
   let isFocus=true, focusSec=25*60, breakSec=5*60, remaining=25*60;
-  let timer=null, sessions=0, breaks=0, totalFocusMin=0;
-  let log=JSON.parse(localStorage.getItem(LOGK)||"[]")||[];
+  let timer=null, sessions=0, breaks=0, totalFocusMin=0, pomoCount=0;
+  let log=[], activeSound=null, audioCtx=null, soundNode=null;
+  try{log=JSON.parse(localStorage.getItem(LOGK)||"[]")||[];}catch{log=[];}
   const $=id=>document.getElementById(id);
 
   function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
-  function fmtTime(d){return new Date(d).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});}
+  function fmtTime(d){return new Date(d).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});}
+
+  function renderPomoDots(){
+    $("pomoDots").innerHTML=Array.from({length:POMO_CYCLE},(_,i)=>
+      `<div class="pomo-dot${i<pomoCount%POMO_CYCLE?' done':''}"></div>`).join("");
+  }
+
+  function updateScore(){
+    const score=Math.min(100,Math.round((sessions*15+totalFocusMin*0.5)));
+    $("scoreVal").textContent=score;
+    const descs=["Complete sessions to build your score.","Great start! Keep going.","Good momentum! 🔥","Excellent focus! 💪","Productivity master! 🏆"];
+    $("scoreDesc").textContent=descs[Math.min(4,Math.floor(score/25))];
+    $("scoreVal").style.color=score>=75?"#54d7a6":score>=50?"#ffd166":"var(--acc)";
+  }
+
+  function renderChart(){
+    const days=7;
+    const bars=$("chartBars"), lbls=$("chartLbls");
+    const dayCounts=[];
+    for(let i=days-1;i>=0;i--){
+      const d=new Date();d.setDate(d.getDate()-i);
+      const ds=d.toLocaleDateString('en-CA');
+      const count=log.filter(l=>l.mode==="focus"&&new Date(l.time).toLocaleDateString('en-CA')===ds).length;
+      dayCounts.push({label:d.toLocaleDateString([],{weekday:'short'}),count});
+    }
+    const mx=Math.max(...dayCounts.map(d=>d.count),1);
+    bars.innerHTML=dayCounts.map(d=>`<div class="chart-bar" style="height:${Math.round(d.count/mx*100)}%;" title="${d.label}: ${d.count} sessions"></div>`).join("");
+    lbls.innerHTML=dayCounts.map(d=>`<span>${d.label}</span>`).join("");
+  }
 
   function updateRing(){
     const total=isFocus?focusSec:breakSec;
@@ -136,55 +199,87 @@
     $("statSessions").textContent=String(sessions);
     $("statFocusTime").textContent=Math.round(totalFocusMin)+"m";
     $("statBreaks").textContent=String(breaks);
-    $("sessionCountBadge").textContent="Sessions: "+sessions;
+    $("sessionCountBadge").textContent="Sessions: "+sessions+" | Pomos: "+Math.floor(pomoCount/POMO_CYCLE);
+    renderPomoDots();
+    updateScore();
+    renderChart();
   }
 
   function stopTimer(){if(timer){clearInterval(timer);timer=null;}}
 
-  function addLog(mode, duration){
-    log.unshift({mode,duration,time:Date.now()});
-    if(log.length>30)log=log.slice(0,30);
+  function addLog(mode,duration){
+    const task=$("taskLabel")?$("taskLabel").value.trim():"";
+    log.unshift({mode,duration,task,time:Date.now()});
+    if(log.length>50)log=log.slice(0,50);
     localStorage.setItem(LOGK,JSON.stringify(log));
     renderLog();
   }
 
   function renderLog(){
     if(!log.length){$("sessionLog").innerHTML='<p class="empty">No sessions yet. Start focusing!</p>';return;}
-    $("sessionLog").innerHTML=log.map(l=>`
-      <div class="log-item">
-        <div>
-          <div class="li-label">${l.mode==="focus"?"🎯 Focus session":"☕ Break"}</div>
-          <div class="li-time">${fmtTime(l.time)}</div>
-        </div>
-        <span class="li-mode ${l.mode==="focus"?"focus-mode-badge":"break-mode-badge"}">${l.duration} min</span>
-      </div>`).join("");
+    $("sessionLog").innerHTML=log.map(l=>{
+      const task=l.task?`<span style="font-size:.8rem;color:var(--acc);margin-left:6px;">"${l.task}"</span>`:"";
+      return `<div class="log-item">
+        <div><div class="li-label">${l.mode==="focus"?"🎯 Focus":"☕ Break"}${task}</div>
+        <div class="li-time">${fmtTime(l.time)}</div></div>
+        <span class="li-mode ${l.mode==="focus"?"focus-mode-badge":"break-mode-badge'}">${l.duration} min</span>
+      </div>`;
+    }).join("");
   }
 
   function switchMode(){
-    const wasFocus=isFocus;
-    if(wasFocus){sessions++;totalFocusMin+=focusSec/60;addLog("focus",Math.round(focusSec/60));$("statusText").textContent="✅ Focus session done! Time for a break.";}
+    if(isFocus){sessions++;pomoCount++;totalFocusMin+=focusSec/60;addLog("focus",Math.round(focusSec/60));$("statusText").textContent="✅ Focus done! Break time.";}
     else{breaks++;addLog("break",Math.round(breakSec/60));$("statusText").textContent="⚡ Break done. Back to focus!";}
     isFocus=!isFocus;remaining=isFocus?focusSec:breakSec;
     updateRing();
-    if($("autoStart").checked){timer=setInterval(tick,1000);}else{stopTimer();}
+    if($("autoStart").checked)timer=setInterval(tick,1000);else stopTimer();
   }
 
-  function tick(){remaining--;updateRing();if(remaining<=0){switchMode();}}
+  function tick(){remaining--;updateRing();if(remaining<=0)switchMode();}
 
   $("startBtn").addEventListener("click",()=>{if(timer)return;timer=setInterval(tick,1000);$("statusText").textContent="🎯 Timer running...";});
   $("pauseBtn").addEventListener("click",()=>{stopTimer();$("statusText").textContent="⏸ Paused.";});
-  $("resetBtn").addEventListener("click",()=>{stopTimer();isFocus=true;remaining=focusSec;updateRing();$("statusText").textContent="↩ Reset to focus mode.";});
+  $("resetBtn").addEventListener("click",()=>{stopTimer();isFocus=true;remaining=focusSec;updateRing();$("statusText").textContent="↩ Reset.";});
   $("skipBtn").addEventListener("click",switchMode);
   $("applyBtn").addEventListener("click",()=>{
     const fm=Math.max(5,Math.min(120,Number($("focusMin").value)||25));
     const bm=Math.max(1,Math.min(60,Number($("breakMin").value)||5));
-    focusSec=fm*60;breakSec=bm*60;
-    remaining=isFocus?focusSec:breakSec;
-    $("statusText").textContent="✅ Durations updated.";updateRing();
+    focusSec=fm*60;breakSec=bm*60;remaining=isFocus?focusSec:breakSec;
+    $("statusText").textContent="✅ Updated.";updateRing();
+    localStorage.setItem(SK,JSON.stringify({fm,bm,auto:$("autoStart").checked}));
   });
-  $("clearLog").addEventListener("click",()=>{log=[];localStorage.setItem(LOGK,"[]");renderLog();});
+  $("clearLog").addEventListener("click",()=>{log=[];localStorage.setItem(LOGK,"[]");renderLog();renderChart();});
 
-  // Load saved settings
+  // Ambient sounds via Web Audio API
+  function stopSound(){if(soundNode){try{soundNode.stop();}catch{}soundNode=null;}}
+  function playWhiteNoise(){
+    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*2,audioCtx.sampleRate);
+    const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    const src=audioCtx.createBufferSource();src.buffer=buf;src.loop=true;
+    const g=audioCtx.createGain();g.gain.value=0.04;
+    src.connect(g);g.connect(audioCtx.destination);src.start();soundNode=src;
+  }
+  function playOscNoise(freq=200,type='sine',vol=0.03){
+    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const osc=audioCtx.createOscillator();
+    const g=audioCtx.createGain();g.gain.value=vol;
+    osc.type=type;osc.frequency.value=freq;
+    osc.connect(g);g.connect(audioCtx.destination);osc.start();soundNode=osc;
+  }
+  document.getElementById('soundRow').addEventListener('click',e=>{
+    const btn=e.target.closest('.sound-btn');if(!btn)return;
+    document.querySelectorAll('.sound-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    stopSound();
+    const s=btn.dataset.sound;
+    if(s==='white')playWhiteNoise();
+    else if(s==='rain')playWhiteNoise();// closest to rain with Web Audio
+    else if(s==='waves'){playOscNoise(80,'sine',0.04);}
+    else if(s==='lofi'){playOscNoise(220,'triangle',0.02);}
+    $("statusText").textContent=s==="none"?"🔇 Silent mode":"🎵 Ambient: "+btn.textContent.trim();
+  });
+
   try{const s=JSON.parse(localStorage.getItem(SK)||"{}");if(s.fm){$("focusMin").value=s.fm;$("breakMin").value=s.bm||5;$("autoStart").checked=s.auto||false;focusSec=s.fm*60;breakSec=(s.bm||5)*60;remaining=focusSec;}}catch{}
 
   updateRing();renderLog();
