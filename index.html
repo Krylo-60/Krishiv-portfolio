@@ -367,7 +367,16 @@
     </div>
   </header>
 
-  <main id="main-content">
+  <!-- WHAT'S NEW BANNER -->
+  <div id="whatsNewBanner" style="background:linear-gradient(90deg,rgba(0,242,255,.1),rgba(122,113,255,.12),rgba(0,242,255,.1));border-bottom:1px solid rgba(0,242,255,.18);padding:10px 20px;text-align:center;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+    <span style="background:linear-gradient(90deg,#00f2ff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-family:'Orbitron',sans-serif;font-size:.8rem;">v13.0.0</span>
+    <span style="color:#c8e8ff;">Mega App Galaxy Upgrade — 100+ Apps Now Fully Functional 🚀</span>
+    <a href="release-notes.html" style="color:#00f2ff;font-weight:700;text-decoration:none;border:1px solid rgba(0,242,255,.3);border-radius:999px;padding:3px 10px;font-size:.75rem;">See What's New →</a>
+    <button onclick="this.parentElement.style.display='none'" style="background:transparent;border:none;color:#6b8fad;cursor:pointer;font-size:1.1rem;line-height:1;padding:0 4px;">×</button>
+  </div>
+  <!-- PARTICLE CANVAS BACKGROUND -->
+  <canvas id="heroParticles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.35;"></canvas>
+  <main id="main-content" style="position:relative;z-index:1;">
     <section id="home" class="hero section-pad">
       <div class="container hero-layout">
         <div class="hero-copy">
@@ -4965,8 +4974,62 @@
   <script src="usage-tracker.js" defer></script>
   <script src="future-upgrade.js" defer></script>
   <script src="app-universe-shell.js" defer></script>
-</body>
-</html>
+<script>
+// Particle canvas background
+(function(){
+  var c=document.getElementById('heroParticles');
+  if(!c)return;
+  var ctx=c.getContext('2d');
+  var pts=[];
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  for(var i=0;i<55;i++)pts.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.8+.5,a:Math.random()});
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    pts.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
+      if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,220,255,'+p.a+')';ctx.fill();
+    });
+    // Connect close particles
+    for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){
+      var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<100){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle='rgba(0,200,255,'+(0.12*(1-d/100))+')';ctx.lineWidth=.6;ctx.stroke();}
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 
-
-
+// Animated stat counters
+(function(){
+  function animCount(el, target, suffix){
+    var start=0, dur=1600, step=16;
+    var inc=Math.ceil(target/(dur/step));
+    var t=setInterval(function(){
+      start=Math.min(start+inc,target);
+      el.textContent=start+(suffix||'');
+      if(start>=target)clearInterval(t);
+    },step);
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var el=e.target;
+        var val=parseInt(el.dataset.target||el.textContent);
+        if(!isNaN(val)){animCount(el,val,el.dataset.suffix||'');}
+        io.unobserve(el);
+      }
+    });
+  },{threshold:.3});
+  ['heroProjectsStat','heroPagesStat','heroAppsStat'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el){el.dataset.target=el.textContent;el.textContent='0';io.observe(el);}
+  });
+})();
+</script>
+</body></html>

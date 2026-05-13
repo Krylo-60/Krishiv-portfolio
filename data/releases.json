@@ -1,5 +1,21 @@
 [
   {
+    "date": "2026-05-13",
+    "version": "v13.0.0",
+    "title": "Mega App Galaxy Upgrade — 100+ Apps Fully Functional",
+    "summary": "The biggest single-session upgrade ever. All 58+ stub apps rebuilt with real features, the Owner Nexus fixed to work fully offline, Focus Timer got 5 new features, and every app got sort, bulk-delete, search and export.",
+    "tags": ["major", "apps", "owner-nexus", "features", "upgrade", "release-notes"],
+    "items": [
+      "Rebuilt all 58 stub apps from scratch with full localStorage persistence, add/edit/delete, star/favourite, search, category filter, and CSV export.",
+      "Added Newest/Oldest/A-Z sort buttons, item count display, and bulk-delete with checkboxes to every app in the ecosystem.",
+      "Fixed the Owner Nexus (owner.private.html) to work fully on a static Vercel deployment — all controls now read from localStorage instead of dead API routes.",
+      "Upgraded Focus Timer with Pomodoro cycle dots, task label per session, ambient sound picker (Rain/Lofi/Waves/White Noise), productivity score, and 7-day bar chart.",
+      "Upgraded Expense Tracker with 7-day income vs expense bar chart, category pill filters, CSV export, and ₹ formatting.",
+      "Fixed ecosystem overview in the Owner Nexus to show real data from Notes Vault, Goal Planner, Flashcards, and other apps.",
+      "Deployed all changes to production via Vercel — krishiv-new-portfoilo.vercel.app."
+    ]
+  },
+  {
     "date": "2026-05-12",
     "version": "v12.1.0",
     "title": "Dual Deployment Launch + Release Notes Upgrade",
