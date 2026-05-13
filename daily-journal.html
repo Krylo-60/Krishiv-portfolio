@@ -1,70 +1,235 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Krishiv PB" />
-  <title>Daily Journal | Krishiv PB</title>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Daily Journal Pro | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css"/>
+  <link rel="icon" type="image/svg+xml" href="logo.svg"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
   <style>
-    :root{--bg:#071323;--panel:#11263f;--line:#355b80;--text:#eef7ff;--muted:#a8c4e5;--accent:#78d7ff;--ok:#54d8a7}
-    *{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(170deg,#040d18,#0b213a 50%,#15365c)}
-    .wrap{width:min(940px,94%);margin:24px auto 86px}.card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(160deg,rgba(17,38,63,.95),rgba(9,22,40,.95));margin-bottom:12px}
-    h1,h2{margin:0 0 8px}p{margin:0 0 10px;color:var(--muted)}textarea,input,select,button{width:100%;border-radius:10px;border:1px solid var(--line);background:#081a2e;color:var(--text);padding:10px;font:inherit}
-    textarea{min-height:110px}.row{display:grid;gap:10px;grid-template-columns:1fr 180px 140px}.btn{font-weight:700;cursor:pointer}.btn-primary{border:none;background:linear-gradient(135deg,var(--accent),var(--ok));color:#042232}
-    .entry{border:1px solid rgba(110,162,215,.28);border-radius:12px;padding:10px;background:rgba(6,18,32,.72);margin-bottom:8px}.meta{font-size:.86rem;color:#9fc1e3}
-    .credit{font-weight:700;color:#d9edff} a{color:#9fd9ff}
-    @media(max-width:780px){.row{grid-template-columns:1fr}}
-  </style>
-  <link rel="stylesheet" href="app-universe-shell.css" />
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+    :root{--bg:#071223;--line:#365f88;--text:#eef7ff;--muted:#a9c6e7;--ok:#56d5a6;--acc:#79d8ff;--warn:#ffd166;}
+    *{box-sizing:border-box;}body{margin:0;color:var(--text);background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
+    .wrap{width:min(1020px,94%);margin:24px auto;}
+    .card{border:1px solid var(--line);border-radius:14px;padding:20px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:14px;}
+    h1,h2{margin:0 0 10px;}p{color:var(--muted);margin:0 0 8px;}
+    input,textarea,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1b31;color:var(--text);font:inherit;transition:border-color .2s;}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);}
+    textarea{min-height:160px;resize:vertical;}
+    .btn{cursor:pointer;font-weight:700;padding:10px 18px;border-radius:10px;border:none;transition:all .2s;}
+    .btn.primary{background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn.sm{padding:6px 12px;font-size:.82rem;}
+    .btn.danger{background:rgba(255,107,107,.15);border:1px solid rgba(255,107,107,.4);color:#ff9999;}
+    .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    /* MOOD PILLS */
+    .mood-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+    .mood-pill{padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:#0a1b31;cursor:pointer;font-size:.82rem;transition:all .2s;}
+    .mood-pill.active,.mood-pill:hover{border-color:var(--acc);background:rgba(121,216,255,.1);color:var(--acc);}
+    /* ENTRY CARDS */
+    .entry{border:1px solid rgba(84,126,171,.35);border-radius:12px;padding:14px;margin-bottom:10px;background:rgba(5,16,30,.72);transition:border-color .2s;}
+    .entry:hover{border-color:rgba(121,216,255,.3);}
+    .entry-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+    .entry-date{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--muted);}
+    .entry-mood{font-size:1.1rem;}
+    .entry-title{font-family:"Orbitron",sans-serif;font-size:.92rem;margin:0 0 5px;}
+    .entry-body{font-size:.88rem;color:rgba(238,247,255,.8);white-space:pre-wrap;max-height:80px;overflow:hidden;line-height:1.6;}
+    .entry-body.exp{max-height:none;}
+    .entry-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+    .tag{padding:3px 9px;border-radius:999px;background:rgba(121,216,255,.08);border:1px solid rgba(121,216,255,.2);font-size:.72rem;color:var(--acc);font-family:"JetBrains Mono",monospace;}
+    .entry-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+    /* STREAKS */
+    .streak-bar{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;}
+    .streak-dot{width:12px;height:12px;border-radius:3px;background:rgba(255,255,255,.08);}
+    .streak-dot.done{background:var(--ok);}
+    .streak-dot.today{background:var(--acc);box-shadow:0 0 6px var(--acc);}
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+    .stat{border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;background:rgba(5,16,30,.6);}
+    .stat strong{display:block;font-size:1.5rem;font-family:"JetBrains Mono",monospace;color:var(--acc);}
+    .stat span{font-size:.75rem;color:var(--muted);}
+    .empty{color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:20px;text-align:center;}
+    @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
-<body data-theme="default" data-mode="dark">
-  <main class="wrap">
-    <section class="card"><h1>Daily Journal</h1><p>Track your day, mood, and learning wins.</p><p class="credit">Created by Krishiv PB</p><p><a href="index.html#app-verse">Back to Apps Galaxy</a></p></section>
-    <section class="card">
-      <h2>Write Entry</h2>
-      <div class="row">
-        <input id="title" placeholder="Entry title" maxlength="60" />
-        <select id="mood"><option>Happy</option><option>Focused</option><option>Excited</option><option>Tired</option><option>Neutral</option></select>
-        <button id="saveBtn" class="btn btn-primary" type="button">Save Entry</button>
-      </div>
-      <textarea id="content" maxlength="600" placeholder="What happened today? What did you learn?"></textarea>
-      <p>Details: journal entries are stored in your browser to help build consistency.</p>
-    </section>
-    <section class="card"><h2>Journal Timeline</h2><div id="entries"></div></section>
-  </main>
-  <script>
-    (() => {
-      const key = "krishiv_daily_journal_v1";
-      const title = document.getElementById("title"), mood = document.getElementById("mood"), content = document.getElementById("content"), saveBtn = document.getElementById("saveBtn"), entries = document.getElementById("entries");
-      let items = []; try { items = JSON.parse(localStorage.getItem(key) || "[]"); if (!Array.isArray(items)) items = []; } catch { items = []; }
-      function save(){ localStorage.setItem(key, JSON.stringify(items)); }
-      function render(){ entries.innerHTML = items.length ? items.map((e)=>`<article class="entry"><strong>${e.title}</strong><div class="meta">${e.mood} | ${new Date(e.ts).toLocaleString()}</div><p>${e.content}</p><button data-id="${e.id}">Delete</button></article>`).join("") : '<p class="meta">No entries yet.</p>'; }
-      saveBtn.addEventListener("click", ()=>{ const t=title.value.trim(), c=content.value.trim(); if(t.length<2||c.length<5){alert("Add a title and a meaningful entry.");return;} items.unshift({id:Date.now().toString(36),title:t,mood:mood.value,content:c,ts:Date.now()}); title.value=""; content.value=""; save(); render(); });
-      entries.addEventListener("click",(ev)=>{ const b=ev.target; if(!(b instanceof HTMLButtonElement)) return; items=items.filter((x)=>x.id!==b.dataset.id); save(); render(); });
-      render();
-    })();
-  </script>
-  <script src="app-catalog.js"></script>
-  <script src="app-universe-shell.js" defer></script>
+<body>
+<main class="wrap">
+  <section class="card">
+    <h1>📔 Daily Journal Pro</h1>
+    <p>Write, reflect, and track your mood every day. All entries saved locally.</p>
+    <a href="index.html#projects" style="color:#9edcff;">← Back to portfolio</a>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats" id="statsBar">
+    <div class="stat"><strong id="sTotal">0</strong><span>Entries</span></div>
+    <div class="stat"><strong id="sStreak">0</strong><span>Day streak 🔥</span></div>
+    <div class="stat"><strong id="sWords">0</strong><span>Total words</span></div>
+    <div class="stat"><strong id="sMood">—</strong><span>Top mood</span></div>
+  </div>
+
+  <!-- WRITE -->
+  <section class="card">
+    <h2>✍️ New Entry</h2>
+    <div style="margin-bottom:8px;"><label style="font-size:.82rem;color:var(--muted);">Title (optional)</label><input id="entryTitle" placeholder="What's on your mind today?"/></div>
+    <div class="mood-row" id="moodRow">
+      <div class="mood-pill active" data-mood="😊">😊 Happy</div>
+      <div class="mood-pill" data-mood="😐">😐 Neutral</div>
+      <div class="mood-pill" data-mood="😔">😔 Low</div>
+      <div class="mood-pill" data-mood="😤">😤 Frustrated</div>
+      <div class="mood-pill" data-mood="🤩">🤩 Excited</div>
+      <div class="mood-pill" data-mood="😴">😴 Tired</div>
+      <div class="mood-pill" data-mood="🎯">🎯 Focused</div>
+    </div>
+    <div style="margin-bottom:8px;"><label style="font-size:.82rem;color:var(--muted);">Journal entry</label><textarea id="entryBody" placeholder="Write anything — what happened today, what you felt, what you want to remember..."></textarea></div>
+    <div style="margin-bottom:12px;"><label style="font-size:.82rem;color:var(--muted);">Tags (comma separated)</label><input id="entryTags" placeholder="school, coding, win"/></div>
+    <div class="row">
+      <button class="btn primary" id="saveBtn">💾 Save Entry</button>
+      <button class="btn ghost sm" id="exportBtn">📤 Export All</button>
+      <span id="wc" style="font-size:.78rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">0 words</span>
+    </div>
+  </section>
+
+  <!-- PAST 7 DAYS -->
+  <section class="card">
+    <h2>📅 7-Day Streak</h2>
+    <div class="streak-bar" id="streakBar"></div>
+  </section>
+
+  <!-- ENTRIES -->
+  <section class="card">
+    <div class="row" style="margin-bottom:12px;">
+      <input id="searchInput" placeholder="Search entries..." style="flex:1;"/>
+      <select id="moodFilter" style="max-width:140px;">
+        <option value="">All moods</option>
+        <option value="😊">😊 Happy</option>
+        <option value="😐">😐 Neutral</option>
+        <option value="😔">😔 Low</option>
+        <option value="😤">😤 Frustrated</option>
+        <option value="🤩">🤩 Excited</option>
+        <option value="😴">😴 Tired</option>
+        <option value="🎯">🎯 Focused</option>
+      </select>
+    </div>
+    <div id="entryList"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const LSK = 'krishiv_dj_v2';
+  let entries = [], selectedMood = '😊';
+
+  function load() {
+    try { entries = JSON.parse(localStorage.getItem(LSK) || '[]'); if(!Array.isArray(entries)) entries = []; } catch { entries = []; }
+  }
+  function save() { localStorage.setItem(LSK, JSON.stringify(entries)); }
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function wc(s) { return s.trim() ? s.trim().split(/\s+/).length : 0; }
+  function today() { return new Date().toLocaleDateString('en-CA'); }
+
+  // Mood selection
+  document.querySelectorAll('.mood-pill').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('.mood-pill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      selectedMood = p.dataset.mood;
+    });
+  });
+
+  // Word count
+  const bodyEl = document.getElementById('entryBody');
+  const wcEl = document.getElementById('wc');
+  bodyEl.addEventListener('input', () => { wcEl.textContent = wc(bodyEl.value) + ' words'; });
+
+  // Save
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const body = bodyEl.value.trim();
+    if (body.length < 5) { alert('Write at least a sentence!'); return; }
+    const title = document.getElementById('entryTitle').value.trim() || 'Untitled';
+    const tags = document.getElementById('entryTags').value.split(',').map(t => t.trim()).filter(Boolean);
+    entries.unshift({ id: Date.now().toString(36), title, body, mood: selectedMood, tags, date: today(), ts: Date.now(), words: wc(body) });
+    save(); render();
+    bodyEl.value = ''; document.getElementById('entryTitle').value = ''; document.getElementById('entryTags').value = '';
+    wcEl.textContent = '0 words';
+  });
+
+  // Export
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const text = entries.map(e => `[${e.date}] ${e.mood} ${e.title}\n${e.body}\nTags: ${e.tags.join(', ')}\n---`).join('\n\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type:'text/plain'}));
+    a.download = 'journal-export.txt'; a.click();
+  });
+
+  // Search/filter
+  document.getElementById('searchInput').addEventListener('input', render);
+  document.getElementById('moodFilter').addEventListener('change', render);
+
+  function renderStats() {
+    const totalWords = entries.reduce((a,e) => a + (e.words||0), 0);
+    // streak
+    const dates = new Set(entries.map(e => e.date));
+    let streak = 0, d = new Date();
+    while (dates.has(d.toLocaleDateString('en-CA'))) { streak++; d.setDate(d.getDate()-1); }
+    // top mood
+    const moodCounts = {};
+    entries.forEach(e => { moodCounts[e.mood] = (moodCounts[e.mood]||0)+1; });
+    const topMood = Object.entries(moodCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || '—';
+    document.getElementById('sTotal').textContent = entries.length;
+    document.getElementById('sStreak').textContent = streak;
+    document.getElementById('sWords').textContent = totalWords.toLocaleString();
+    document.getElementById('sMood').textContent = topMood;
+    // 7-day bar
+    const bar = document.getElementById('streakBar');
+    bar.innerHTML = '';
+    for (let i=6; i>=0; i--) {
+      const dd = new Date(); dd.setDate(dd.getDate()-i);
+      const ds = dd.toLocaleDateString('en-CA');
+      const hasEntry = dates.has(ds);
+      const isToday = i===0;
+      const dot = document.createElement('div');
+      dot.className = 'streak-dot' + (hasEntry ? (isToday ? ' today' : ' done') : '');
+      dot.title = ds;
+      bar.appendChild(dot);
+    }
+  }
+
+  function render() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const mf = document.getElementById('moodFilter').value;
+    let vis = entries.filter(e => {
+      if (mf && e.mood !== mf) return false;
+      if (q && !(e.title+e.body+e.tags.join(' ')).toLowerCase().includes(q)) return false;
+      return true;
+    });
+    const list = document.getElementById('entryList');
+    if (!vis.length) { list.innerHTML = '<div class="empty">No entries found. Start writing above!</div>'; renderStats(); return; }
+    list.innerHTML = vis.map(e => `
+      <article class="entry">
+        <div class="entry-head">
+          <span class="entry-mood">${esc(e.mood)}</span>
+          <span class="entry-date">${esc(e.date)}</span>
+        </div>
+        <div class="entry-title">${esc(e.title)}</div>
+        <div class="entry-body" id="eb-${e.id}">${esc(e.body)}</div>
+        ${e.body.length>120?`<button onclick="toggleEntry('${e.id}')" style="font-size:.75rem;background:none;border:none;color:var(--acc);cursor:pointer;padding:2px 0;">Show more</button>`:''}
+        ${e.tags.length?`<div class="entry-tags">${e.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:''}
+        <div class="entry-actions">
+          <button class="btn ghost sm" onclick="deleteEntry('${e.id}')">🗑 Delete</button>
+          <span style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;">${e.words||wc(e.body)} words</span>
+        </div>
+      </article>`).join('');
+    renderStats();
+  }
+
+  window.toggleEntry = id => { const el = document.getElementById('eb-'+id); if(el) el.classList.toggle('exp'); };
+  window.deleteEntry = id => { if(!confirm('Delete this entry?')) return; entries = entries.filter(e=>e.id!==id); save(); render(); };
+
+  load(); render();
+})();
+</script>
+<script src="app-catalog.js"></script>
+<script src="app-universe-shell.js" defer></script>
 </body>
 </html>
-
-
-
