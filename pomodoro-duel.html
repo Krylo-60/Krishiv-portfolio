@@ -1,19 +1,134 @@
-﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Krishiv PB" /><title>Pomodoro Duel | Krishiv PB</title><link rel="stylesheet" href="concept-apps.css" /><link rel="stylesheet" href="app-universe-shell.css" /><link rel="icon" type="image/svg+xml" href="logo.svg" />  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
-  <style id="codex-shared-fonts">
-    body, button, input, select, textarea {
-      font-family: "Space Grotesk", "Segoe UI", sans-serif !important;
-    }
-
-    h1, h2, h3, h4, h5, h6, .brand, .site-title, .logo-text {
-      font-family: "Orbitron", "Space Grotesk", sans-serif !important;
-    }
-
-    code, pre, .mono, .eyebrow, .card-kicker, .mini-label {
-      font-family: "JetBrains Mono", monospace !important;
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Pomodoro Duel | Krishiv PB</title>
+  <link rel="stylesheet" href="app-universe-shell.css"/>
+  <link rel="icon" href="logo.svg" type="image/svg+xml"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;}body{margin:0;font-family:"Space Grotesk",sans-serif;color:#eef7ff;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
+    h1,h2{font-family:"Orbitron",sans-serif;margin:0 0 10px;}p{color:#a9c6e7;margin:0 0 8px;}
+    .wrap{width:min(960px,94%);margin:24px auto;}
+    .card{border:1px solid #365f88;border-radius:14px;padding:20px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:14px;}
+    input,select,textarea{padding:10px;border-radius:10px;border:1px solid #365f88;background:#0a1b31;color:#eef7ff;font:inherit;width:100%;transition:border-color .2s;}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:#79d8ff;}
+    .btn{cursor:pointer;font-weight:700;padding:10px 18px;border-radius:10px;border:none;font-family:inherit;transition:all .2s;}
+    .btn.primary{background:linear-gradient(135deg,#79d8ff,#58d4a8);color:#032333;}
+    .btn.sm{padding:6px 12px;font-size:.82rem;}
+    .btn.ghost{background:transparent;border:1px solid #365f88;color:#a9c6e7;}
+    .btn.danger{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.3);color:#ff9999;}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .item{border:1px solid rgba(84,126,171,.3);border-radius:10px;padding:12px;margin-bottom:8px;background:rgba(5,16,30,.65);display:flex;align-items:flex-start;gap:12px;transition:border-color .2s;}
+    .item:hover{border-color:rgba(121,216,255,.25);}
+    .item-info{flex:1;min-width:0;}
+    .item-title{font-weight:700;font-size:.9rem;margin:0 0 4px;}
+    .item-meta{font-size:.75rem;color:#a9c6e7;font-family:"JetBrains Mono",monospace;display:block;margin-bottom:2px;}
+    .badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.7rem;font-family:"JetBrains Mono",monospace;background:rgba(121,216,255,.1);border:1px solid rgba(121,216,255,.25);color:#79d8ff;margin-top:4px;}
+    .empty{color:#a9c6e7;border:1px dashed #365f88;border-radius:12px;padding:24px;text-align:center;}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+    .stat{border:1px solid #365f88;border-radius:12px;padding:12px;text-align:center;background:rgba(5,16,30,.6);}
+    .stat strong{display:block;font-size:1.4rem;font-family:"JetBrains Mono",monospace;color:#79d8ff;}
+    .stat span{font-size:.72rem;color:#a9c6e7;}
+    @media(max-width:600px){.grid2{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
-</head><body class="concept-app-root" data-theme="default" data-mode="dark"><main class="concept-wrap"><section class="concept-shell concept-hero"><span id="appCategory" class="concept-kicker"></span><h1 id="appTitle" class="concept-title"></h1><p id="appLead" class="concept-lead"></p><div class="concept-meta"><span class="concept-pill">Starter app page</span><a class="concept-link" href="index.html#app-verse">Back to Apps Galaxy</a></div></section><section class="concept-grid"><section class="concept-shell"><h2>Add Duel Round</h2><div class="concept-form-grid"><div><label id="titleLabel" for="entryTitle"></label><input id="entryTitle" /></div><div><label id="metaLabel" for="entryMeta"></label><input id="entryMeta" /></div><div><label for="entryState">Round type</label><select id="entryState"></select></div><div class="concept-full"><label id="notesLabel" for="entryNotes"></label><textarea id="entryNotes"></textarea></div></div><div class="concept-actions"><button id="addEntryBtn" class="concept-btn-primary" type="button"></button><button id="seedEntryBtn" class="concept-btn-secondary" type="button"></button></div></section><section class="concept-shell"><h2>Duel Samples</h2><div id="seedChips" class="concept-seeds"></div><p id="helperCopy"></p></section></section><section class="concept-shell"><div class="concept-board-head"><h2 id="boardTitle"></h2><input id="searchInput" type="search" /></div><div class="concept-stats"><div class="concept-stat"><strong id="totalCount">0</strong><span>Rounds</span></div><div class="concept-stat"><strong id="pinnedCount">0</strong><span>Best duels</span></div><div class="concept-stat"><strong id="doneCount">0</strong><span>Completed rounds</span></div></div><div id="entryList" class="concept-list"></div></section></main><script id="app-config" type="application/json">{"title":"Pomodoro Duel","category":"Concept | Focus","lead":"Turn focus sessions into playful duel rounds with quick scoring and challenge notes.","helper":"Save duel ideas, opponents, or session formats for a more competitive focus app.","storageKey":"krishiv_pomodoro_duel_v1","boardTitle":"Duel Rounds","titleLabel":"Round name","titlePlaceholder":"25-minute battle","metaLabel":"Opponent or session","metaPlaceholder":"Solo or vs friend","notesLabel":"Rules or rewards","notesPlaceholder":"Add score rules, breaks, or bonus challenges.","ctaLabel":"Add duel round","seedLabel":"Load sample duel","searchPlaceholder":"Search duel rounds...","emptyTitle":"No duel rounds yet.","emptyLead":"Add the first challenge format.","statuses":["Warm-up","Standard","Boss round"],"seeds":[{"title":"Math sprint duel","meta":"25 mins | vs friend","notes":"Winner is whoever finishes more tasks with fewer mistakes.","state":"Standard"},{"title":"Quiet focus boss round","meta":"45 mins | solo","notes":"No phone, no tab switching, reward with 10-minute break.","state":"Boss round"}]}</script><script src="concept-apps.js"></script><script src="app-catalog.js"></script>
-  <script src="app-universe-shell.js" defer></script></body></html>
+</head>
+<body>
+<main class="wrap">
+  <section class="card">
+    <h1>⏱️ Pomodoro Duel</h1>
+    <p>Log pomodoro session duels and scores.</p>
+    <a href="index.html" style="color:#9edcff;font-size:.85rem;">Back to portfolio</a>
+  </section>
+  <div class="stats">
+    <div class="stat"><strong id="sTotal">0</strong><span>Total duels</span></div>
+    <div class="stat"><strong id="sThis">0</strong><span>This week</span></div>
+    <div class="stat"><strong id="sStar">0</strong><span>Starred ⭐</span></div>
+  </div>
+  <section class="card">
+    <h2>Add Duel</h2>
+    <div class="grid2" style="margin-bottom:10px;">
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Task</label><input id="f0" placeholder="Task..."/></div>
+<div><label style="font-size:.8rem;color:#a9c6e7;">Sessions</label><input id="f1" placeholder="Sessions..."/></div>
+<div><label style="font-size:.8rem;color:#a9c6e7;">Score</label><input id="f2" placeholder="Score..."/></div>
+<div><label style="font-size:.8rem;color:#a9c6e7;">Date</label><input id="f3" placeholder="Date..."/></div>
 
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Category</label><select id="fcat"><option>Study</option><option>Coding</option><option>Creative</option><option>Other</option></select></div>
+      <div><label style="font-size:.8rem;color:#a9c6e7;">Star?</label><select id="fstar"><option value="0">No</option><option value="1">Yes ⭐</option></select></div>
+    </div>
+    <button class="btn primary" id="addBtn">+ Add Duel</button>
+  </section>
+  <section class="card">
+    <div class="row" style="margin-bottom:10px;">
+      <input id="sq" placeholder="Search..." style="flex:1;"/>
+      <select id="filterCat" style="max-width:160px;"><option value="">All categories</option><option>Study</option><option>Coding</option><option>Creative</option><option>Other</option></select>
+      <button class="btn ghost sm" id="expBtn">Export</button>
+      <button class="btn danger sm" id="clrBtn">Clear All</button>
+    </div>
+    <div id="list"></div>
+  </section>
+<script>
+(function(){
+  var KEY='krishiv_pomodoro_duel_v1';
+  var items=[];
+  try{items=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(items))items=[];}catch(e){items=[];}
+  function save(){localStorage.setItem(KEY,JSON.stringify(items));}
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function ago(ts){var d=Date.now()-ts;if(d<6e4)return'just now';if(d<36e5)return Math.floor(d/6e4)+'m ago';if(d<864e5)return Math.floor(d/36e5)+'h ago';return Math.floor(d/864e5)+'d ago';}
+  var labels=["Task", "Sessions", "Score", "Date"];
+  document.getElementById('addBtn').addEventListener('click',function(){
+    var vals=[(document.getElementById('f0')||{value:''}).value.trim() + ',' + (document.getElementById('f1')||{value:''}).value.trim() + ',' + (document.getElementById('f2')||{value:''}).value.trim() + ',' + (document.getElementById('f3')||{value:''}).value.trim()];
+    if(!vals[0]){alert('Fill the first field!');return;}
+    var cat=document.getElementById('fcat')?document.getElementById('fcat').value:'';
+    var star=document.getElementById('fstar')&&document.getElementById('fstar').value==='1';
+    items.unshift({id:Date.now().toString(36),vals:vals,cat:cat,star:star,ts:Date.now()});
+    save();render();
+    var e0=document.getElementById('f0');if(e0)e0.value=''; var e1=document.getElementById('f1');if(e1)e1.value=''; var e2=document.getElementById('f2');if(e2)e2.value=''; var e3=document.getElementById('f3');if(e3)e3.value='';
+  });
+  document.getElementById("filterCat").addEventListener("change",render);
+  document.getElementById('sq').addEventListener('input',render);
+  document.getElementById('clrBtn').addEventListener('click',function(){if(!confirm('Clear all?'))return;items=[];save();render();});
+  document.getElementById('expBtn').addEventListener('click',function(){
+    var rows=[labels.join(',')].concat(items.map(function(it){return it.vals.map(function(v){return '"'+String(v||'').replace(/"/g,'""')+'"';}).join(',');}));
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));a.download='pomodoro_duel_v1.csv';a.click();
+  });
+  function render(){
+    var q=document.getElementById('sq').value.toLowerCase();
+    var fc=document.getElementById("filterCat")?document.getElementById("filterCat").value:"";
+    var vis=items.filter(function(it){
+      if(fc&&it.cat!==fc)return false;
+      if(q&&it.vals.join(' ').toLowerCase().indexOf(q)<0)return false;
+      return true;
+    });
+    var week=Date.now()-7*864e5;
+    document.getElementById('sTotal').textContent=items.length;
+    document.getElementById('sThis').textContent=items.filter(function(it){return it.ts>week;}).length;
+    document.getElementById('sStar').textContent=items.filter(function(it){return it.star;}).length;
+    var el=document.getElementById('list');
+    if(!vis.length){el.innerHTML='<div class="empty">No duels yet. Add one above!</div>';return;}
+    el.innerHTML=vis.map(function(it){
+      var metas=it.vals.slice(1).map(function(v,i){return v?'<span class="item-meta">'+labels[i+1]+': '+esc(v)+'</span>':''}).join('');
+      return '<div class="item">'+
+        '<div style="font-size:1.6rem;flex:0 0 36px">⏱️</div>'+
+        '<div class="item-info">'+
+          '<p class="item-title">'+(it.star?'⭐ ':'')+esc(it.vals[0]||'Untitled')+'</p>'+
+          metas+
+          (it.cat?'<span class="badge">'+esc(it.cat)+'</span>':'')+
+          '<span style="font-size:.7rem;color:#6b8fad;margin-left:6px;font-family:monospace">'+ago(it.ts)+'</span>'+
+        '</div>'+
+        '<div class="row" style="flex:0 0 auto">'+
+          '<button class="btn ghost sm" onclick="ts(''+it.id+'')">'+(it.star?'★':'☆')+'</button>'+
+          '<button class="btn danger sm" onclick="dl(''+it.id+'')">🗑</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+  window.dl=function(id){if(!confirm('Delete?'))return;items=items.filter(function(x){return x.id!==id;});save();render();};
+  window.ts=function(id){var it=items.find(function(x){return x.id===id;});if(it){it.star=!it.star;save();render();}};
+  render();
+})();
+</script>
+<script src="app-catalog.js"></script><script src="app-universe-shell.js" defer></script>
+</main></body></html>
