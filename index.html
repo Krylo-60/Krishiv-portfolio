@@ -3774,6 +3774,195 @@
         if (heroQuickApp) {
           const optionHrefs = new Set(Array.from(heroQuickApp.options || []).map((option) => option.value));
           bonusApps.forEach((item) => {
+        </article>
+      </div>
+    </section>
+
+    <section class="section-pad final-cta-shell">
+      <div class="container">
+        <article class="final-cta">
+          <p class="eyebrow">Final Message</p>
+          <h2>This is only the beginning of what I can build.</h2>
+          <p class="lead">
+            I am learning early, building consistently, and pushing my portfolio to look stronger with every upgrade. If you want to follow my journey, projects, and creator growth, this website is just the start.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#contact">Connect With Me</a>
+            <a class="btn secondary" href="#projects">Explore Projects</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <button type="button" id="quickTopBtn" class="quick-top-btn" aria-label="Scroll to top">↑ Top</button>
+
+  <div id="commandPalette" class="command-palette" aria-hidden="true">
+    <div class="palette-panel">
+      <div class="palette-header">
+        <h3>Quick Launcher</h3>
+        <button type="button" id="paletteCloseBtn" aria-label="Close launcher">×</button>
+      </div>
+      <input id="paletteSearch" class="palette-search" type="search" placeholder="Search sections or apps..." autocomplete="off" />
+      <div id="paletteList" class="palette-list"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <p>&copy; 2026 Krishiv PB. I made this website and I am still upgrading it.</p>
+      <a href="#top">Back to top</a>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var l = document.getElementById('pageLoader');
+      if (l) { l.style.transition = 'opacity 0.5s ease'; l.style.opacity = '0'; setTimeout(function() { l.parentNode && l.parentNode.removeChild(l); }, 500); }
+      document.body.classList.add('page-ready');
+      document.body.classList.remove('preboot');
+      window._loaderHandled = true;
+    })();
+
+    (function() {
+      const sections = Array.from(document.querySelectorAll('main section[id]'));
+      const header = document.querySelector('.site-header');
+      const navMenuBtn = document.getElementById('navMenuBtn');
+      const mainNav = document.getElementById('mainNav');
+      const scrollProgressBar = document.getElementById('scrollProgressBar');
+      const quickTopBtn = document.getElementById('quickTopBtn');
+      const launcherBtn = document.getElementById('launcherBtn');
+      const headerLaunchBtn = document.getElementById('headerLaunchBtn');
+      const commandPalette = document.getElementById('commandPalette');
+      const paletteSearch = document.getElementById('paletteSearch');
+      const paletteList = document.getElementById('paletteList');
+      const paletteCloseBtn = document.getElementById('paletteCloseBtn');
+      const navSearchForm = document.getElementById('navSearchForm');
+      const navSearchInput = document.getElementById('navSearchInput');
+      const navSearchOptions = document.getElementById('navSearchOptions');
+      const heroQuickApp = document.getElementById('heroQuickApp');
+      const heroQuickGo = document.getElementById('heroQuickGo');
+      const heroRandomGo = document.getElementById('heroRandomGo');
+      const musicPlayer = document.getElementById('musicPlayer');
+      const musicPlayBtn = document.getElementById('musicPlayBtn');
+      const musicProgress = document.getElementById('musicProgress');
+      const musicTime = document.getElementById('musicTime');
+      const musicVolume = document.getElementById('musicVolume');
+      const musicTrackState = document.getElementById('musicTrackState');
+      const musicMuteBtn = document.getElementById('musicMuteBtn');
+      const heroProjectsStat = document.getElementById('heroProjectsStat');
+      const heroPagesStat = document.getElementById('heroPagesStat');
+      const heroAppsStat = document.getElementById('heroAppsStat');
+      const heroBackendStat = document.getElementById('heroBackendStat');
+      const appCountStat = document.getElementById('appCountStat');
+      const categoryCountStat = document.getElementById('categoryCountStat');
+      const totalLaunchesStat = document.getElementById('totalLaunchesStat');
+      const backendModeStat = document.getElementById('backendModeStat');
+      const appLeaderboard = document.getElementById('appLeaderboard');
+      const recentAppTray = document.getElementById('recentAppTray');
+      const dailyBuilderTip = document.getElementById('dailyBuilderTip');
+      const appVerseGrid = document.querySelector('.app-verse-grid');
+      const appVerseSearch = document.getElementById('appVerseSearch');
+      const appVerseCategory = document.getElementById('appVerseCategory');
+      const appVerseStatus = document.getElementById('appVerseStatus');
+      const appTierButtons = Array.from(document.querySelectorAll('.app-tier-btn'));
+      const proofProjectCount = document.getElementById('proofProjectCount');
+      const proofLiveCount = document.getElementById('proofLiveCount');
+      const proofAppCount = document.getElementById('proofAppCount');
+      const proofSectionCount = document.getElementById('proofSectionCount');
+      const missionProgress = document.getElementById('missionProgress');
+      const openTopAppBtn = document.getElementById('openTopAppBtn');
+      const shuffleAppsBtn = document.getElementById('shuffleAppsBtn');
+      const scanImagesBtn = document.getElementById('scanImagesBtn');
+      const imageScanStatus = document.getElementById('imageScanStatus');
+      const ccBackendMode = document.getElementById('ccBackendMode');
+      const ccSyncSource = document.getElementById('ccSyncSource');
+      const ccSyncTime = document.getElementById('ccSyncTime');
+      const ccSubs = document.getElementById('ccSubs');
+      const ccViews = document.getElementById('ccViews');
+      const ccVideos = document.getElementById('ccVideos');
+      const ccMessage = document.getElementById('ccMessage');
+      const ccClock = document.getElementById('ccClock');
+      const ccQualityScore = document.getElementById('ccQualityScore');
+      const ccAiLoaded = document.getElementById('ccAiLoaded');
+      const ccAiReady = document.getElementById('ccAiReady');
+      const ccAiCooling = document.getElementById('ccAiCooling');
+      const ccAiSuccesses = document.getElementById('ccAiSuccesses');
+      const ccAiStatus = document.getElementById('ccAiStatus');
+      const ccPublicApps = document.getElementById('ccPublicApps');
+      const ccReviewCount = document.getElementById('ccReviewCount');
+      const ccIdeaCount = document.getElementById('ccIdeaCount');
+      const ccSessionCount = document.getElementById('ccSessionCount');
+      const ccTopApps = document.getElementById('ccTopApps');
+      const feedbackSummary = document.getElementById('feedbackSummary');
+      const feedbackPreviewGrid = document.getElementById('feedbackPreviewGrid');
+      const futureClock = document.getElementById('futureClock');
+      const futureLaunches = document.getElementById('futureLaunches');
+      const futureQuality = document.getElementById('futureQuality');
+      const futurePulse = document.getElementById('futurePulse');
+      const installAppBtn = document.getElementById('installAppBtn');
+
+      const APP_ANALYTICS_KEY = 'krishiv_home_app_launches_v1';
+      const APP_RECENT_KEY = 'krishiv_home_recent_launches_v1';
+      const HOME_THEME_KEY = 'krishiv_home_theme_v1';
+      const HOME_THEMES = [
+        { key: 'default', label: 'Aurora' },
+        { key: 'neon', label: 'Neon' },
+        { key: 'solar', label: 'Solar' }
+      ];
+
+      let launchAnalytics = {};
+      let recentLaunches = [];
+      let paletteTargets = [];
+      let paletteActiveIndex = -1;
+      let appVerseSearchTerm = '';
+      let appVerseCategoryValue = 'all';
+      let appVerseTierValue = 'all';
+      let installPromptEvent = null;
+
+      const escapeHtml = (value) => String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+      const createAppCardMarkup = (item) => {
+        const tier = String(item.tier || 'live').trim().toLowerCase();
+        const status = tier === 'featured' ? 'Featured Build' : 'Working App';
+        const icon = escapeHtml(item.icon || 'logo.svg');
+        const description = escapeHtml(item.description || item.lead || 'Open this app from the Krishiv Velocity app galaxy.');
+        const title = escapeHtml(item.name || 'Untitled App');
+        const tag = escapeHtml(item.cardKicker || item.tag || 'App');
+        const searchTags = escapeHtml(item.searchTags || [item.name, item.tag, item.description].filter(Boolean).join(' '));
+        const href = escapeHtml(item.href || '#');
+        return `
+          <a class="app-verse-card" href="${href}" data-launch-name="${title}" data-launch-tags="${searchTags}" data-tier="${tier}" aria-label="Open ${title}">
+            <div class="app-verse-head">
+              <img class="app-mini-logo-img" src="${icon}" alt="" loading="lazy" decoding="async" width="32" height="32" />
+              <span class="card-kicker">${tag}</span>
+            </div>
+            <h3>${title}</h3>
+            <span class="app-status-chip">${status}</span>
+            <p>${description}</p>
+          </a>
+        `;
+      };
+
+      const bonusApps = Array.isArray(window.KRISHIV_BONUS_APPS) ? window.KRISHIV_BONUS_APPS : [];
+      const injectBonusApps = () => {
+        const existingHrefs = new Set(Array.from(document.querySelectorAll('.app-verse-card'))
+          .map((card) => String(card.getAttribute('href') || '').trim())
+          .filter(Boolean));
+
+        bonusApps.forEach((item) => {
+          const href = String(item && item.href || '').trim();
+          if (!href || existingHrefs.has(href)) return;
+          if (appVerseGrid) appVerseGrid.insertAdjacentHTML('beforeend', createAppCardMarkup(item));
+          existingHrefs.add(href);
+        });
+
+        if (heroQuickApp) {
+          const optionHrefs = new Set(Array.from(heroQuickApp.options || []).map((option) => option.value));
+          bonusApps.forEach((item) => {
             const href = String(item && item.href || '').trim();
             if (!href || optionHrefs.has(href)) return;
             const option = document.createElement('option');
@@ -3786,7 +3975,7 @@
       };
       injectBonusApps();
 
-      const appCards = Array.from(document.querySelectorAll('.app-verse-card'));
+      let appCards = Array.from(document.querySelectorAll('.app-verse-card'));
       const links = Array.from(document.querySelectorAll('a[href]'));
 
       const navDestinations = [
@@ -4800,35 +4989,6 @@
 
       applyProjectView();
 
-      const counters = Array.from(document.querySelectorAll('.stat-number'));
-      const runCounter = (el) => {
-        const target = Number(el.dataset.target || 0);
-        let current = 0;
-        const step = Math.max(1, Math.ceil(target / 28));
-        const tick = () => {
-          current = Math.min(target, current + step);
-          el.textContent = String(current);
-          if (current < target) requestAnimationFrame(tick);
-        };
-        tick();
-      };
-
-      if ('IntersectionObserver' in window) {
-        const counterObserver = new IntersectionObserver((entries, obs) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            runCounter(entry.target);
-            obs.unobserve(entry.target);
-          });
-        }, { threshold: 0.55 });
-
-        counters.forEach((counter) => counterObserver.observe(counter));
-      } else {
-        counters.forEach((counter) => {
-          counter.textContent = String(Number(counter.dataset.target || 0));
-        });
-      }
-
       const copyEmailBtn = document.getElementById('copyEmailBtn');
       const copyEmailStatus = document.getElementById('copyEmailStatus');
       const emailValue = 'krylobloxyt@gmail.com';
@@ -5078,31 +5238,22 @@
   draw();
 })();
 
-// Animated stat counters
-(function(){
-  function animCount(el, target, suffix){
-    var start=0, dur=1600, step=16;
-    var inc=Math.ceil(target/(dur/step));
-    var t=setInterval(function(){
-      start=Math.min(start+inc,target);
-      el.textContent=start+(suffix||'');
-      if(start>=target)clearInterval(t);
-    },step);
-  }
-  var io=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        var el=e.target;
-        var val=parseInt(el.dataset.target||el.textContent);
-        if(!isNaN(val)){animCount(el,val,el.dataset.suffix||'');}
-        io.unobserve(el);
+// Animated stat counters — run AFTER main JS has set real values
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    function animCount(el, target){
+      var start=0, dur=1400, step=16;
+      var inc=Math.max(1,Math.ceil(target/(dur/step)));
+      var t=setInterval(function(){start=Math.min(start+inc,target);el.textContent=start;if(start>=target)clearInterval(t);},step);
+    }
+    ['heroProjectsStat','heroPagesStat','heroAppsStat'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el){
+        var val=parseInt(el.textContent);
+        if(!isNaN(val)&&val>0){el.textContent='0';animCount(el,val);}
       }
     });
-  },{threshold:.3});
-  ['heroProjectsStat','heroPagesStat','heroAppsStat'].forEach(function(id){
-    var el=document.getElementById(id);
-    if(el){el.dataset.target=el.textContent;el.textContent='0';io.observe(el);}
-  });
-})();
+  }, 800);
+});
 </script>
 </body></html>
