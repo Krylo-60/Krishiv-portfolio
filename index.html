@@ -321,6 +321,23 @@
       <span class="loader-line" aria-hidden="true"></span>
     </div>
   </div>
+  <!-- BULLETPROOF LOADER DISMISS: fires 800ms after parse, before anything else can block it -->
+  <script>
+  (function(){
+    function killLoader(){
+      if(window._loaderHandled) return;
+      window._loaderHandled = true;
+      var l = document.getElementById('pageLoader');
+      document.body.classList.add('page-ready');
+      document.body.classList.remove('preboot');
+      if(l){ l.style.transition='opacity 0.4s ease'; l.style.opacity='0'; setTimeout(function(){ if(l.parentNode) l.parentNode.removeChild(l); }, 420); }
+    }
+    // Fire on DOMContentLoaded, load, and hard timeout — whichever comes first
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(killLoader, 200); });
+    window.addEventListener('load', function(){ setTimeout(killLoader, 100); });
+    setTimeout(killLoader, 1500); // absolute failsafe
+  })();
+  </script>
   <div class="aurora aurora-one" aria-hidden="true"></div>
   <div class="aurora aurora-two" aria-hidden="true"></div>
   <div class="spotlight" id="spotlight" aria-hidden="true"></div>
@@ -1426,10 +1443,6 @@
             </div>
             <div class="project-links">
               <a href="#top">Back to top</a>
-    </div>
-  </footer>
-  <script>
-    (function() {
               <a href="projects.html">Open Projects Hub</a>
             </div>
           </article>
@@ -3626,10 +3639,7 @@
   <script>
     // CRITICAL: dismiss loader first, before any other JS runs
     (function() {
-      var l = document.getElementById('pageLoader');
-      if (l) { l.style.transition = 'opacity 0.5s ease'; l.style.opacity = '0'; setTimeout(function() { l.parentNode && l.parentNode.removeChild(l); }, 500); }
-      document.body.classList.add('page-ready');
-      document.body.classList.remove('preboot');
+      // Loader already handled by inline script above — nothing needed here
       window._loaderHandled = true;
     })();
 
