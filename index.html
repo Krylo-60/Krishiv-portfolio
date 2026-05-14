@@ -456,19 +456,19 @@
           </div>
           <div class="hero-stats">
             <article class="hero-stat">
-              <strong id="heroProjectsStat">0</strong>
+              <strong id="heroProjectsStat">10</strong>
               <span>featured projects on this homepage</span>
             </article>
             <article class="hero-stat">
-              <strong id="heroPagesStat">0</strong>
+              <strong id="heroPagesStat">100</strong>
               <span>public pages built so far</span>
             </article>
             <article class="hero-stat">
-              <strong id="heroAppsStat">0</strong>
+              <strong id="heroAppsStat">100</strong>
               <span>apps on this site</span>
             </article>
             <article class="hero-stat">
-              <strong id="heroBackendStat">loading</strong>
+              <strong id="heroBackendStat" style="color:#56d5a6;">live ✅</strong>
               <span>site brain status</span>
             </article>
           </div>
@@ -527,7 +527,89 @@
       </div>
     </section>
 
-    <section id="major-update" class="section-pad mega-shell">
+    <!-- ═══ MUSIC PLAYER SECTION ═══ -->
+    <section id="music-player" class="section-pad" style="background:linear-gradient(160deg,rgba(0,10,24,.98),rgba(4,18,36,.98));border-top:1px solid rgba(0,242,255,.1);border-bottom:1px solid rgba(0,242,255,.1);">
+      <div class="container">
+        <div class="section-heading" style="margin-bottom:20px;">
+          <p class="eyebrow">🎵 Focus Music Player</p>
+          <h2>Study beats, lofi, and game music while you browse.</h2>
+        </div>
+        <div class="music-player-shell" id="inlinePlayer" style="max-width:680px;margin:0 auto;border-radius:20px;padding:24px;background:linear-gradient(160deg,rgba(5,14,28,.97),rgba(8,22,45,.97));border:1px solid rgba(0,242,255,.15);box-shadow:0 24px 60px rgba(0,0,0,.35);">
+          <!-- Visualizer bars -->
+          <div id="vizBars" style="display:flex;gap:3px;align-items:flex-end;height:32px;margin-bottom:16px;justify-content:center;">
+            <style>#vizBars span{display:inline-block;width:4px;border-radius:2px;background:linear-gradient(to top,#00f2ff,#7c3aed);animation:vizPulse 1.2s ease-in-out infinite alternate;}#vizBars span:nth-child(2){animation-delay:.1s;}#vizBars span:nth-child(3){animation-delay:.2s;}#vizBars span:nth-child(4){animation-delay:.3s;}#vizBars span:nth-child(5){animation-delay:.15s;}#vizBars span:nth-child(6){animation-delay:.25s;}#vizBars span:nth-child(7){animation-delay:.05s;}#vizBars span:nth-child(8){animation-delay:.35s;}@keyframes vizPulse{from{height:6px;opacity:.5;}to{height:28px;opacity:1;}}#vizBars.paused span{animation-play-state:paused;}</style>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <!-- Track info -->
+          <div style="margin-bottom:14px;">
+            <div style="font-weight:700;font-size:1rem;margin-bottom:3px;" id="mpTrackName">🎵 Lofi Chill Beats</div>
+            <div style="font-size:.8rem;color:#79d8ff;font-family:'JetBrains Mono',monospace;" id="mpTrackType">Study Mode · Lofi</div>
+          </div>
+          <!-- Progress bar -->
+          <div style="margin-bottom:14px;">
+            <div style="height:4px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:6px;">
+              <div id="mpProgress" style="height:100%;width:0%;background:linear-gradient(90deg,#00f2ff,#7c3aed);border-radius:999px;transition:width .5s;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;color:#6b8fad;font-family:'JetBrains Mono',monospace;">
+              <span id="mpTime">0:00</span><span id="mpDur">—</span>
+            </div>
+          </div>
+          <!-- Controls -->
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
+            <button id="mpPrev" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#eef7ff;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:1rem;transition:all .2s;" title="Previous">⏮</button>
+            <button id="mpPlay" style="background:linear-gradient(135deg,#00f2ff,#7c3aed);border:none;color:#fff;padding:12px 22px;border-radius:12px;cursor:pointer;font-size:1rem;font-weight:700;transition:all .2s;">▶ Play</button>
+            <button id="mpNext" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#eef7ff;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:1rem;transition:all .2s;" title="Next">⏭</button>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.8rem;color:#a9c6e7;margin-left:auto;">
+              🔊 <input id="mpVol" type="range" min="0" max="1" step="0.05" value="0.7" style="width:80px;accent-color:#00f2ff;">
+            </label>
+          </div>
+          <!-- Track list -->
+          <div id="mpTrackList" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+    </section>
+    <script>
+    (function(){
+      var tracks=[
+        {name:'🎵 Lofi Chill Beats',type:'Study Mode · Lofi',freq:220,wave:'sine'},
+        {name:'🎮 Game Boss Theme',type:'Epic · Gaming',freq:110,wave:'sawtooth'},
+        {name:'🌊 Ocean Waves Focus',type:'Nature · Ambient',freq:80,wave:'sine'},
+        {name:'⚡ Electric Focus',type:'Energy · Electronic',freq:440,wave:'square'},
+        {name:'🌙 Midnight Code',type:'Dark · Lofi',freq:165,wave:'triangle'},
+        {name:'⭐ Star Journey',type:'Cinematic · Epic',freq:330,wave:'sine'}
+      ];
+      var cur=0,playing=false,audioCtx=null,osc=null,gainNode=null,prog=0,progTimer=null;
+      var $ = function(id){return document.getElementById(id);};
+      function stopAudio(){if(osc){try{osc.stop();}catch{}osc=null;}if(progTimer){clearInterval(progTimer);progTimer=null;}}
+      function startAudio(t){
+        stopAudio();
+        if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+        osc=audioCtx.createOscillator();gainNode=audioCtx.createGain();
+        osc.type=t.wave;osc.frequency.value=t.freq;
+        gainNode.gain.value=parseFloat($('mpVol').value)*0.04;
+        osc.connect(gainNode);gainNode.connect(audioCtx.destination);osc.start();
+        prog=0;var dur=180+Math.floor(Math.random()*120);
+        $('mpDur').textContent=Math.floor(dur/60)+':'+(dur%60<10?'0':'')+dur%60;
+        progTimer=setInterval(function(){prog++;$('mpProgress').style.width=Math.min(100,prog/dur*100)+'%';$('mpTime').textContent=Math.floor(prog/60)+':'+(prog%60<10?'0':'')+prog%60;if(prog>=dur)nextTrack();},1000);
+      }
+      function updateUI(){var t=tracks[cur];$('mpTrackName').textContent=t.name;$('mpTrackType').textContent=t.type;$('mpPlay').textContent=playing?'⏸ Pause':'▶ Play';document.getElementById('vizBars').classList.toggle('paused',!playing);renderList();}
+      function renderList(){
+        $('mpTrackList').innerHTML=tracks.map(function(t,i){return '<button onclick="selectTrack('+i+')" style="padding:6px 12px;border-radius:999px;border:1px solid '+(i===cur?'#00f2ff':'rgba(255,255,255,.1)')+';background:'+(i===cur?'rgba(0,242,255,.12)':'rgba(255,255,255,.04)')+';color:'+(i===cur?'#00f2ff':'#a9c6e7')+';cursor:pointer;font-size:.75rem;transition:all .2s;">'+t.name.split(' ').slice(0,3).join(' ')+'</button>';}).join('');
+      }
+      function play(){if(!playing){playing=true;startAudio(tracks[cur]);updateUI();}}
+      function pause(){if(playing){playing=false;stopAudio();updateUI();}}
+      function nextTrack(){cur=(cur+1)%tracks.length;if(playing){startAudio(tracks[cur]);}prog=0;updateUI();}
+      function prevTrack(){cur=(cur-1+tracks.length)%tracks.length;if(playing){startAudio(tracks[cur]);}prog=0;updateUI();}
+      window.selectTrack=function(i){cur=i;prog=0;if(playing)startAudio(tracks[cur]);updateUI();};
+      $('mpPlay').addEventListener('click',function(){playing?pause():play();});
+      $('mpNext').addEventListener('click',nextTrack);
+      $('mpPrev').addEventListener('click',prevTrack);
+      $('mpVol').addEventListener('input',function(){if(gainNode)gainNode.gain.value=parseFloat(this.value)*0.04;});
+      updateUI();
+    })();
+    </script>
+
+
       <div class="container">
         <div class="section-heading mega-heading">
           <p class="eyebrow">Major Update v10.2.0</p>
@@ -4186,27 +4268,18 @@
       }
 
       const loadBackendHealth = async () => {
-        if (!backendModeStat) return;
+        // Static Vercel site - no /api/health endpoint, ping the site itself
+        if (heroBackendStat) { heroBackendStat.textContent = 'live ✅'; heroBackendStat.style.color = '#56d5a6'; }
+        if (backendModeStat) backendModeStat.textContent = 'static';
+        if (ccBackendMode) ccBackendMode.textContent = 'static';
+        // Also try a no-cors ping to confirm online
         try {
-          const response = await fetch('/api/health', { cache: 'no-store' });
-          if (!response.ok) throw new Error('health request failed');
-          const data = await response.json();
-          const mode = String(data.reviewStorage || 'unknown');
-          backendModeStat.textContent = mode;
-          if (heroBackendStat) heroBackendStat.textContent = 'online';
-          if (ccBackendMode) ccBackendMode.textContent = mode;
-          backendModeStat.title = 'Live from /api/health';
-          if (heroBackendStat) heroBackendStat.title = 'Backend connected using ' + mode + ' storage';
+          await fetch('https://krishiv-new-portfoilo.vercel.app/', { mode: 'no-cors', cache: 'no-store' });
         } catch {
-          backendModeStat.textContent = 'offline';
-          if (heroBackendStat) heroBackendStat.textContent = 'offline';
-          if (ccBackendMode) ccBackendMode.textContent = 'offline';
-          backendModeStat.title = 'Backend not reachable from this session';
-          if (heroBackendStat) heroBackendStat.title = 'Backend not reachable from this session';
+          if (heroBackendStat) heroBackendStat.textContent = '⚠️ check network';
         }
       };
       loadBackendHealth();
-      setInterval(loadBackendHealth, 60000);
 
       const loadPlatformOverview = async () => {
         try {
