@@ -10,6 +10,13 @@
   to = "/index.html"
   status = 200
 
+# Proxy all API requests to the active Vercel backend
+[[redirects]]
+  from = "/api/*"
+  to = "https://krishiv-new-portfoilo.vercel.app/api/:splat"
+  status = 200
+  force = true
+
 # Handle all routes (SPA-style fallback for 404s)
 [[redirects]]
   from = "/*"
