@@ -1,0 +1,56 @@
+# Netlify deployment configuration for Krishiv Velocity Portfolio
+
+[build]
+  publish = "."
+  command = "echo 'Static site - no build step needed'"
+
+# Serve index.html as the root
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
+
+# Handle all routes (SPA-style fallback for 404s)
+[[redirects]]
+  from = "/*"
+  to = "/:splat"
+  status = 200
+
+# Cache static assets aggressively
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.mp3"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Security headers on all pages
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
