@@ -403,7 +403,7 @@
           <p class="eyebrow">Hi, I am Krishiv and I make stuff on the internet</p>
           <h1>I am 11 and this is my website.</h1>
           <p class="lead hero-lead">
-            I like making websites, random apps, game pages, and new ideas when I get excited. Some parts are neat, some parts are experimental, but all of it is really mine and I keep upgrading it.
+            I like making websites, random apps, game pages, and new ideas when I get excited. Some parts are neat, some parts are experimental, but all of it is really mine and I keep upgrading it. Now the best web ever is live on both Vercel and Netlify.
           </p>
           <div class="hero-ribbon" aria-label="Portfolio highlights">
             <span>my biggest version yet</span>
@@ -415,6 +415,12 @@
             <a class="btn primary" href="#projects">See What I Made</a>
             <a class="btn secondary" href="https://www.youtube.com/@KryloBlox60" target="_blank" rel="noopener noreferrer">My YouTube</a>
             <button class="btn secondary" type="button" id="headerLaunchBtn">Quick Launcher</button>
+          </div>
+          <div class="hero-live-panel" style="display:flex;align-items:center;gap:0.85rem;flex-wrap:wrap;margin:1rem 0 1.25rem;padding:0.95rem 1rem;border:1px solid rgba(0,242,255,0.22);border-radius:18px;background:rgba(5,12,26,0.75);box-shadow:0 18px 45px rgba(0,0,0,0.15);backdrop-filter:blur(14px);">
+            <span style="color:#d6f4ff;font-weight:700;font-size:0.95rem;white-space:nowrap;">Live launch now running on both hosts</span>
+            <a class="btn secondary" href="https://krishiv-new-portfoilo.vercel.app" target="_blank" rel="noopener noreferrer" style="padding:0.7rem 1rem;">Vercel</a>
+            <a class="btn secondary" href="https://krishiv-new-portfoilo.netlify.app" target="_blank" rel="noopener noreferrer" style="padding:0.7rem 1rem;">Netlify</a>
+            <span style="flex:1 1 100%;color:#a8d8ff;font-size:0.88rem;">Fast live hosting, one shared shell, 100+ pages, and constant updates from Krishiv's web studio.</span>
           </div>
           <div class="hero-quick-launch">
             <p class="mini-label">Instant App Launch</p>
@@ -5157,7 +5163,8 @@
       if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
       if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,220,255,'+p.a+')';ctx.fill();
+      ctx.shadowBlur=12;ctx.shadowColor='rgba(0,220,255,0.4)';
+      ctx.fillStyle='rgba(0,220,255,'+Math.min(0.85,0.35+p.a*0.5)+')';ctx.fill();
     });
     // Connect close particles
     for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){
