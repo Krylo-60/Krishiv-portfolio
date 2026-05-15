@@ -1,5 +1,7 @@
-    (function() {
-      let appCards = Array.from(document.querySelectorAll('.app-verse-card'));
+﻿    (function() {
+      const sections = Array.from(document.querySelectorAll('main section[id]'));
+      const header = document.querySelector('.site-header');
+      const navMenuBtn = document.getElementById('navMenuBtn');
       const mainNav = document.getElementById('mainNav');
       const scrollProgressBar = document.getElementById('scrollProgressBar');
       const quickTopBtn = document.getElementById('quickTopBtn');
@@ -632,14 +634,14 @@
 
       const loadBackendHealth = async () => {
         // Static Vercel site - no /api/health endpoint, ping the site itself
-        if (heroBackendStat) { heroBackendStat.textContent = 'live ✅'; heroBackendStat.style.color = '#56d5a6'; }
+        if (heroBackendStat) { heroBackendStat.textContent = 'live Γ£à'; heroBackendStat.style.color = '#56d5a6'; }
         if (backendModeStat) backendModeStat.textContent = 'static';
         if (ccBackendMode) ccBackendMode.textContent = 'static';
         // Also try a no-cors ping to confirm online
         try {
           await fetch('https://krishiv-new-portfoilo.vercel.app/', { mode: 'no-cors', cache: 'no-store' });
         } catch {
-          if (heroBackendStat) heroBackendStat.textContent = '⚠️ check network';
+          if (heroBackendStat) heroBackendStat.textContent = 'ΓÜá∩╕Å check network';
         }
       };
       loadBackendHealth();
@@ -1257,3 +1259,7 @@
       // Safety timeout
       setTimeout(hideLoader, 3000);
     })();
+  </script>
+  <!-- ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ SITE FOOTER ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ -->
+  <footer id="site-footer" style="
+    background:linear-gradient(180deg,transparent,rgba(2,10,20,.98));

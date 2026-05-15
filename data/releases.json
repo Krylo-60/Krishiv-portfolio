@@ -6,7 +6,7 @@
     "summary": "The portfolio is now live on both Vercel and Netlify, with a major shared shell upgrade and full dual deployment coverage.",
     "tags": ["deployment", "vercel", "netlify", "release-notes", "production"],
     "items": [
-      "Deployed the latest portfolio version to Vercel: krishiv-new-portfoilo.vercel.app.",
+      "Deployed the latest portfolio version to Netlify: krishiv-new-portfoilo.netlify.app.",
       "Deployed the same codebase to Netlify: krishiv-new-portfoilo.netlify.app.",
       "Completed the shared UI shell upgrade across 100+ pages with consistent theme class and script ordering.",
       "Verified the HTML upgrade pattern across the site with no missing app-theme-root or shared script issues.",
@@ -26,7 +26,7 @@
       "Upgraded Focus Timer with Pomodoro cycle dots, task label per session, ambient sound picker (Rain/Lofi/Waves/White Noise), productivity score, and 7-day bar chart.",
       "Upgraded Expense Tracker with 7-day income vs expense bar chart, category pill filters, CSV export, and ₹ formatting.",
       "Fixed ecosystem overview in the Owner Nexus to show real data from Notes Vault, Goal Planner, Flashcards, and other apps.",
-      "Deployed all changes to production via Vercel — krishiv-new-portfoilo.vercel.app."
+      "Deployed all changes to production via Netlify — krishiv-new-portfoilo.netlify.app."
     ]
   },
   {
