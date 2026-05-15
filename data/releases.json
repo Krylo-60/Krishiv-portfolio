@@ -1,5 +1,19 @@
 [
   {
+    "date": "2026-05-15",
+    "version": "v13.1.0",
+    "title": "Wide Launch — Vercel + Netlify Deployment",
+    "summary": "The portfolio is now live on both Vercel and Netlify, with a major shared shell upgrade and full dual deployment coverage.",
+    "tags": ["deployment", "vercel", "netlify", "release-notes", "production"],
+    "items": [
+      "Deployed the latest portfolio version to Vercel: krishiv-new-portfoilo.vercel.app.",
+      "Deployed the same codebase to Netlify: krishiv-new-portfoilo.netlify.app.",
+      "Completed the shared UI shell upgrade across 100+ pages with consistent theme class and script ordering.",
+      "Verified the HTML upgrade pattern across the site with no missing app-theme-root or shared script issues.",
+      "Updated README with both live deployment URLs for easy sharing."
+    ]
+  },
+  {
     "date": "2026-05-13",
     "version": "v13.0.0",
     "title": "Mega App Galaxy Upgrade — 100+ Apps Fully Functional",

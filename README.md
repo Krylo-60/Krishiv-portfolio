@@ -5,6 +5,7 @@ This repository is the live portfolio and app galaxy for Krishiv PB.
 ## Live deployments
 
 - Vercel: https://krishiv-new-portfoilo.vercel.app
+- Netlify: https://krishiv-new-portfoilo.netlify.app
 - GitHub Pages: https://krylo-60.github.io/krishiv_new_portfoilo/
 - GitHub repo: https://github.com/Krylo-60/Krishiv-portfolio
 
