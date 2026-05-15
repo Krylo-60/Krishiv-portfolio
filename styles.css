@@ -256,6 +256,26 @@ body[data-theme="solar"][data-mode="light"] {
   box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(4, 11, 22, 0.9);
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(99, 245, 210, 0.4), rgba(116, 167, 255, 0.4));
+  border-radius: 10px;
+  border: 2px solid rgba(4, 11, 22, 0.9);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(99, 245, 210, 0.7), rgba(116, 167, 255, 0.7));
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
@@ -926,11 +946,17 @@ h1 {
 }
 
 .hero h1 {
-  background: linear-gradient(98deg, #ffffff 0%, #d7f7ff 18%, #8cf5dc 46%, #9ec2ff 70%, #ffd166 100%);
+  background: linear-gradient(98deg, #ffffff 0%, #d7f7ff 18%, #8cf5dc 46%, #9ec2ff 70%, #ffd166 100%, #ffffff 130%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   filter: drop-shadow(0 10px 24px rgba(7, 17, 31, 0.38));
+  animation: shineGradient 6s linear infinite;
+}
+
+@keyframes shineGradient {
+  to { background-position: 200% center; }
 }
 
 .kid-note {
@@ -1688,7 +1714,14 @@ h3 {
   padding: 12px;
   border-radius: 42px;
   background: linear-gradient(145deg, rgba(99, 245, 210, 0.32), rgba(116, 167, 255, 0.24), rgba(255, 209, 102, 0.2));
-  box-shadow: 0 28px 52px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 28px 52px rgba(0, 0, 0, 0.3), 0 0 40px rgba(99, 245, 210, 0.15);
+  animation: floatProfile 6s ease-in-out infinite;
+}
+
+@keyframes floatProfile {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
 }
 
 .hero-photo-frame::before {
