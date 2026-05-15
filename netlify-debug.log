@@ -1,0 +1,275 @@
+[project.ts]: detectFrameworks
+[project.ts]: detectBuildSystem
+[project.ts]: detectWorkspaces
+[project.ts]: detectPackageManager
+[project.ts]: detectFrameworksInPath - undefined
+​
+❯ Initial build environment
+config: F:\Krishiv portfolio\netlify.toml
+context: dev
+cwd: F:\Krishiv portfolio
+featureFlags: []
+mode: cli
+repositoryRoot: F:\Krishiv portfolio
+siteId: b0272401-018c-4771-b57c-d79a113e32d7
+​
+❯ UI build settings
+baseRelDir: false
+​
+❯ Resolved build environment
+branch: master
+buildDir: F:\Krishiv portfolio
+configPath: F:\Krishiv portfolio\netlify.toml
+context: dev
+env:
+  - FIREBASE_DB_URL
+  - FIREBASE_SERVICE_ACCOUNT_JSON_B64
+  - GOOGLE_API_KEY
+  - GOOGLE_API_KEYS
+  - GOOGLE_MODEL
+  - REVIEW_ADMIN_TOKEN
+  - REVIEW_STORAGE_KEY
+  - YOUTUBE_API_KEY
+  - DEPLOY_ID
+  - BUILD_ID
+  - ACCOUNT_ID
+  - NETLIFY_LOCAL
+  - HEAD
+  - COMMIT_REF
+  - CACHED_COMMIT_REF
+  - PULL_REQUEST
+  - LANG
+  - LANGUAGE
+  - LC_ALL
+  - GATSBY_TELEMETRY_DISABLED
+  - NEXT_TELEMETRY_DISABLED
+​
+❯ Resolved config
+build:
+  command: echo 'Static site - no build step needed'
+  commandOrigin: config
+  publish: F:\Krishiv portfolio
+  publishOrigin: config
+headers:
+  - for: "*.css"
+    values:
+      Cache-Control: public, max-age=31536000, immutable
+  - for: "*.js"
+    values:
+      Cache-Control: public, max-age=31536000, immutable
+  - for: "*.svg"
+    values:
+      Cache-Control: public, max-age=31536000, immutable
+  - for: "*.png"
+    values:
+      Cache-Control: public, max-age=31536000, immutable
+  - for: "*.jpg"
+    values:
+      Cache-Control: public, max-age=31536000, immutable
+  - for: "*.mp3"
+    values:
+      Cache-Control: public, max-age=31536000, immutable
+  - for: /*.html
+    values:
+      Referrer-Policy: strict-origin-when-cross-origin
+      X-Content-Type-Options: nosniff
+      X-Frame-Options: SAMEORIGIN
+headersOrigin: config
+redirects:
+  - from: /
+    status: 200
+    to: /index.html
+  - force: true
+    from: /api/*
+    status: 200
+    to: https://krishiv-new-portfoilo.vercel.app/api/:splat
+  - from: /*
+    status: 200
+    to: /:splat
+redirectsOrigin: config
+[project.ts]: getBuildSettings
+[project.ts]: detectFrameworks
+[get-build-settings.ts] getBuildSettings for baseDirectory: 
+[96m[1m​[22m[39m
+[96m[1mNetlify Build                                                 [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+[36m[1m​[22m[39m
+[36m[1m❯ Version[22m[39m
+  @netlify/build 35.13.4
+[36m[1m​[22m[39m
+[36m[1m❯ Flags[22m[39m
+  accountId: 6953e603ca751468eb24b625
+  debug: true
+  deployId: 6a07552ea10c9b0e3be8979a
+  edgeFunctionsBootstrapURL: https://v2-17-1--edge.netlify.com/bootstrap/index-combined.ts
+  featureFlags:
+    - netlify_build_db_setup
+  mode: cli
+  siteId: b0272401-018c-4771-b57c-d79a113e32d7
+  skewProtectionToken: 9a82a0aa1e5cdb183ff53708866cde3a457aebef9871aedae41af16171237ead366130373535326561313063396230653362653839373961
+[36m[1m​[22m[39m
+[36m[1m❯ Current directory[22m[39m
+  F:\Krishiv portfolio
+[36m[1m​[22m[39m
+[36m[1m❯ Config file[22m[39m
+  F:\Krishiv portfolio\netlify.toml
+[36m[1m​[22m[39m
+[36m[1m❯ Resolved config[22m[39m
+  build:
+    command: echo 'Static site - no build step needed'
+    commandOrigin: config
+    publish: F:\Krishiv portfolio
+    publishOrigin: config
+  headers:
+    - for: "*.css"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.js"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.svg"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.png"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.jpg"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.mp3"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: /*.html
+      values:
+        Referrer-Policy: strict-origin-when-cross-origin
+        X-Content-Type-Options: nosniff
+        X-Frame-Options: SAMEORIGIN
+  headersOrigin: config
+  redirects:
+    - from: /
+      status: 200
+      to: /index.html
+    - force: true
+      from: /api/*
+      status: 200
+      to: https://krishiv-new-portfoilo.vercel.app/api/:splat
+    - from: /*
+      status: 200
+      to: /:splat
+  redirectsOrigin: config
+[36m[1m​[22m[39m
+[36m[1m❯ Context[22m[39m
+  production
+[96m[1m​[22m[39m
+[96m[1mbuild.command from netlify.toml                               [22m[39m
+[96m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+[36m$ echo 'Static site - no build step needed'[39m
+'Static site - no build step needed'
+​
+[90m(build.command completed in 58ms)[39m
+Build step duration: build.command completed in 58ms
+Build step duration: Functions bundling completed in 6ms
+
+Deploying to Netlify
+────────────────────────────────────────────────────────────────
+
+[32mDeploy path: [39m       F:\Krishiv portfolio
+[32mConfiguration path: [39mF:\Krishiv portfolio\netlify.toml
+
+[33m⠋[39m Uploading blobs to deploy store...
+
+[32m✔[39m Finished uploading blobs to deploy store
+[33m⠋[39m Hashing files...
+[33m⠋[39m Looking for a functions cache...
+[32m✔[39m No cached functions were found
+[32m✔[39m Finished hashing 
+[33m⠋[39m CDN diffing files...
+[32m✔[39m CDN requesting 2 files
+[33m⠋[39m Uploading 2 files
+ »   Warning: JSONHTTPError: no records matched 422
+ »   Warning: 
+{
+  "name": "JSONHTTPError",
+  "status": 422,
+  "json": {
+    "code": 422,
+    "message": "no records matched"
+  }
+}
+
+Build step duration: options.onEnd completed in 63ms
+[91m[1m​[22m[39m
+[91m[1mInternal error during "options.onPostBuild"                   [22m[39m
+[91m[1m────────────────────────────────────────────────────────────────[22m[39m
+​
+  [31m[1mError message[22m[39m
+  JSONHTTPError: Unprocessable Entity
+​
+  [31m[1mError location[22m[39m
+  During options.onPostBuild
+      at parseResponse (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/node_modules/@netlify/api/lib/methods/response.js:34:39)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async callMethod (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/node_modules/@netlify/api/lib/methods/index.js:26:28)
+      at async tryUpload (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/dist/utils/deploy/upload-files.js:80:29)
+​
+  [31m[1mError properties[22m[39m
+  {
+    name: [32m'JSONHTTPError'[39m,
+    status: [33m422[39m,
+    json: { code: [33m422[39m, message: [32m'no records matched'[39m }
+  }
+​
+  [31m[1mResolved config[22m[39m
+  build:
+    command: echo 'Static site - no build step needed'
+    commandOrigin: config
+    publish: F:\Krishiv portfolio
+    publishOrigin: config
+  headers:
+    - for: "*.css"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.js"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.svg"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.png"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.jpg"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: "*.mp3"
+      values:
+        Cache-Control: public, max-age=31536000, immutable
+    - for: /*.html
+      values:
+        Referrer-Policy: strict-origin-when-cross-origin
+        X-Content-Type-Options: nosniff
+        X-Frame-Options: SAMEORIGIN
+  headersOrigin: config
+  redirects:
+    - from: /
+      status: 200
+      to: /index.html
+    - force: true
+      from: /api/*
+      status: 200
+      to: https://krishiv-new-portfoilo.vercel.app/api/:splat
+    - from: /*
+      status: 200
+      to: /:splat
+  redirectsOrigin: config
+ »   Warning: Error: Error while running build
+ »       at toError (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/dist/utils/command-helpers.js:144:16)
+ »       at logAndThrowError (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/dist/utils/command-helpers.js:150:17)
+ »       at handleBuild (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/dist/commands/deploy/deploy.js:552:9)
+ »       at async deploy (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/dist/commands/deploy/deploy.js:1038:13)
+ »       at async BaseCommand.<anonymous> (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/dist/commands/deploy/index.js:107:5)
+ »       at async BaseCommand.parseAsync (C:\Users\naina\AppData\Roaming\npm\node_modules\netlify-cli\node_modules\commander\lib\command.js:1092:5)
+ »       at async runProgram (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/dist/utils/run-program.js:13:9)
+ »       at async main (file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/bin/run.js:75:5)
+ »       at async file:///C:/Users/naina/AppData/Roaming/npm/node_modules/netlify-cli/bin/run.js:86:1
