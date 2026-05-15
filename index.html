@@ -3596,56 +3596,8 @@
       </div>
     </section>
 
-    <section class="section-pad final-cta-shell">
-      <div class="container">
-        <article class="final-cta">
-          <p class="eyebrow">Final Message</p>
-          <h2>This is only the beginning of what I can build.</h2>
-          <p class="lead">
-            I am learning early, building consistently, and pushing my portfolio to look stronger with every upgrade. If you want to follow my journey, projects, and creator growth, this website is just the start.
-          </p>
-          <div class="hero-actions">
-            <a class="btn primary" href="#contact">Connect With Me</a>
-            <a class="btn secondary" href="#projects">Explore Projects</a>
-          </div>
-        </article>
-      </div>
-    </section>
-  </main>
-  <button type="button" id="quickTopBtn" class="quick-top-btn" aria-label="Scroll to top">↑ Top</button>
-
-  <div id="commandPalette" class="command-palette" aria-hidden="true">
-    <div class="palette-panel">
-      <div class="palette-header">
-        <h3>Quick Launcher</h3>
-        <button type="button" id="paletteCloseBtn" aria-label="Close launcher">×</button>
-      </div>
-      <input id="paletteSearch" class="palette-search" type="search" placeholder="Search sections or apps..." autocomplete="off" />
-      <div id="paletteList" class="palette-list"></div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="container footer-row">
-      <p>&copy; 2026 Krishiv PB. I made this website and I am still upgrading it.</p>
-      <a href="#top">Back to top</a>
-    </div>
-  </footer>
   <script>
     (function() {
-    </div>
-  </footer>
-  <script src="app-catalog.js"></script>
-  <script>
-    // CRITICAL: dismiss loader first, before any other JS runs
-    (function() {
-      // Loader already handled by inline script above — nothing needed here
-      window._loaderHandled = true;
-    })();
-
-    (function() {
-      const sections = Array.from(document.querySelectorAll('main section[id]'));
-      const header = document.querySelector('.site-header');
       const navMenuBtn = document.getElementById('navMenuBtn');
       const mainNav = document.getElementById('mainNav');
       const scrollProgressBar = document.getElementById('scrollProgressBar');
@@ -3784,58 +3736,25 @@
         if (heroQuickApp) {
           const optionHrefs = new Set(Array.from(heroQuickApp.options || []).map((option) => option.value));
           bonusApps.forEach((item) => {
-        </article>
-      </div>
-    </section>
+            const href = String(item && item.href || '').trim();
+            if (!href || optionHrefs.has(href)) return;
+            const option = document.createElement('option');
+            option.value = href;
+            option.textContent = item.name || href;
+            heroQuickApp.appendChild(option);
+            optionHrefs.add(href);
+          });
+        }
+      };
+      injectBonusApps();
+    })();
+  </script>
 
-    <section class="section-pad final-cta-shell">
-      <div class="container">
-        <article class="final-cta">
-          <p class="eyebrow">Final Message</p>
-          <h2>This is only the beginning of what I can build.</h2>
-          <p class="lead">
-            I am learning early, building consistently, and pushing my portfolio to look stronger with every upgrade. If you want to follow my journey, projects, and creator growth, this website is just the start.
-          </p>
-          <div class="hero-actions">
-            <a class="btn primary" href="#contact">Connect With Me</a>
-            <a class="btn secondary" href="#projects">Explore Projects</a>
-          </div>
-        </article>
-      </div>
-    </section>
-  </main>
-  <button type="button" id="quickTopBtn" class="quick-top-btn" aria-label="Scroll to top">↑ Top</button>
+  <script src="app-catalog.js"></script>
 
-  <div id="commandPalette" class="command-palette" aria-hidden="true">
-    <div class="palette-panel">
-      <div class="palette-header">
-        <h3>Quick Launcher</h3>
-        <button type="button" id="paletteCloseBtn" aria-label="Close launcher">×</button>
-      </div>
-      <input id="paletteSearch" class="palette-search" type="search" placeholder="Search sections or apps..." autocomplete="off" />
-      <div id="paletteList" class="palette-list"></div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="container footer-row">
-      <p>&copy; 2026 Krishiv PB. I made this website and I am still upgrading it.</p>
-      <a href="#top">Back to top</a>
-    </div>
-  </footer>
   <script>
     (function() {
-      var l = document.getElementById('pageLoader');
-      if (l) { l.style.transition = 'opacity 0.5s ease'; l.style.opacity = '0'; setTimeout(function() { l.parentNode && l.parentNode.removeChild(l); }, 500); }
-      document.body.classList.add('page-ready');
-      document.body.classList.remove('preboot');
-      window._loaderHandled = true;
-    })();
-
-    (function() {
-      const sections = Array.from(document.querySelectorAll('main section[id]'));
-      const header = document.querySelector('.site-header');
-      const navMenuBtn = document.getElementById('navMenuBtn');
+      let appCards = Array.from(document.querySelectorAll('.app-verse-card'));
       const mainNav = document.getElementById('mainNav');
       const scrollProgressBar = document.getElementById('scrollProgressBar');
       const quickTopBtn = document.getElementById('quickTopBtn');
@@ -5214,9 +5133,9 @@
     })();
   </script>
 
+  <script src="app-universe-shell.js" defer></script>
   <script src="usage-tracker.js" defer></script>
   <script src="future-upgrade.js" defer></script>
-  <script src="app-universe-shell.js" defer></script>
 <script>
 // Particle canvas background
 (function(){

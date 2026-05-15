@@ -48,8 +48,7 @@
       body.preboot .site-header,
       body.preboot main,
       body.preboot .site-footer,
-      body.preboot .app-shell-dock,
-      body.preboot .future-toggle-btn {
+      body.preboot .app-shell-dock {
         opacity: 1 !important;
         pointer-events: auto !important;
         transform: none !important;
@@ -81,8 +80,212 @@
       font-family: "JetBrains Mono", monospace !important;
     }
   </style>
+  <style id="games-page-enhancements">
+    body.games-page.app-theme-root {
+      background: radial-gradient(circle at 22% 2%, rgba(0, 255, 236, 0.14), transparent 20%),
+        linear-gradient(180deg, #020b17 0%, #041523 100%);
+      color: #eafcff;
+    }
+
+    .games-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 0 3rem;
+    }
+
+    .games-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 18% 14%, rgba(0, 240, 255, 0.12), transparent 22%),
+        radial-gradient(circle at 78% 25%, rgba(255, 152, 84, 0.07), transparent 15%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #heroParticles {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.44;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .games-hero-layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.85fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .hero-copy,
+    .games-highlight {
+      background: rgba(6, 16, 29, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.17);
+      border-radius: 28px;
+      backdrop-filter: blur(18px);
+      padding: 2rem;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.6rem, 4vw, 4.2rem);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      margin: 0 0 1rem;
+    }
+
+    .hero-copy p.lead {
+      max-width: 58ch;
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-ribbon {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 1.6rem 0;
+      padding: 1rem 1rem;
+      background: rgba(3, 38, 65, 0.56);
+      border: 1px solid rgba(0, 255, 242, 0.1);
+      border-radius: 999px;
+    }
+
+    .hero-ribbon span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1rem;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      color: #d7f9ff;
+      font-size: 0.96rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.4rem;
+    }
+
+    .hero-actions .btn {
+      min-width: 10rem;
+    }
+
+    .command-center {
+      background: rgba(5, 12, 25, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+      border-radius: 28px;
+      padding: 2rem;
+    }
+
+    .command-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1.4rem;
+    }
+
+    .search-wrap {
+      display: block;
+      width: 100%;
+    }
+
+    .command-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e8fbff;
+      border-radius: 16px;
+      padding: 1rem 1.1rem;
+    }
+
+    .command-status {
+      margin-top: 1rem;
+      color: rgba(227, 248, 255, 0.84);
+    }
+
+    .app-verse-card,
+    .playstyle-card {
+      transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.32s ease;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .app-verse-card:hover,
+    .playstyle-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 26px 90px rgba(0, 0, 0, 0.18);
+    }
+
+    .game-wall-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.35rem;
+      margin-top: 2rem;
+    }
+
+    .game-wall-card {
+      overflow: hidden;
+      min-height: 320px;
+      background: linear-gradient(180deg, rgba(4, 11, 22, 0.92), rgba(2, 8, 18, 0.98));
+      border-radius: 24px;
+    }
+
+    .game-wall-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+      display: block;
+    }
+
+    .game-wall-card:hover img {
+      transform: scale(1.04);
+    }
+
+    .game-wall-card.poster-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      min-height: 320px;
+      background: linear-gradient(135deg, rgba(7,18,34,0.96), rgba(13,26,44,0.88));
+      color: rgba(224, 250, 255, 0.9);
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .game-banner-icon {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
+    @media (max-width: 980px) {
+      .games-hero-layout {
+        grid-template-columns: 1fr;
+      }
+      .game-wall-grid {
+        grid-template-columns: 1fr;
+      }
+      .command-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body id="top" class="games-page preboot" data-theme="default" data-mode="dark">
+<body id="top" class="games-page preboot app-theme-root" data-theme="default" data-mode="dark">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="page-loader" id="pageLoader" aria-hidden="true">
     <div class="loader-core">
@@ -119,6 +322,7 @@
 
   <main id="main-content">
     <section class="hero games-hero section-pad">
+      <canvas id="heroParticles" aria-hidden="true"></canvas>
       <div class="container games-hero-layout">
         <div class="hero-copy">
           <p class="eyebrow">My Games</p>
@@ -1421,10 +1625,118 @@
     setTimeout(hideLoader, 3000);
   </script>
 
-  <script src="usage-tracker.js" defer></script>
-  <script src="future-upgrade.js" defer></script>
+  <script>
+    (function () {
+      const canvas = document.getElementById('heroParticles');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let width = 0;
+      let height = 0;
+      const ratio = Math.min(2, window.devicePixelRatio || 1);
+      const stars = Array.from({ length: 88 }, () => ({
+        x: 0,
+        y: 0,
+        r: Math.random() * 1.6 + 0.8,
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: (Math.random() - 0.5) * 0.08,
+        alpha: 0.18 + Math.random() * 0.55
+      }));
+      const pointer = { x: -9999, y: -9999 };
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        canvas.width = Math.floor(width * ratio);
+        canvas.height = Math.floor(height * ratio);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        stars.forEach((star) => {
+          star.x = Math.random() * width;
+          star.y = Math.random() * height;
+        });
+      }
+
+      function drawStars() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = 'rgba(168, 249, 255, 0.05)';
+        ctx.fillRect(0, 0, width, height);
+
+        stars.forEach((star) => {
+          star.x += star.vx;
+          star.y += star.vy;
+          if (star.x < -20) star.x = width + 20;
+          if (star.x > width + 20) star.x = -20;
+          if (star.y < -20) star.y = height + 20;
+          if (star.y > height + 20) star.y = -20;
+
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(118, 246, 255, ${star.alpha})`;
+          ctx.fill();
+
+          const dx = star.x - pointer.x;
+          const dy = star.y - pointer.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 160) {
+            ctx.strokeStyle = `rgba(101, 224, 255, ${(0.2 * (160 - dist)) / 160})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(star.x, star.y);
+            ctx.lineTo(pointer.x, pointer.y);
+            ctx.stroke();
+          }
+        });
+
+        requestAnimationFrame(drawStars);
+      }
+
+      window.addEventListener('resize', resize, { passive: true });
+      window.addEventListener('mousemove', (event) => {
+        const rect = canvas.getBoundingClientRect();
+        pointer.x = event.clientX - rect.left;
+        pointer.y = event.clientY - rect.top;
+      });
+      window.addEventListener('mouseleave', () => {
+        pointer.x = -9999;
+        pointer.y = -9999;
+      });
+
+      resize();
+      drawStars();
+    })();
+  </script>
+
+  <script>
+    // Poster fallback guard: hide broken images and show gradient card
+    (function(){
+      try {
+        const posters = Array.from(document.querySelectorAll('.game-wall-card img'));
+        posters.forEach((img) => {
+          // if already failed before script ran
+          if (img.complete && img.naturalWidth === 0) {
+            img.style.display = 'none';
+            const card = img.closest('.game-wall-card');
+            if (card) card.classList.add('poster-fallback');
+          }
+          img.addEventListener('error', function(){
+            try {
+              img.style.display = 'none';
+              const card = img.closest('.game-wall-card');
+              if (card) card.classList.add('poster-fallback');
+            } catch(e) {}
+          }, { once: true });
+        });
+      } catch (e) {}
+    })();
+  </script>
+
   <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js" defer></script>
+  <script src="usage-tracker.js" defer></script>
 </body>
 </html>
 

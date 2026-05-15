@@ -917,4 +917,47 @@
   }, { passive: true });
 })();
 
+/* Star helper: initializes a decorative starfield on a canvas or with THREE.js if loaded.
+   Usage: window.initStarHelper('heroParticles', {count:120, color:'#7beaff'}) */
+(function(){
+  window.initStarHelper = function(canvasId, opts){
+    try {
+      const cfg = Object.assign({count:88, color:'#7beaff', blend:'screen'}, opts || {});
+      const c = document.getElementById(canvasId);
+      if (!c) return null;
+      // If three is available, attempt a WebGL starfield (best-effort)
+      if (window.THREE && typeof window.THREE === 'object') {
+        try {
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 2000);
+          camera.position.z = 400;
+          const renderer = new THREE.WebGLRenderer({ canvas: c, alpha: true });
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          const geometry = new THREE.BufferGeometry();
+          const positions = new Float32Array(cfg.count * 3);
+          for (let i=0;i<cfg.count;i++){ positions[i*3+0]=(Math.random()-0.5)*2000; positions[i*3+1]=(Math.random()-0.5)*1200; positions[i*3+2]=(Math.random()-0.5)*1200; }
+          geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+          const material = new THREE.PointsMaterial({ color: cfg.color, size: 2, sizeAttenuation: true, transparent: true, opacity: 0.85 });
+          const points = new THREE.Points(geometry, material);
+          scene.add(points);
+          let raf = null;
+          function onResize(){ camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
+          window.addEventListener('resize', onResize, { passive:true });
+          (function animate(){ points.rotation.y += 0.0008; points.rotation.x += 0.0004; renderer.render(scene, camera); raf = requestAnimationFrame(animate); })();
+          return { stop: ()=>{ if (raf) cancelAnimationFrame(raf); window.removeEventListener('resize', onResize); renderer.dispose(); } };
+        } catch(e) { /* fallthrough to 2D */ }
+      }
+      // 2D Canvas fallback
+      const ctx = c.getContext('2d'); if (!ctx) return null;
+      let w = 0, h = 0; const ratio = Math.min(2, window.devicePixelRatio || 1);
+      const stars = Array.from({length: cfg.count}, ()=>({ x:0,y:0,r:Math.random()*1.6+0.6,vx:(Math.random()-.5)*0.2, vy:(Math.random()-.5)*0.08, a:0.2+Math.random()*0.6 }));
+      function resize(){ const rect = c.getBoundingClientRect(); w = rect.width; h = rect.height; c.width = Math.floor(w*ratio); c.height = Math.floor(h*ratio); c.style.width = w+'px'; c.style.height = h+'px'; ctx.setTransform(ratio,0,0,ratio,0,0); stars.forEach(s=>{s.x=Math.random()*w; s.y=Math.random()*h;}); }
+      function draw(){ ctx.clearRect(0,0,w,h); stars.forEach(s=>{ s.x+=s.vx; s.y+=s.vy; if (s.x< -20) s.x = w+20; if (s.x> w+20) s.x = -20; if (s.y< -20) s.y = h+20; if (s.y> h+20) s.y = -20; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle = `rgba(123,234,255,${s.a})`; ctx.fill(); }); raf = requestAnimationFrame(draw); }
+      window.addEventListener('resize', resize, { passive:true });
+      resize(); let raf = requestAnimationFrame(draw);
+      return { stop: ()=>{ if (raf) cancelAnimationFrame(raf); window.removeEventListener('resize', resize); } };
+    } catch(e) { return null; }
+  };
+})();
+
 

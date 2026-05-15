@@ -15,7 +15,7 @@
   };
 
   const path = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
-  const allowed = ["index.html", "games.html", ""];
+  const allowed = ["index.html", ""];
   if (!allowed.includes(path)) return;
 
   let futureMode = safeGet(MODE_KEY, "");
