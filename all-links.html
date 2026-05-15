@@ -274,8 +274,6 @@
     </section>
   </main>
 
-  <script src="app-catalog.js"></script>
-  <script src="app-universe-shell.js"></script>
   <script>
     const PROD_BASE_URL = "https://krishiv-new-portfoilo.vercel.app";
     const BASE_URL = /^https?:$/.test(window.location.protocol) && window.location.hostname
@@ -550,6 +548,10 @@
     updateStats();
     document.getElementById("copyAllLinksBtn").addEventListener("click", copyAllLinks);
   </script>
+  <script src="app-catalog.js"></script>
+  <script src="app-universe-shell.js" defer></script>
+  <script src="usage-tracker.js" defer></script>
+  <script src="future-upgrade.js" defer></script>
 </body>
 </html>
 

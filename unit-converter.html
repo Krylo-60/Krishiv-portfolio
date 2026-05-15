@@ -38,7 +38,7 @@
     .history-item{display:flex;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(121,216,255,.06);border:1px solid rgba(121,216,255,.1);margin-bottom:6px;font-size:.82rem;font-family:"JetBrains Mono",monospace;color:#a9c6e7;}
   </style>
 </head>
-<body>
+<body class="app-theme-root">
 <main class="wrap">
   <section class="card">
     <h1>📐 Unit Converter Pro</h1>
@@ -207,5 +207,8 @@ function renderHistory(){
 
 loadCategory();renderHistory();
 </script>
-<script src="app-catalog.js"></script><script src="app-universe-shell.js" defer></script>
+  <script src="app-catalog.js"></script>
+  <script src="app-universe-shell.js" defer></script>
+  <script src="usage-tracker.js" defer></script>
+  <script src="future-upgrade.js" defer></script>
 </body></html>

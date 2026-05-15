@@ -47,7 +47,7 @@
     @media(max-width:760px){.grid2{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
-<body>
+<body class="app-theme-root">
 <main class="wrap">
   <section class="card">
     <h1>📚 Study Planner Pro</h1>
@@ -230,7 +230,9 @@
   load();render();
 })();
 </script>
-<script src="app-catalog.js"></script>
-<script src="app-universe-shell.js" defer></script>
+  <script src="app-catalog.js"></script>
+  <script src="app-universe-shell.js" defer></script>
+  <script src="usage-tracker.js" defer></script>
+  <script src="future-upgrade.js" defer></script>
 </body>
 </html>

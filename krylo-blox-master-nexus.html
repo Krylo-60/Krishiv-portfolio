@@ -104,7 +104,7 @@
     }
   </style>
 </head>
-<body>
+<body class="app-theme-root">
 
 <canvas id="bg-canvas"></canvas>
 <div id="cursor"></div>
@@ -252,8 +252,10 @@
     function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); pArray.forEach(p => p.draw()); requestAnimationFrame(animate); }
     animate();
 </script>
-<script src="app-catalog.js"></script>
+  <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js" defer></script>
+  <script src="usage-tracker.js" defer></script>
+  <script src="future-upgrade.js" defer></script>
 </body>
 </html>
 

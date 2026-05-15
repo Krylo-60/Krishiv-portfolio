@@ -53,7 +53,7 @@
     @media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr);}.fc-item{grid-template-columns:1fr;}}
   </style>
 </head>
-<body>
+<body class="app-theme-root">
 <main class="wrap">
   <section class="card">
     <h1>🃏 Flashcards Pro</h1>
@@ -250,5 +250,8 @@
   load();render();
 })();
 </script>
-<script src="app-catalog.js"></script><script src="app-universe-shell.js" defer></script>
+  <script src="app-catalog.js"></script>
+  <script src="app-universe-shell.js" defer></script>
+  <script src="usage-tracker.js" defer></script>
+  <script src="future-upgrade.js" defer></script>
 </body></html>

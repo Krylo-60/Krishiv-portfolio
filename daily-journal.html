@@ -53,7 +53,7 @@
     @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
-<body>
+<body class="app-theme-root">
 <main class="wrap">
   <section class="card">
     <h1>📔 Daily Journal Pro</h1>
@@ -229,7 +229,9 @@
   load(); render();
 })();
 </script>
-<script src="app-catalog.js"></script>
-<script src="app-universe-shell.js" defer></script>
+  <script src="app-catalog.js"></script>
+  <script src="app-universe-shell.js" defer></script>
+  <script src="usage-tracker.js" defer></script>
+  <script src="future-upgrade.js" defer></script>
 </body>
 </html>
