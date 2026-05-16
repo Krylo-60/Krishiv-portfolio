@@ -66,7 +66,7 @@
 
   <div class="stats">
     <div class="stat"><strong id="sTotal">0</strong><span>Goals</span></div>
-    <div class="stat"><strong id="sDone">0</strong><span>Completed ✅</span></div>
+    <div class="stat"><strong id="sDone">0</strong><span>Completed &#x2705;</span></div>
     <div class="stat"><strong id="sInProg">0</strong><span>In Progress</span></div>
     <div class="stat"><strong id="sOverdue">0</strong><span>Overdue ⚠️</span></div>
   </div>
@@ -157,11 +157,11 @@
       const overdue=isOverdue(g);
       const done=g.progress>=100;
       const daysLeft=g.deadline?Math.ceil((new Date(g.deadline)-new Date())/864e5):null;
-      const milesHTML=(g.milestones||[]).map((m,i)=>`<span class="${m.done?'done':''}" onclick="toggleMile('${g.id}',${i})">${m.done?'✅':'⬜'} ${esc(m.text)}</span>`).join('');
+      const milesHTML=(g.milestones||[]).map((m,i)=>`<span class="${m.done?'done':''}" onclick="toggleMile('${g.id}',${i})">${m.done?'&#x2705;':'⬜'} ${esc(m.text)}</span>`).join('');
       return `<div class="goal">
         <div class="goal-head">
           <div>
-            <h3 class="goal-title">${esc(g.title)}${done?' ✅':''}</h3>
+            <h3 class="goal-title">${esc(g.title)}${done?' &#x2705;':''}</h3>
             <span class="goal-cat">${esc(g.cat)}</span>
           </div>
           <button class="btn danger sm" onclick="deleteGoal('${g.id}')">🗑</button>

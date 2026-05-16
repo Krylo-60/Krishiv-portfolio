@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -228,7 +228,7 @@
 
           <div class="row">
             <button class="btn${doneToday?" soft":""} sm" data-action="toggle" data-id="${h.id}">
-              ${doneToday?"✅ Done Today — Undo":"Mark Today Done ✓"}
+              ${doneToday?"&#x2705; Done Today — Undo":"Mark Today Done ✓"}
             </button>
             <button class="btn soft sm" data-action="reset" data-id="${h.id}">Reset Streak</button>
             <button class="btn soft sm" data-action="delete" data-id="${h.id}">🗑 Delete</button>
@@ -284,4 +284,3 @@
   <script src="usage-tracker.js" defer></script>
 </body>
 </html>
-

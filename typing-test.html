@@ -195,7 +195,7 @@
     const elapsed=(Date.now()-start)/1000;
     const wpm=calcWPM(typed,elapsed);
     const acc=calcAcc(typed);
-    $("resultText").textContent=timeUp?`⏱ Time up! WPM: ${wpm} | Accuracy: ${acc}%`:`✅ Complete! WPM: ${wpm} | Accuracy: ${acc}%`;
+    $("resultText").textContent=timeUp?`⏱ Time up! WPM: ${wpm} | Accuracy: ${acc}%`:`&#x2705; Complete! WPM: ${wpm} | Accuracy: ${acc}%`;
     if(wpm>best){best=wpm;localStorage.setItem(BEST_KEY,String(best));}
     $("bestWPM").textContent=String(best);
     hist.unshift({wpm,acc,mode,date:new Date().toLocaleDateString("en-IN")});

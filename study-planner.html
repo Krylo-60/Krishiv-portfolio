@@ -182,7 +182,7 @@
         ${t.notes?`<p style="font-size:.85rem;margin-top:4px;color:var(--muted);">${esc(t.notes)}</p>`:""}
         ${est>0?`<div style="margin-top:8px;"><div class="prog-labels"><span>⏱ ${spent}h / ${est}h</span><span>${pct}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div></div>`:""}
         <div class="row" style="margin-top:10px;">
-          <button class="btn sm" data-action="toggle" data-id="${t.id}">${t.done?"↩ Re-open":"✅ Mark Done"}</button>
+          <button class="btn sm" data-action="toggle" data-id="${t.id}">${t.done?"↩ Re-open":"&#x2705; Mark Done"}</button>
           <button class="btn sm" data-action="delete" data-id="${t.id}">🗑 Delete</button>
         </div>
       </article>`;

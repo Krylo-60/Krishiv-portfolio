@@ -211,7 +211,7 @@
     stopTimer();locked=true;
     const sel=Number(t.dataset.index),q=questions[index];
     document.querySelectorAll(".option").forEach(b=>b.disabled=true);
-    if(sel===q.a){score++;$("scoreDisplay").textContent=String(score);t.classList.add("correct");$("feedback").textContent="✅ Correct!";$("feedback").style.color="#52d6a3";}
+    if(sel===q.a){score++;$("scoreDisplay").textContent=String(score);t.classList.add("correct");$("feedback").textContent="&#x2705; Correct!";$("feedback").style.color="#52d6a3";}
     else{t.classList.add("wrong");document.querySelectorAll(".option")[q.a].classList.add("correct");$("feedback").textContent="❌ Wrong answer.";$("feedback").style.color="#ff7f7f";}
     showExplanation();$("nextBtn").disabled=false;
   });

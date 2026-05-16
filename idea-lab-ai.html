@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet" />
   <style id="codex-shared-fonts">body,button,input,select,textarea{font-family:"Space Grotesk",sans-serif!important;}h1,h2,h3{font-family:"Orbitron",sans-serif!important;}code,pre{font-family:"JetBrains Mono",monospace!important;}</style>
   <style>
+
     :root{--bg:#071223;--line:rgba(121,216,255,0.15);--text:#eef7ff;--muted:#a9c6e7;--ok:#56d5a6;--acc:#79d8ff;}
     *{box-sizing:border-box;}body{margin:0;color:var(--text);background:radial-gradient(circle at 15% 50%, rgba(10,34,58,1), rgba(3,10,20,1) 80%);min-height:100vh;}
     .wrap{width:min(1020px,94%);margin:24px auto;position:relative;z-index:2;}
@@ -24,17 +25,13 @@
     .btn.sm:hover{background:rgba(121,216,255,0.2);}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
     .grid{display:grid;gap:20px;grid-template-columns:1fr 1fr;}
-    /* TEMPLATE TABS */
     .template-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
     .tmpl-tab{padding:10px 8px;border-radius:12px;border:1px solid rgba(121,216,255,0.15);background:rgba(5,16,30,0.5);color:var(--muted);cursor:pointer;text-align:center;font-size:.85rem;font-weight:600;transition:all .3s ease;}
     .tmpl-tab:hover,.tmpl-tab.active{background:rgba(121,216,255,.15);border-color:var(--acc);color:var(--acc);box-shadow:0 4px 12px rgba(121,216,255,0.1);}
-    /* RESULT AREA */
     .result-area{position:relative;}
     .result-area textarea{min-height:220px;font-family:"Space Grotesk",sans-serif;font-size:1rem;line-height:1.6;}
     .wc-badge{font-size:.8rem;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-top:6px;display:block;}
-    /* MODE INDICATOR */
     .mode-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(121,216,255,.1);border:1px solid rgba(121,216,255,.25);font-size:.85rem;color:var(--acc);margin-top:12px;}
-    /* IDEA LIST */
     .idea{border:1px solid rgba(121,216,255,.15);border-radius:14px;padding:16px;background:rgba(5,16,30,.6);margin-bottom:12px;transition:all .3s ease;backdrop-filter:blur(8px);}
     .idea:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.3);}
     .idea h3{font-size:1.1rem;margin:0 0 8px;}
@@ -45,7 +42,6 @@
     .idea-meta{font-size:.8rem;color:var(--muted);margin-top:10px;display:flex;gap:12px;flex-wrap:wrap;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);}
     .idea-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
     .idea-actions button{padding:6px 12px;font-size:.8rem;border-radius:10px;}
-    /* SUGGESTION BLOCKS */
     .suggestion-block{background:rgba(121,216,255,.08);border:1px solid rgba(121,216,255,.2);border-radius:14px;padding:16px;margin-bottom:12px;transition:transform 0.2s;}
     .suggestion-block:hover{transform:translateY(-2px);}
     .suggestion-block h4{font-size:.95rem;margin:0 0 8px;}
@@ -53,6 +49,7 @@
     a{color:#9edcff;text-decoration:none;transition:color 0.2s;}a:hover{color:#fff;}
     @keyframes brainPulse{0%,100%{transform:scale(1) rotate(0deg);opacity:0.04;}50%{transform:scale(1.15) rotate(6deg);opacity:0.12;}}
     @media(max-width:760px){.grid{grid-template-columns:1fr;}.template-tabs{grid-template-columns:repeat(2,1fr);}}
+
   </style>
 </head>
 <body class="app-theme-root">
@@ -267,7 +264,7 @@
 
   $("copyBtn").addEventListener("click",async()=>{
     const t=$("resultArea").value.trim();if(!t)return;
-    try{await navigator.clipboard.writeText(t);$("modeChip").style.display="flex";$("modeChip").textContent="✅ Copied to clipboard!";}
+    try{await navigator.clipboard.writeText(t);$("modeChip").style.display="flex";$("modeChip").textContent="&#x2705; Copied to clipboard!";}
     catch{$("modeChip").textContent="❌ Copy blocked by browser.";}
   });
 
@@ -295,7 +292,7 @@
       const data=await res.json();
       if(data.suggestion){$("resultArea").value=data.suggestion;updateWC();}
       if(Array.isArray(data.suggestions)&&data.suggestions.length){renderSuggBlocks(data.suggestions);}
-      $("modeChip").style.display="flex";$("modeChip").textContent="🤖 AI: "+(data.mode==="google"?"Google Gemini":"Smart fallback");
+      $("modeChip").style.display="flex";$("modeChip").textContent="&#x1F916; AI: "+(data.mode==="google"?"Google Gemini":"Smart fallback");
     }catch{}
   },true);
 

@@ -128,7 +128,7 @@ const tabsEl=document.getElementById('tabs');
 Object.keys(CATEGORIES).forEach(cat=>{
   const t=document.createElement('div');
   t.className='tab'+(cat===activeCat?' active':'');
-  t.textContent={'Length':'📏 Length','Weight':'⚖️ Weight','Temperature':'🌡️ Temp','Speed':'🚀 Speed','Area':'▪️ Area','Volume':'🫙 Volume','Time':'⏱ Time','Data':'💾 Data'}[cat]||cat;
+  t.textContent={'Length':'📏 Length','Weight':'⚖️ Weight','Temperature':'🌡️ Temp','Speed':'&#x1F680; Speed','Area':'▪️ Area','Volume':'🫙 Volume','Time':'⏱ Time','Data':'💾 Data'}[cat]||cat;
   t.onclick=()=>{activeCat=cat;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');loadCategory();};
   tabsEl.appendChild(t);
 });

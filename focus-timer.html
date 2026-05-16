@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -233,7 +233,7 @@
   }
 
   function switchMode(){
-    if(isFocus){sessions++;pomoCount++;totalFocusMin+=focusSec/60;addLog("focus",Math.round(focusSec/60));$("statusText").textContent="✅ Focus done! Break time.";}
+    if(isFocus){sessions++;pomoCount++;totalFocusMin+=focusSec/60;addLog("focus",Math.round(focusSec/60));$("statusText").textContent="&#x2705; Focus done! Break time.";}
     else{breaks++;addLog("break",Math.round(breakSec/60));$("statusText").textContent="⚡ Break done. Back to focus!";}
     isFocus=!isFocus;remaining=isFocus?focusSec:breakSec;
     updateRing();
@@ -250,7 +250,7 @@
     const fm=Math.max(5,Math.min(120,Number($("focusMin").value)||25));
     const bm=Math.max(1,Math.min(60,Number($("breakMin").value)||5));
     focusSec=fm*60;breakSec=bm*60;remaining=isFocus?focusSec:breakSec;
-    $("statusText").textContent="✅ Updated.";updateRing();
+    $("statusText").textContent="&#x2705; Updated.";updateRing();
     localStorage.setItem(SK,JSON.stringify({fm,bm,auto:$("autoStart").checked}));
   });
   $("clearLog").addEventListener("click",()=>{log=[];localStorage.setItem(LOGK,"[]");renderLog();renderChart();});
@@ -297,4 +297,3 @@
   <script src="usage-tracker.js" defer></script>
 </body>
 </html>
-

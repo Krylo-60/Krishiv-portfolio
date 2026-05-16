@@ -1362,7 +1362,7 @@
           if (ecoReviews) ecoReviews.textContent = String(decks.length||0);
           if (ecoIdeas) ecoIdeas.textContent = String(ideas.length||0);
           if (ecoSessions) ecoSessions.textContent = String(goals.length||0);
-          setStatus(ecoStatus, "✅ Ecosystem loaded from local data.", "ok");
+          setStatus(ecoStatus, "&#x2705; Ecosystem loaded from local data.", "ok");
         } catch {
           setStatus(ecoStatus, "Could not load ecosystem data.", "warn");
         }
@@ -1497,7 +1497,7 @@
       function loadHealth() {
         // Static site — show site as live by fetching the live URL
         fetch("https://krishiv-new-portfoilo.vercel.app/", { mode: "no-cors", cache: "no-store" })
-          .then(() => { healthState.textContent = "✅ online"; })
+          .then(() => { healthState.textContent = "&#x2705; online"; })
           .catch(() => { healthState.textContent = "⚠️ check network"; });
       }
 
@@ -1533,7 +1533,7 @@
         writeJsonStorage("krishiv_yt_sync_v1", payload);
         if (typeof syncMeta !== "undefined" && syncMeta) syncMeta.textContent = "Sync source: local | Last sync: " + payload.savedAt;
         syncSourceStat.textContent = "localStorage";
-        setStatus(ps, "✅ Saved locally! Data persisted in browser.", "ok");
+        setStatus(ps, "&#x2705; Saved locally! Data persisted in browser.", "ok");
         logAction("Published YT sync data to localStorage.");
       }
 
@@ -1576,7 +1576,7 @@
           loadOverview();
           loadReleaseFeed();
           lastRefreshLine.textContent = "Last refresh: " + new Date().toLocaleString();
-          setStatus(ownerStatus, "✅ Dashboard refreshed — static mode (localStorage data).", "ok");
+          setStatus(ownerStatus, "&#x2705; Dashboard refreshed — static mode (localStorage data).", "ok");
           logAction("Refreshed dashboard (static mode).");
         } catch (error) {
           setStatus(ownerStatus, "Refresh error: " + error.message, "err");

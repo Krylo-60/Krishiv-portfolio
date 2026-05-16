@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -60,7 +60,7 @@
 
   <div class="grid" style="margin-bottom:14px;">
     <div class="stat"><strong id="sTotal">0</strong><span>Books logged</span></div>
-    <div class="stat"><strong id="sDone">0</strong><span>Finished ✅</span></div>
+    <div class="stat"><strong id="sDone">0</strong><span>Finished &#x2705;</span></div>
     <div class="stat"><strong id="sPages">0</strong><span>Pages read</span></div>
   </div>
 
@@ -72,7 +72,7 @@
       <div><label style="font-size:.8rem;color:#a9c6e7;">Total pages</label><input type="number" id="bTotal" min="1" placeholder="300"/></div>
       <div><label style="font-size:.8rem;color:#a9c6e7;">Pages read</label><input type="number" id="bRead" min="0" value="0" placeholder="0"/></div>
       <div><label style="font-size:.8rem;color:#a9c6e7;">Status</label>
-        <select id="bStatus"><option value="reading">📖 Reading</option><option value="done">✅ Finished</option><option value="want">⭐ Want to Read</option><option value="paused">⏸ Paused</option></select>
+        <select id="bStatus"><option value="reading">📖 Reading</option><option value="done">&#x2705; Finished</option><option value="want">⭐ Want to Read</option><option value="paused">⏸ Paused</option></select>
       </div>
       <div><label style="font-size:.8rem;color:#a9c6e7;">Genre</label>
         <select id="bGenre"><option>Fiction</option><option>Non-Fiction</option><option>Fantasy</option><option>Sci-Fi</option><option>Mystery</option><option>Biography</option><option>Self-Help</option><option>History</option><option>Other</option></select>
@@ -105,7 +105,7 @@
 (() => {
   const LSK = 'krishiv_rt_v2';
   let books = [], rating = 5;
-  const EMOJIS = {'Fiction':'📖','Non-Fiction':'📰','Fantasy':'🧙','Sci-Fi':'🚀','Mystery':'🔍','Biography':'👤','Self-Help':'💡','History':'🏛','Other':'📗'};
+  const EMOJIS = {'Fiction':'📖','Non-Fiction':'📰','Fantasy':'🧙','Sci-Fi':'&#x1F680;','Mystery':'🔍','Biography':'👤','Self-Help':'💡','History':'🏛','Other':'📗'};
   function load(){try{books=JSON.parse(localStorage.getItem(LSK)||'[]');if(!Array.isArray(books))books=[];}catch{books=[];}}
   function save(){localStorage.setItem(LSK,JSON.stringify(books));}
   function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -179,7 +179,7 @@
           <div class="book-title">${esc(b.title)}</div>
           <div class="book-author">${b.author?esc(b.author):'Unknown author'} · ${esc(b.genre)}</div>
           <div class="book-meta">
-            <span class="badge ${b.status}">${{reading:'📖 Reading',done:'✅ Done',want:'⭐ Wishlist',paused:'⏸ Paused'}[b.status]||b.status}</span>
+            <span class="badge ${b.status}">${{reading:'📖 Reading',done:'&#x2705; Done',want:'⭐ Wishlist',paused:'⏸ Paused'}[b.status]||b.status}</span>
             <span style="font-size:.78rem;color:#a9c6e7;font-family:'JetBrains Mono',monospace;">${pct}%${b.total?' · '+b.read+'/'+b.total+' pages':''}</span>
           </div>
           ${b.total>0||b.status==='done'?`<div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>`:''}
@@ -189,7 +189,7 @@
             ${b.status==='reading'&&b.total>0?`<input type="number" min="0" max="${b.total}" value="${b.read}" style="width:80px;padding:4px 8px;font-size:.8rem;" onchange="updatePages('${b.id}',this.value)"/> pages`:''}
             <select style="max-width:130px;padding:4px 6px;font-size:.8rem;" onchange="updateStatus('${b.id}',this.value)">
               <option value="reading"${b.status==='reading'?' selected':''}>📖 Reading</option>
-              <option value="done"${b.status==='done'?' selected':''}>✅ Done</option>
+              <option value="done"${b.status==='done'?' selected':''}>&#x2705; Done</option>
               <option value="want"${b.status==='want'?' selected':''}>⭐ Wishlist</option>
               <option value="paused"${b.status==='paused'?' selected':''}>⏸ Paused</option>
             </select>
@@ -213,4 +213,3 @@
   <script src="app-universe-shell.js" defer></script>
   <script src="usage-tracker.js" defer></script>
 </body></html>
-

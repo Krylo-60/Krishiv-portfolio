@@ -64,7 +64,7 @@
   <!-- STATS -->
   <div class="stats">
     <div class="stat"><strong id="sTotal">0</strong><span>Total cards</span></div>
-    <div class="stat"><strong id="sKnow">0</strong><span>Known ✅</span></div>
+    <div class="stat"><strong id="sKnow">0</strong><span>Known &#x2705;</span></div>
     <div class="stat"><strong id="sLearn">0</strong><span>Learning 🔄</span></div>
     <div class="stat"><strong id="sDecks">0</strong><span>Decks</span></div>
   </div>
@@ -105,7 +105,7 @@
     <div class="controls">
       <button class="btn danger" id="hardBtn">😰 Hard</button>
       <button class="btn ghost" id="flipBtn" onclick="flipCard()">🔄 Flip</button>
-      <button class="btn ok" id="gotBtn">✅ Got It</button>
+      <button class="btn ok" id="gotBtn">&#x2705; Got It</button>
     </div>
     <div id="sessionResult" style="display:none;text-align:center;padding:20px;">
       <div style="font-size:2rem;margin-bottom:10px;">🎉</div>
@@ -160,7 +160,7 @@
         <div class="fc-q">Q: ${esc(c.q)}</div>
         <div class="fc-a">A: ${esc(c.a)}</div>
         <div class="row">
-          <span class="badge ${c.status==='know'?'green':c.status==='learn'?'yellow':'yellow'}">${c.status==='know'?'✅ Known':c.status==='hard'?'😰 Hard':'🔄 Learning'}</span>
+          <span class="badge ${c.status==='know'?'green':c.status==='learn'?'yellow':'yellow'}">${c.status==='know'?'&#x2705; Known':c.status==='hard'?'😰 Hard':'🔄 Learning'}</span>
           <button class="btn danger sm" onclick="deleteCard(${i})">🗑</button>
         </div>
       </div>`).join('');
@@ -243,7 +243,7 @@
     document.getElementById('cardScene').style.display='none';
     document.querySelectorAll('.controls button').forEach(b=>b.style.display='none');
     document.getElementById('sessionResult').style.display='';
-    document.getElementById('sessionScore').textContent=`✅ Got it: ${sessionGot} · 😰 Hard: ${sessionHard} · 📊 ${Math.round(sessionGot/studyQueue.length*100)}% score`;
+    document.getElementById('sessionScore').textContent=`&#x2705; Got it: ${sessionGot} · 😰 Hard: ${sessionHard} · 📊 ${Math.round(sessionGot/studyQueue.length*100)}% score`;
     render();
   }
 
