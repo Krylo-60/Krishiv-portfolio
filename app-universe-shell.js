@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const path = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
   const BLOCKED_PATHS = new Set(["admin.private.html"]);
   if (BLOCKED_PATHS.has(path)) return;
@@ -958,6 +958,67 @@
       return { stop: ()=>{ if (raf) cancelAnimationFrame(raf); window.removeEventListener('resize', resize); } };
     } catch(e) { return null; }
   };
+  // Global Cursor Aura
+  if (!document.getElementById('cursorAura')) {
+    const aura = document.createElement('div');
+    aura.id = 'cursorAura';
+    aura.style.cssText = 
+      position: fixed; top: 0; left: 0;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,220,255,0.15) 0%, transparent 70%);
+      pointer-events: none; transform: translate(-50%, -50%);
+      z-index: 9999; mix-blend-mode: screen;
+      transition: width 0.3s, height 0.3s; will-change: transform; opacity: 0;
+    ;
+    document.body.appendChild(aura);
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let auraX = mouseX;
+    let auraY = mouseY;
+    let auraVisible = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      if (!auraVisible) { aura.style.opacity = '1'; auraVisible = true; }
+    }, { passive: true });
+
+    window.addEventListener('mousedown', () => { aura.style.width = '400px'; aura.style.height = '400px'; });
+    window.addEventListener('mouseup', () => { aura.style.width = '300px'; aura.style.height = '300px'; });
+
+    function renderAura() {
+      auraX += (mouseX - auraX) * 0.15;
+      auraY += (mouseY - auraY) * 0.15;
+      aura.style.transform = "translate(" + (auraX - 150) + "px, " + (auraY - 150) + "px)";
+      requestAnimationFrame(renderAura);
+    }
+    renderAura();
+  }
+
+  // Matrix Konami Code globally
+  const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  let kIdx = 0;
+  window.addEventListener('keydown', (e) => {
+    if (e.key === konami[kIdx] || e.key.toLowerCase() === konami[kIdx].toLowerCase()) {
+      kIdx++;
+      if (kIdx === konami.length) {
+        document.body.classList.toggle('matrix-mode');
+        if (!document.getElementById('matrixStyle')) {
+          const style = document.createElement('style');
+          style.id = 'matrixStyle';
+          style.textContent = 
+            body.matrix-mode { background: #000 !important; color: #0f0 !important; }
+            body.matrix-mode * { border-color: #0f0 !important; box-shadow: none !important; }
+            body.matrix-mode .card, body.matrix-mode .app-card, body.matrix-mode section { background: rgba(0,20,0,0.8) !important; backdrop-filter: none !important; }
+            body.matrix-mode h1, body.matrix-mode h2, body.matrix-mode h3, body.matrix-mode p, body.matrix-mode a, body.matrix-mode span { color: #0f0 !important; text-shadow: 0 0 8px #0f0 !important; font-family: 'JetBrains Mono', monospace !important; }
+          ;
+          document.head.appendChild(style);
+        }
+        kIdx = 0;
+      }
+    } else {
+      kIdx = 0;
+    }
+  });
+
 })();
-
-
