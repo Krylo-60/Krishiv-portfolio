@@ -1,17 +1,17 @@
 {
-  "totalEvents": 49,
+  "totalEvents": 54,
   "byEvent": {
-    "page_view": 34,
-    "app_open": 15
+    "page_view": 37,
+    "app_open": 17
   },
   "byPage": {
-    "index.html": 18,
-    "aether-core-v110.html": 10,
+    "index.html": 19,
+    "aether-core-v110.html": 12,
     "idea-lab-ai.html": 4,
     "focus-timer.html": 6,
     "reading-tracker.html": 2,
     "habit-tracker.html": 7,
-    "release-notes.html": 2
+    "release-notes.html": 4
   },
   "uniqueSessions": {
     "sess_moa08czv_t7i6svh0": "2026-05-16",
@@ -358,6 +358,41 @@
       "at": "2026-05-16T19:44:51.747Z",
       "event": "page_view",
       "page": "index.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-05-16T21:27:18.095Z",
+      "event": "page_view",
+      "page": "release-notes.html",
+      "sessionId": "sess_mp8cusv9_7wzimsi9",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-05-16T21:27:18.096Z",
+      "event": "app_open",
+      "page": "release-notes.html",
+      "sessionId": "sess_mp8cusv9_7wzimsi9",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-05-16T21:30:10.772Z",
+      "event": "page_view",
+      "page": "index.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-05-16T21:38:10.888Z",
+      "event": "page_view",
+      "page": "aether-core-v110.html",
+      "sessionId": "sess_moa08czv_t7i6svh0",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-05-16T21:38:10.899Z",
+      "event": "app_open",
+      "page": "aether-core-v110.html",
       "sessionId": "sess_moa08czv_t7i6svh0",
       "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
     }
