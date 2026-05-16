@@ -659,6 +659,8 @@
             ccAiStatus.textContent = 'Model: ' + String(data?.ai?.model || 'unknown') + ' - failures tracked: ' + String(Number(data?.ai?.totalFailures || 0));
           }
           if (ccPublicApps) ccPublicApps.textContent = String(Number(data?.appCount || 0));
+          if (heroAppsStat && data?.appCount) heroAppsStat.textContent = String(data.appCount);
+          if (heroPagesStat && data?.appCount) heroPagesStat.textContent = String(data.appCount);
           if (ccReviewCount) ccReviewCount.textContent = String(Number(data?.reviewCount || 0));
           if (ccIdeaCount) ccIdeaCount.textContent = String(Number(data?.ideaCount || 0));
           if (ccSessionCount) ccSessionCount.textContent = String(Number(data?.usage?.uniqueSessionsTotal || 0));
