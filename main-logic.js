@@ -1296,22 +1296,7 @@
         window.addEventListener('mouseup', () => { cursorAura.style.width = '300px'; cursorAura.style.height = '300px'; });
       }
 
-      // Konami Code Easter Egg
-      const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-      let konamiIndex = 0;
-      window.addEventListener('keydown', (e) => {
-        if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex].toLowerCase()) {
-          konamiIndex++;
-          if (konamiIndex === konamiCode.length) {
-            document.body.classList.toggle('matrix-mode');
-            const aiStatusNode = document.getElementById('ccAiStatus');
-            if (aiStatusNode) aiStatusNode.textContent = 'GOD MODE ACTIVE - SYSTEM OVERRIDE';
-            konamiIndex = 0;
-          }
-        } else {
-          konamiIndex = 0;
-        }
-      });
+
 
       // Typewriter Effect
       const twText = document.getElementById('typewriterText');
