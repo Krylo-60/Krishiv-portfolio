@@ -1050,3 +1050,102 @@ body.app-theme-root button:focus, body.app-theme-root a:focus { outline: 3px sol
   to { transform: scale(1.1); opacity: 1; }
 }
 
+/* Custom Cyber Alert Popup */
+.custom-cyber-alert-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  background: rgba(3, 9, 19, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  padding: 20px;
+}
+.custom-cyber-alert-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.custom-cyber-alert-modal {
+  background: linear-gradient(160deg, var(--app-panel-a, rgba(15, 32, 56, 0.95)), var(--app-panel-b, rgba(8, 20, 37, 0.98)));
+  border: 1px solid var(--app-accent-a, #00f2ff);
+  border-radius: 20px;
+  width: min(460px, 90vw);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 255, 0.15);
+  transform: translateY(-30px) scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+.custom-cyber-alert-overlay.active .custom-cyber-alert-modal {
+  transform: translateY(0) scale(1);
+}
+.custom-cyber-alert-header {
+  padding: 16px 20px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(121, 216, 255, 0.1);
+}
+.custom-cyber-alert-badge {
+  background: rgba(0, 242, 255, 0.12);
+  color: var(--app-accent-a, #00f2ff);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font: 700 0.7rem "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(0, 242, 255, 0.25);
+}
+.custom-cyber-alert-close {
+  background: transparent;
+  border: none;
+  color: var(--app-muted, #9fc0de);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+.custom-cyber-alert-close:hover {
+  color: var(--app-accent-a, #00f2ff);
+}
+.custom-cyber-alert-body {
+  padding: 24px 20px;
+  color: var(--app-text, #eef7ff);
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  text-shadow: 0 0 4px rgba(0, 242, 255, 0.05);
+}
+.custom-cyber-alert-footer {
+  padding: 12px 20px 18px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(121, 216, 255, 0.06);
+}
+.custom-cyber-alert-btn {
+  background: linear-gradient(135deg, var(--app-accent-a, #00f2ff), var(--app-accent-b, #58d4a8));
+  color: #030a14 !important;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 24px;
+  font-weight: 700;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.35);
+  transition: all 0.25s ease;
+}
+.custom-cyber-alert-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 242, 255, 0.6);
+}
+.custom-cyber-alert-btn:active {
+  transform: translateY(0);
+}
+

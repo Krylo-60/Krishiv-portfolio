@@ -3,6 +3,67 @@
   const BLOCKED_PATHS = new Set(["admin.private.html"]);
   if (BLOCKED_PATHS.has(path)) return;
 
+  // Override global window.alert with a premium glassmorphic modal
+  window.alert = function (message) {
+    let overlay = document.getElementById("custom-cyber-alert-overlay");
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = "custom-cyber-alert-overlay";
+      overlay.className = "custom-cyber-alert-overlay";
+      
+      const modal = document.createElement("div");
+      modal.className = "custom-cyber-alert-modal";
+      
+      const header = document.createElement("div");
+      header.className = "custom-cyber-alert-header";
+      
+      const badge = document.createElement("div");
+      badge.className = "custom-cyber-alert-badge";
+      badge.textContent = "SYSTEM DEPLOYMENT ALERT";
+      
+      const closeBtn = document.createElement("button");
+      closeBtn.className = "custom-cyber-alert-close";
+      closeBtn.innerHTML = "&times;";
+      closeBtn.onclick = () => overlay.classList.remove("active");
+      
+      header.appendChild(badge);
+      header.appendChild(closeBtn);
+      
+      const body = document.createElement("div");
+      body.id = "custom-cyber-alert-body";
+      body.className = "custom-cyber-alert-body";
+      
+      const footer = document.createElement("div");
+      footer.className = "custom-cyber-alert-footer";
+      
+      const actionBtn = document.createElement("button");
+      actionBtn.className = "custom-cyber-alert-btn";
+      actionBtn.textContent = "ACKNOWLEDGE";
+      actionBtn.onclick = () => overlay.classList.remove("active");
+      
+      footer.appendChild(actionBtn);
+      
+      modal.appendChild(header);
+      modal.appendChild(body);
+      modal.appendChild(footer);
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+    }
+    
+    const bodyEl = overlay.querySelector("#custom-cyber-alert-body");
+    if (bodyEl) {
+      bodyEl.textContent = String(message || "");
+    }
+    
+    // Auto-focus the action button for keyboard accessibility
+    const btn = overlay.querySelector(".custom-cyber-alert-btn");
+    
+    requestAnimationFrame(() => {
+      overlay.classList.add("active");
+      if (btn) btn.focus();
+    });
+  };
+
   const safeGet = (key, fallback = "") => {
     try {
       const value = localStorage.getItem(key);
