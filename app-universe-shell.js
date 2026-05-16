@@ -994,6 +994,24 @@
       if (kIdx === konami.length) {
         document.body.classList.toggle('matrix-mode');
         if (!document.getElementById('matrixStyle')) {
+          if (!document.querySelector('link[href*="fonts.googleapis.com/css2?family=JetBrains+Mono"]')) {
+            const fontPreconnect1 = document.createElement('link');
+            fontPreconnect1.rel = 'preconnect';
+            fontPreconnect1.href = 'https://fonts.googleapis.com';
+            document.head.appendChild(fontPreconnect1);
+
+            const fontPreconnect2 = document.createElement('link');
+            fontPreconnect2.rel = 'preconnect';
+            fontPreconnect2.href = 'https://fonts.gstatic.com';
+            fontPreconnect2.crossOrigin = 'anonymous';
+            document.head.appendChild(fontPreconnect2);
+
+            const fontLink = document.createElement('link');
+            fontLink.rel = 'stylesheet';
+            fontLink.href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;700;800&family=Patrick+Hand&family=Space+Grotesk:wght@400;500;700&display=swap';
+            document.head.appendChild(fontLink);
+          }
+
           const style = document.createElement('style');
           style.id = 'matrixStyle';
           style.textContent = 'body.matrix-mode { background: #000 !important; color: #0f0 !important; } body.matrix-mode * { border-color: #0f0 !important; box-shadow: none !important; } body.matrix-mode .card, body.matrix-mode .app-card, body.matrix-mode section { background: rgba(0,20,0,0.8) !important; backdrop-filter: none !important; } body.matrix-mode h1, body.matrix-mode h2, body.matrix-mode h3, body.matrix-mode p, body.matrix-mode a, body.matrix-mode span { color: #0f0 !important; text-shadow: 0 0 8px #0f0 !important; font-family: "JetBrains Mono", monospace !important; }';
