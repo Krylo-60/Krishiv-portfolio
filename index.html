@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -47,7 +47,38 @@
       .page-loader {
         display: none !important;
       }
-    </style>
+      .cursor-aura {
+    position: fixed;
+    top: 0; left: 0;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,220,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    mix-blend-mode: screen;
+    transition: width 0.3s, height 0.3s;
+    will-change: transform;
+    opacity: 0;
+  }
+  body:hover .cursor-aura { opacity: 1; }
+  body.matrix-mode .cursor-aura { background: radial-gradient(circle, rgba(0,255,0,0.15) 0%, transparent 70%); }
+  body.matrix-mode * { color: #0f0 !important; border-color: #0f0 !important; text-shadow: 0 0 5px #0f0 !important; }
+  body.matrix-mode { background: #000 !important; }
+    .app-verse-card { position: relative; overflow: hidden; }
+  .app-verse-card::after {
+    content: '';
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0) 100%);
+    transform: rotate(45deg) translateY(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .app-verse-card:hover::after {
+    transform: rotate(45deg) translateY(100%);
+  }
+  </style>
   </noscript>
   <script type="application/ld+json">
     {
@@ -306,6 +337,37 @@
       pointer-events: auto;
       transform: translateY(0);
     }
+    .cursor-aura {
+    position: fixed;
+    top: 0; left: 0;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,220,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    mix-blend-mode: screen;
+    transition: width 0.3s, height 0.3s;
+    will-change: transform;
+    opacity: 0;
+  }
+  body:hover .cursor-aura { opacity: 1; }
+  body.matrix-mode .cursor-aura { background: radial-gradient(circle, rgba(0,255,0,0.15) 0%, transparent 70%); }
+  body.matrix-mode * { color: #0f0 !important; border-color: #0f0 !important; text-shadow: 0 0 5px #0f0 !important; }
+  body.matrix-mode { background: #000 !important; }
+    .app-verse-card { position: relative; overflow: hidden; }
+  .app-verse-card::after {
+    content: '';
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0) 100%);
+    transform: rotate(45deg) translateY(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .app-verse-card:hover::after {
+    transform: rotate(45deg) translateY(100%);
+  }
   </style>
 </head>
 <body id="top" class="preboot app-theme-root" data-theme="default" data-mode="dark">
@@ -401,7 +463,38 @@
       <div class="container hero-layout">
         <div class="hero-copy">
           <p class="eyebrow">Hi, I am Krishiv and I build <span id="typewriterText" style="color: #00dcff; font-weight: 700; text-shadow: 0 0 8px rgba(0,220,255,0.4);">stuff on the internet</span><span class="type-cursor" style="animation: blink 1s step-end infinite;">|</span></p>
-          <style>@keyframes blink { 50% { opacity: 0; } }</style>
+          <style>@keyframes blink { 50% { opacity: 0; } }  .cursor-aura {
+    position: fixed;
+    top: 0; left: 0;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,220,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    mix-blend-mode: screen;
+    transition: width 0.3s, height 0.3s;
+    will-change: transform;
+    opacity: 0;
+  }
+  body:hover .cursor-aura { opacity: 1; }
+  body.matrix-mode .cursor-aura { background: radial-gradient(circle, rgba(0,255,0,0.15) 0%, transparent 70%); }
+  body.matrix-mode * { color: #0f0 !important; border-color: #0f0 !important; text-shadow: 0 0 5px #0f0 !important; }
+  body.matrix-mode { background: #000 !important; }
+    .app-verse-card { position: relative; overflow: hidden; }
+  .app-verse-card::after {
+    content: '';
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0) 100%);
+    transform: rotate(45deg) translateY(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .app-verse-card:hover::after {
+    transform: rotate(45deg) translateY(100%);
+  }
+  </style>
           <h1>I am 11 and this is my website.</h1>
           <p class="lead hero-lead">
             I like making websites, random apps, game pages, and new ideas when I get excited. Some parts are neat, some parts are experimental, but all of it is really mine and I keep upgrading it. Now the best web ever is live on both Vercel and Netlify.
@@ -564,7 +657,38 @@
         <div class="music-player-shell" id="inlinePlayer" style="max-width:680px;margin:0 auto;border-radius:20px;padding:24px;background:linear-gradient(160deg,rgba(5,14,28,.97),rgba(8,22,45,.97));border:1px solid rgba(0,242,255,.15);box-shadow:0 24px 60px rgba(0,0,0,.35);">
           <!-- Visualizer bars -->
           <div id="vizBars" style="display:flex;gap:3px;align-items:flex-end;height:32px;margin-bottom:16px;justify-content:center;">
-            <style>#vizBars span{display:inline-block;width:4px;border-radius:2px;background:linear-gradient(to top,#00f2ff,#7c3aed);animation:vizPulse 1.2s ease-in-out infinite alternate;}#vizBars span:nth-child(2){animation-delay:.1s;}#vizBars span:nth-child(3){animation-delay:.2s;}#vizBars span:nth-child(4){animation-delay:.3s;}#vizBars span:nth-child(5){animation-delay:.15s;}#vizBars span:nth-child(6){animation-delay:.25s;}#vizBars span:nth-child(7){animation-delay:.05s;}#vizBars span:nth-child(8){animation-delay:.35s;}@keyframes vizPulse{from{height:6px;opacity:.5;}to{height:28px;opacity:1;}}#vizBars.paused span{animation-play-state:paused;}</style>
+            <style>#vizBars span{display:inline-block;width:4px;border-radius:2px;background:linear-gradient(to top,#00f2ff,#7c3aed);animation:vizPulse 1.2s ease-in-out infinite alternate;}#vizBars span:nth-child(2){animation-delay:.1s;}#vizBars span:nth-child(3){animation-delay:.2s;}#vizBars span:nth-child(4){animation-delay:.3s;}#vizBars span:nth-child(5){animation-delay:.15s;}#vizBars span:nth-child(6){animation-delay:.25s;}#vizBars span:nth-child(7){animation-delay:.05s;}#vizBars span:nth-child(8){animation-delay:.35s;}@keyframes vizPulse{from{height:6px;opacity:.5;}to{height:28px;opacity:1;}}#vizBars.paused span{animation-play-state:paused;}  .cursor-aura {
+    position: fixed;
+    top: 0; left: 0;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,220,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    mix-blend-mode: screen;
+    transition: width 0.3s, height 0.3s;
+    will-change: transform;
+    opacity: 0;
+  }
+  body:hover .cursor-aura { opacity: 1; }
+  body.matrix-mode .cursor-aura { background: radial-gradient(circle, rgba(0,255,0,0.15) 0%, transparent 70%); }
+  body.matrix-mode * { color: #0f0 !important; border-color: #0f0 !important; text-shadow: 0 0 5px #0f0 !important; }
+  body.matrix-mode { background: #000 !important; }
+    .app-verse-card { position: relative; overflow: hidden; }
+  .app-verse-card::after {
+    content: '';
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0) 100%);
+    transform: rotate(45deg) translateY(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .app-verse-card:hover::after {
+    transform: rotate(45deg) translateY(100%);
+  }
+  </style>
             <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
           </div>
           <!-- Track info -->
@@ -3016,7 +3140,38 @@
           .kv-player-card { padding: 1.5rem 1.2rem; }
           .kv-track-name { font-size: 1.1rem; }
         }
-      </style>
+        .cursor-aura {
+    position: fixed;
+    top: 0; left: 0;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,220,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    mix-blend-mode: screen;
+    transition: width 0.3s, height 0.3s;
+    will-change: transform;
+    opacity: 0;
+  }
+  body:hover .cursor-aura { opacity: 1; }
+  body.matrix-mode .cursor-aura { background: radial-gradient(circle, rgba(0,255,0,0.15) 0%, transparent 70%); }
+  body.matrix-mode * { color: #0f0 !important; border-color: #0f0 !important; text-shadow: 0 0 5px #0f0 !important; }
+  body.matrix-mode { background: #000 !important; }
+    .app-verse-card { position: relative; overflow: hidden; }
+  .app-verse-card::after {
+    content: '';
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0) 100%);
+    transform: rotate(45deg) translateY(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .app-verse-card:hover::after {
+    transform: rotate(45deg) translateY(100%);
+  }
+  </style>
 
       <script>
       (function() {
@@ -3754,7 +3909,38 @@
       #back-to-top:hover{background:linear-gradient(135deg,rgba(92,225,230,.35),rgba(71,211,165,.35));transform:translateY(-2px);}
       @media(max-width:760px){#site-footer .ft-grid{grid-template-columns:1fr 1fr;gap:28px;}#site-footer .ft-brand{grid-column:1/-1;}}
       @media(max-width:480px){#site-footer .ft-grid{grid-template-columns:1fr;}}
-    </style>
+      .cursor-aura {
+    position: fixed;
+    top: 0; left: 0;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,220,255,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    mix-blend-mode: screen;
+    transition: width 0.3s, height 0.3s;
+    will-change: transform;
+    opacity: 0;
+  }
+  body:hover .cursor-aura { opacity: 1; }
+  body.matrix-mode .cursor-aura { background: radial-gradient(circle, rgba(0,255,0,0.15) 0%, transparent 70%); }
+  body.matrix-mode * { color: #0f0 !important; border-color: #0f0 !important; text-shadow: 0 0 5px #0f0 !important; }
+  body.matrix-mode { background: #000 !important; }
+    .app-verse-card { position: relative; overflow: hidden; }
+  .app-verse-card::after {
+    content: '';
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 40%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0) 100%);
+    transform: rotate(45deg) translateY(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .app-verse-card:hover::after {
+    transform: rotate(45deg) translateY(100%);
+  }
+  </style>
 
     <div class="ft-inner">
       <div class="ft-grid">
@@ -3920,4 +4106,5 @@ window.addEventListener('load', function(){
   <script src="app-universe-shell.js" defer></script>
   <script src="usage-tracker.js" defer></script>
   <script src="future-upgrade.js" defer></script>
+  <div id="cursorAura" class="cursor-aura"></div>
 </body></html>

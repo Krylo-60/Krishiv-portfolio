@@ -1258,6 +1258,43 @@
       } else {
         hideLoader();
       }
+      // Cursor Aura
+      const cursorAura = document.getElementById('cursorAura');
+      if (cursorAura) {
+        let auraX = -1000; let auraY = -1000;
+        let msX = -1000; let msY = -1000;
+        window.addEventListener('mousemove', (e) => {
+          msX = e.clientX; msY = e.clientY;
+        });
+        function animateAura() {
+          auraX += (msX - auraX) * 0.15;
+          auraY += (msY - auraY) * 0.15;
+          cursorAura.style.transform = `translate(${auraX}px, ${auraY}px)`;
+          requestAnimationFrame(animateAura);
+        }
+        animateAura();
+        
+        window.addEventListener('mousedown', () => { cursorAura.style.width = '400px'; cursorAura.style.height = '400px'; });
+        window.addEventListener('mouseup', () => { cursorAura.style.width = '300px'; cursorAura.style.height = '300px'; });
+      }
+
+      // Konami Code Easter Egg
+      const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+      let konamiIndex = 0;
+      window.addEventListener('keydown', (e) => {
+        if (e.key === konamiCode[konamiIndex] || e.key.toLowerCase() === konamiCode[konamiIndex].toLowerCase()) {
+          konamiIndex++;
+          if (konamiIndex === konamiCode.length) {
+            document.body.classList.toggle('matrix-mode');
+            const aiStatusNode = document.getElementById('ccAiStatus');
+            if (aiStatusNode) aiStatusNode.textContent = 'GOD MODE ACTIVE - SYSTEM OVERRIDE';
+            konamiIndex = 0;
+          }
+        } else {
+          konamiIndex = 0;
+        }
+      });
+
       // Typewriter Effect
       const twText = document.getElementById('typewriterText');
       if (twText) {
