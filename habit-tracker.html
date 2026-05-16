@@ -51,12 +51,16 @@
     @keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}
     .empty{border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center;color:var(--muted);}
     a{color:#9ad9ff;}
+    @keyframes streakGlow{0%,100%{text-shadow:0 0 10px rgba(255,214,126,0.2);}50%{text-shadow:0 0 25px rgba(255,214,126,0.6);}}
     @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body class="app-theme-root">
+<div style="position:fixed;inset:0;background:radial-gradient(circle at 90% 10%, rgba(255,148,201,0.05), transparent 40%), radial-gradient(circle at 10% 90%, rgba(121,216,255,0.05), transparent 40%);z-index:-1;pointer-events:none;"></div>
+<canvas id="habitStars" style="position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.45;"></canvas>
 <main class="wrap">
-  <section class="card">
+  <section class="card" style="position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-30px;left:-30px;font-size:10rem;opacity:0.03;filter:blur(10px);animation:streakGlow 4s ease-in-out infinite;">🔥</div>
     <h1>🔥 Habit Streak Tracker Pro</h1>
     <p>Build daily streaks, track your 7-day heatmap, and celebrate your wins.</p>
     <a href="index.html#projects">← Back to portfolio</a>
@@ -270,11 +274,12 @@
   });
 
   load();render();
+  if (window.initStarHelper) window.initStarHelper('habitStars');
 })();
 </script>
+
   <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js" defer></script>
   <script src="usage-tracker.js" defer></script>
-  <script src="future-upgrade.js" defer></script>
 </body>
 </html>

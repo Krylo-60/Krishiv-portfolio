@@ -42,12 +42,16 @@
     .stars{color:#ffd166;font-size:1rem;cursor:pointer;}
     .book-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
     .empty{color:#a9c6e7;border:1px dashed #365f88;border-radius:12px;padding:20px;text-align:center;}
+    @keyframes bookFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-10px) rotate(2deg);}}
     @media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr);}.book{flex-direction:column;}}
   </style>
 </head>
 <body class="app-theme-root">
+<div style="position:fixed;inset:0;background:radial-gradient(circle at 10% 10%, rgba(121,216,255,0.05), transparent 50%), radial-gradient(circle at 90% 90%, rgba(86,213,166,0.05), transparent 50%);z-index:-1;pointer-events:none;"></div>
+<canvas id="readingStars" style="position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.4;"></canvas>
 <main class="wrap">
-  <section class="card">
+  <section class="card" style="position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-10px;right:-10px;font-size:6rem;opacity:0.04;filter:blur(4px);animation:bookFloat 6s ease-in-out infinite;">📖</div>
     <h1>📚 Reading Tracker Pro</h1>
     <p style="color:#a9c6e7;">Track every book — progress, ratings, notes. All saved locally.</p>
     <a href="index.html" style="color:#9edcff;font-size:.85rem;">← Back to portfolio</a>
@@ -200,10 +204,11 @@
   window.updateStatus=(id,val)=>{const b=books.find(x=>x.id===id);if(!b)return;b.status=val;save();render();};
 
   load();render();
+  if (window.initStarHelper) window.initStarHelper('readingStars');
 })();
 </script>
+
   <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js" defer></script>
   <script src="usage-tracker.js" defer></script>
-  <script src="future-upgrade.js" defer></script>
 </body></html>

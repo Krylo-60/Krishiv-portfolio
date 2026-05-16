@@ -56,9 +56,13 @@
     .chart-bar{flex:1;border-radius:4px 4px 0 0;background:rgba(121,216,255,.5);min-width:20px;transition:height .4s;}
     .chart-lbl{display:flex;gap:4px;justify-content:space-around;margin-top:4px;}
     .chart-lbl span{flex:1;text-align:center;font-size:.6rem;color:var(--muted);font-family:"JetBrains Mono",monospace;}
+    @keyframes focusBreathe{0%,100%{opacity:0.03;}50%{opacity:0.08;}}
+    @media(max-width:600px){.grid2{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body class="app-theme-root">
+<div style="position:fixed;inset:0;background:radial-gradient(circle at 50% 50%, var(--acc), transparent 70%);z-index:-1;animation:focusBreathe 10s ease-in-out infinite;pointer-events:none;"></div>
+<canvas id="focusStars" style="position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.5;"></canvas>
 <main class="wrap">
   <section class="card">
     <h1>⏱ Focus Sprint Timer Pro</h1>
@@ -283,11 +287,12 @@
   try{const s=JSON.parse(localStorage.getItem(SK)||"{}");if(s.fm){$("focusMin").value=s.fm;$("breakMin").value=s.bm||5;$("autoStart").checked=s.auto||false;focusSec=s.fm*60;breakSec=(s.bm||5)*60;remaining=focusSec;}}catch{}
 
   updateRing();renderLog();
+  if (window.initStarHelper) window.initStarHelper('focusStars');
 })();
 </script>
+
   <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js" defer></script>
   <script src="usage-tracker.js" defer></script>
-  <script src="future-upgrade.js" defer></script>
 </body>
 </html>

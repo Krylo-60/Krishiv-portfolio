@@ -45,12 +45,15 @@
     .suggestion-block p{font-size:.88rem;color:rgba(238,247,255,.85);margin:0;}
     .empty{color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:14px;text-align:center;}
     a{color:#9edcff;}
+    @keyframes brainPulse{0%,100%{transform:scale(1) rotate(0deg);opacity:0.05;}50%{transform:scale(1.1) rotate(5deg);opacity:0.1;}}
     @media(max-width:760px){.grid{grid-template-columns:1fr;}.template-tabs{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body class="app-theme-root">
+<canvas id="ideaStars" style="position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.6;"></canvas>
 <main class="wrap">
-  <section class="card">
+  <section class="card" style="position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-20px;right:-20px;font-size:8rem;opacity:0.05;filter:blur(8px);animation:brainPulse 8s ease-in-out infinite;">🧠</div>
     <h1>🧠 Idea Lab AI Pro</h1>
     <p>Generate app ideas, story starters, YouTube concepts, and project plans. All saved locally.</p>
     <a href="index.html#projects">← Back to portfolio</a>
@@ -291,11 +294,12 @@
   },true);
 
   load();setTemplate("app");renderIdeaList();
+  if (window.initStarHelper) window.initStarHelper('ideaStars');
 })();
 </script>
+
   <script src="app-catalog.js"></script>
   <script src="app-universe-shell.js" defer></script>
   <script src="usage-tracker.js" defer></script>
-  <script src="future-upgrade.js" defer></script>
 </body>
 </html>
