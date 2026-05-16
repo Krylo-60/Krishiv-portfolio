@@ -123,6 +123,26 @@
   syncFuturePanel();
   setInterval(syncFuturePanel, 1000);
 
+  // Intersection Observer to reveal .reveal-item elements on the page (like the Animation Lab itself!)
+  try {
+    const revealObserver = new IntersectionObserver((entries, observerRef) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observerRef.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+
+    document.querySelectorAll('.reveal-item').forEach((item) => {
+      revealObserver.observe(item);
+    });
+  } catch (err) {
+    document.querySelectorAll('.reveal-item').forEach((item) => {
+      item.classList.add('is-visible');
+    });
+  }
+
   window.addEventListener("storage", (event) => {
     if (event.key === MODE_KEY) {
       futureMode = safeGet(MODE_KEY, futureMode || "on") || "on";
