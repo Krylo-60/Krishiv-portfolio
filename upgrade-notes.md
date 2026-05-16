@@ -9,10 +9,11 @@ Changes made:
 - app-universe-shell.js: added `window.initStarHelper()` helper (uses THREE if present, otherwise canvas fallback).
 - index.html: fixed script ordering previously so the shell loads before trackers/upgrades.
 
-Next steps:
-- Run site-wide script ordering consistency across all app pages (bulk pass).
-- Add per-page small visual deltas: idea-lab-ai, focus-timer, reading-tracker, habit-tracker.
-- Final QA: run HTML validation and test on desktop/mobile viewports.
+Next steps (Completed):
+- [x] Run site-wide script ordering consistency across all app pages (bulk pass).
+- [x] Add per-page small visual deltas: idea-lab-ai, focus-timer, reading-tracker, habit-tracker.
+- [x] Final QA: run HTML validation and test on desktop/mobile viewports.
+- [x] Fix GitHub Pages deployment issues by upgrading workflow actions and adding .nojekyll.
 
 How to test locally:
 1. Run the local server (node server.js)

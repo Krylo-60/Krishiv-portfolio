@@ -1,4 +1,4 @@
-﻿    (function() {
+    (function() {
       const sections = Array.from(document.querySelectorAll('main section[id]'));
       const header = document.querySelector('.site-header');
       const navMenuBtn = document.getElementById('navMenuBtn');
@@ -1258,10 +1258,34 @@
       } else {
         hideLoader();
       }
+      // Typewriter Effect
+      const twText = document.getElementById('typewriterText');
+      if (twText) {
+        const phrases = ['stuff on the internet', 'AI applications', 'games on Roblox', 'cool web experiences'];
+        let phraseIdx = 0; let charIdx = 0; let isDeleting = false;
+        function typeWriter() {
+          const currentPhrase = phrases[phraseIdx];
+          if (isDeleting) {
+            twText.textContent = currentPhrase.substring(0, charIdx - 1);
+            charIdx--;
+          } else {
+            twText.textContent = currentPhrase.substring(0, charIdx + 1);
+            charIdx++;
+          }
+          let speed = isDeleting ? 40 : 80;
+          if (!isDeleting && charIdx === currentPhrase.length) {
+            speed = 2500;
+            isDeleting = true;
+          } else if (isDeleting && charIdx === 0) {
+            isDeleting = false;
+            phraseIdx = (phraseIdx + 1) % phrases.length;
+            speed = 400;
+          }
+          setTimeout(typeWriter, speed);
+        }
+        setTimeout(typeWriter, 1200);
+      }
+
       // Safety timeout
       setTimeout(hideLoader, 3000);
     })();
-  </script>
-  <!-- ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ SITE FOOTER ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ -->
-  <footer id="site-footer" style="
-    background:linear-gradient(180deg,transparent,rgba(2,10,20,.98));

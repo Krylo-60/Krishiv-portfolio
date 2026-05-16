@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -400,7 +400,8 @@
     <section id="home" class="hero section-pad">
       <div class="container hero-layout">
         <div class="hero-copy">
-          <p class="eyebrow">Hi, I am Krishiv and I make stuff on the internet</p>
+          <p class="eyebrow">Hi, I am Krishiv and I build <span id="typewriterText" style="color: #00dcff; font-weight: 700; text-shadow: 0 0 8px rgba(0,220,255,0.4);">stuff on the internet</span><span class="type-cursor" style="animation: blink 1s step-end infinite;">|</span></p>
+          <style>@keyframes blink { 50% { opacity: 0; } }</style>
           <h1>I am 11 and this is my website.</h1>
           <p class="lead hero-lead">
             I like making websites, random apps, game pages, and new ideas when I get excited. Some parts are neat, some parts are experimental, but all of it is really mine and I keep upgrading it. Now the best web ever is live on both Vercel and Netlify.
@@ -3858,25 +3859,38 @@
   if(!c)return;
   var ctx=c.getContext('2d');
   var pts=[];
+  var mouse = { x: -1000, y: -1000 };
   function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
   resize();
   window.addEventListener('resize',resize);
-  for(var i=0;i<55;i++)pts.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.8+.5,a:Math.random()});
+  window.addEventListener('mousemove', function(e) { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('mouseout', function() { mouse.x = -1000; mouse.y = -1000; });
+  for(var i=0;i<85;i++)pts.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*2+.5,a:Math.random()});
   function draw(){
     ctx.clearRect(0,0,c.width,c.height);
     pts.forEach(function(p){
       p.x+=p.vx;p.y+=p.vy;
       if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
       if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
+      
+      var dxMouse = p.x - mouse.x;
+      var dyMouse = p.y - mouse.y;
+      var distMouse = Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
+      if(distMouse < 180) {
+        p.x += dxMouse * 0.015;
+        p.y += dyMouse * 0.015;
+        ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(mouse.x,mouse.y);
+        ctx.strokeStyle='rgba(0,255,255,'+(0.25*(1-distMouse/180))+')';ctx.lineWidth=1;ctx.stroke();
+      }
+
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.shadowBlur=12;ctx.shadowColor='rgba(0,220,255,0.4)';
-      ctx.fillStyle='rgba(0,220,255,'+Math.min(0.85,0.35+p.a*0.5)+')';ctx.fill();
+      ctx.shadowBlur=12;ctx.shadowColor='rgba(0,220,255,0.6)';
+      ctx.fillStyle='rgba(0,220,255,'+Math.min(0.9,0.4+p.a*0.5)+')';ctx.fill();
     });
-    // Connect close particles
     for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){
       var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<100){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
-        ctx.strokeStyle='rgba(0,200,255,'+(0.12*(1-d/100))+')';ctx.lineWidth=.6;ctx.stroke();}
+      if(d<110){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle='rgba(0,200,255,'+(0.15*(1-d/110))+')';ctx.lineWidth=.6;ctx.stroke();}
     }
     requestAnimationFrame(draw);
   }
