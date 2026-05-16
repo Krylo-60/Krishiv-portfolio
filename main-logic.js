@@ -959,7 +959,25 @@
       }
       if (paletteSearch) {
         paletteSearch.addEventListener('input', () => {
-          renderPalette(paletteSearch.value);
+          const val = paletteSearch.value.toLowerCase().trim();
+          if (val === 'do a barrel roll') {
+            document.body.style.transition = 'transform 2s ease-in-out';
+            document.body.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+              document.body.style.transition = '';
+              document.body.style.transform = '';
+            }, 2000);
+            paletteSearch.value = '';
+          } else if (val === 'godmode' || val === 'matrix') {
+            document.body.classList.toggle('matrix-mode');
+            const aiStatusNode = document.getElementById('ccAiStatus');
+            if (aiStatusNode) aiStatusNode.textContent = 'GOD MODE ACTIVE - SYSTEM OVERRIDE';
+            paletteSearch.value = '';
+            closePalette();
+            alert('GOD MODE INITIATED: Matrix Mode Unlocked!');
+          } else {
+            renderPalette(paletteSearch.value);
+          }
         });
       }
       if (paletteList) {
