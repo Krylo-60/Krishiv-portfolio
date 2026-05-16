@@ -1334,101 +1334,134 @@
     if (e.key === konami[kIdx] || e.key.toLowerCase() === konami[kIdx].toLowerCase()) {
       kIdx++;
       if (kIdx === konami.length) {
-        const isMatrix = document.body.classList.toggle('matrix-mode');
-        if (!document.getElementById('matrixStyle')) {
-          if (!document.querySelector('link[href*="fonts.googleapis.com/css2?family=JetBrains+Mono"]')) {
-            const fontPreconnect1 = document.createElement('link');
-            fontPreconnect1.rel = 'preconnect';
-            fontPreconnect1.href = 'https://fonts.googleapis.com';
-            document.head.appendChild(fontPreconnect1);
-
-            const fontPreconnect2 = document.createElement('link');
-            fontPreconnect2.rel = 'preconnect';
-            fontPreconnect2.href = 'https://fonts.gstatic.com';
-            fontPreconnect2.crossOrigin = 'anonymous';
-            document.head.appendChild(fontPreconnect2);
-
-            const fontLink = document.createElement('link');
-            fontLink.rel = 'stylesheet';
-            fontLink.href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;700;800&family=Patrick+Hand&family=Space+Grotesk:wght@400;500;700&display=swap';
-            document.head.appendChild(fontLink);
-          }
-
-          const style = document.createElement('style');
-          style.id = 'matrixStyle';
-          style.textContent = 'body.matrix-mode { background: #000 !important; color: #0f0 !important; } body.matrix-mode * { border-color: #0f0 !important; box-shadow: none !important; } body.matrix-mode .card, body.matrix-mode .app-card, body.matrix-mode section { background: rgba(0,20,0,0.8) !important; backdrop-filter: none !important; } body.matrix-mode h1, body.matrix-mode h2, body.matrix-mode h3, body.matrix-mode p, body.matrix-mode a, body.matrix-mode span { color: #0f0 !important; text-shadow: 0 0 8px #0f0 !important; font-family: "JetBrains Mono", monospace !important; }';
-          document.head.appendChild(style);
-        }
-
-        if (isMatrix) {
-          let rainCanvas = document.getElementById('heroParticles');
-          let cleanUpCanvas = false;
-          if (!rainCanvas) {
-            rainCanvas = document.createElement('canvas');
-            rainCanvas.id = 'matrixRainCanvas';
-            rainCanvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.25;';
-            document.body.appendChild(rainCanvas);
-            cleanUpCanvas = true;
-          }
-
-          const ctx = rainCanvas.getContext('2d');
-          let width = rainCanvas.width = window.innerWidth;
-          let height = rainCanvas.height = window.innerHeight;
-
-          const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
-          const fontSize = 16;
-          const columns = Math.floor(width / fontSize) + 1;
-          const rainDrops = [];
-
-          for (let x = 0; x < columns; x++) {
-            rainDrops[x] = Math.random() * -100;
-          }
-
-          function drawMatrixRain() {
-            if (!document.body.classList.contains('matrix-mode')) {
-              if (cleanUpCanvas && document.getElementById('matrixRainCanvas')) {
-                document.getElementById('matrixRainCanvas').remove();
-              } else if (document.getElementById('heroParticles')) {
-                const canvas = document.getElementById('heroParticles');
-                const pCtx = canvas.getContext('2d');
-                pCtx.clearRect(0, 0, canvas.width, canvas.height);
-              }
-              return;
-            }
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, width, height);
-
-            ctx.fillStyle = '#0f0';
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < rainDrops.length; i++) {
-              const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-              ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
-              if (rainDrops[i] * fontSize > height && Math.random() > 0.975) {
-                rainDrops[i] = 0;
-              }
-              rainDrops[i]++;
-            }
-            requestAnimationFrame(drawMatrixRain);
-          }
-          
-          const handleResize = () => {
-            if (document.body.classList.contains('matrix-mode')) {
-              width = rainCanvas.width = window.innerWidth;
-              height = rainCanvas.height = window.innerHeight;
-            }
-          };
-          window.addEventListener('resize', handleResize);
-          drawMatrixRain();
-        }
+        document.body.classList.toggle('matrix-mode');
         kIdx = 0;
       }
     } else {
       kIdx = 0;
     }
   });
+
+  let matrixRainActive = false;
+
+  function syncMatrixModeState() {
+    const isMatrix = document.body.classList.contains('matrix-mode');
+    
+    if (isMatrix) {
+      // 1. Ensure fonts are loaded
+      if (!document.querySelector('link[href*="fonts.googleapis.com/css2?family=JetBrains+Mono"]')) {
+        const fontPreconnect1 = document.createElement('link');
+        fontPreconnect1.rel = 'preconnect';
+        fontPreconnect1.href = 'https://fonts.googleapis.com';
+        document.head.appendChild(fontPreconnect1);
+
+        const fontPreconnect2 = document.createElement('link');
+        fontPreconnect2.rel = 'preconnect';
+        fontPreconnect2.href = 'https://fonts.gstatic.com';
+        fontPreconnect2.crossOrigin = 'anonymous';
+        document.head.appendChild(fontPreconnect2);
+
+        const fontLink = document.createElement('link');
+        fontLink.rel = 'stylesheet';
+        fontLink.href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;700;800&family=Patrick+Hand&family=Space+Grotesk:wght@400;500;700&display=swap';
+        document.head.appendChild(fontLink);
+      }
+
+      // 2. Ensure styles are loaded
+      if (!document.getElementById('matrixStyle')) {
+        const style = document.createElement('style');
+        style.id = 'matrixStyle';
+        style.textContent = 'body.matrix-mode { background: #000 !important; color: #0f0 !important; } body.matrix-mode * { border-color: #0f0 !important; box-shadow: none !important; } body.matrix-mode .card, body.matrix-mode .app-card, body.matrix-mode section { background: rgba(0,20,0,0.8) !important; backdrop-filter: none !important; } body.matrix-mode h1, body.matrix-mode h2, body.matrix-mode h3, body.matrix-mode p, body.matrix-mode a, body.matrix-mode span { color: #0f0 !important; text-shadow: 0 0 8px #0f0 !important; font-family: "JetBrains Mono", monospace !important; }';
+        document.head.appendChild(style);
+      }
+
+      // 3. Start Matrix rain if not already active
+      if (!matrixRainActive) {
+        matrixRainActive = true;
+        let rainCanvas = document.getElementById('heroParticles');
+        let cleanUpCanvas = false;
+        if (!rainCanvas) {
+          rainCanvas = document.createElement('canvas');
+          rainCanvas.id = 'matrixRainCanvas';
+          rainCanvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.25;';
+          document.body.appendChild(rainCanvas);
+          cleanUpCanvas = true;
+        }
+
+        const ctx = rainCanvas.getContext('2d');
+        let width = rainCanvas.width = window.innerWidth;
+        let height = rainCanvas.height = window.innerHeight;
+
+        const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
+        const fontSize = 16;
+        const columns = Math.floor(width / fontSize) + 1;
+        const rainDrops = [];
+
+        for (let x = 0; x < columns; x++) {
+          rainDrops[x] = Math.random() * -100;
+        }
+
+        function drawMatrixRain() {
+          if (!document.body.classList.contains('matrix-mode')) {
+            matrixRainActive = false;
+            if (cleanUpCanvas && document.getElementById('matrixRainCanvas')) {
+              document.getElementById('matrixRainCanvas').remove();
+            } else if (document.getElementById('heroParticles')) {
+              const canvas = document.getElementById('heroParticles');
+              const pCtx = canvas.getContext('2d');
+              pCtx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            return;
+          }
+
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+          ctx.fillRect(0, 0, width, height);
+
+          ctx.fillStyle = '#0f0';
+          ctx.font = fontSize + 'px monospace';
+
+          for (let i = 0; i < rainDrops.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+            if (rainDrops[i] * fontSize > height && Math.random() > 0.975) {
+              rainDrops[i] = 0;
+            }
+            rainDrops[i]++;
+          }
+          requestAnimationFrame(drawMatrixRain);
+        }
+
+        const handleResize = () => {
+          if (document.body.classList.contains('matrix-mode')) {
+            width = rainCanvas.width = window.innerWidth;
+            height = rainCanvas.height = window.innerHeight;
+          }
+        };
+        window.addEventListener('resize', handleResize);
+        drawMatrixRain();
+      }
+    } else {
+      // Clean up rain canvas if present
+      if (document.getElementById('matrixRainCanvas')) {
+        document.getElementById('matrixRainCanvas').remove();
+      }
+      matrixRainActive = false;
+    }
+  }
+
+  // Monitor class changes to body
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        syncMatrixModeState();
+      }
+    });
+  });
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+  // Initial check on load
+  syncMatrixModeState();
   // Global Holographic Portal Transition Loader
   document.addEventListener("click", (e) => {
     const link = e.target.closest("a");

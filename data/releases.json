@@ -1,5 +1,18 @@
 [
   {
+    "date": "2026-05-16",
+    "version": "v14.0.0",
+    "title": "Krishiv Overdrive Upgrade — Procedural Synth deck, Warp Loaders & telemetry diagnostics!",
+    "summary": "Pushed the portfolio into its most premium and high-performance era yet, introducing procedural synth audio decks, Warp Loaders, telemetry diagnostics, and scroll-reveal triggers across all pages.",
+    "tags": ["major", "performance", "synth", "telemetry", "release-notes", "production"],
+    "items": [
+      "Integrated full-featured procedurally generated synthesizer audio deck in the global utility panel.",
+      "Added Warp Loaders and telemetry-style diagnostic system overlays for that advanced hacker aesthetic.",
+      "Implemented highly responsive global IntersectionObservers to automatically reveal elements like the Animation Lab on scroll.",
+      "Synced global cursor glow particles and universal easter eggs (barrel roll, Matrix mode font injection) across all 80+ pages."
+    ]
+  },
+  {
     "date": "2026-05-15",
     "version": "v13.1.0",
     "title": "Wide Launch — Vercel + Netlify Deployment",
