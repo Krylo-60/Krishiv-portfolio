@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="description" content="Track books, reading goals, and insights." />
   <title>Reading Tracker Pro | Krishiv PB</title>
   <link rel="stylesheet" href="app-universe-shell.css"/>
   <link rel="icon" href="logo.svg" type="image/svg+xml"/>
@@ -10,7 +11,7 @@
     *{box-sizing:border-box;}body{margin:0;font-family:"Space Grotesk",sans-serif;color:#eef7ff;background:linear-gradient(160deg,#030a14,#0a223a 48%,#123860);min-height:100vh;}
     h1,h2,h3{font-family:"Orbitron",sans-serif;margin:0 0 8px;}
     .wrap{width:min(1020px,94%);margin:24px auto;}
-    .card{border:1px solid #365f88;border-radius:14px;padding:20px;background:linear-gradient(160deg,rgba(18,40,68,.96),rgba(9,22,41,.96));margin-bottom:14px;}
+    .card{border:1px solid #365f88;border-radius:14px;padding:20px;background:linear-gradient(145deg,rgba(18,40,68,0.6),rgba(9,22,41,0.6));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 16px 40px rgba(0,0,0,0.4);;margin-bottom:14px;}
     input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #365f88;background:#0a1b31;color:#eef7ff;font:inherit;transition:border-color .2s;}
     input:focus,select:focus{outline:none;border-color:#79d8ff;}
     .btn{cursor:pointer;font-weight:700;padding:10px 18px;border-radius:10px;border:none;transition:all .2s;font-family:inherit;}
@@ -25,7 +26,7 @@
     .stat strong{display:block;font-size:1.5rem;font-family:"JetBrains Mono",monospace;color:#79d8ff;}
     .stat span{font-size:.75rem;color:#a9c6e7;}
     /* BOOK CARD */
-    .book{border:1px solid rgba(84,126,171,.35);border-radius:12px;padding:14px;margin-bottom:10px;background:rgba(5,16,30,.72);display:flex;gap:14px;transition:border-color .2s;}
+    .book{border:1px solid rgba(84,126,171,.35);border-radius:12px;padding:14px;margin-bottom:10px;background:rgba(5,16,30,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(121,216,255,0.15);;display:flex;gap:14px;transition:border-color .2s;}
     .book:hover{border-color:rgba(121,216,255,.3);}
     .book-cover{width:48px;height:68px;border-radius:8px;flex:0 0 48px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:linear-gradient(135deg,#0d2540,#0a1b31);border:1px solid #365f88;}
     .book-info{flex:1;min-width:0;}
@@ -212,3 +213,4 @@
   <script src="app-universe-shell.js" defer></script>
   <script src="usage-tracker.js" defer></script>
 </body></html>
+
