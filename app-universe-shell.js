@@ -374,13 +374,253 @@
     <button type="button" class="app-shell-btn" id="shellHomeBtn">Home</button>
     <button type="button" class="app-shell-btn" id="shellAppsBtn">Apps</button>
     <button type="button" class="app-shell-btn" id="shellThemeBtn">Theme</button>
+    <button type="button" class="app-shell-btn" id="shellMusicBtn">🎵 Synth</button>
     <span class="app-shell-pill">Ctrl/Cmd + K</span>
   `;
+
+  // 🎵 Web Audio Procedural Synth Core Engine
+  let audioCtx = null;
+  let synthIsPlaying = false;
+  let activePreset = "aurora";
+  let masterGain = null;
+  let synthLoopTimer = null;
+  let synthOscillators = [];
+  let currentVolume = 0.5;
+
+  const CHORDS = {
+    aurora: [
+      [130.81, 164.81, 196.00, 246.94], // Cmaj7
+      [174.61, 220.00, 261.63, 329.63], // Fmaj7
+      [220.00, 261.63, 329.63, 392.00], // Am7
+      [196.00, 246.94, 293.66, 392.00]  // G6
+    ],
+    drone: [
+      [65.41, 130.81, 196.00], // Low C
+      [58.27, 116.54, 174.61], // Low Bb
+      [73.42, 146.83, 220.00]  // Low D
+    ]
+  };
+
+  let chordIndex = 0;
+
+  function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = currentVolume;
+    masterGain.connect(audioCtx.destination);
+  }
+
+  function playSynthPreset() {
+    if (!audioCtx) initAudio();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+
+    stopOscillators();
+
+    if (activePreset === "aurora" || activePreset === "drone") {
+      const chords = CHORDS[activePreset];
+      const frequencies = chords[chordIndex % chords.length];
+      chordIndex++;
+
+      frequencies.forEach((freq) => {
+        const osc = audioCtx.createOscillator();
+        const filter = audioCtx.createBiquadFilter();
+        const oscGain = audioCtx.createGain();
+
+        osc.type = activePreset === "drone" ? "sine" : "triangle";
+        osc.frequency.value = freq + (Math.random() * 0.5 - 0.25);
+        
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(freq * 3, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + 3.5);
+
+        oscGain.gain.setValueAtTime(0, audioCtx.currentTime);
+        oscGain.gain.linearRampToValueAtTime(activePreset === "drone" ? 0.25 : 0.15, audioCtx.currentTime + 1.5);
+        oscGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 4.5);
+
+        osc.connect(filter);
+        filter.connect(oscGain);
+        oscGain.connect(masterGain);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 4.8);
+
+        synthOscillators.push(osc);
+      });
+
+      synthLoopTimer = setTimeout(playSynthPreset, 4500);
+
+    } else if (activePreset === "rain") {
+      const bufferSize = audioCtx.sampleRate * 2;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        output[i] = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = output[i];
+        output[i] *= 3.5;
+      }
+
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = noiseBuffer;
+      noise.loop = true;
+
+      const rainFilter = audioCtx.createBiquadFilter();
+      rainFilter.type = "bandpass";
+      rainFilter.frequency.setValueAtTime(800, audioCtx.currentTime);
+      
+      const lfo = audioCtx.createOscillator();
+      lfo.frequency.value = 0.15;
+      const lfoGain = audioCtx.createGain();
+      lfoGain.gain.value = 350;
+
+      lfo.connect(lfoGain);
+      lfoGain.connect(rainFilter.frequency);
+      lfo.start();
+
+      const rainGain = audioCtx.createGain();
+      rainGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      rainGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 2.0);
+
+      noise.connect(rainFilter);
+      rainFilter.connect(rainGain);
+      rainGain.connect(masterGain);
+
+      noise.start();
+      
+      function scheduleBellPluck() {
+        if (!synthIsPlaying || activePreset !== "rain") return;
+        
+        const bellOsc = audioCtx.createOscillator();
+        const bellGain = audioCtx.createGain();
+        
+        bellOsc.type = "sine";
+        const notes = [587.33, 698.46, 880.00, 1046.50, 1318.51];
+        const randomNote = notes[Math.floor(Math.random() * notes.length)];
+        bellOsc.frequency.value = randomNote;
+
+        bellGain.gain.setValueAtTime(0, audioCtx.currentTime);
+        bellGain.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 0.02);
+        bellGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.2);
+
+        bellOsc.connect(bellGain);
+        bellGain.connect(masterGain);
+        
+        bellOsc.start();
+        bellOsc.stop(audioCtx.currentTime + 2.5);
+        
+        synthOscillators.push(bellOsc);
+        synthLoopTimer = setTimeout(scheduleBellPluck, 2000 + Math.random() * 3000);
+      }
+      
+      scheduleBellPluck();
+      synthOscillators.push(noise, lfo);
+    }
+  }
+
+  function stopOscillators() {
+    clearTimeout(synthLoopTimer);
+    synthOscillators.forEach((osc) => {
+      try { osc.stop(); } catch {}
+      try { osc.disconnect(); } catch {}
+    });
+    synthOscillators = [];
+  }
+
+  function stopSynth() {
+    stopOscillators();
+    synthIsPlaying = false;
+  }
+
+  // Inject floating control card
+  const synthDeck = document.createElement("div");
+  synthDeck.className = "app-shell-synth-deck";
+  synthDeck.innerHTML = `
+    <div class="synth-deck-header">
+      <strong>🎵 Cyber Synth Deck</strong>
+      <span class="synth-preset-tag" id="synthPresetTag">Aurora Pad</span>
+    </div>
+    <div class="synth-deck-controls">
+      <button type="button" class="synth-control-btn" id="synthPlayBtn">▶ Play</button>
+      <div class="synth-volume-container">
+        <span>🔊</span>
+        <input type="range" id="synthVolRange" min="0" max="1" step="0.05" value="0.5" />
+      </div>
+    </div>
+    <div class="synth-deck-presets">
+      <button type="button" class="synth-preset-btn active" data-preset="aurora">Aurora Pad</button>
+      <button type="button" class="synth-preset-btn" data-preset="rain">Cyber Rain</button>
+      <button type="button" class="synth-preset-btn" data-preset="drone">Space Drone</button>
+    </div>
+  `;
+  document.body.appendChild(synthDeck);
+
+  const shellMusicBtn = dock.querySelector("#shellMusicBtn");
+  const synthPlayBtn = synthDeck.querySelector("#synthPlayBtn");
+  const synthVolRange = synthDeck.querySelector("#synthVolRange");
+  const synthPresetTag = synthDeck.querySelector("#synthPresetTag");
+  const presetButtons = synthDeck.querySelectorAll(".synth-preset-btn");
+
+  shellMusicBtn.addEventListener("click", () => {
+    synthDeck.classList.toggle("is-visible");
+  });
+
+  function updateSynthUI() {
+    if (synthIsPlaying) {
+      synthPlayBtn.textContent = "⏸ Pause";
+      synthPlayBtn.classList.add("playing");
+      shellMusicBtn.classList.add("playing");
+      shellMusicBtn.innerHTML = "🎵 playing...";
+    } else {
+      synthPlayBtn.textContent = "▶ Play";
+      synthPlayBtn.classList.remove("playing");
+      shellMusicBtn.classList.remove("playing");
+      shellMusicBtn.innerHTML = "🎵 Synth";
+    }
+    const currentActiveBtn = Array.from(presetButtons).find(btn => btn.getAttribute("data-preset") === activePreset);
+    if (currentActiveBtn) {
+      synthPresetTag.textContent = currentActiveBtn.textContent;
+    }
+  }
+
+  synthPlayBtn.addEventListener("click", () => {
+    initAudio();
+    if (synthIsPlaying) {
+      stopSynth();
+    } else {
+      synthIsPlaying = true;
+      playSynthPreset();
+    }
+    updateSynthUI();
+  });
+
+  synthVolRange.addEventListener("input", (e) => {
+    currentVolume = parseFloat(e.target.value);
+    if (masterGain) {
+      masterGain.gain.setValueAtTime(currentVolume, audioCtx.currentTime);
+    }
+  });
+
+  presetButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      initAudio();
+      presetButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      activePreset = btn.getAttribute("data-preset");
+      
+      if (synthIsPlaying) {
+        stopOscillators();
+        playSynthPreset();
+      }
+      updateSynthUI();
+    });
+  });
 
   const overlay = document.createElement("div");
   overlay.className = "app-shell-overlay";
   overlay.setAttribute("aria-hidden", "true");
-  overlay.tabIndex = -1;
   overlay.innerHTML = `
     <section class="app-shell-panel" role="dialog" aria-modal="true" aria-label="Apps Galaxy">
       <header class="app-shell-head">
@@ -407,6 +647,7 @@
         <button type="button" class="app-shell-quick" data-action="directory">Open Links Directory</button>
         <button type="button" class="app-shell-quick" data-action="copy">Copy Page URL</button>
         <button type="button" class="app-shell-quick" data-action="ai">Open AI Zone</button>
+        <button type="button" class="app-shell-quick" data-action="diagnostics">🛡️ Run Diagnostics</button>
       </div>
       <div class="app-shell-system-feed" id="shellSystemFeed">
         <span class="feed-blink"></span> <span id="feedText">Initializing Krylo-Nexus Protocol...</span>
@@ -644,6 +885,88 @@
   }
   if (appsBtn) appsBtn.addEventListener("click", openOverlay);
   if (closeBtn) closeBtn.addEventListener("click", closeOverlay);
+  
+  function runDiagnostics() {
+    closeOverlay();
+    if (document.getElementById("cyberDiagnosticsModal")) return;
+
+    initAudio();
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    if (audioCtx) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.15);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    }
+
+    const modal = document.createElement("div");
+    modal.id = "cyberDiagnosticsModal";
+    modal.className = "app-shell-diagnostics-modal";
+    modal.innerHTML = `
+      <div class="diagnostics-box">
+        <div class="diagnostics-header">
+          <span>🛡️ GALAXY TELEMETRY PROTOCOL v14.0.0</span>
+          <button type="button" class="diagnostics-close-btn" id="closeDiagBtn">×</button>
+        </div>
+        <div class="diagnostics-body" id="diagnosticsLog">
+          <div class="diag-line primary">> Initiating system telemetry scan...</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const logBox = modal.querySelector("#diagnosticsLog");
+    const closeBtn = modal.querySelector("#closeDiagBtn");
+
+    closeBtn.addEventListener("click", () => {
+      modal.remove();
+    });
+
+    const steps = [
+      { text: "[BOOT] Initializing galaxy cores...", delay: 400, sound: 600 },
+      { text: "[LINK] Verifying active CDN nodes: Vercel & Netlify: OK", delay: 700, sound: 700 },
+      { text: `[NET] Telemetry latency response check: ${Math.floor(Math.random() * 15 + 8)}ms (Fast)`, delay: 1000, sound: 800 },
+      { text: "[CSS] Validating Glassmorphic styling engines: Active (98.6% opacity)", delay: 1300, sound: 900 },
+      { text: `[REGISTRY] Scanning App Catalog: ${APPS.length} applications loaded successfully`, delay: 1700, sound: 1000 },
+      { text: "[AUDIO] Procedural Web Audio Synthesis Engine: Online & detuned", delay: 2100, sound: 1100 },
+      { text: "[AURA] Spotlighting Glow vector coordinates: Stable", delay: 2400, sound: 1200 },
+      { text: "[MATRIX] God Mode Core decryption: Key Verified", delay: 2700, sound: 1300 },
+      { text: "[SUCCESS] System integrity: 100% SECURE. ALL SYSTEMS GO!", delay: 3200, sound: 1500, class: "success" }
+    ];
+
+    steps.forEach((step, idx) => {
+      setTimeout(() => {
+        if (!document.getElementById("cyberDiagnosticsModal")) return;
+        
+        if (audioCtx) {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(step.sound, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.1);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        const div = document.createElement("div");
+        div.className = "diag-line " + (step.class || "");
+        div.textContent = step.text;
+        logBox.appendChild(div);
+        logBox.scrollTop = logBox.scrollHeight;
+      }, step.delay);
+    });
+  }
+
   if (overlay) {
     overlay.addEventListener("click", (event) => {
       if (event.target === overlay) {
@@ -655,13 +978,14 @@
       const quickAction = target.closest("[data-action]");
       if (!(quickAction instanceof HTMLButtonElement)) return;
       const action = String(quickAction.dataset.action || "");
-        if (action === "featured") openRandomFeatured();
+      if (action === "featured") openRandomFeatured();
       if (action === "top") openMostUsed();
       if (action === "latest") continueLatest();
       if (action === "directory") openLinksDirectory();
       if (action === "copy") copyCurrentPageLink();
       if (action === "surprise") openSurprise();
       if (action === "ai") openAiZone();
+      if (action === "diagnostics") runDiagnostics();
     });
   }
   if (searchInput) {
@@ -992,7 +1316,7 @@
     if (e.key === konami[kIdx] || e.key.toLowerCase() === konami[kIdx].toLowerCase()) {
       kIdx++;
       if (kIdx === konami.length) {
-        document.body.classList.toggle('matrix-mode');
+        const isMatrix = document.body.classList.toggle('matrix-mode');
         if (!document.getElementById('matrixStyle')) {
           if (!document.querySelector('link[href*="fonts.googleapis.com/css2?family=JetBrains+Mono"]')) {
             const fontPreconnect1 = document.createElement('link');
@@ -1017,10 +1341,120 @@
           style.textContent = 'body.matrix-mode { background: #000 !important; color: #0f0 !important; } body.matrix-mode * { border-color: #0f0 !important; box-shadow: none !important; } body.matrix-mode .card, body.matrix-mode .app-card, body.matrix-mode section { background: rgba(0,20,0,0.8) !important; backdrop-filter: none !important; } body.matrix-mode h1, body.matrix-mode h2, body.matrix-mode h3, body.matrix-mode p, body.matrix-mode a, body.matrix-mode span { color: #0f0 !important; text-shadow: 0 0 8px #0f0 !important; font-family: "JetBrains Mono", monospace !important; }';
           document.head.appendChild(style);
         }
+
+        if (isMatrix) {
+          let rainCanvas = document.getElementById('heroParticles');
+          let cleanUpCanvas = false;
+          if (!rainCanvas) {
+            rainCanvas = document.createElement('canvas');
+            rainCanvas.id = 'matrixRainCanvas';
+            rainCanvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.25;';
+            document.body.appendChild(rainCanvas);
+            cleanUpCanvas = true;
+          }
+
+          const ctx = rainCanvas.getContext('2d');
+          let width = rainCanvas.width = window.innerWidth;
+          let height = rainCanvas.height = window.innerHeight;
+
+          const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
+          const fontSize = 16;
+          const columns = Math.floor(width / fontSize) + 1;
+          const rainDrops = [];
+
+          for (let x = 0; x < columns; x++) {
+            rainDrops[x] = Math.random() * -100;
+          }
+
+          function drawMatrixRain() {
+            if (!document.body.classList.contains('matrix-mode')) {
+              if (cleanUpCanvas && document.getElementById('matrixRainCanvas')) {
+                document.getElementById('matrixRainCanvas').remove();
+              } else if (document.getElementById('heroParticles')) {
+                const canvas = document.getElementById('heroParticles');
+                const pCtx = canvas.getContext('2d');
+                pCtx.clearRect(0, 0, canvas.width, canvas.height);
+              }
+              return;
+            }
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+              const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+              ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+              if (rainDrops[i] * fontSize > height && Math.random() > 0.975) {
+                rainDrops[i] = 0;
+              }
+              rainDrops[i]++;
+            }
+            requestAnimationFrame(drawMatrixRain);
+          }
+          
+          const handleResize = () => {
+            if (document.body.classList.contains('matrix-mode')) {
+              width = rainCanvas.width = window.innerWidth;
+              height = rainCanvas.height = window.innerHeight;
+            }
+          };
+          window.addEventListener('resize', handleResize);
+          drawMatrixRain();
+        }
         kIdx = 0;
       }
     } else {
       kIdx = 0;
     }
+  });
+  // Global Holographic Portal Transition Loader
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest("a");
+    if (!link || !link.href) return;
+    
+    const url = new URL(link.href, window.location.href);
+    if (url.origin !== window.location.origin) return;
+    if (url.pathname === window.location.pathname && url.hash) return;
+    if (link.target === "_blank") return;
+
+    e.preventDefault();
+
+    const portal = document.createElement("div");
+    portal.className = "app-shell-portal-loader";
+    portal.innerHTML = `
+      <div class="portal-spinner-wrap">
+        <div class="portal-spinner"></div>
+        <div class="portal-glow"></div>
+        <span class="portal-text">WARPING TO NODE...</span>
+      </div>
+    `;
+    document.body.appendChild(portal);
+
+    initAudio();
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+    if (audioCtx) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.4);
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.45);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
+    }
+
+    setTimeout(() => {
+      portal.classList.add("active");
+      setTimeout(() => {
+        window.location.href = link.href;
+      }, 350);
+    }, 50);
   });
 })();

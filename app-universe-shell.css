@@ -829,3 +829,223 @@ body.app-theme-root button:focus, body.app-theme-root a:focus { outline: 3px sol
 .kv-animate { transition: all 0.28s cubic-bezier(.2,.9,.3,1); }
 .kv-hidden { display:none !important; }
 
+/* ── Procedural Ambient Synth Deck ───────────────── */
+.app-shell-synth-deck {
+  position: fixed;
+  left: 50%;
+  bottom: 74px;
+  transform: translateX(-50%) translateY(20px);
+  width: 280px;
+  background: rgba(8, 22, 45, 0.95);
+  border: 1px solid rgba(0, 242, 255, 0.35);
+  border-radius: 18px;
+  padding: 16px;
+  z-index: 9998;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.app-shell-synth-deck.is-visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+.synth-deck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+.synth-preset-tag {
+  background: rgba(0, 242, 255, 0.15);
+  color: #00f2ff;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-shadow: 0 0 5px rgba(0, 242, 255, 0.5);
+}
+.synth-deck-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.synth-control-btn {
+  background: linear-gradient(135deg, #00f2ff, #7c3aed) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.synth-control-btn:hover {
+  transform: scale(1.03);
+}
+.synth-volume-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-size: 0.8rem;
+}
+.synth-volume-container input[type="range"] {
+  width: 70px;
+  accent-color: #00f2ff;
+  cursor: pointer;
+}
+.synth-deck-presets {
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+}
+.synth-preset-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px;
+  padding: 4px 2px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.synth-preset-btn.active {
+  background: rgba(0, 242, 255, 0.15) !important;
+  border-color: #00f2ff !important;
+  color: #00f2ff !important;
+}
+.app-shell-btn.playing {
+  animation: synthPulse 1.5s infinite alternate;
+}
+@keyframes synthPulse {
+  from { border-color: rgba(120, 178, 255, 0.35); box-shadow: none; }
+  to { border-color: #00f2ff; box-shadow: 0 0 8px #00f2ff; }
+}
+
+/* ── Cyber Diagnostics Modal ────────────────────── */
+.app-shell-diagnostics-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10005;
+  background: rgba(1, 6, 12, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.diagnostics-box {
+  width: 100%;
+  max-width: 580px;
+  background: #000;
+  border: 2px solid #0f0;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+  font-family: "JetBrains Mono", monospace;
+  overflow: hidden;
+}
+.diagnostics-header {
+  background: #0f0;
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+.diagnostics-close-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #000 !important;
+  font-size: 1.4rem;
+  font-weight: 800;
+  cursor: pointer;
+  line-height: 1;
+}
+.diagnostics-body {
+  height: 320px;
+  padding: 16px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+  color: #0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.diag-line {
+  line-height: 1.4;
+  text-shadow: 0 0 4px rgba(0, 255, 0, 0.6);
+}
+.diag-line.primary {
+  color: #0f0;
+}
+.diag-line.success {
+  color: #58d4a8;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(88, 212, 168, 0.7);
+}
+
+/* ── Holographic Portal loader ──────────────────── */
+.app-shell-portal-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10010;
+  background: #030a14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: all;
+}
+.app-shell-portal-loader.active {
+  opacity: 1;
+}
+.portal-spinner-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.portal-spinner {
+  width: 80px;
+  height: 80px;
+  border: 3px solid rgba(0, 242, 255, 0.15);
+  border-top-color: #00f2ff;
+  border-radius: 50%;
+  animation: portalSpin 0.8s linear infinite;
+}
+.portal-glow {
+  position: absolute;
+  top: 10px;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(0, 242, 255, 0.4) 0%, transparent 70%);
+  filter: blur(4px);
+  animation: portalPulse 1.2s ease-in-out infinite alternate;
+}
+.portal-text {
+  margin-top: 20px;
+  color: #00f2ff;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.6);
+}
+@keyframes portalSpin {
+  to { transform: rotate(360deg); }
+}
+@keyframes portalPulse {
+  from { transform: scale(0.9); opacity: 0.6; }
+  to { transform: scale(1.1); opacity: 1; }
+}
+
