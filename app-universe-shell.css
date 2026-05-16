@@ -904,13 +904,14 @@ body.app-theme-root button:focus, body.app-theme-root a:focus { outline: 3px sol
   display: flex;
   gap: 6px;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 .synth-preset-btn {
-  flex: 1;
+  flex: 1 1 calc(50% - 4px);
   background: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 8px;
-  padding: 4px 2px;
+  padding: 6px 2px;
   font-size: 0.7rem;
   font-weight: 700;
   cursor: pointer;

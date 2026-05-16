@@ -386,6 +386,7 @@
   let synthLoopTimer = null;
   let synthOscillators = [];
   let currentVolume = 0.5;
+  let crownAudio = null;
 
   const CHORDS = {
     aurora: [
@@ -416,6 +417,16 @@
     if (audioCtx.state === "suspended") audioCtx.resume();
 
     stopOscillators();
+
+    if (activePreset === "crown") {
+      if (!crownAudio) {
+        crownAudio = new Audio("better_from_the_crown.mp3");
+        crownAudio.loop = true;
+      }
+      crownAudio.volume = currentVolume;
+      crownAudio.play().catch(err => console.log("Crown track play deferred:", err));
+      return;
+    }
 
     if (activePreset === "aurora" || activePreset === "drone") {
       const chords = CHORDS[activePreset];
@@ -527,6 +538,9 @@
       try { osc.disconnect(); } catch {}
     });
     synthOscillators = [];
+    if (crownAudio) {
+      try { crownAudio.pause(); } catch {}
+    }
   }
 
   function stopSynth() {
@@ -553,6 +567,7 @@
       <button type="button" class="synth-preset-btn active" data-preset="aurora">Aurora Pad</button>
       <button type="button" class="synth-preset-btn" data-preset="rain">Cyber Rain</button>
       <button type="button" class="synth-preset-btn" data-preset="drone">Space Drone</button>
+      <button type="button" class="synth-preset-btn" data-preset="crown" style="border-color:#ffd700 !important; color:#ffd700 !important;">👑 Crown Track</button>
     </div>
   `;
   document.body.appendChild(synthDeck);
@@ -600,6 +615,9 @@
     currentVolume = parseFloat(e.target.value);
     if (masterGain) {
       masterGain.gain.setValueAtTime(currentVolume, audioCtx.currentTime);
+    }
+    if (crownAudio) {
+      crownAudio.volume = currentVolume;
     }
   });
 
