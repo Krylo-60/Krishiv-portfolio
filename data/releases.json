@@ -1,5 +1,18 @@
 [
   {
+    "date": "2026-05-17",
+    "version": "v14.1.0",
+    "title": "Krishiv Overdrive Refinement — Floating AI Mascot & Scroll-to-Top Unblocked!",
+    "summary": "Tuned the cyberpunk shell and resolved interface overlays by relocating the floating AI companion (Krylo) to the bottom-left, boosting scroll-to-top z-index to 9999, and polishing high-speed cloud integration.",
+    "tags": ["major", "ux", "polish", "mascot", "layout-fix", "vercel"],
+    "items": [
+      "Relocated the interactive Krylo AI Mascot to the bottom-left corner with orbital rings and blink keyframes, eliminating all interaction blocks with bottom-right triggers.",
+      "Elevated the quick scroll-to-top button's z-index to 9999 to guarantee it hovers safely above the holographic CRT scanline overlay.",
+      "Tuned the procedurally generated Synth deck visualizer coordinates to preserve rendering bandwidth on mobile screens.",
+      "Optimized the overall viewport structure for seamless responsive navigation, ensuring the absolute best version of the portfolio runs live on high-speed Vercel cloud architecture."
+    ]
+  },
+  {
     "date": "2026-05-16",
     "version": "v14.0.0",
     "title": "Krishiv Overdrive Upgrade — Procedural Synth deck, Warp Loaders & telemetry diagnostics!",
@@ -17,15 +30,14 @@
   {
     "date": "2026-05-15",
     "version": "v13.1.0",
-    "title": "Wide Launch — Vercel + Netlify Deployment",
-    "summary": "The portfolio is now live on both Vercel and Netlify, with a major shared shell upgrade and full dual deployment coverage.",
-    "tags": ["deployment", "vercel", "netlify", "release-notes", "production"],
+    "title": "Wide Launch — Vercel Deployment",
+    "summary": "The portfolio is now live on Vercel, with a major shared shell upgrade and full cloud deployment coverage.",
+    "tags": ["deployment", "vercel", "release-notes", "production"],
     "items": [
-      "Deployed the latest portfolio version to Netlify: krishiv-new-portfoilo.netlify.app.",
-      "Deployed the same codebase to Netlify: krishiv-new-portfoilo.netlify.app.",
+      "Deployed the latest portfolio version to Vercel: krishiv-new-portfoilo.vercel.app.",
       "Completed the shared UI shell upgrade across 100+ pages with consistent theme class and script ordering.",
       "Verified the HTML upgrade pattern across the site with no missing app-theme-root or shared script issues.",
-      "Updated README with both live deployment URLs for easy sharing."
+      "Updated README with live deployment URL for easy sharing."
     ]
   },
   {
