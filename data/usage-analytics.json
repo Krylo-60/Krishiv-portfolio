@@ -1,11 +1,11 @@
 {
-  "totalEvents": 60,
+  "totalEvents": 61,
   "byEvent": {
-    "page_view": 43,
+    "page_view": 44,
     "app_open": 17
   },
   "byPage": {
-    "index.html": 25,
+    "index.html": 26,
     "aether-core-v110.html": 12,
     "idea-lab-ai.html": 4,
     "focus-timer.html": 6,
@@ -433,6 +433,13 @@
     },
     {
       "at": "2026-05-17T15:14:33.782Z",
+      "event": "page_view",
+      "page": "index.html",
+      "sessionId": "sess_mp8cusv9_7wzimsi9",
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+    },
+    {
+      "at": "2026-05-17T15:38:41.466Z",
       "event": "page_view",
       "page": "index.html",
       "sessionId": "sess_mp8cusv9_7wzimsi9",

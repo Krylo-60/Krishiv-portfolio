@@ -433,10 +433,10 @@
   dock.innerHTML = `
     <button type="button" class="app-shell-btn" id="shellTopBtn">Top</button>
     <button type="button" class="app-shell-btn" id="shellHomeBtn">Home</button>
-    <button type="button" class="app-shell-btn" id="shellAppsBtn">Apps</button>
+    <button type="button" class="app-shell-btn" id="shellAppsBtn">Apps <span class="app-shell-pill" style="font-size: 9px; opacity: 0.8; margin-left: 4px; border: 1px solid rgba(120, 178, 255, 0.25); border-radius: 4px; padding: 1px 3px;">Ctrl+K</span></button>
     <button type="button" class="app-shell-btn" id="shellThemeBtn">Theme</button>
     <button type="button" class="app-shell-btn" id="shellMusicBtn">🎵 Synth</button>
-    <span class="app-shell-pill">Ctrl/Cmd + K</span>
+
   `;
 
   // 🎵 Web Audio Procedural Synth Core Engine
