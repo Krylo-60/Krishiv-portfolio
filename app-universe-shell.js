@@ -1438,8 +1438,159 @@
     `;
     document.body.appendChild(mascot);
     
-    mascot.addEventListener('click', () => {
-      window.alert("Krylo AI Core online. All systems nominal. Ready to assist!");
+    // Create Holographic Assistant Panel
+    const panel = document.createElement('div');
+    panel.id = 'kryloAssistantPanel';
+    panel.className = 'krylo-assistant-panel';
+    panel.innerHTML = `
+      <div class="panel-header">
+        <div class="panel-title"><div class="pulse-dot"></div> KRYLO SYSTEM AI</div>
+      </div>
+      <div class="panel-body">
+        <div class="panel-dialogue" id="kryloDialogue">Hello! I am Krylo, Krishiv's cyber assistant. Select an operational directive to begin.</div>
+        <div class="panel-actions">
+          <button class="panel-btn" id="kryloDiagBtn">Diagnostics</button>
+          <button class="panel-btn" id="kryloSoundBtn">Synth Note</button>
+          <button class="panel-btn" id="kryloQuoteBtn">Dev Quote</button>
+          <button class="panel-btn" id="kryloMatrixBtn">Matrix Mode</button>
+          <button class="panel-btn close-btn" id="kryloCloseBtn">Shutdown Terminal</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(panel);
+
+    // Audio synthesizer helper function
+    function playAssistantSynth(freq, duration) {
+      try {
+        if (typeof initAudio === "function") initAudio();
+        if (window.audioCtx && window.audioCtx.state === "suspended") window.audioCtx.resume();
+        const ctx = window.audioCtx || (window.AudioContext && new window.AudioContext());
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration + 0.05);
+      } catch(err) {}
+    }
+
+    // Toggle panel on Mascot click
+    mascot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isActive = panel.classList.toggle('is-active');
+      if (isActive) {
+        // Trigger a cute startup arpeggio sound
+        playAssistantSynth(523.25, 0.08); // C5
+        setTimeout(() => playAssistantSynth(659.25, 0.08), 80); // E5
+        setTimeout(() => playAssistantSynth(783.99, 0.14), 160); // G5
+        
+        document.getElementById('kryloDialogue').className = "panel-dialogue";
+        document.getElementById('kryloDialogue').innerText = "Hello! I am Krylo, Krishiv's cyber assistant. Select an operational directive to begin.";
+      }
+    });
+
+    // Close panel when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!panel.contains(e.target) && e.target !== mascot && !mascot.contains(e.target)) {
+        panel.classList.remove('is-active');
+      }
+    });
+
+    // Diagnostics logic
+    let diagInterval = null;
+    document.getElementById('kryloDiagBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (diagInterval) clearInterval(diagInterval);
+      playAssistantSynth(880, 0.06);
+      
+      const dialogue = document.getElementById('kryloDialogue');
+      dialogue.className = "panel-dialogue terminal-mode";
+      dialogue.innerText = "[SYSTEM DIAGNOSTIC RUNNING...]\n";
+      
+      const logs = [
+        "Connecting core...",
+        "Resolving Glassmorphic borders...",
+        "Starfield warp acceleration: 100%",
+        "Synthesis oscillator: detuned",
+        "God mode Matrix rain: Ready",
+        "SYSTEM HEALTH: 100% SECURE!"
+      ];
+      
+      let step = 0;
+      diagInterval = setInterval(() => {
+        if (step < logs.length) {
+          dialogue.innerText += `> ${logs[step]}\n`;
+          dialogue.scrollTop = dialogue.scrollHeight;
+          playAssistantSynth(600 + (step * 50), 0.04);
+          step++;
+        } else {
+          clearInterval(diagInterval);
+          diagInterval = null;
+        }
+      }, 300);
+    });
+
+    // Synth Sound logic
+    document.getElementById('kryloSoundBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const freqs = [130.81, 146.83, 164.81, 196.00, 220.00, 261.63, 293.66, 329.63, 392.00, 440.00];
+      const randomFreq = freqs[Math.floor(Math.random() * freqs.length)];
+      playAssistantSynth(randomFreq, 0.4);
+      
+      const dialogue = document.getElementById('kryloDialogue');
+      dialogue.className = "panel-dialogue";
+      dialogue.innerText = `Synthesizing futuristic retro sound wave at frequency: ${randomFreq}Hz... 🎵`;
+    });
+
+    // Dev Quote logic
+    const quotes = [
+      "Krishiv: 'I drink apple juice to compile CSS faster!' 🧃",
+      "Krishiv: 'Don't touch that line of code, it's holding the whole portfolio grid together!' ⚠️",
+      "Krishiv: 'Just compiled 42 lines of vanilla JavaScript without a single console error!' 🎉",
+      "Krishiv: 'Future Mode core temperature: Stable. Leveling up next apps now!' 🚀",
+      "Krishiv: 'I am building a Roblox tower defense game in my other tab right now!' 🎮",
+      "Krishiv: 'Apple Pie increases developer productivity by 200%, scientifically proven by me.' 🥧"
+    ];
+    let lastQuoteIdx = -1;
+    document.getElementById('kryloQuoteBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      playAssistantSynth(700, 0.06);
+      
+      let nextIdx = lastQuoteIdx;
+      while (nextIdx === lastQuoteIdx) {
+        nextIdx = Math.floor(Math.random() * quotes.length);
+      }
+      lastQuoteIdx = nextIdx;
+      
+      const dialogue = document.getElementById('kryloDialogue');
+      dialogue.className = "panel-dialogue";
+      dialogue.innerText = quotes[nextIdx];
+    });
+
+    // Matrix toggle logic
+    document.getElementById('kryloMatrixBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      playAssistantSynth(400, 0.12);
+      document.body.classList.toggle('matrix-mode');
+      
+      const isMatrix = document.body.classList.contains('matrix-mode');
+      const dialogue = document.getElementById('kryloDialogue');
+      dialogue.className = "panel-dialogue";
+      dialogue.innerText = isMatrix 
+        ? "God Mode Core decrypted. Initiating Matrix rain falling code stream... 🟢"
+        : "Re-activating premium glassmorphism styling engines... 🔵";
+    });
+
+    // Close logic
+    document.getElementById('kryloCloseBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      playAssistantSynth(200, 0.15);
+      panel.classList.remove('is-active');
     });
   }
 
