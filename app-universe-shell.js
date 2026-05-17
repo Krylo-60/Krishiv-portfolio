@@ -1250,6 +1250,27 @@
 
         <div class="hud-divider"></div>
 
+        <div class="hud-section-title" style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:4px; margin-bottom: 6px;">
+          <span>Cyber Commands</span>
+          <span style="font-size:0.6rem; opacity:0.6; font-family:'JetBrains Mono',monospace;">(HOTKEYS)</span>
+        </div>
+        <div class="hud-shortcuts-list" style="font-family:'Space Grotesk',sans-serif; font-size:0.75rem; display:flex; flex-direction:column; gap:6px; background:rgba(255,255,255,0.01); border:1px solid rgba(121,216,255,0.08); border-radius:12px; padding:10px; color:var(--app-muted,#9fc0de); margin-bottom: 12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>🔍 Portal Search</span>
+            <kbd style="background:rgba(121,216,255,0.15); border:1px solid rgba(121,216,255,0.3); border-radius:4px; padding:1px 5px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#fff;">Ctrl+K</kbd>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>🌐 Links Directory</span>
+            <kbd style="background:rgba(121,216,255,0.15); border:1px solid rgba(121,216,255,0.3); border-radius:4px; padding:1px 5px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#fff;">Ctrl+Shift+L</kbd>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>🟢 Matrix Rain Code</span>
+            <kbd style="background:rgba(121,216,255,0.15); border:1px solid rgba(121,216,255,0.3); border-radius:4px; padding:1px 5px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#fff;">Konami Code</kbd>
+          </div>
+        </div>
+
+        <div class="hud-divider"></div>
+
         <div class="hud-section-title">Ecosystem Metrics</div>
         <div class="hud-metrics-grid">
           <div class="hud-metric-card">

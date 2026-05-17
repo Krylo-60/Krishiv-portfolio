@@ -1,6 +1,18 @@
 [
   {
     "date": "2026-05-17",
+    "version": "v14.3.1",
+    "title": "Cybernetic Telemetry Stats HUD Refinement — Interactive Shortcuts & Cyber commands guide!",
+    "summary": "Polished the Telemetry Stats HUD with a fully integrated, beautifully designed Keyboard Shortcuts & Cyber Commands cheat sheet! Users can now instantly discover quick commands to open overlays, links directory console, and activate the God Mode Matrix code rain storm.",
+    "tags": ["major", "ux", "telemetry", "hud", "shortcuts", "cyber-commands"],
+    "items": [
+      "Designed and integrated a premium glassmorphic Keyboard Shortcuts & Cyber Commands cheat sheet widget directly inside the Telemetry HUD body.",
+      "Styled styled cybernetic <kbd> tags matching the terminal overlay aesthetic for high contrast visual discovery.",
+      "Documented quick keyboard shortcuts including Portal Search (Ctrl+K), Links Directory (Ctrl+Shift+L), and the legendary Konami Code sequence."
+    ]
+  },
+  {
+    "date": "2026-05-17",
     "version": "v14.3.0",
     "title": "Cybernetic Telemetry Stats HUD — Realtime CPU, RAM & Uptime diagnostics!",
     "summary": "Added a state-of-the-art Cybernetic Telemetry HUD! View simulated live-fluctuating CPU core load, RAM allocation, network latency responses, active apps count, global theme shifts, mascot diagnostics run, and real-time session uptime tracking.",
