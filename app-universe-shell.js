@@ -2180,4 +2180,95 @@
       }, 350);
     }, 50);
   });
+
+  // ── Glassmorphism Floating Music Dock & Dark Mode Toggle ──
+  const injectMusicDock = () => {
+    if (document.getElementById("glassMusicDock")) return;
+    const dock = document.createElement("div");
+    dock.id = "glassMusicDock";
+    dock.className = "glass-music-dock";
+    dock.innerHTML = `
+      <div class="dock-vinyl" id="dockVinyl"></div>
+      <div class="dock-info">
+        <div class="dock-title">Better From The Crown</div>
+        <div class="dock-artist">Krishiv Velocity</div>
+      </div>
+      <button class="dock-btn" id="dockThemeToggleBtn" title="Toggle Theme (Dark/Light)">🌙</button>
+      <button class="dock-btn" id="dockPlayBtn" title="Play/Pause Track">▶</button>
+    `;
+    document.body.appendChild(dock);
+
+    const playBtn = document.getElementById("dockPlayBtn");
+    const vinyl = document.getElementById("dockVinyl");
+    const themeBtn = document.getElementById("dockThemeToggleBtn");
+
+    let isPlaying = false;
+    let audio = null;
+
+    const playTrack = () => {
+      if (!audio) {
+        audio = new Audio("better_from_the_crown.mp3");
+        audio.loop = true;
+      }
+      if (audio.paused) {
+        audio.play().then(() => {
+          playBtn.innerText = "⏸";
+          vinyl.classList.add("playing");
+          isPlaying = true;
+        }).catch(() => {});
+      } else {
+        audio.pause();
+        playBtn.innerText = "▶";
+        vinyl.classList.remove("playing");
+        isPlaying = false;
+      }
+    };
+
+    playBtn.addEventListener("click", playTrack);
+
+    // Sync theme toggle with existing themes
+    themeBtn.addEventListener("click", () => {
+      let curTheme = safeGet(THEME_KEY, "default");
+      const nextTheme = curTheme === "solar" ? "neon" : "solar";
+      safeSet(THEME_KEY, nextTheme);
+      applyTheme(nextTheme);
+      themeBtn.innerText = nextTheme === "solar" ? "☀" : "🌙";
+    });
+
+    let curTheme = safeGet(THEME_KEY, "default");
+    themeBtn.innerText = curTheme === "solar" ? "☀" : "🌙";
+  };
+
+  // ── Kinetic Typography scroll controller ──
+  const initKineticTypography = () => {
+    const headers = document.querySelectorAll(".section-heading h2, .section-heading .eyebrow");
+    headers.forEach((h) => {
+      h.classList.add("kinetic-text");
+      h.style.display = "inline-block";
+      h.style.transition = "transform 0.1s ease-out";
+      h.style.willChange = "transform";
+    });
+
+    window.addEventListener("scroll", () => {
+      const kineticElements = document.querySelectorAll(".kinetic-text");
+      kineticElements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        const viewHeight = window.innerHeight;
+        if (rect.top < viewHeight && rect.bottom > 0) {
+          const relativeScroll = (rect.top - viewHeight / 2) / (viewHeight / 2);
+          el.style.transform = `skewX(${relativeScroll * 10}deg) translateX(${relativeScroll * 15}px)`;
+        }
+      });
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      injectMusicDock();
+      initKineticTypography();
+    });
+  } else {
+    injectMusicDock();
+    initKineticTypography();
+  }
 })();
