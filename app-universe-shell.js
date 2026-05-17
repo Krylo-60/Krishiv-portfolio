@@ -1072,7 +1072,7 @@
 
     const steps = [
       { text: "[BOOT] Initializing galaxy cores...", delay: 400, sound: 600 },
-      { text: "[LINK] Verifying active CDN nodes: Vercel & Netlify: OK", delay: 700, sound: 700 },
+      { text: "[LINK] Verifying active CDN nodes: Vercel: OK", delay: 700, sound: 700 },
       { text: `[NET] Telemetry latency response check: ${Math.floor(Math.random() * 15 + 8)}ms (Fast)`, delay: 1000, sound: 800 },
       { text: "[CSS] Validating Glassmorphic styling engines: Active (98.6% opacity)", delay: 1300, sound: 900 },
       { text: `[REGISTRY] Scanning App Catalog: ${APPS.length} applications loaded successfully`, delay: 1700, sound: 1000 },
