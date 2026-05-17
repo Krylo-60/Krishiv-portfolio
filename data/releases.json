@@ -9,7 +9,9 @@
       "Integrated full-featured procedurally generated synthesizer audio deck in the global utility panel.",
       "Added Warp Loaders and telemetry-style diagnostic system overlays for that advanced hacker aesthetic.",
       "Implemented highly responsive global IntersectionObservers to automatically reveal elements like the Animation Lab on scroll.",
-      "Synced global cursor glow particles and universal easter eggs (barrel roll, Matrix mode font injection) across all 80+ pages."
+      "Synced global cursor glow particles and universal easter eggs (barrel roll, Matrix mode font injection) across all 80+ pages.",
+      "Overrode the system-default window.alert globally across all 80+ sub-apps with a premium, theme-synchronized glassmorphic cyber modal.",
+      "Implemented a dynamic MutationObserver to auto-inject Google Fonts, load canvases, and initiate matrix falling code rain on body class changes in real-time."
     ]
   },
   {
