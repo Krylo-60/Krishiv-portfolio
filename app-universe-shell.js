@@ -1432,7 +1432,62 @@
       if (!document.getElementById('matrixStyle')) {
         const style = document.createElement('style');
         style.id = 'matrixStyle';
-        style.textContent = 'body.matrix-mode { background: #000 !important; color: #0f0 !important; } body.matrix-mode * { border-color: #0f0 !important; box-shadow: none !important; } body.matrix-mode .card, body.matrix-mode .app-card, body.matrix-mode section { background: rgba(0,20,0,0.8) !important; backdrop-filter: none !important; } body.matrix-mode h1, body.matrix-mode h2, body.matrix-mode h3, body.matrix-mode p, body.matrix-mode a, body.matrix-mode span { color: #0f0 !important; text-shadow: 0 0 8px #0f0 !important; font-family: "JetBrains Mono", monospace !important; }';
+        style.textContent = `
+          body.matrix-mode {
+            background: #000000 !important;
+            color: #00ff66 !important;
+            font-family: "Space Grotesk", sans-serif !important;
+          }
+          body.matrix-mode * {
+            border-color: #00ff66 !important;
+            box-shadow: 0 0 5px rgba(0, 255, 102, 0.1) !important;
+          }
+          body.matrix-mode h1,
+          body.matrix-mode h2,
+          body.matrix-mode h3,
+          body.matrix-mode .nav-logo,
+          body.matrix-mode .hero-title,
+          body.matrix-mode .section-title,
+          body.matrix-mode .app-title {
+            font-family: "Orbitron", sans-serif !important;
+            color: #00ff66 !important;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.8), 0 0 20px rgba(0, 255, 102, 0.4) !important;
+          }
+          body.matrix-mode p,
+          body.matrix-mode span,
+          body.matrix-mode a,
+          body.matrix-mode div:not(.custom-cyber-alert-modal) {
+            color: #00ff66 !important;
+          }
+          body.matrix-mode .card,
+          body.matrix-mode .app-card,
+          body.matrix-mode section,
+          body.matrix-mode .concept-card {
+            background: rgba(0, 15, 5, 0.85) !important;
+            border: 1px solid #00ff66 !important;
+            backdrop-filter: none !important;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.25) !important;
+          }
+          body.matrix-mode code,
+          body.matrix-mode pre,
+          body.matrix-mode .code-font,
+          body.matrix-mode .monospace-text,
+          body.matrix-mode input,
+          body.matrix-mode textarea,
+          body.matrix-mode select {
+            font-family: "JetBrains Mono", monospace !important;
+            background: #000b03 !important;
+            color: #00ff66 !important;
+          }
+          body.matrix-mode .note-card,
+          body.matrix-mode .handwritten,
+          body.matrix-mode .casual-note,
+          body.matrix-mode blockquote {
+            font-family: "Patrick Hand", cursive !important;
+            font-size: 1.2rem !important;
+            color: #a3ffd0 !important;
+          }
+        `;
         document.head.appendChild(style);
       }
 
