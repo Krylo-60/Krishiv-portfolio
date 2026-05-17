@@ -1,0 +1,14 @@
+node_modules/
+.git/
+.vercel/
+.netlify/
+.kilo/
+.github/
+scripts/
+brain/
+tempmediaStorage/
+*.log
+netlify-deploy.log
+package-lock.json
+package.json
+server.js

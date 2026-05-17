@@ -73,6 +73,107 @@ body[data-mode="light"].app-theme-root {
   --app-accent-b: #14c8b0;
 }
 
+/* ── Synth Visualizer ── */
+.synth-visualizer-canvas {
+  flex: 1;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  margin: 0 10px;
+}
+
+/* ── AI Mascot ── */
+.krylo-ai-mascot {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  z-index: 10000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.krylo-ai-mascot:hover {
+  transform: scale(1.15);
+}
+
+.mascot-core {
+  width: 20px;
+  height: 20px;
+  background: var(--app-accent-a);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--app-accent-a);
+  position: relative;
+  animation: mascot-pulse 2s infinite ease-in-out;
+}
+
+.mascot-eye {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: mascot-blink 4s infinite;
+}
+
+.mascot-ring {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--app-accent-b);
+  border-radius: 50%;
+  animation: mascot-spin 4s linear infinite;
+  box-shadow: 0 0 10px rgba(121, 216, 255, 0.2);
+}
+
+.mascot-ring-outer {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border: 1px dashed var(--app-line);
+  border-radius: 50%;
+  animation: mascot-spin-reverse 7s linear infinite;
+}
+
+@keyframes mascot-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); box-shadow: 0 0 25px var(--app-accent-a); }
+}
+
+@keyframes mascot-blink {
+  0%, 96%, 98%, 100% { height: 8px; }
+  97%, 99% { height: 1px; }
+}
+
+@keyframes mascot-spin { 100% { transform: rotate(360deg); } }
+@keyframes mascot-spin-reverse { 100% { transform: rotate(-360deg); } }
+
+/* ── Glitch Text Effect ── */
+.glitch-hover {
+  position: relative;
+  display: inline-block;
+}
+.glitch-hover:hover {
+  animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+  color: var(--app-accent-a);
+  text-shadow: 2px 0 var(--app-accent-b), -2px 0 var(--danger);
+}
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-10deg); }
+  40% { transform: skew(10deg); }
+  60% { transform: skew(-5deg); }
+  80% { transform: skew(5deg); }
+  100% { transform: skew(0deg); }
+}
+
 body[data-theme="neon"][data-mode="light"].app-theme-root {
   --app-bg-a: #fff2ff;
   --app-bg-b: #ffe7fb;

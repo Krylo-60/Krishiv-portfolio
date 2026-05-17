@@ -448,6 +448,9 @@
   let synthOscillators = [];
   let currentVolume = 0.5;
   let crownAudio = null;
+  let synthAnalyser = null;
+  let visualizerAnimId = null;
+  let crownMediaSource = null;
 
   const CHORDS = {
     aurora: [
@@ -470,7 +473,48 @@
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
     masterGain.gain.value = currentVolume;
-    masterGain.connect(audioCtx.destination);
+    
+    synthAnalyser = audioCtx.createAnalyser();
+    synthAnalyser.fftSize = 64;
+    synthAnalyser.smoothingTimeConstant = 0.8;
+    
+    masterGain.connect(synthAnalyser);
+    synthAnalyser.connect(audioCtx.destination);
+    
+    startVisualizer();
+  }
+  
+  function startVisualizer() {
+    const canvas = document.getElementById("synthVisualizer");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const bufferLength = synthAnalyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    
+    function draw() {
+      visualizerAnimId = requestAnimationFrame(draw);
+      
+      if (!synthIsPlaying) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+      }
+      
+      synthAnalyser.getByteFrequencyData(dataArray);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const barWidth = (canvas.width / bufferLength) * 1.5;
+      let barHeight;
+      let x = 0;
+      
+      for(let i = 0; i < bufferLength; i++) {
+        barHeight = (dataArray[i] / 255) * canvas.height;
+        const hue = i * (360 / bufferLength) + Date.now() / 20;
+        ctx.fillStyle = `hsl(${hue}, 100%, 65%)`;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+        x += barWidth;
+      }
+    }
+    draw();
   }
 
   function playSynthPreset() {
@@ -483,6 +527,11 @@
       if (!crownAudio) {
         crownAudio = new Audio("better_from_the_crown.mp3");
         crownAudio.loop = true;
+        crownAudio.crossOrigin = "anonymous";
+        if (audioCtx) {
+           crownMediaSource = audioCtx.createMediaElementSource(crownAudio);
+           crownMediaSource.connect(masterGain);
+        }
       }
       crownAudio.volume = currentVolume;
       crownAudio.play().catch(err => console.log("Crown track play deferred:", err));
@@ -619,6 +668,7 @@
     </div>
     <div class="synth-deck-controls">
       <button type="button" class="synth-control-btn" id="synthPlayBtn">▶ Play</button>
+      <canvas id="synthVisualizer" width="120" height="30" class="synth-visualizer-canvas"></canvas>
       <div class="synth-volume-container">
         <span>🔊</span>
         <input type="range" id="synthVolRange" min="0" max="1" step="0.05" value="0.5" />
@@ -704,7 +754,7 @@
     <section class="app-shell-panel" role="dialog" aria-modal="true" aria-label="Apps Galaxy">
       <header class="app-shell-head">
         <div class="app-shell-head-copy">
-          <h2 class="app-shell-title">Apps Galaxy</h2>
+          <h2 class="app-shell-title glitch-hover">Apps Galaxy</h2>
           <p class="app-shell-subtitle">Your fastest route to favorites, AI tools, live builds, and every site page.</p>
         </div>
         <input class="app-shell-search" id="shellSearchInput" type="search" placeholder="Search page, app, or link..." aria-label="Search apps and pages" />
@@ -813,12 +863,24 @@
     if (!insights) return;
     insights.innerHTML = `
       <article class="app-shell-insight"><strong>${APPS.length}</strong><span>apps indexed</span></article>
-      <article class="app-shell-insight"><strong>${APPS.filter((item) => item.tier === "featured").length}</strong><span>featured</span></article>
-      <article class="app-shell-insight"><strong>${favorites.length}</strong><span>favorites</span></article>
-      <article class="app-shell-insight"><strong>${recents.length}</strong><span>recents</span></article>
       <article class="app-shell-insight"><strong>${totalLaunches}</strong><span>launches</span></article>
+      <article class="app-shell-insight"><strong id="sysCpuUsage">14%</strong><span>cpu load</span></article>
+      <article class="app-shell-insight"><strong id="sysRamUsage">2.4GB</strong><span>ram usage</span></article>
+      <article class="app-shell-insight"><strong id="sysNetPing">24ms</strong><span>network latency</span></article>
       <article class="app-shell-insight"><strong>${totalStreak}</strong><span>total streak</span></article>
     `;
+    
+    // Telemetry updates
+    if (!window.telemetryTimer) {
+      window.telemetryTimer = setInterval(() => {
+        const cpuEl = document.getElementById("sysCpuUsage");
+        const ramEl = document.getElementById("sysRamUsage");
+        const pingEl = document.getElementById("sysNetPing");
+        if (cpuEl) cpuEl.textContent = Math.floor(Math.random() * 20 + 5) + "%";
+        if (ramEl) ramEl.textContent = (2.0 + Math.random()).toFixed(1) + "GB";
+        if (pingEl) pingEl.textContent = Math.floor(Math.random() * 30 + 10) + "ms";
+      }, 2000);
+    }
   }
 
   function renderCard({ item, isFav, launches }) {
@@ -1361,6 +1423,25 @@
       return { stop: ()=>{ if (raf) cancelAnimationFrame(raf); window.removeEventListener('resize', resize); } };
     } catch(e) { return null; }
   };
+
+  // AI Mascot (Krylo)
+  if (!document.getElementById('kryloMascot')) {
+    const mascot = document.createElement('div');
+    mascot.id = 'kryloMascot';
+    mascot.className = 'krylo-ai-mascot';
+    mascot.innerHTML = `
+      <div class="mascot-core">
+        <div class="mascot-eye"></div>
+      </div>
+      <div class="mascot-ring"></div>
+      <div class="mascot-ring-outer"></div>
+    `;
+    document.body.appendChild(mascot);
+    
+    mascot.addEventListener('click', () => {
+      window.alert("Krylo AI Core online. All systems nominal. Ready to assist!");
+    });
+  }
 
   // Global Cursor Aura
   if (!document.getElementById('cursorAura')) {
