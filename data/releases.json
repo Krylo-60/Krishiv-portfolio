@@ -1,6 +1,18 @@
 [
   {
     "date": "2026-05-17",
+    "version": "v14.5.2",
+    "title": "Global Audio Engine & Link Transitions Fix — Resolved ReferenceError click failures!",
+    "summary": "Resolved a critical Javascript scoping ReferenceError that completely broke global anchor navigation clicks across all app pages! Properly exposed initAudio & audioCtx on the window hierarchy to feed real-time warping sound synthesis dynamically.",
+    "tags": ["patch", "audio", "navigation", "transitions", "warping", "scope-fix"],
+    "items": [
+      "Exposed the private IIFE scoped initAudio function globally as window.initAudio.",
+      "Safely mapped the audioCtx variable to the window level to prevent ReferenceError exceptions on click interception.",
+      "Stabilized the global holographic portal transition loader to guarantee warp triggers and navigation redrawing."
+    ]
+  },
+  {
+    "date": "2026-05-17",
     "version": "v14.5.1",
     "title": "Vercel Manifest & Telemetry HUD Audit — Bug fixes & bundle optimizations!",
     "summary": "Conducted a thorough system audit and resolved high-priority interactive & Vercel deployment bugs! Restored HTML5 canvas sparklines, fixed the diagnostics counter event listener, and resolved the PWA manifest bundle loading failure.",

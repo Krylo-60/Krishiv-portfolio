@@ -471,6 +471,7 @@
   function initAudio() {
     if (audioCtx) return;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    window.audioCtx = audioCtx;
     masterGain = audioCtx.createGain();
     masterGain.gain.value = currentVolume;
     
@@ -483,6 +484,7 @@
     
     startVisualizer();
   }
+  window.initAudio = initAudio;
   
   function startVisualizer() {
     const canvas = document.getElementById("synthVisualizer");
@@ -2154,20 +2156,21 @@
     `;
     document.body.appendChild(portal);
 
-    initAudio();
-    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-    if (audioCtx) {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+    if (typeof window.initAudio === "function") window.initAudio();
+    const ctx = window.audioCtx;
+    if (ctx && ctx.state === "suspended") ctx.resume();
+    if (ctx) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.4);
-      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.45);
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.4);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.45);
       osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      gain.connect(ctx.destination);
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.5);
+      osc.stop(ctx.currentTime + 0.5);
     }
 
     setTimeout(() => {
