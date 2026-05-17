@@ -1221,8 +1221,8 @@
             <span class="hud-value" id="hudCpuVal">18.4%</span>
             <span class="hud-indicator status-ok">OPTIMIZED</span>
           </div>
-          <div class="hud-progress-bg">
-            <div class="hud-progress-bar bar-cpu" id="hudCpuBar" style="width: 18.4%"></div>
+          <div style="width:100%; height:32px; background:rgba(255,255,255,0.02); border:1px solid rgba(121,216,255,0.06); border-radius:6px; overflow:hidden; display:flex; align-items:center;">
+            <canvas id="hudCpuSparkline" width="280" height="30" style="width:100%; height:100%; display:block;"></canvas>
           </div>
         </div>
 
@@ -1243,8 +1243,8 @@
             <span class="hud-value" id="hudPingVal">12ms</span>
             <span class="hud-indicator status-fast">HYPER-FAST</span>
           </div>
-          <div class="hud-progress-bg">
-            <div class="hud-progress-bar bar-ping" id="hudPingBar" style="width: 12%"></div>
+          <div style="width:100%; height:32px; background:rgba(255,255,255,0.02); border:1px solid rgba(121,216,255,0.06); border-radius:6px; overflow:hidden; display:flex; align-items:center;">
+            <canvas id="hudPingSparkline" width="280" height="30" style="width:100%; height:100%; display:block;"></canvas>
           </div>
         </div>
 
@@ -1301,7 +1301,7 @@
     let uptimeInterval = null;
     let sessionUptime = 0;
     let themeSwitches = 0;
-    let diagnosticsRun = 0;
+    window.hudDiagnosticsRun = 0;
 
     // Track theme switches
     if (themeBtn) {
@@ -1313,13 +1313,11 @@
     }
 
     // Monitor diagnostics button from AI Mascot
-    document.body.addEventListener("click", (e) => {
-      if (e.target && e.target.id === "kryloDiagBtn") {
-        diagnosticsRun++;
-        const countEl = document.getElementById("hudDiagnosticsCount");
-        if (countEl) countEl.innerText = diagnosticsRun;
-      }
-    });
+    window.incrementHudDiagnostics = () => {
+      window.hudDiagnosticsRun++;
+      const countEl = document.getElementById("hudDiagnosticsCount");
+      if (countEl) countEl.innerText = window.hudDiagnosticsRun;
+    };
 
     // Uptime counter
     uptimeInterval = setInterval(() => {
@@ -1797,6 +1795,9 @@
     let diagInterval = null;
     document.getElementById('kryloDiagBtn').addEventListener('click', (e) => {
       e.stopPropagation();
+      if (typeof window.incrementHudDiagnostics === "function") {
+        window.incrementHudDiagnostics();
+      }
       if (diagInterval) clearInterval(diagInterval);
       playAssistantSynth(880, 0.06);
       

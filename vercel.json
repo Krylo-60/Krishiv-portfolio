@@ -15,7 +15,9 @@
           "*.jpeg",
           "*.webp",
           "data/**",
-          "*.mp3"
+          "*.mp3",
+          "*.webmanifest",
+          "*.json"
         ]
       }
     }
