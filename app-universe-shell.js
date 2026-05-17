@@ -1806,18 +1806,46 @@
       dialogue.innerText = quotes[nextIdx];
     });
 
+    // Matrix color cycling state
+    const MATRIX_COLORS = [
+      { name: "Classic Green 🟢", hex: "#00ff66" },
+      { name: "Cyber Cyan 🔵", hex: "#00f2ff" },
+      { name: "Neon Purple 🟣", hex: "#b300ff" },
+      { name: "Overdrive Red 🔴", hex: "#ff3b30" },
+      { name: "Golden Matrix 🟡", hex: "#ffd166" }
+    ];
+    let matrixColorIdx = 0;
+    window.matrixRainColor = MATRIX_COLORS[0].hex;
+
     // Matrix toggle logic
     document.getElementById('kryloMatrixBtn').addEventListener('click', (e) => {
       e.stopPropagation();
-      playAssistantSynth(400, 0.12);
-      document.body.classList.toggle('matrix-mode');
-      
-      const isMatrix = document.body.classList.contains('matrix-mode');
       const dialogue = document.getElementById('kryloDialogue');
       dialogue.className = "panel-dialogue";
-      dialogue.innerText = isMatrix 
-        ? "God Mode Core decrypted. Initiating Matrix rain falling code stream... 🟢"
-        : "Re-activating premium glassmorphism styling engines... 🔵";
+
+      const hasMatrix = document.body.classList.contains('matrix-mode');
+      if (!hasMatrix) {
+        // First activate: start classic green
+        document.body.classList.add('matrix-mode');
+        matrixColorIdx = 0;
+        window.matrixRainColor = MATRIX_COLORS[matrixColorIdx].hex;
+        playAssistantSynth(400, 0.12);
+        dialogue.innerText = `God Mode Core decrypted. Initiating Matrix rain falling code stream... 🟢`;
+      } else {
+        // Already active: cycle colors!
+        matrixColorIdx++;
+        if (matrixColorIdx >= MATRIX_COLORS.length) {
+          // Cycled past the end: disable Matrix Mode
+          document.body.classList.remove('matrix-mode');
+          playAssistantSynth(200, 0.15);
+          dialogue.innerText = "Re-activating premium glassmorphism styling engines... 🔵";
+        } else {
+          // Set new color!
+          window.matrixRainColor = MATRIX_COLORS[matrixColorIdx].hex;
+          playAssistantSynth(450 + matrixColorIdx * 80, 0.12);
+          dialogue.innerText = `Matrix color stream modulated: Decrypted the ${MATRIX_COLORS[matrixColorIdx].name} stream. Tuning frequency... 📻`;
+        }
+      }
     });
 
     // Close logic
@@ -1999,7 +2027,7 @@
           ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
           ctx.fillRect(0, 0, width, height);
 
-          ctx.fillStyle = '#0f0';
+          ctx.fillStyle = window.matrixRainColor || '#00ff66';
           ctx.font = fontSize + 'px monospace';
 
           for (let i = 0; i < rainDrops.length; i++) {
