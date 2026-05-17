@@ -1,6 +1,19 @@
 [
   {
     "date": "2026-05-17",
+    "version": "v14.5.0",
+    "title": "Realtime Sparkline Telemetry Charts — High-end glowing HTML5 canvas analytics!",
+    "summary": "Upgraded the Cybernetic Telemetry HUD with real-time glowing HTML5 canvas sparkline charts! Monitor CPU loads and latency ping responses historically over the last 15 ticks on smooth glowing linear vectors rather than static bars.",
+    "tags": ["major", "canvas", "telemetry", "sparklines", "charts", "analytics"],
+    "items": [
+      "Replaced simple static progress bars inside the Telemetry HUD with fully responsive HTML5 canvas tags.",
+      "Developed a custom glowing linear sparkline renderer function complete with under-fill opacity gradients and box-shadow glows.",
+      "Wired dynamic data history tracking arrays logging the last 15 diagnostic records to feed sparkline vectors real-time.",
+      "Tuned canvas draw ticks synchronous to the 800ms data refresh cycle for maximum browser frame rate optimization."
+    ]
+  },
+  {
+    "date": "2026-05-17",
     "version": "v14.4.0",
     "title": "Interactive Matrix Modulator — Multi-channel Color streams & detuned Synth tones!",
     "summary": "Upgraded the God Mode Matrix Code Rain into a fully interactive, multi-channel color modulating system deck! Cycle between five neon stream states (Classic Green, Cyber Cyan, Neon Purple, Overdrive Red, Golden Matrix) with dynamic pitch-shifting Web Audio synthesizers.",

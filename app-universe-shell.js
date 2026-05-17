@@ -1400,16 +1400,71 @@
       }, 1200);
     });
 
+    // History arrays for sparkline tracking
+    const cpuHistory = Array(15).fill(15);
+    const pingHistory = Array(15).fill(10);
+
+    function drawSparkline(canvasId, history, color, minVal=0, maxVal=40) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Create glowing gradient
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, color);
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+      ctx.beginPath();
+      const step = w / (history.length - 1);
+      
+      // Draw path
+      for (let i = 0; i < history.length; i++) {
+        const x = i * step;
+        const valPct = (history[i] - minVal) / (maxVal - minVal);
+        const y = h - valPct * (h - 4) - 2;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      
+      // Path line
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.shadowBlur = 4;
+      ctx.shadowColor = color;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Fill underneath
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.globalAlpha = 0.15;
+      ctx.fill();
+      ctx.globalAlpha = 1.0;
+    }
+
     // Simulate fluctuate values
     function startHudSimulation() {
       if (hudInterval) clearInterval(hudInterval);
+      
+      // Trigger initial draws immediately
+      drawSparkline('hudCpuSparkline', cpuHistory, '#00f2ff', 0, 40);
+      drawSparkline('hudPingSparkline', pingHistory, '#58d4a8', 0, 25);
+
       hudInterval = setInterval(() => {
         // CPU loads
         const cpuVal = (Math.random() * 15 + 10).toFixed(1);
         const cpuEl = document.getElementById("hudCpuVal");
-        const cpuBar = document.getElementById("hudCpuBar");
         if (cpuEl) cpuEl.innerText = cpuVal + "%";
-        if (cpuBar) cpuBar.style.width = cpuVal + "%";
+
+        // Track and redraw sparkline
+        cpuHistory.push(Number(cpuVal));
+        cpuHistory.shift();
+        drawSparkline('hudCpuSparkline', cpuHistory, '#00f2ff', 0, 40);
 
         // RAM load
         let ramBase = 250 + Math.random() * 30;
@@ -1421,9 +1476,12 @@
         // Ping latency
         const pingVal = Math.floor(Math.random() * 6 + 8);
         const pingEl = document.getElementById("hudPingVal");
-        const pingBar = document.getElementById("hudPingBar");
         if (pingEl) pingEl.innerText = pingVal + "ms";
-        if (pingBar) pingBar.style.width = (pingVal * 5) + "%";
+
+        // Track and redraw sparkline
+        pingHistory.push(pingVal);
+        pingHistory.shift();
+        drawSparkline('hudPingSparkline', pingHistory, '#58d4a8', 0, 25);
       }, 800);
     }
 
