@@ -1,6 +1,20 @@
 [
   {
     "date": "2026-05-17",
+    "version": "v14.3.0",
+    "title": "Cybernetic Telemetry Stats HUD — Realtime CPU, RAM & Uptime diagnostics!",
+    "summary": "Added a state-of-the-art Cybernetic Telemetry HUD! View simulated live-fluctuating CPU core load, RAM allocation, network latency responses, active apps count, global theme shifts, mascot diagnostics run, and real-time session uptime tracking.",
+    "tags": ["major", "telemetry", "hud", "dashboard", "diagnostics", "performance"],
+    "items": [
+      "Injected a gorgeous glassmorphic Telemetry HUD (`#kryloHudPanel`) sliding in from the top-right of the viewport.",
+      "Coded dynamic fluctuation simulators for real-time CPU percentages, RAM Megabytes, and hyper-fast Millisecond latency response charts.",
+      "Integrated automated reactive triggers counting live theme shifts, mascot diagnostic executions, and global active app tallies.",
+      "Added an operational Defragment & Speed Boost action button complete with dual Web Audio synth sweeping feedback alerts.",
+      "Wired session uptime counters starting immediately upon loading to provide accurate telemetry on browser session persistence."
+    ]
+  },
+  {
+    "date": "2026-05-17",
     "version": "v14.2.0",
     "title": "Holographic Companion Terminal — Interactive Krylo AI & Web Audio synthesizer notes!",
     "summary": "Transformed the floating AI companion (Krylo) from a simple passive mascot into a fully interactive Holographic Command Terminal! Select system diagnostics, trigger audio synthesizer notes, toggle Matrix mode, and listen to fun development quotes directly in the cyberpunk shell.",

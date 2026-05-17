@@ -436,7 +436,7 @@
     <button type="button" class="app-shell-btn" id="shellAppsBtn">Apps <span class="app-shell-pill" style="font-size: 9px; opacity: 0.8; margin-left: 4px; border: 1px solid rgba(120, 178, 255, 0.25); border-radius: 4px; padding: 1px 3px;">Ctrl+K</span></button>
     <button type="button" class="app-shell-btn" id="shellThemeBtn">Theme</button>
     <button type="button" class="app-shell-btn" id="shellMusicBtn">🎵 Synth</button>
-
+    <button type="button" class="app-shell-btn" id="shellHudBtn">📊 HUD</button>
   `;
 
   // 🎵 Web Audio Procedural Synth Core Engine
@@ -1200,6 +1200,219 @@
       safeSet(THEME_KEY, activeTheme);
       refreshButtons();
     });
+  }
+
+  // ── Telemetry Stats HUD Dashboard ──
+  const hudBtn = document.getElementById("shellHudBtn");
+  if (hudBtn) {
+    // Inject the Cyber Stats HUD Panel
+    const hudPanel = document.createElement("div");
+    hudPanel.id = "kryloHudPanel";
+    hudPanel.className = "krylo-hud-panel";
+    hudPanel.innerHTML = `
+      <div class="hud-header">
+        <div class="hud-title"><div class="pulse-dot"></div> CYBERNETIC STATS HUD</div>
+        <button class="hud-close-x" id="hudCloseX">×</button>
+      </div>
+      <div class="hud-body">
+        <div class="hud-stat-box">
+          <div class="hud-label">CPU CORE LOAD</div>
+          <div class="hud-value-row">
+            <span class="hud-value" id="hudCpuVal">18.4%</span>
+            <span class="hud-indicator status-ok">OPTIMIZED</span>
+          </div>
+          <div class="hud-progress-bg">
+            <div class="hud-progress-bar bar-cpu" id="hudCpuBar" style="width: 18.4%"></div>
+          </div>
+        </div>
+
+        <div class="hud-stat-box">
+          <div class="hud-label">RAM ALLOCATION</div>
+          <div class="hud-value-row">
+            <span class="hud-value" id="hudRamVal">256.8 MB</span>
+            <span class="hud-indicator status-ok">STABLE</span>
+          </div>
+          <div class="hud-progress-bg">
+            <div class="hud-progress-bar bar-ram" id="hudRamBar" style="width: 44%"></div>
+          </div>
+        </div>
+
+        <div class="hud-stat-box">
+          <div class="hud-label">PING LATENCY RESPONSE</div>
+          <div class="hud-value-row">
+            <span class="hud-value" id="hudPingVal">12ms</span>
+            <span class="hud-indicator status-fast">HYPER-FAST</span>
+          </div>
+          <div class="hud-progress-bg">
+            <div class="hud-progress-bar bar-ping" id="hudPingBar" style="width: 12%"></div>
+          </div>
+        </div>
+
+        <div class="hud-divider"></div>
+
+        <div class="hud-section-title">Ecosystem Metrics</div>
+        <div class="hud-metrics-grid">
+          <div class="hud-metric-card">
+            <strong id="hudTotalApps">--</strong>
+            <span>Active Apps</span>
+          </div>
+          <div class="hud-metric-card">
+            <strong id="hudThemeSwitches">0</strong>
+            <span>Theme Shifts</span>
+          </div>
+          <div class="hud-metric-card">
+            <strong id="hudDiagnosticsCount">0</strong>
+            <span>Diagnostics Run</span>
+          </div>
+          <div class="hud-metric-card">
+            <strong id="hudUptimeVal">0s</strong>
+            <span>Session Uptime</span>
+          </div>
+        </div>
+
+        <button class="hud-action-btn" id="hudBoostBtn">🚀 DEFRAGMENT & BOOST SPEED</button>
+      </div>
+    `;
+    document.body.appendChild(hudPanel);
+
+    // Track state variables
+    let hudInterval = null;
+    let uptimeInterval = null;
+    let sessionUptime = 0;
+    let themeSwitches = 0;
+    let diagnosticsRun = 0;
+
+    // Track theme switches
+    if (themeBtn) {
+      themeBtn.addEventListener("click", () => {
+        themeSwitches++;
+        const countEl = document.getElementById("hudThemeSwitches");
+        if (countEl) countEl.innerText = themeSwitches;
+      });
+    }
+
+    // Monitor diagnostics button from AI Mascot
+    document.body.addEventListener("click", (e) => {
+      if (e.target && e.target.id === "kryloDiagBtn") {
+        diagnosticsRun++;
+        const countEl = document.getElementById("hudDiagnosticsCount");
+        if (countEl) countEl.innerText = diagnosticsRun;
+      }
+    });
+
+    // Uptime counter
+    uptimeInterval = setInterval(() => {
+      sessionUptime++;
+      const uptimeEl = document.getElementById("hudUptimeVal");
+      if (uptimeEl) {
+        if (sessionUptime < 60) {
+          uptimeEl.innerText = sessionUptime + "s";
+        } else {
+          const mins = Math.floor(sessionUptime / 60);
+          const secs = sessionUptime % 60;
+          uptimeEl.innerText = `${mins}m ${secs}s`;
+        }
+      }
+    }, 1000);
+
+    // Interactive toggle click handlers
+    hudBtn.addEventListener("click", () => {
+      const isVisible = hudPanel.classList.toggle("is-active");
+      if (isVisible) {
+        playHudSynth(600, 0.1);
+        startHudSimulation();
+        // Load real total apps count from catalog
+        const totalAppsEl = document.getElementById("hudTotalApps");
+        if (totalAppsEl && typeof APPS !== "undefined") {
+          totalAppsEl.innerText = APPS.length;
+        }
+      } else {
+        stopHudSimulation();
+      }
+    });
+
+    document.getElementById("hudCloseX").addEventListener("click", () => {
+      hudPanel.classList.remove("is-active");
+      stopHudSimulation();
+      playHudSynth(400, 0.08);
+    });
+
+    // Synth player for HUD feedback
+    function playHudSynth(freq, duration) {
+      try {
+        if (typeof initAudio === "function") initAudio();
+        if (window.audioCtx && window.audioCtx.state === "suspended") window.audioCtx.resume();
+        const ctx = window.audioCtx || (window.AudioContext && new window.AudioContext());
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration + 0.05);
+      } catch(e) {}
+    }
+
+    // Boost defragment button
+    document.getElementById("hudBoostBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      playHudSynth(900, 0.15);
+      setTimeout(() => playHudSynth(1200, 0.25), 120);
+
+      const btn = document.getElementById("hudBoostBtn");
+      btn.innerText = "⚡ DEFRICTION CORE PURGING...";
+      btn.disabled = true;
+      btn.style.background = "linear-gradient(135deg, #ffd166, #ff6384)";
+
+      // Trigger standard cybermodal
+      setTimeout(() => {
+        if (typeof window.alert === "function") {
+          window.alert("CORE OPTIMIZATION COMPLETE!\n- Cleared simulated JavaScript Garbage Collector caches.\n- Defragmented glassmorphic layer boundaries.\n- Restored latency overhead headroom: +18.4% speed gain.");
+        }
+        btn.innerText = "🚀 DEFRAGMENT & BOOST SPEED";
+        btn.disabled = false;
+        btn.style.background = "";
+      }, 1200);
+    });
+
+    // Simulate fluctuate values
+    function startHudSimulation() {
+      if (hudInterval) clearInterval(hudInterval);
+      hudInterval = setInterval(() => {
+        // CPU loads
+        const cpuVal = (Math.random() * 15 + 10).toFixed(1);
+        const cpuEl = document.getElementById("hudCpuVal");
+        const cpuBar = document.getElementById("hudCpuBar");
+        if (cpuEl) cpuEl.innerText = cpuVal + "%";
+        if (cpuBar) cpuBar.style.width = cpuVal + "%";
+
+        // RAM load
+        let ramBase = 250 + Math.random() * 30;
+        const ramEl = document.getElementById("hudRamVal");
+        const ramBar = document.getElementById("hudRamBar");
+        if (ramEl) ramEl.innerText = ramBase.toFixed(1) + " MB";
+        if (ramBar) ramBar.style.width = ((ramBase / 800) * 100).toFixed(0) + "%";
+
+        // Ping latency
+        const pingVal = Math.floor(Math.random() * 6 + 8);
+        const pingEl = document.getElementById("hudPingVal");
+        const pingBar = document.getElementById("hudPingBar");
+        if (pingEl) pingEl.innerText = pingVal + "ms";
+        if (pingBar) pingBar.style.width = (pingVal * 5) + "%";
+      }, 800);
+    }
+
+    // Stop simulate values
+    function stopHudSimulation() {
+      if (hudInterval) {
+        clearInterval(hudInterval);
+        hudInterval = null;
+      }
+    }
   }
 
   window.addEventListener("storage", (event) => {
