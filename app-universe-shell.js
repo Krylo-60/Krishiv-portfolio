@@ -200,6 +200,8 @@
     { name: "Random Picker", href: "random-picker.html", tag: "Utility" },
     { name: "All Links Directory", href: "all-links.html", tag: "Navigation", tier: "featured" },
     { name: "Release Notes", href: "release-notes.html", tag: "Updates", tier: "featured" },
+    { name: "Phonk Room", href: "phonk-room.html", tag: "Music", tier: "featured" },
+    { name: "Git Devlog", href: "changelog.html", tag: "Updates", tier: "featured" },
     { name: "Master Nexus", href: "krylo-blox-master-nexus.html", tag: "Core", tier: "featured" },
     { name: "Aether v110", href: "aether-core-v110.html", tag: "Core", tier: "featured" },
     { name: "Aether v104", href: "aether-core-v104.html", tag: "Core" },
@@ -242,6 +244,8 @@
     "index.html": "logo.svg",
     "all-links.html": "logo.svg",
     "release-notes.html": "logo.svg",
+    "phonk-room.html": "logo.svg",
+    "changelog.html": "logo.svg",
     "contact.html": "app-icon-contact-page.svg",
     "projects.html": "app-icon-projects-page.svg",
     "games.html": "app-icon-games-hub.svg",
@@ -2262,13 +2266,144 @@
     });
   };
 
+  // ── 3D Tilt Effect ──
+  const initTiltEffect = () => {
+    const cards = document.querySelectorAll(".project-card, .app-verse-card, .app-card");
+    cards.forEach(card => {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const xc = rect.width / 2;
+        const yc = rect.height / 2;
+        const dx = x - xc;
+        const dy = y - yc;
+        
+        const rx = -(dy / yc) * 15;
+        const ry = (dx / xc) * 15;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.03)`;
+        card.style.transition = "transform 0.1s ease-out";
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+        card.style.transition = "transform 0.5s ease-out";
+      });
+    });
+  };
+
+  // ── Glow Trailing Cursor ──
+  const initTrailingCursor = () => {
+    const aura = document.getElementById("cursorAura");
+    if (!aura) return;
+
+    const hoverElements = document.querySelectorAll(".project-card, .app-verse-card, .app-card, .btn, a, button");
+    hoverElements.forEach(el => {
+      el.addEventListener("mouseenter", () => {
+        aura.style.width = "450px";
+        aura.style.height = "450px";
+        aura.style.background = "radial-gradient(circle, rgba(0, 242, 255, 0.3) 0%, transparent 70%)";
+      });
+      el.addEventListener("mouseleave", () => {
+        aura.style.width = "300px";
+        aura.style.height = "300px";
+        aura.style.background = "radial-gradient(circle, rgba(0, 220, 255, 0.15) 0%, transparent 70%)";
+      });
+    });
+  };
+
+  // ── Smooth Scroll Anchor Links ──
+  const initSmoothScroll = () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === "#") return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  };
+
+  // ── AI Status Badge ──
+  const injectStatusBadge = () => {
+    if (document.getElementById("aiStatusBadge")) return;
+    const badge = document.createElement("div");
+    badge.id = "aiStatusBadge";
+    badge.style.position = "fixed";
+    badge.style.bottom = "24px";
+    badge.style.left = "24px";
+    badge.style.zIndex = "9999";
+    badge.style.background = "rgba(10, 25, 47, 0.6)";
+    badge.style.backdropFilter = "blur(12px)";
+    badge.style.webkitBackdropFilter = "blur(12px)";
+    badge.style.border = "1px solid rgba(0, 242, 255, 0.25)";
+    badge.style.padding = "8px 16px";
+    badge.style.borderRadius = "999px";
+    badge.style.fontFamily = "'Fira Code', monospace";
+    badge.style.fontSize = "0.75rem";
+    badge.style.color = "#fff";
+    badge.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.3)";
+    badge.style.display = "flex";
+    badge.style.alignItems = "center";
+    badge.style.gap = "8px";
+    badge.style.transition = "all 0.3s ease";
+    badge.innerHTML = `
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: #00f2ff; box-shadow: 0 0 10px #00f2ff;" id="statusIndicator"></span>
+      Krylo Agent: <strong id="statusText" style="color: #00f2ff;">Coding</strong>
+    `;
+    document.body.appendChild(badge);
+
+    const updateStatus = async () => {
+      try {
+        const res = await fetch("/api/agent/status");
+        if (res.ok) {
+          const data = await res.json();
+          const textEl = document.getElementById("statusText");
+          const indEl = document.getElementById("statusIndicator");
+          if (textEl && indEl) {
+            textEl.innerText = data.status;
+            if (data.status === "Coding") {
+              textEl.style.color = "#00f2ff";
+              indEl.style.background = "#00f2ff";
+              indEl.style.boxShadow = "0 0 10px #00f2ff";
+            } else if (data.status === "Gaming") {
+              textEl.style.color = "#ff0055";
+              indEl.style.background = "#ff0055";
+              indEl.style.boxShadow = "0 0 10px #ff0055";
+            } else {
+              textEl.style.color = "#94a3b8";
+              indEl.style.background = "#94a3b8";
+              indEl.style.boxShadow = "none";
+            }
+          }
+        }
+      } catch {}
+    };
+
+    updateStatus();
+    setInterval(updateStatus, 10000);
+  };
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       injectMusicDock();
       initKineticTypography();
+      initTiltEffect();
+      initTrailingCursor();
+      initSmoothScroll();
+      injectStatusBadge();
     });
   } else {
     injectMusicDock();
     initKineticTypography();
+    initTiltEffect();
+    initTrailingCursor();
+    initSmoothScroll();
+    injectStatusBadge();
   }
 })();

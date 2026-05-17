@@ -4,6 +4,22 @@ Welcome to the definitive ledger of the **Krishiv Velocity** cyberpunk universe.
 
 ---
 
+## ⚡ v15.0.0 (May 2026) — The "Velocity v3.0" Masterpiece Release
+
+### 🎮 The Cyber Phonk Room & Canvas Spectrogram
+- **HTML5 Canvas Visualizer**: Created a dedicated `phonk-room.html` page driven by the Web Audio API rendering dynamic, neon reactive audio frequency spectrograms and bass-pulsing background particles!
+- **Zero 404 Media Fallback**: Fully synchronized the high-energy track *Nitro Voltage* to drive the spectrum canvas safely.
+
+### 🎭 Custom Trailing Aura & 3D Cards
+- **Glow Trailing Cursor**: Injected mouse-reactive glow physics resizing the global cursor aura to 450px with a vibrant neon cyan gradient whenever hovering over interactive cards, buttons, or links!
+- **Real-Time 3D Card Tilting**: Injected Vanilla mouse-position tracking calculations to dynamically tilt every single `.app-verse-card` and `.project-card` relative to client coordinates with perspective depth.
+
+### 🧠 Firebase AI Status Telemetry
+- **Live Agent Status Badge**: Injected a floating neon glass badge checking `/api/agent/status` dynamically. Broadcasts Krylo's active state (Coding, Gaming, or Recharging) based on server-side time-based fallbacks or Firebase telemetry variable changes!
+- **Auto Git Changelog & Devlog**: Engineered an automated git pipeline script compiling telemetry from the last 10 git commits directly into a responsive, premium glassmorphic version dashboard page (`changelog.html`).
+
+---
+
 ## ⚡ v14.5.3 (May 2026) — Masterpiece Master Deck Upgrade
 
 ### 🎨 Visual & Interactive Excellence

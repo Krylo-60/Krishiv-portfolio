@@ -2150,6 +2150,43 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === "GET" && pathname === "/api/agent/status") {
+      let status = "Coding";
+      let detail = "Upgrading portfolio codebase";
+      
+      if (hasFirebaseStorage()) {
+        try {
+          const response = await fetchWithTimeout(firebaseUrl("/agent_status"), {
+            headers: await getFirebaseHeaders()
+          });
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data.status) {
+              status = data.status;
+              detail = data.detail || detail;
+            }
+          }
+        } catch {
+          // Fallback
+        }
+      } else {
+        const hours = new Date().getHours();
+        if (hours >= 22 || hours < 6) {
+          status = "Offline";
+          detail = "Recharging neural batteries";
+        } else if (hours >= 17 && hours < 22) {
+          status = "Gaming";
+          detail = "Playing Clash Royale & Roblox";
+        } else {
+          status = "Coding";
+          detail = "Building cybermatic UI decks";
+        }
+      }
+      
+      sendJson(res, 200, { status, detail });
+      return;
+    }
+
     if (req.method === "GET" && pathname === "/api/yt-portfolio-sync") {
       try {
         const localFallback = await loadYtNexus();

@@ -5030,3 +5030,31 @@ body.future-mode .creator-panel {
   transform: scale(1.1);
 }
 
+/* ── Glow Trailing Cursor ── */
+.cursor-aura {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 220, 255, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  mix-blend-mode: screen;
+  transition: width 0.3s, height 0.3s, background 0.3s;
+  will-change: transform;
+  opacity: 0;
+}
+body:hover .cursor-aura {
+  opacity: 1;
+}
+
+/* ── Coder Typography Headings Upgrade ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Orbitron', 'JetBrains Mono', sans-serif !important;
+  letter-spacing: 0.05em;
+  font-weight: 800;
+}
+
