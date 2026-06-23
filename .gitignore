@@ -2,3 +2,5 @@
 .env*
 .netlify/
 node_modules/
+.vercel.env.local
+
