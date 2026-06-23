@@ -4,6 +4,7 @@
   "private": true,
   "description": "Krishiv portfolio with review backend and AI suggestion API",
   "dependencies": {
+    "openai": "^4.85.4",
     "pg": "^8.13.1"
   },
   "scripts": {

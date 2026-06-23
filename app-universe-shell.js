@@ -204,9 +204,6 @@
     { name: "Git Devlog", href: "changelog.html", tag: "Updates", tier: "featured" },
     { name: "Master Nexus", href: "krylo-blox-master-nexus.html", tag: "Core", tier: "featured" },
     { name: "Aether v110", href: "aether-core-v110.html", tag: "Core", tier: "featured" },
-    { name: "Aether v104", href: "aether-core-v104.html", tag: "Core" },
-    { name: "Aether v55", href: "aether-core-v55.html", tag: "Core" },
-    { name: "Aether v2.5", href: "aether-core-v25.html", tag: "Core" },
     { name: "Homework Hub", href: "homework-hub.html", tag: "App" },
     { name: "Attendance Tracker", href: "attendance-tracker.html", tag: "App" },
     { name: "Link Locker", href: "link-locker.html", tag: "App" },
@@ -290,9 +287,6 @@
     "release-notes.html": "logo.svg",
     "krylo-blox-master-nexus.html": "core-icon-master-nexus.svg",
     "aether-core-v110.html": "core-icon-aether-v110.svg",
-    "aether-core-v104.html": "core-icon-aether-v104.svg",
-    "aether-core-v55.html": "core-icon-aether-v55.svg",
-    "aether-core-v25.html": "core-icon-aether-v25.svg",
     "homework-hub.html": "app-icon-homework-hub.svg",
     "attendance-tracker.html": "app-icon-attendance-tracker.svg",
     "link-locker.html": "app-icon-link-locker.svg",
@@ -781,7 +775,7 @@
         <button type="button" class="app-shell-quick" data-action="latest">Continue Latest</button>
         <button type="button" class="app-shell-quick" data-action="directory">Open Links Directory</button>
         <button type="button" class="app-shell-quick" data-action="copy">Copy Page URL</button>
-        <button type="button" class="app-shell-quick" data-action="ai">Open AI Zone</button>
+        <button type="button" class="app-shell-quick" data-action="ai">Launch AI Hub</button>
         <button type="button" class="app-shell-quick" data-action="diagnostics">🛡️ Run Diagnostics</button>
       </div>
       <div class="app-shell-system-feed" id="shellSystemFeed">

@@ -9,6 +9,8 @@ try {
   PgPoolClass = null;
 }
 
+const { OpenAI } = require("openai");
+
 const PORT = Number(process.env.PORT || 3000);
 const ROOT_DIR = __dirname;
 const DATA_DIR = path.join(ROOT_DIR, "data");
@@ -28,6 +30,8 @@ const GOOGLE_API_KEYS = String(process.env.GOOGLE_API_KEYS || "")
   .map((key) => key.trim())
   .filter(Boolean);
 const GOOGLE_MODEL = String(process.env.GOOGLE_MODEL || "gemini-2.5-flash").trim();
+const XAI_API_KEY = String(process.env.XAI_API_KEY || "").trim();
+const XAI_MODEL = String(process.env.XAI_MODEL || "grok-2").trim();
 const REVIEW_STORAGE_KEY = String(process.env.REVIEW_STORAGE_KEY || "reviews:global:v1").trim();
 const KV_REST_API_URL = String(process.env.KV_REST_API_URL || "").trim();
 const KV_REST_API_TOKEN = String(process.env.KV_REST_API_TOKEN || "").trim();
@@ -680,9 +684,14 @@ async function buildPlatformOverview() {
       topApps
     },
     ai: {
-      provider: "google",
-      model: GOOGLE_MODEL,
-      ...googleHealth
+      provider: XAI_API_KEY ? "xai" : "google",
+      model: XAI_API_KEY ? XAI_MODEL : GOOGLE_MODEL,
+      loadedKeys: XAI_API_KEY ? 1 : googleHealth.loadedKeys,
+      readyKeys: XAI_API_KEY ? 1 : googleHealth.readyKeys,
+      coolingKeys: XAI_API_KEY ? 0 : googleHealth.coolingKeys,
+      totalSuccesses: XAI_API_KEY ? 0 : googleHealth.totalSuccesses,
+      totalFailures: XAI_API_KEY ? 0 : googleHealth.totalFailures,
+      cooldownMsRemaining: XAI_API_KEY ? 0 : googleHealth.cooldownMsRemaining
     }
   };
 }
@@ -1577,6 +1586,51 @@ function generateLocalKryloReply(prompt) {
   return `🤖 [KRYLO TERMINAL RESPONSE]\\n${LOCAL_KRYLO_REPLIES[index]}`;
 }
 
+async function callXaiModel(prompt, systemInstruction = "") {
+  if (!XAI_API_KEY) {
+    throw new Error("No xAI API key configured");
+  }
+
+  const client = new OpenAI({
+    apiKey: XAI_API_KEY,
+    baseURL: "https://api.x.ai/v1"
+  });
+
+  const messages = [];
+  if (systemInstruction) {
+    messages.push({ role: "system", content: systemInstruction });
+  }
+  messages.push({ role: "user", content: prompt });
+
+  const response = await client.chat.completions.create({
+    model: XAI_MODEL,
+    messages: messages,
+    temperature: 0.7
+  });
+
+  const text = response.choices?.[0]?.message?.content?.trim();
+  if (!text) {
+    throw new Error("xAI API returned empty response");
+  }
+
+  return { text, keySource: "xai" };
+}
+
+async function callAiModel(prompt, systemInstruction = "") {
+  if (XAI_API_KEY) {
+    try {
+      return await callXaiModel(prompt, systemInstruction);
+    } catch (xaiError) {
+      console.error("xAI failed, trying Google fallback:", xaiError.message);
+      if (getBalancedGoogleKeys().length) {
+        return await callGoogleModel(prompt, systemInstruction);
+      }
+      throw xaiError;
+    }
+  }
+  return await callGoogleModel(prompt, systemInstruction);
+}
+
 async function callGoogleModel(prompt, systemInstruction = "") {
   const keys = getBalancedGoogleKeys();
   if (!keys.length) {
@@ -1743,10 +1797,10 @@ const server = http.createServer(async (req, res) => {
         ok: true,
         service: "review-backend",
         reviewStorage: getConfiguredReviewStorage(),
-        aiProvider: "google",
-        aiModel: GOOGLE_MODEL,
-        aiLoadedKeys: googleHealth.loadedKeys,
-        aiReadyKeys: googleHealth.readyKeys
+        aiProvider: XAI_API_KEY ? "xai" : "google",
+        aiModel: XAI_API_KEY ? XAI_MODEL : GOOGLE_MODEL,
+        aiLoadedKeys: XAI_API_KEY ? 1 : googleHealth.loadedKeys,
+        aiReadyKeys: XAI_API_KEY ? 1 : googleHealth.readyKeys
       });
       return;
     }
@@ -1994,11 +2048,11 @@ const server = http.createServer(async (req, res) => {
       const aiPrompt = `Category: ${category || "General"}\nRating: ${rating || "N/A"}/5\nReview: ${reviewText}\n\nRewrite this review in under 120 words. Keep it specific, clear, and constructive.`;
       const aiSystem = "You rewrite short user reviews for quality and clarity. Keep a practical tone.";
 
-      if (getAvailableGoogleKeys().length) {
+      if (XAI_API_KEY || getAvailableGoogleKeys().length) {
         try {
-          const aiResult = await callGoogleModel(aiPrompt, aiSystem);
+          const aiResult = await callAiModel(aiPrompt, aiSystem);
           suggestion = aiResult.text;
-          mode = "google";
+          mode = aiResult.keySource;
         } catch (error) {
           suggestion = buildFallbackSuggestion(reviewText, category, rating);
           mode = "fallback";
@@ -2073,11 +2127,11 @@ const server = http.createServer(async (req, res) => {
       const aiPrompt = `Goal: ${goal}\nAudience: ${audience || "General"}\nConstraints: ${constraints || "None"}\n\nGenerate ${count} practical web app ideas. For each idea include:\n1) app name\n2) one-line concept\n3) 3 core features\n4) MVP build steps in 3 bullets\n5) monetization in 1 bullet\n6) best-fit tech stack in 1 bullet\nKeep each idea concise and execution-focused.`;
       const aiSystem = "You are a product strategist for student developers. Give specific, practical app ideas with clear execution direction.";
 
-      if (getAvailableGoogleKeys().length) {
+      if (XAI_API_KEY || getAvailableGoogleKeys().length) {
         try {
-          const aiResult = await callGoogleModel(aiPrompt, aiSystem);
+          const aiResult = await callAiModel(aiPrompt, aiSystem);
           suggestion = aiResult.text;
-          mode = "google";
+          mode = aiResult.keySource;
         } catch {
           suggestion = buildFallbackIdeaSuite(goal, audience, constraints, count);
           mode = "fallback";
@@ -2122,7 +2176,7 @@ const server = http.createServer(async (req, res) => {
         // If local parsing fails, continue to the AI backend.
       }
 
-      if (!getAvailableGoogleKeys().length) {
+      if (!XAI_API_KEY && !getAvailableGoogleKeys().length) {
         const text = generateLocalKryloReply(prompt);
         sendJson(res, 200, {
           text,
@@ -2133,11 +2187,11 @@ const server = http.createServer(async (req, res) => {
       }
 
       try {
-        const response = await callGoogleModel(prompt, systemPrompt);
+        const response = await callAiModel(prompt, systemPrompt);
         sendJson(res, 200, {
           text: response.text,
           mode: response.keySource,
-          model: GOOGLE_MODEL
+          model: response.keySource === "xai" ? XAI_MODEL : GOOGLE_MODEL
         });
       } catch (error) {
         const text = generateLocalKryloReply(prompt);
